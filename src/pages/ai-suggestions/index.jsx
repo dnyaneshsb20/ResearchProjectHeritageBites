@@ -8,7 +8,7 @@ import { motion, useAnimation } from "framer-motion";
 const AISuggestions = () => {
   const controls = useAnimation();
   const [messages, setMessages] = useState([
-    { role: "ai", text: "👋 Hi! Tell me what ingredients you have, and I’ll suggest a dish for you." }
+    { role: "ai", text: "Hi! Tell me what ingredients you have, and I’ll suggest a dish for you." }
   ]);
   const [query, setQuery] = useState("");
   const chatEndRef = useRef(null);
@@ -30,6 +30,12 @@ const AISuggestions = () => {
 
     setMessages((prev) => [...prev, { role: "user", text }]);
     setQuery("");
+    // Handle simple greetings without triggering recipe generation
+    const greetings = ["hi", "hello", "hey", "hii"];
+    if (greetings.includes(text.toLowerCase())) {
+      setMessages((prev) => [...prev, { role: "ai", text: "Hello! Tell me what ingredients you have, and I’ll suggest a dish for you." }]);
+      return;
+    }
 
     try {
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
