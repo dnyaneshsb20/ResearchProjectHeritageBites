@@ -153,12 +153,10 @@ Return it strictly in JSON format:
 
       {/* Main Chat Area */}
       <div className={`flex flex-col flex-1 transition-all duration-500 ${isChatEmpty ? "justify-center items-center" : ""}`}>
-        {!isChatEmpty && (
-          <header className="p-4 border-b border-border bg-popover flex items-center gap-3">
-            <Icon name="Sparkles" size={20} />
-            <h1 className="text-lg font-semibold">AI Recipe Assistant</h1>
-          </header>
-        )}
+        <header className="p-4 border-b border-border bg-popover flex items-center gap-3">
+          <Icon name="Sparkles" size={20} />
+          <h1 className="text-lg font-semibold">AI Recipe Assistant</h1>
+        </header>
 
         {!isChatEmpty && (
           <main className="flex-1 overflow-y-auto px-4 py-6 bg-[#FFFDF9]">
@@ -190,19 +188,25 @@ Return it strictly in JSON format:
         {/* Input Bar */}
         <form
           onSubmit={handleAskAI}
-          className={`p-4 border-t border-border bg-popover transition-all duration-500 ${isChatEmpty ? "border-none bg-transparent flex justify-center items-center" : ""
+          className={`p-4 border-t border-border bg-popover transition-all duration-500 ${isChatEmpty
+            ? "border-none bg-transparent flex flex-col justify-center items-center h-full text-center"
+            : ""
             }`}
         >
+          {isChatEmpty && (
+            <div className="mb-4">
+              <h1 className="text-2xl font-semibold text-foreground/90">
+                {welcomeSentence || "What can I help with?"}
+              </h1>
+            </div>
+          )}
+
           <div
-            className={`flex gap-2 items-center relative transition-all duration-500 ${isChatEmpty ? "w-full max-w-3xl justify-center" : "max-w-4xl mx-auto"
+            className={`flex gap-2 items-center justify-center transition-all duration-500 ${isChatEmpty ? "w-full max-w-3xl" : "max-w-4xl mx-auto"
               }`}
           >
-            <div className={`relative flex-1 transition-all duration-500`}>
-              {/* Welcome Sentence */}
-              {isChatEmpty && welcomeSentence && (
-                <div className="mb-2 text-center text-lg text-gray-600">{welcomeSentence}</div>
-              )}
-
+            {/* Input Section */}
+            <div className="relative flex-1 w-full max-w-[800px]">
               <button
                 type="button"
                 onClick={() => setShowAttachMenu(!showAttachMenu)}
@@ -211,22 +215,19 @@ Return it strictly in JSON format:
                 <FiPlus />
               </button>
 
-              <div className={`relative flex-1 transition-all duration-500`}>
-                <Input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Enter your ingredients or mood here..."
-                  className={`w-full h-12 pl-10 pr-12 py-3 rounded-xl border-2 border-gray-300 transition-all duration-500 ${isChatEmpty ? "max-w-2xl" : ""
-                    }`}
-                />
-              </div>
+              <Input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Enter your ingredients or mood here..."
+                className="w-full h-12 pl-10 pr-12 py-3 rounded-xl border-2 border-gray-300"
+              />
 
               <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-primary cursor-pointer">
                 <FiMic />
               </div>
             </div>
 
-            {/* Keep the Send Button beside the textbox */}
+            {/* Send Button */}
             <Button
               type="submit"
               variant="hero"
