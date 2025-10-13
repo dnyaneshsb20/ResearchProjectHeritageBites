@@ -52,7 +52,6 @@ const Header = () => {
     }
   ];
 
-  const restrictedForFarmer = ['Discover', 'Marketplace', 'Contribute'];
   const isActiveRoute = (path) => location?.pathname === path;
 
   const handleProtectedNavigation = (path) => {
@@ -154,13 +153,8 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center space-x-1">
-          {navigationItems?.map((item) => {
-            // If the signed-in user is a farmer, hide certain tabs
-            if (userProfile?.role === 'farmer' && restrictedForFarmer.includes(item.label)) {
-              return null;
-            }
-
-            return item.protected ? (
+          {navigationItems?.map((item) => (
+            item.protected ? (
               <button
                 key={item?.path}
                 onClick={() => handleProtectedNavigation(item?.path)}
@@ -184,8 +178,8 @@ const Header = () => {
                 <Icon name={item?.icon} size={16} />
                 <span>{item?.label}</span>
               </Link>
-            );
-          })}
+            )
+          ))}
         </nav>
 
         {/* Search, Cart, and User Menu */}
@@ -358,24 +352,18 @@ const Header = () => {
       {/* Mobile Navigation */}
       <nav className="lg:hidden border-t border-border bg-background">
         <div className="flex items-center justify-around py-2">
-          {navigationItems?.map((item) => {
-            if (userProfile?.role === 'farmer' && restrictedForFarmer.includes(item.label)) {
-              return null;
-            }
-
-            return (
-              <Link
-                key={item?.path}
-                to={item?.path}
-                className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-all duration-200 ${isActiveRoute(item?.path)
-                  ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
-                  }`}
-              >
-                <Icon name={item?.icon} size={20} />
-                <span className="text-xs font-caption font-medium">{item?.label}</span>
-              </Link>
-            );
-          })}
+          {navigationItems?.map((item) => (
+            <Link
+              key={item?.path}
+              to={item?.path}
+              className={`flex flex-col items-center space-y-1 px-3 py-2 rounded-lg transition-all duration-200 ${isActiveRoute(item?.path)
+                ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                }`}
+            >
+              <Icon name={item?.icon} size={20} />
+              <span className="text-xs font-caption font-medium">{item?.label}</span>
+            </Link>
+          ))}
         </div>
       </nav>
       {showAuthPopup && (
