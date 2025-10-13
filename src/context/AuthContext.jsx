@@ -1,5 +1,6 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useContext, useState } from "react";
+import { supabase } from "../supabaseClient";
 
 // Create context
 const AuthContext = createContext();
@@ -14,9 +15,9 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    setUser(null);
+  const logout = async () => {
+    await supabase.auth.signOut();  // 🧼 clears session
+    setUser(null);                  // 🧼 clear context user
   };
 
   return (

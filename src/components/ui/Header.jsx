@@ -23,44 +23,37 @@ const Header = () => {
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [userProfile, setUserProfile] = useState(null); // fetched from Supabase
 
-  const navigationItems = [
-    {
-      path: '/recipe-discovery-dashboard',
-      label: 'Discover',
-      icon: 'Search',
-      description: 'Explore authentic recipes'
-    },
-    {
-      path: '/ingredient-marketplace',
-      label: 'Marketplace',
-      icon: 'ShoppingBag',
-      description: 'Source authentic ingredients'
-    },
-    {
-      path: '/user-profile-health-goals',
-      label: 'Profile',
-      icon: 'User',
-      description: 'Manage your preferences',
-      protected: true // mark as protected
-    },
-    {
-      path: '/recipe-submission-management',
-      label: 'Contribute',
-      icon: 'Plus',
-      description: 'Share your recipes',
-      protected: true // mark as protected
-    }
+ // 👇 Add this just before defining navigationItems
+const userRole = userProfile?.role || "user";
+
+// 👇 Conditional navigation
+const navigationItems = React.useMemo(() => {
+  if (userRole === "farmer") {
+    return [
+      { path: "/farmer-dashboard", label: "Dashboard", icon: "LayoutDashboard" },
+      { path: "/farmer-products", label: "My Products", icon: "Package" },
+      { path: "/farmer-orders", label: "Orders", icon: "ClipboardList" },
+      { path: "/farmer-profile", label: "Profile", icon: "User" },
+    ];
+  }
+  return [
+    { path: "/recipe-discovery-dashboard", label: "Discover", icon: "Search" },
+    { path: "/ingredient-marketplace", label: "Marketplace", icon: "ShoppingBag" },
+    { path: "/user-profile-health-goals", label: "Profile", icon: "User", protected: true },
+    { path: "/recipe-submission-management", label: "Contribute", icon: "Plus", protected: true },
   ];
+}, [userRole]);
 
   const isActiveRoute = (path) => location?.pathname === path;
 
   const handleProtectedNavigation = (path) => {
-    if (!isAuthenticated) {
-      setShowAuthPopup(true); // show popup
-      return;
-    }
-    navigate(path);
-  };
+  setIsUserMenuOpen(false);
+  if (!isAuthenticated) {
+    setShowAuthPopup(true);
+    return;
+  }
+  navigate(path);
+};
 
   const handleSearchSubmit = (e) => {
     e?.preventDefault();
@@ -236,7 +229,7 @@ const Header = () => {
           </div>
 
           {/* Shopping Cart */}
-          {isAuthenticated && (
+          {isAuthenticated && user.role !== "farmer" &&( 
             <div className="relative">
               <Button
                 variant="ghost"
