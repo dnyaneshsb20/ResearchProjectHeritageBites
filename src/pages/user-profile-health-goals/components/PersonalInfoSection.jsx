@@ -5,12 +5,12 @@ import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import { supabase } from '../../../supabaseClient';
+import {User} from 'lucide-react'
 
 const PersonalInfoSection = ({ isExpanded, onToggle, userData, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(userData || {});
   const [dbUser, setDbUser] = useState(null);
-
 
   const genderOptions = [
     { value: 'male', label: 'Male' },
@@ -200,11 +200,17 @@ const PersonalInfoSection = ({ isExpanded, onToggle, userData, onUpdate }) => {
             <div className="flex items-center space-x-4 mb-6">
               <div className="relative">
                 <div className="w-20 h-20 rounded-full overflow-hidden bg-muted">
-                  <Image
-                    src={formData?.profilePicture || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"}
-                    alt="Profile Picture"
-                    className="w-full h-full object-cover"
-                  />
+                  {formData?.profilePicture ? (
+                    <Image
+                      src={formData.profilePicture}
+                      alt="Profile Picture"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-200 rounded-full">
+                      <User className="w-10 h-10 text-gray-500" />
+                    </div>
+                  )}
                 </div>
                 {isEditing && (
                   <Button
