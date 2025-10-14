@@ -88,7 +88,7 @@ const FarmerProfileSection = () => {
         // ✅ Fetch name & email from users table
         const { data: userData, error: userError } = await supabase
           .from("users")
-          .select("name, email")
+          .select("name, email, created_at")
           .eq("user_id", userId)
           .single();
 
@@ -108,6 +108,7 @@ const FarmerProfileSection = () => {
           name: userData?.name || "",
           email: userData?.email || "",
           bio: farmerData?.bio || "",
+          created_at: userData?.created_at || null,
           certifications: farmerData?.certifications || "",
           contactInfo: farmerData?.contact_info || "",
           location: farmerData?.location || "",
@@ -204,8 +205,8 @@ const FarmerProfileSection = () => {
               <h4 className="font-medium text-foreground">{formData?.name}</h4>
               <p className="text-sm text-muted-foreground">
                 Member since{" "}
-                {formData?.joinDate
-                  ? new Date(formData.joinDate).toLocaleDateString()
+                {formData?.created_at
+                  ? new Date(formData.created_at).toLocaleDateString()
                   : "N/A"}
               </p>
             </div>
