@@ -12,6 +12,7 @@ import UserRecipesList from './components/UserRecipesList';
 import Button from '../../components/ui/Button';
 import Icon from '../../components/AppIcon';
 import Footer from '../dashboard/components/Footer';
+import { supabase } from "../../supabaseClient";
 
 const RecipeSubmissionManagement = () => {
   const [currentView, setCurrentView] = useState('list'); // 'list' or 'form'
@@ -78,32 +79,58 @@ const RecipeSubmissionManagement = () => {
     };
     localStorage.setItem('recipe-draft', JSON.stringify(draftData));
   };
+const handleSubmit = async () => {
+  setIsSubmitting(true);
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-    
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Clear draft after successful submission
-      localStorage.removeItem('recipe-draft');
-      
-      // Reset form
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      alert("Please log in to submit a recipe.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // 🧩 Map formData fields from all steps to your table columns
+    const recipeData = {
+      name: formData.dishName, // from BasicInfoStep
+      description: formData.shortDescription || '', // optional
+      state_id: formData.state_id || null, // could map to a state_id if you have one
+      cooking_time: parseInt(formData.cookTime, 10) || null,
+      prep_time: parseInt(formData.prepTime, 10) || null,
+      difficulty_level:
+  formData.difficulty
+    ? formData.difficulty.charAt(0).toUpperCase() + formData.difficulty.slice(1).toLowerCase()
+    : null,
+      festival_tag: formData.festivalTag || null,
+      dietary_type: formData.dietaryType || null,
+      meal_type: formData.category || null,
+      image_url: formData.heroImage || null,
+      created_by: user.id,
+    };
+
+    const { data, error } = await supabase
+      .from("recipes")
+      .insert([recipeData])
+      .select();
+
+    if (error) {
+      console.error("Error submitting recipe:", error);
+      alert("There was an error submitting your recipe. Please try again.");
+    } else {
+      alert("🎉 Recipe submitted successfully!");
+      localStorage.removeItem("recipe-draft");
       setFormData({});
       setCurrentStep(1);
-      setCurrentView('list');
-      
-      // Show success message (you could use a toast library here)
-      alert('Recipe submitted successfully! It will be reviewed within 2-3 business days.');
-      
-    } catch (error) {
-      console.error('Submission error:', error);
-      alert('There was an error submitting your recipe. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+      setCurrentView("list");
     }
-  };
+  } catch (error) {
+    console.error("Submission error:", error);
+    alert("There was an error submitting your recipe. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const handleSaveDraft = () => {
     saveDraft();
@@ -137,7 +164,7 @@ const RecipeSubmissionManagement = () => {
         <main className="container mx-auto px-4 py-8">
           <UserRecipesList onNewRecipe={startNewRecipe} />
         </main>
-        <Footer/>
+        <Footer />
       </div>
     );
   }
@@ -158,14 +185,14 @@ const RecipeSubmissionManagement = () => {
               >
                 Back to My Recipes
               </Button>
-              
+
               <div className="h-6 w-px bg-border" />
-              
+
               <h1 className="text-2xl font-heading font-bold text-foreground">
                 Submit New Recipe
               </h1>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <Button
                 variant="outline"
@@ -176,7 +203,7 @@ const RecipeSubmissionManagement = () => {
               >
                 Guidelines
               </Button>
-              
+
               <Button
                 variant="secondary"
                 size="sm"
@@ -275,12 +302,11 @@ const RecipeSubmissionManagement = () => {
                     {steps?.map((step, index) => (
                       <div
                         key={step?.id}
-                        className={`flex items-center space-x-2 text-sm ${
-                          index + 1 < currentStep
+                        className={`flex items-center space-x-2 text-sm ${index + 1 < currentStep
                             ? 'text-success'
                             : index + 1 === currentStep
-                            ? 'text-primary' :'text-muted-foreground'
-                        }`}
+                              ? 'text-primary' : 'text-muted-foreground'
+                          }`}
                       >
                         {index + 1 < currentStep ? (
                           <Icon name="CheckCircle" size={16} />
@@ -312,7 +338,7 @@ const RecipeSubmissionManagement = () => {
         isOpen={showGuidelines}
         onClose={() => setShowGuidelines(false)}
       />
-      <Footer/>
+      <Footer />
     </div>
   );
 };

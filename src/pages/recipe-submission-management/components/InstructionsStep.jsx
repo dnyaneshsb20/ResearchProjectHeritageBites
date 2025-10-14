@@ -14,33 +14,37 @@ const InstructionsStep = ({ formData, updateFormData, onNext, onPrevious }) => {
   
   const [videoFile, setVideoFile] = useState(null);
   const [videoPreview, setVideoPreview] = useState(formData?.videoDemo || null);
+  const [editIndex, setEditIndex] = useState(null);
+
 
   const instructions = formData?.instructions || [];
 
-  const addInstruction = () => {
-    if (currentInstruction?.step && currentInstruction?.description) {
-      const newInstructions = [...instructions, { 
-        ...currentInstruction, 
-        id: Date.now(),
-        stepNumber: instructions?.length + 1
-      }];
-      updateFormData({ instructions: newInstructions });
-      setCurrentInstruction({ step: '', description: '', image: null, tips: '' });
+const addInstruction = () => {
+  if (currentInstruction.step && currentInstruction.description) {
+    let newInstructions = [...instructions];
+    if (editIndex !== null) {
+      newInstructions[editIndex] = { ...currentInstruction, id: Date.now(), stepNumber: editIndex + 1 };
+      setEditIndex(null);
+    } else {
+      newInstructions.push({ ...currentInstruction, id: Date.now(), stepNumber: instructions.length + 1 });
     }
-  };
-
+    updateFormData({ instructions: newInstructions });
+    setCurrentInstruction({ step: '', description: '', image: null, tips: '' });
+  }
+};
   const removeInstruction = (id) => {
     const updatedInstructions = instructions?.filter(instruction => instruction?.id !== id)?.map((instruction, index) => ({ ...instruction, stepNumber: index + 1 }));
     updateFormData({ instructions: updatedInstructions });
   };
 
-  const editInstruction = (id) => {
-    const instruction = instructions?.find(inst => inst?.id === id);
-    if (instruction) {
-      setCurrentInstruction(instruction);
-      removeInstruction(id);
-    }
-  };
+const editInstruction = (id) => {
+  const index = instructions.findIndex(inst => inst.id === id);
+  const instruction = instructions[index];
+  if (instruction) {
+    setCurrentInstruction(instruction);
+    setEditIndex(index);
+  }
+};
 
   const handleImageUpload = (file) => {
     if (file && file?.type?.startsWith('image/')) {

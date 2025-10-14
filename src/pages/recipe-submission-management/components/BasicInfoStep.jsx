@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import Button from '../../../components/ui/Button';
 import Image from '../../../components/AppImage';
 import Icon from '../../../components/AppIcon';
+import { supabase } from '../../../supabaseClient';
 
 const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
   const [imagePreview, setImagePreview] = useState(formData?.heroImage || null);
   const [isDragging, setIsDragging] = useState(false);
+  const [states, setStates] = useState([]);
 
-  const regionOptions = [
-    { value: 'north', label: 'North India' },
-    { value: 'south', label: 'South India' },
-    { value: 'east', label: 'East India' },
-    { value: 'west', label: 'West India' },
-    { value: 'northeast', label: 'Northeast India' },
-    { value: 'central', label: 'Central India' }
-  ];
-
+  useEffect(() => {
+    const fetchStates = async () => {
+      const { data, error } = await supabase.from("states").select("*");
+      if (error) {
+        console.error("Error fetching states:", error);
+      } else {
+        setStates(data);
+      }
+    };
+    fetchStates();
+  }, []);
   const categoryOptions = [
     { value: 'breakfast', label: 'Breakfast' },
     { value: 'lunch', label: 'Lunch' },
@@ -71,7 +75,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
         <h2 className="text-xl font-heading font-semibold text-foreground mb-6">
           Basic Recipe Information
         </h2>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-4">
             <Input
@@ -82,16 +86,19 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
               onChange={(e) => handleInputChange('dishName', e?.target?.value)}
               required
             />
-            
             <Select
-              label="Region"
-              placeholder="Select the region of origin"
-              options={regionOptions}
-              value={formData?.region || ''}
-              onChange={(value) => handleInputChange('region', value)}
+              label="Region / State"
+              placeholder="Select the state of origin"
+              options={states.map((s) => ({
+                value: s.state_id,       // UUID value
+                label: s.state_name,     // Human-readable name
+              }))}
+              value={formData?.state_id || ''}
+              onChange={(value) => handleInputChange('state_id', value)}
               required
             />
-            
+
+
             <Select
               label="Category"
               placeholder="Select dish category"
@@ -100,7 +107,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
               onChange={(value) => handleInputChange('category', value)}
               required
             />
-            
+
             <Input
               label="Preparation Time"
               type="text"
@@ -108,7 +115,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
               value={formData?.prepTime || ''}
               onChange={(e) => handleInputChange('prepTime', e?.target?.value)}
             />
-            
+
             <Input
               label="Cooking Time"
               type="text"
@@ -116,7 +123,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
               value={formData?.cookTime || ''}
               onChange={(e) => handleInputChange('cookTime', e?.target?.value)}
             />
-            
+
             <Input
               label="Serves"
               type="number"
@@ -125,17 +132,16 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
               onChange={(e) => handleInputChange('serves', e?.target?.value)}
             />
           </div>
-          
+
           <div className="space-y-4">
             <label className="block text-sm font-body font-medium text-foreground">
               Hero Image *
             </label>
-            
+
             <div
-              className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${
-                isDragging 
-                  ? 'border-primary bg-primary/5' :'border-border hover:border-primary/50'
-              }`}
+              className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${isDragging
+                  ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+                }`}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -181,7 +187,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
                 </div>
               )}
             </div>
-            
+
             <input
               id="hero-image-input"
               type="file"
@@ -189,7 +195,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
               className="hidden"
               onChange={(e) => handleImageUpload(e?.target?.files?.[0])}
             />
-            
+
             <Input
               label="Short Description"
               type="text"
