@@ -90,31 +90,33 @@ const handleSubmit = async () => {
       return;
     }
 
-    // 🧩 Map formData fields from all steps to your table columns
+    // 🧩 Map form fields to rec_contributions table
     const recipeData = {
-      name: formData.dishName, // from BasicInfoStep
-      description: formData.shortDescription || '', // optional
-      state_id: formData.state_id || null, // could map to a state_id if you have one
-      cooking_time: parseInt(formData.cookTime, 10) || null,
-      prep_time: parseInt(formData.prepTime, 10) || null,
-      difficulty_level:
-  formData.difficulty
-    ? formData.difficulty.charAt(0).toUpperCase() + formData.difficulty.slice(1).toLowerCase()
-    : null,
+      name: formData.dishName || '',
+      description: formData.shortDescription || '',
+      state_id: formData.state_id || null,
+      cooking_time: formData.cookTime ? parseInt(formData.cookTime, 10) : null,
+      prep_time: formData.prepTime ? parseInt(formData.prepTime, 10) : null,
+      difficulty_level: formData.difficulty
+        ? formData.difficulty.charAt(0).toUpperCase() + formData.difficulty.slice(1).toLowerCase()
+        : null,
       festival_tag: formData.festivalTag || null,
       dietary_type: formData.dietaryType || null,
       meal_type: formData.category || null,
       image_url: formData.heroImage || null,
+      origin_story: formData.originStory || null,
+      heritage_significance: formData.heritageSignificance || null,
       created_by: user.id,
+      status: 'pending'  // ✅ moderation workflow
     };
 
     const { data, error } = await supabase
-      .from("recipes")
+      .from("rec_contributions")
       .insert([recipeData])
       .select();
 
     if (error) {
-      console.error("Error submitting recipe:", error);
+      console.error("❌ Error submitting recipe:", error);
       alert("There was an error submitting your recipe. Please try again.");
     } else {
       alert("🎉 Recipe submitted successfully!");
@@ -124,13 +126,12 @@ const handleSubmit = async () => {
       setCurrentView("list");
     }
   } catch (error) {
-    console.error("Submission error:", error);
+    console.error("❌ Submission error:", error);
     alert("There was an error submitting your recipe. Please try again.");
   } finally {
     setIsSubmitting(false);
   }
 };
-
 
   const handleSaveDraft = () => {
     saveDraft();

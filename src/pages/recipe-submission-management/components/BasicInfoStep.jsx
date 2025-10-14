@@ -66,7 +66,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
   };
 
   const isFormValid = () => {
-    return formData?.dishName && formData?.region && formData?.category && formData?.heroImage;
+    return formData?.dishName && formData?.state_id && formData?.category && formData?.heroImage;
   };
 
   return (

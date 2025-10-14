@@ -22,18 +22,19 @@ const UserRecipesList = ({ onNewRecipe }) => {
     }
 
     const { data, error } = await supabase
-      .from("recipes")
+      .from("rec_contributions")
       .select(`
-        recipe_id,
-        name,
-        description,
-        image_url,
-        cooking_time,
-        created_at,
-        meal_type,
-        state_id,
-        states ( state_name, region )
-      `)
+    indg_recipe_id,
+    name,
+    description,
+    image_url,
+    cooking_time,
+    created_at,
+    meal_type,
+    state_id,
+    status,
+    states ( state_name, region )
+  `)
       .eq("created_by", user.id)
       .order("created_at", { ascending: false });
 
