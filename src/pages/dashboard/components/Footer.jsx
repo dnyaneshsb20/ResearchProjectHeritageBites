@@ -1,85 +1,102 @@
-import { ChefHat, Mail, Phone, MapPin } from "lucide-react";
+import { useState } from "react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import Button from '../../../components/ui/Button';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  // Simple email validation regex
+  const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const handleSubscribe = () => {
+    if (!email) {
+      setMessage("Email cannot be empty.");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setMessage("Please enter a valid email address.");
+      return;
+    }
+
+    // Simulate sending mail (for now just show message)
+    setMessage(`Thank you for subscribing! A confirmation has been sent to ${email}.`);
+    setEmail(""); // Clear input
+  };
+
   return (
     <footer className="bg-earth-brown text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-8 h-8 bg-golden rounded-lg">
-                <span className="text-earth-brown text-md font-bold">HB</span>
+              <div className="flex items-center justify-center w-10 h-10 bg-golden rounded-lg">
+                <span className="text-earth-brown text-lg font-bold">HB</span>
               </div>
-              <span className="text-2xl font-bold">HeitageBites</span>
+              <span className="text-2xl font-bold">HeritageBites</span>
             </div>
             <p className="text-white/80 leading-relaxed">
               Preserving India's culinary heritage while connecting communities
               through authentic flavors and sustainable practices.
             </p>
-            <div className="flex space-x-4">
-              <Button variant="golden" size="sm" className="text-earth-brown bg-golden">
-                Download App
+            <Link to="/recipe-discovery-dashboard">
+              <Button
+                variant="golden"
+                size="sm"
+                className="text-earth-brown bg-golden mt-3"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              >
+                Explore Recipes
               </Button>
-            </div>
+            </Link>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-lg font-semibold text-golden mb-4">Heritage Bites</h4>
-            <ul className="space-y-3">
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Regional Recipes</a></li>
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Festival Foods</a></li>
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Healthy Options</a></li>
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Quick Meals</a></li>
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Cultural Stories</a></li>
-            </ul>
-          </div>
-
-          {/* Marketplace */}
-          <div>
-            <h4 className="text-lg font-semibold text-golden mb-4">Marketplace</h4>
-            <ul className="space-y-3">
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Indigenous Grains</a></li>
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Organic Spices</a></li>
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Cold-Pressed Oils</a></li>
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Ready-to-Cook</a></li>
-              <li><a href="#" className="text-white/80 hover:text-golden transition-colors">Farmer Partners</a></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-lg font-semibold text-golden mb-4">Connect</h4>
+          {/* Contact & Newsletter */}
+          <div className="space-y-6">
+            <h4 className="text-lg font-semibold text-golden mb-2">Connect With Us</h4>
             <ul className="space-y-3">
               <li className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-golden" />
+                <Mail className="h-5 w-5 text-golden" />
                 <span className="text-white/80">heritagebites007@gmail.com</span>
               </li>
               <li className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-golden" />
+                <Phone className="h-5 w-5 text-golden" />
                 <span className="text-white/80">+91 12345 67890</span>
               </li>
               <li className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-golden" />
+                <MapPin className="h-5 w-5 text-golden" />
                 <span className="text-white/80">Pune, India</span>
               </li>
             </ul>
 
             {/* Newsletter */}
-            <div className="mt-6">
+            <div>
               <h5 className="font-medium text-golden mb-2">Stay Updated</h5>
               <div className="flex space-x-2">
                 <input
                   type="email"
                   placeholder="Your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="flex-1 px-3 py-2 bg-white/10 border border-white/20 rounded text-white placeholder:text-white/60 focus:outline-none focus:ring-2 focus:ring-golden"
                 />
-                <Button variant="golden" size="sm">
+                <Button
+                  variant="golden"
+                  size="sm"
+                  className="text-earth-brown bg-golden"
+                  onClick={handleSubscribe}
+                >
                   Subscribe
                 </Button>
               </div>
+              {message && (
+                <p className="text-white/80 mt-2 text-sm">{message}</p>
+              )}
             </div>
           </div>
         </div>
@@ -90,9 +107,9 @@ const Footer = () => {
             © 2025 HeritageBites. Preserving India's culinary heritage.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="text-white/60 hover:text-golden transition-colors text-sm">Privacy Policy</a>
-            <a href="#" className="text-white/60 hover:text-golden transition-colors text-sm">Terms of Service</a>
-            <a href="#" className="text-white/60 hover:text-golden transition-colors text-sm">Support</a>
+            <Link to="/privacy-policy" className="text-white/60 hover:text-golden transition-colors text-sm">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="text-white/60 hover:text-golden transition-colors text-sm">Terms of Service</Link>
+            <Link to="/support" className="text-white/60 hover:text-golden transition-colors text-sm">Support</Link>
           </div>
         </div>
       </div>
