@@ -24,17 +24,6 @@ const UserProfileHealthGoals = () => {
   });
 
   const [userData, setUserData] = useState({
-    name: "Priya Sharma",
-    email: "priya.sharma@email.com",
-    phone: "+91 98765 43210",
-    gender: "female",
-    ageGroup: "26-35",
-    location: "Mumbai, Maharashtra",
-    height: "165",
-    weight: "58",
-    activityLevel: "moderately-active",
-    profilePicture: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-    joinDate: "March 2024"
   });
 
   const [healthGoals, setHealthGoals] = useState([
@@ -166,9 +155,12 @@ const UserProfileHealthGoals = () => {
   };
 
   const handleUserDataUpdate = (newData) => {
-    setUserData(newData);
-    updateProfileCompletion();
-  };
+  setUserData(newData);
+
+  // instantly calculate completion without re-fetching
+  const newCompletion = calculateProfileCompletion(newData, currentProfileData);
+  setProfileCompleteness(newCompletion);
+};
 
   const handleHealthGoalsUpdate = (newGoals) => {
     setHealthGoals(newGoals);
