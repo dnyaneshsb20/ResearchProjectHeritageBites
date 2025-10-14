@@ -19,11 +19,24 @@ const Products = () => {
         const userId = stored?.id || stored?.user_id || stored?.user?.id;
 
         if (!userId) return;
+         const { data: farmerData, error: fErr } = await supabase
+          .from("farmers")
+          .select("farmer_id")
+          .eq("user_id", userId)
+          .single();
+
+        if (fErr || !farmerData) {
+          console.warn("Farmer not found:", fErr?.message);
+          setProducts([]);
+          return;
+        }
+
 
         const { data, error } = await supabase
           .from("products")
           .select("*")
-          .eq("farmer_id", userId)
+          .eq("farmer_id", farmerData?.farmer_id)
+
           .order("created_at", { ascending: false });
 
         if (error) console.error(error);

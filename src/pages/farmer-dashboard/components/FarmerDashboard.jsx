@@ -39,7 +39,8 @@ const FarmerDashboard = () => {
         const { data: productsData, error: pErr } = await supabase
           .from("products")
           .select("*")
-          .eq("farmer_id", userId)
+          .eq("farmer_id", farmerData?.farmer_id)
+
           .order("created_at", { ascending: false })
           .limit(10);
 
@@ -47,9 +48,10 @@ const FarmerDashboard = () => {
         setProducts(productsData || []);
 
         const { data: ordersData, error: oErr } = await supabase
-          .from("orders")
+          .from("farmer_orders_view")
           .select("*")
-          .eq("farmer_id", userId)
+          .eq("farmer_id", farmerData?.farmer_id)
+
           .order("created_at", { ascending: false })
           .limit(10);
 

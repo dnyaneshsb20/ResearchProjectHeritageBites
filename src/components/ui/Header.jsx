@@ -135,7 +135,7 @@ const navigationItems = React.useMemo(() => {
     <header className="sticky top-0 z-100 bg-background border-b border-border shadow-warm">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
         {/* Logo */}
-        <Link to="/recipe-discovery-dashboard" className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center space-x-2">
           <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-lg">
             <span className="text-white text-sm font-bold">HB</span>
           </div>
@@ -229,7 +229,7 @@ const navigationItems = React.useMemo(() => {
           </div>
 
           {/* Shopping Cart */}
-          {isAuthenticated && user.role !== "farmer" &&( 
+          {isAuthenticated && userProfile?.role !== "farmer" &&( 
             <div className="relative">
               <Button
                 variant="ghost"
@@ -273,7 +273,7 @@ const navigationItems = React.useMemo(() => {
                       </p>
                       {userProfile?.role && (
                         <p className="text-xs text-accent font-medium mt-1">
-                          {userProfile.role === "admin" ? "Administrator" : userProfile.role}
+                          {userProfile?.role === "admin" ? "Administrator" : userProfile?.role}
                         </p>
                       )}
                     </div>

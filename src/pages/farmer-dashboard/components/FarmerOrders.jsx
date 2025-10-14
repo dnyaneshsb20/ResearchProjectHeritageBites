@@ -25,16 +25,35 @@ const FarmerOrders = () => {
         const { data, error } = await supabase
           .from("orders")
           .select(`
-            *,
-            product:products(name, farmer_id)
-          `)
-          .eq("product.farmer_id", userId)
+    order_id,
+    status,
+    created_at,
+    total_amount,
+    order_items (
+      quantity,
+      price,
+      products (
+      product_id,
+        name,
+        farmer_id
+      )
+    )
+  `)
           .order("created_at", { ascending: false });
 
-        if (error) console.error(error);
-        else setOrders(data || []);
+
+      if (error) {
+          console.error("Supabase error:", error);
+          return;
+        }
+
+         const farmerOrders = data.filter(order =>
+          order.order_items.some(item => item.products?.farmer_id === userId)
+        );
+
+        setOrders(farmerOrders);
       } catch (err) {
-        console.error(err);
+        console.error("Fetch error:", err);
       } finally {
         setLoading(false);
       }
