@@ -7,6 +7,7 @@ import { motion, useAnimation } from "framer-motion";
 
 const AISuggestions = () => {
   const controls = useAnimation();
+  const attachRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [query, setQuery] = useState("");
   const chatEndRef = useRef(null);
@@ -111,6 +112,18 @@ Return it strictly in JSON format:
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (attachRef.current && !attachRef.current.contains(event.target)) {
+        setShowAttachMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="flex h-screen bg-background text-foreground">
       {/* Sidebar */}
@@ -206,14 +219,39 @@ Return it strictly in JSON format:
               }`}
           >
             {/* Input Section */}
-            <div className="relative flex-1 w-full max-w-[800px]">
+            <div ref={attachRef} className="relative flex-1 w-full max-w-[800px]">
               <button
                 type="button"
                 onClick={() => setShowAttachMenu(!showAttachMenu)}
-                className="absolute left-2 top-1/2 -translate-y-1/2 text-xl text-primary z-10"
+                className={`absolute left-2 top-[30%] text-xl text-primary z-10 transition-transform duration-300 ${showAttachMenu ? "rotate-45" : "rotate-0"
+                  }`}
               >
                 <FiPlus />
               </button>
+
+              {showAttachMenu && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute left-0 bottom-14 bg-white border border-border rounded-xl shadow-lg w-44 z-10"
+                >
+                  <ul className="flex flex-col text-sm text-gray-700">
+                    <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <FiImage /> Photos
+                    </li>
+                    <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <FiVideo /> Videos
+                    </li>
+                    <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <FiFile /> Documents
+                    </li>
+                    <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <FiFileText /> Notes
+                    </li>
+                  </ul>
+                </motion.div>
+              )}
 
               <Input
                 value={query}
