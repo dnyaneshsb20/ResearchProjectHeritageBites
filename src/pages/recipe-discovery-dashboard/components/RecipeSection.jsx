@@ -66,7 +66,8 @@ const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) =
       {/* Desktop Grid View */}
       <div className="hidden lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {recipes?.slice(0, 8)?.map((recipe) => (
-          <RecipeCard key={recipe?.id} recipe={recipe} />
+          <RecipeCard key={recipe?.recipe_id || recipe?.indg_recipe_id} recipe={recipe} />
+
         ))}
       </div>
       {/* Mobile/Tablet Horizontal Scroll */}
