@@ -1,11 +1,11 @@
 // src/pages/FarmerDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../supabaseClient";
-import { useAuth } from "../../context/AuthContext";
-import Button from "../../components/ui/Button";
-import Header from "../../components/ui/Header";
-import Footer from "../dashboard/components/Footer";
+import { supabase } from "../../../supabaseClient";
+import { useAuth } from "../../../context/AuthContext";
+import Button from "../../../components/ui/Button";
+import Header from "../../../components/ui/Header";
+import Footer from "../../dashboard/components/Footer";
 
 const FarmerDashboard = () => {
   const navigate = useNavigate();
@@ -75,24 +75,6 @@ const FarmerDashboard = () => {
 
       <div className="min-h-screen p-6 bg-background">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Sidebar */}
-          <aside className="col-span-1 bg-popover p-4 rounded-lg border border-border">
-            <div className="flex flex-col items-center text-center space-y-3">
-              <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center text-xl font-medium">
-                {(farmer?.name || user?.name || "Farmer").charAt(0).toUpperCase()}
-              </div>
-              <div className="font-semibold">{farmer?.name || user?.name || "Farmer"}</div>
-              <div className="text-sm text-muted-foreground">{user?.email}</div>
-            </div>
-
-            <nav className="mt-6 space-y-2">
-              <button className="w-full text-left p-2 rounded hover:bg-muted" onClick={() => navigate("/farmer-dashboard")}>Dashboard</button>
-              <button className="w-full text-left p-2 rounded hover:bg-muted" onClick={() => navigate("/farmer/products")}>My Products</button>
-              <button className="w-full text-left p-2 rounded hover:bg-muted" onClick={() => navigate("/farmer/orders")}>Orders</button>
-              <button className="w-full text-left p-2 rounded hover:bg-muted" onClick={() => navigate("/farmer/profile")}>Profile</button>
-              <button className="w-full text-left p-2 rounded hover:bg-muted" onClick={() => { logout?.(); navigate("/sign-in"); }}>Logout</button>
-            </nav>
-          </aside>
 
           {/* Main */}
           <main className="md:col-span-3">

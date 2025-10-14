@@ -12,7 +12,7 @@ import RecipeDiscoveryDashboard from './pages/recipe-discovery-dashboard';
 import Dashboard from './pages/dashboard';
 import SignIn from "./pages/sign-in";
 import AISuggestions from "./pages/ai-suggestions";
-import FarmerDashboard from "./pages/farmer-dashboard/FarmerDashboard";
+import FarmerDashboard from "./pages/farmer-dashboard/components/FarmerDashboard";
 import aiuggestions from "pages/ai-suggestions/aisuggestions";
 const Routes = () => {
   return (
