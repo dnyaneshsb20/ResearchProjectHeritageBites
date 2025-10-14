@@ -15,6 +15,7 @@ import AISuggestions from "./pages/ai-suggestions";
 import FarmerDashboard from "./pages/farmer-dashboard/components/FarmerDashboard";
 import FarmerProducts from './pages/farmer-dashboard/components/FarmerProducts';
 import FarmerOrders from "pages/farmer-dashboard/components/FarmerOrders";
+import FarmerProfileSection from "pages/farmer-dashboard/components/FarmerProfileSection";
 import aiuggestions from "pages/ai-suggestions/aisuggestions";
 const Routes = () => {
   return (
@@ -36,6 +37,7 @@ const Routes = () => {
         <Route path="/farmer-dashboard" element={<FarmerDashboard/>}></Route>
         <Route path='/farmer-products' element={<FarmerProducts/>}></Route>
         <Route path="/farmer-orders" element={<FarmerOrders/>}/>
+        <Route path="/farmer-profile" element={<FarmerProfileSection/>}/>
         <Route path="*" element={<NotFound />} />
       </RouterRoutes>
     </ErrorBoundary>
