@@ -11,26 +11,11 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
     stock: "",
     certifications: "",
     image_url: "",
-    ingredient_id: "",
   });
-  const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(false);
   const [farmerId, setFarmerId] = useState(null);
 
-  // ✅ Fetch ingredients
-  useEffect(() => {
-    const fetchIngredients = async () => {
-      const { data, error } = await supabase
-        .from("ingredients")
-        .select("ingredient_id, name")
-        .order("name", { ascending: true });
-      if (error) console.error("Error fetching ingredients:", error);
-      else setIngredients(data);
-    };
-    if (isOpen) fetchIngredients();
-  }, [isOpen]);
-
-  // ✅ Fetch farmer_id from Supabase v2
+  // ✅ Fetch farmer_id from Supabase session
   useEffect(() => {
     const fetchFarmerId = async () => {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -71,32 +56,55 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
 
     setLoading(true);
 
-    const { data, error } = await supabase
-      .from("products")
-      .insert([
-        {
-          name: formData.name,
-          price: formData.price,
-          unit: formData.unit,
-          stock: formData.stock,
-          certifications: formData.certifications,
-          image_url: formData.image_url,
-          ingredient_id: formData.ingredient_id,
-          farmer_id: farmerId,
-        },
-      ])
-      .select()
-      .single();
+    try {
+      // ✅ Step 1: Insert new ingredient (if not already exists)
+      const { data: ingredient, error: ingredientError } = await supabase
+        .from("ingredients")
+        .insert([{ name: formData.name }])
+        .select("ingredient_id")
+        .single();
 
-    setLoading(false);
+      if (ingredientError) {
+        // Check if duplicate ingredient name (due to unique constraint)
+        if (ingredientError.code === "23505") {
+          // Fetch existing ingredient_id if name already exists
+          const { data: existing, error: fetchError } = await supabase
+            .from("ingredients")
+            .select("ingredient_id")
+            .eq("name", formData.name)
+            .single();
 
-    if (error) {
-      console.error("Error adding product:", error);
-      alert("Failed to add product");
-    } else {
+          if (fetchError || !existing) throw fetchError;
+          ingredient = existing;
+        } else {
+          throw ingredientError;
+        }
+      }
+
+      // ✅ Step 2: Insert product with the new ingredient_id
+      const { data, error } = await supabase
+        .from("products")
+        .insert([
+          {
+            name: formData.name,
+            price: formData.price,
+            unit: formData.unit,
+            stock: formData.stock,
+            certifications: formData.certifications,
+            image_url: formData.image_url,
+            ingredient_id: ingredient.ingredient_id,
+            farmer_id: farmerId,
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+
       alert("✅ Product added successfully!");
       onProductAdded(data);
       onClose();
+
       setFormData({
         name: "",
         price: "",
@@ -104,8 +112,12 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
         stock: "",
         certifications: "",
         image_url: "",
-        ingredient_id: "",
       });
+    } catch (err) {
+      console.error("Error adding product:", err);
+      alert("Failed to add product");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -171,26 +183,6 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
               placeholder="Paste image URL here"
               required
             />
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Ingredient
-              </label>
-              <select
-                name="ingredient_id"
-                value={formData.ingredient_id}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                required
-              >
-                <option value="">Select Ingredient</option>
-                {ingredients.map((ingredient) => (
-                  <option key={ingredient.ingredient_id} value={ingredient.ingredient_id}>
-                    {ingredient.name}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             <div className="flex justify-end gap-3 mt-6">
               <Button
