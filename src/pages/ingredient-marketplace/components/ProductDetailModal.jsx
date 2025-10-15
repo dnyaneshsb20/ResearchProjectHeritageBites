@@ -64,8 +64,8 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
   ];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-background rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 mt-18">
+      <div className="bg-background rounded-lg max-w-4xl w-full max-h-[85vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 bg-background">
           <h2 className="text-xl font-heading font-semibold text-foreground">Product Details</h2>
@@ -312,7 +312,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
           </div>
 
           {/* Reviews Section */}
-          <div className="mt-8">
+          {/* <div className="mt-8">
             <h3 className="text-lg font-heading font-semibold text-foreground mb-4">Customer Reviews</h3>
             <div className="space-y-4">
               {reviews?.map((review) => (
@@ -342,7 +342,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
