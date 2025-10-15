@@ -56,12 +56,12 @@ const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) =
           </div>
         </div>
 
-        {showViewAll && (
+        {/* {showViewAll && (
           <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
             View All
             <Icon name="ArrowRight" size={16} className="ml-1" />
           </Button>
-        )}
+        )} */}
       </div>
       {/* Desktop Grid View */}
       <div className="hidden lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6">

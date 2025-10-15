@@ -40,7 +40,7 @@ const RecipeCard = ({ recipe, className = '' }) => {
 
   return (
     <Link to="/recipe-detail-instructions" className={`block ${className}`}>
-      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-warm hover:shadow-warm-md transition-all duration-200 animate-scale-hover">
+      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-warm hover:shadow-warm-md transition-all duration-200 animate-scale-hover h-[360px]">
         {/* Image Container */}
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
@@ -48,17 +48,17 @@ const RecipeCard = ({ recipe, className = '' }) => {
             alt={title}
             className="w-full h-full object-cover"
           />
-          
+
           {/* Bookmark Button */}
           <button
             onClick={handleBookmark}
             className="absolute top-3 right-3 w-8 h-8 bg-white/90 hover:bg-white backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-200"
             aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
           >
-            <Icon 
-              name={isBookmarked ? 'Bookmark' : 'BookmarkPlus'} 
-              size={16} 
-              color={isBookmarked ? 'var(--color-primary)' : 'var(--color-muted-foreground)'} 
+            <Icon
+              name={isBookmarked ? 'Bookmark' : 'BookmarkPlus'}
+              size={16}
+              color={isBookmarked ? 'var(--color-primary)' : 'var(--color-muted-foreground)'}
             />
           </button>
 
@@ -108,7 +108,7 @@ const RecipeCard = ({ recipe, className = '' }) => {
                 <span>{cookingTime}</span>
               </div>
             </div>
-            
+
             {difficulty && (
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(difficulty)}`}>
                 {difficulty}
@@ -118,7 +118,7 @@ const RecipeCard = ({ recipe, className = '' }) => {
 
           {/* Rating and Chef */}
           <div className="flex items-center justify-between">
-            {rating && (
+            {/* {rating && (
               <div className="flex items-center space-x-1">
                 <div className="flex items-center">
                   {[...Array(5)]?.map((_, i) => (
@@ -135,7 +135,7 @@ const RecipeCard = ({ recipe, className = '' }) => {
                   {rating} ({reviewCount || 0})
                 </span>
               </div>
-            )}
+            )} */}
 
             {chef && (
               <div className="flex items-center space-x-2">
