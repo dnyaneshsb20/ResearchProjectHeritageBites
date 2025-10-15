@@ -15,8 +15,8 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
   const fetchFarmers = async () => {
     setLoading(true)
     const { data, error } = await supabase
-  .from("farmers")
-  .select(`
+      .from("farmers")
+      .select(`
     farmer_id,
     bio,
     certifications,
@@ -26,8 +26,10 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
       email,
       location,
       role
-    )
+    ),
+    products:products!products_farmer_id_fkey (product_id) -- fetch related products
   `);
+
 
     if (error) {
       console.error('Error fetching farmers:', error)
@@ -95,7 +97,7 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
                 <span className="text-sm font-medium text-foreground">{farmer.rating || '—'}</span>
               </div>
               <span className="text-sm text-muted-foreground">
-                {farmer.products || 0} products
+                {farmer.products?.length || 0} products
               </span>
             </div>
 
