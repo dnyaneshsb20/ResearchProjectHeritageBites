@@ -37,7 +37,6 @@ const HeroCarousel = () => {
           id: recipe.recipe_id,
           type: 'recipe',
           title: recipe.name,
-          subtitle: recipe.states?.state_name || '',
           description: recipe.description,
           image: recipe.hero_image_url || 'https://via.placeholder.com/800x600',
           region: recipe.states?.state_name || 'Unknown',
