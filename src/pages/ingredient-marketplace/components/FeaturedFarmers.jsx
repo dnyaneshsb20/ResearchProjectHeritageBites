@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Icon from '../../../components/AppIcon'
 import Image from '../../../components/AppImage'
 import Button from '../../../components/ui/Button'
-import { supabase } from "../../../supabaseClient"; // ✅ Import Supabase client
+import { supabase } from "../../../supabaseClient";
+import ViewProductModal from './ViewProductModal';
 
 const FeaturedFarmers = ({ onFarmerClick }) => {
   const [farmers, setFarmers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedFarmerId, setSelectedFarmerId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchFarmers()
@@ -42,6 +45,10 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
   if (loading) {
     return <p className="text-muted-foreground p-4">Loading farmers...</p>
   }
+  const handleViewProducts = (farmerId) => {
+    setSelectedFarmerId(farmerId); // set the current farmer
+    setIsModalOpen(true);           // open modal
+  };
 
   return (
     <div className="bg-card border border-border rounded-lg p-6 mb-6">
@@ -132,9 +139,15 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
               iconName="ArrowRight"
               iconPosition="right"
               className="w-full"
+              onClick={() => handleViewProducts(farmer.farmer_id)} // open modal
             >
               View Products
             </Button>
+            <ViewProductModal
+              farmerId={selectedFarmerId} // pass the selected farmer
+              isOpen={isModalOpen}        // control visibility
+              onClose={() => setIsModalOpen(false)} // close modal
+            />
           </div>
         ))}
       </div>
