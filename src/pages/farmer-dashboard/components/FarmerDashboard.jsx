@@ -130,9 +130,9 @@ const FarmerDashboard = () => {
                   >
                     {/* Product Image */}
                     <div className="relative aspect-square overflow-hidden flex items-center justify-center bg-muted">
-                      {product.image ? (
+                      {product.image_url ? (
                         <Image
-                          src={product.image}
+                          src={product.image_url}
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                         />
