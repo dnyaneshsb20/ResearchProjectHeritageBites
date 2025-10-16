@@ -41,7 +41,7 @@ const FarmerDashboard = () => {
           .from("products")
           .select("*")
           .eq("farmer_id", farmerData?.farmer_id)
-          .order("created_at", { ascending: false });
+          .order("name", { ascending: true });
 
         if (pErr) console.error(pErr);
         setProducts(productsData || []);
