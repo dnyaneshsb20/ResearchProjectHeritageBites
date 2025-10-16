@@ -124,110 +124,113 @@ const FarmerProducts = () => {
           ) : products.length === 0 ? (
             <div className="text-muted-foreground py-10 text-center">No products added yet.</div>
           ) : (
-            <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/40 text-foreground font-medium">
-                  <tr>
-                    <th className="px-4 py-3 text-left">Product Name</th>
-                    <th className="px-4 py-3 text-left">Price (₹)</th>
-                    <th className="px-4 py-3 text-left">Stock</th>
-                    <th className="px-4 py-3 text-left">Added On</th>
-                    <th className="px-4 py-3 text-center">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map((p) => (
-                    <tr
-                      key={p.product_id}
-                      className="border-t hover:bg-muted/20 transition-all duration-150"
-                    >
-                      {editingProductId === p.product_id ? (
-                        <>
-                          <td className="px-4 py-3">
-                            <input
-                              type="text"
-                              value={editData.name}
-                              onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                              className="input w-full h-12"
-                            />
-                          </td>
-                          <td className="px-4 py-3">
-                            <input
-                              type="number"
-                              value={editData.price}
-                              onChange={(e) =>
-                                setEditData({ ...editData, price: parseFloat(e.target.value) })
-                              }
-                              className="input w-full h-12"
-                            />
-                          </td>
-                          <td className="px-4 py-3">
-                            <input
-                              type="number"
-                              value={editData.stock}
-                              onChange={(e) =>
-                                setEditData({ ...editData, stock: parseInt(e.target.value) })
-                              }
-                              className="input w-full h-12"
-                            />
-                          </td>
-                          <td className="px-4 py-3">
-                            <input
-                              type="text"
-                              value={p.created_at ? new Date(p.created_at).toLocaleDateString() : "-"}
-                              disabled
-                              className="input w-full h-12 bg-gray-100 cursor-not-allowed"
-                            />
-                          </td>
-                          <td className="px-4 py-3 flex justify-center gap-2">
-                            <Button
-                              size="sm"
-                              onClick={() => handleEditSave(p.product_id)}
-                              loading={editLoading}
-                            >
-                              Save
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => setEditingProductId(null)}
-                            >
-                              Cancel
-                            </Button>
-                          </td>
-                        </>
-                      ) : (
-                        <>
-                          <td className="px-4 py-3 font-medium text-foreground">{p.name}</td>
-                          <td className="px-4 py-3 text-muted-foreground">{p.price?.toFixed(2)}</td>
-                          <td className="px-4 py-3">
-                            {p.stock > 0 ? (
-                              <span className="text-success font-medium">{p.stock}</span>
-                            ) : (
-                              <span className="text-destructive font-medium">Out of Stock</span>
-                            )}
-                          </td>
-                          <td className="px-4 py-3 text-muted-foreground">
-                            {p.created_at ? new Date(p.created_at).toLocaleDateString() : "-"}
-                          </td>
-                          <td className="px-4 py-3 flex justify-center items-center gap-2">
-                            <Button size="sm" onClick={() => handleEditClick(p)}>
-                              Edit
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => handleDelete(p.product_id)}
-                            >
-                              Delete
-                            </Button>
-                          </td>
-                        </>
-                      )}
+            <div className="rounded-xl border border-border bg-card shadow-sm">
+              <div className="overflow-y-auto max-h-[535px]">
+                <table className="w-full text-sm table-auto border-separate border-spacing-0">
+                  <thead className="bg-white text-foreground font-medium sticky top-0 z-10 border-b border-border">
+                    <tr>
+                      <th className="px-4 py-3 text-left">Product Name</th>
+                      <th className="px-4 py-3 text-left">Price (₹)</th>
+                      <th className="px-4 py-3 text-left">Stock</th>
+                      <th className="px-4 py-3 text-left">Added On</th>
+                      <th className="px-4 py-3 text-center">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {products.map((p, idx) => (
+                      <tr
+                        key={p.product_id}
+                        className={`border-t hover:bg-muted/20 transition-all duration-150 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                          }`}
+                      >
+                        {editingProductId === p.product_id ? (
+                          <>
+                            <td className="px-4 py-3">
+                              <input
+                                type="text"
+                                value={editData.name}
+                                onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                                className="input w-full h-12"
+                              />
+                            </td>
+                            <td className="px-4 py-3">
+                              <input
+                                type="number"
+                                value={editData.price}
+                                onChange={(e) =>
+                                  setEditData({ ...editData, price: parseFloat(e.target.value) })
+                                }
+                                className="input w-full h-12"
+                              />
+                            </td>
+                            <td className="px-4 py-3">
+                              <input
+                                type="number"
+                                value={editData.stock}
+                                onChange={(e) =>
+                                  setEditData({ ...editData, stock: parseInt(e.target.value) })
+                                }
+                                className="input w-full h-12"
+                              />
+                            </td>
+                            <td className="px-4 py-3">
+                              <input
+                                type="text"
+                                value={p.created_at ? new Date(p.created_at).toLocaleDateString() : "-"}
+                                disabled
+                                className="input w-full h-12 bg-gray-100 cursor-not-allowed"
+                              />
+                            </td>
+                            <td className="px-4 py-3 flex justify-center gap-2">
+                              <Button
+                                size="sm"
+                                onClick={() => handleEditSave(p.product_id)}
+                                loading={editLoading}
+                              >
+                                Save
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => setEditingProductId(null)}
+                              >
+                                Cancel
+                              </Button>
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="px-4 py-3 font-medium text-foreground">{p.name}</td>
+                            <td className="px-4 py-3 text-foreground">₹ {p.price?.toFixed(2)}</td>
+                            <td className="px-4 py-3">
+                              {p.stock > 0 ? (
+                                <span className="text-success font-medium">{p.stock}</span>
+                              ) : (
+                                <span className="text-destructive font-medium">Out of Stock</span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3 text-foreground">
+                              {p.created_at ? new Date(p.created_at).toLocaleDateString() : "-"}
+                            </td>
+                            <td className="px-4 py-3 flex justify-center items-center gap-2">
+                              <Button size="sm" onClick={() => handleEditClick(p)}>
+                                Edit
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => handleDelete(p.product_id)}
+                              >
+                                Delete
+                              </Button>
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
