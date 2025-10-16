@@ -121,36 +121,27 @@ const ViewProductModal = ({ farmerId, isOpen, onClose }) => {
                             <p className="text-muted-foreground">No products available.</p>
                         </div>
                     ) : (
-                        <div className="overflow-x-auto">
-                            <table className="w-full border border-border rounded-lg text-sm table-auto">
-                                <thead className="bg-muted text-foreground">
+                        <div className="max-h-[400px] overflow-auto">
+                            <table className="w-full min-w-0 border border-border rounded-lg text-sm table-auto">
+                                <thead className="bg-muted text-foreground sticky top-0 z-10">
                                     <tr>
                                         <th className="px-4 py-3 text-left font-medium w-12">Sr. No</th>
                                         <th className="px-4 py-3 text-left font-medium">Name</th>
-                                        <th className="px-4 py-3 text-left font-medium">Price</th>
+                                        <th className="px-4 py-3 text-left font-medium">Price (₹)</th>
                                         <th className="px-4 py-3 text-left font-medium">Certifications</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {products.map((product, idx) => (
-                                        <tr
-                                            key={product.product_id}
-                                            className={idx % 2 === 0 ? 'bg-background' : 'bg-card'}
-                                        >
+                                        <tr key={product.product_id} className={idx % 2 === 0 ? 'bg-background' : 'bg-card'}>
                                             <td className="px-4 py-3 align-top">{idx + 1}</td>
                                             <td className="px-4 py-3 align-top">{product.name}</td>
                                             <td className="px-4 py-3 align-top">
-                                                {product.price !== null && product.price !== undefined
-                                                    ? Number(product.price).toLocaleString(undefined, {
-                                                        minimumFractionDigits: 2,
-                                                        maximumFractionDigits: 2,
-                                                    })
+                                                ₹ {product.price !== null && product.price !== undefined
+                                                    ? Number(product.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                                                     : '—'}
                                             </td>
-                                            <td className="px-4 py-3 align-top">
-                                                {product.certifications || '—'}
-                                            </td>
+                                            <td className="px-4 py-3 align-top">{product.certifications || '—'}</td>
                                         </tr>
                                     ))}
                                 </tbody>
