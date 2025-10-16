@@ -5,7 +5,8 @@ import Button from './Button';
 import Input from './Input';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { supabase } from "../../supabaseClient"; // make sure this points to your Supabase client
+import { supabase } from "../../supabaseClient"; 
+import { useCart } from '../../context/CartContext';// make sure this points to your Supabase client
 
 const Header = () => {
   const navigate = useNavigate();
@@ -14,9 +15,11 @@ const Header = () => {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]); // stores all products added to cart
-  const [cartItemCount, setCartItemCount] = useState(0); // count of items in cart
-  const [isCartOpen, setIsCartOpen] = useState(false); // already exists, keep it
+  //const [cartItems, setCartItems] = useState([]); // stores all products added to cart
+  //const [cartItemCount, setCartItemCount] = useState(0); // count of items in cart
+  //const [isCartOpen, setIsCartOpen] = useState(false); // already exists, keep it
+   const { cartItems, isCartOpen, setIsCartOpen } = useCart();
+  const cartItemCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const location = useLocation();
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
@@ -80,12 +83,24 @@ const navigationItems = React.useMemo(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+const handleAddToCart = (product) => { // removed ": ProductType"
+  setCartItems(prev => {
+    // Check if item is already in cart
+    const existing = prev.find(item => item.id === product.id);
+    if (existing) {
+      // Increase quantity
+      return prev.map(item =>
+        item.id === product.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+      );
+    } else {
+      // Add new item
+      return [...prev, { ...product, quantity: 1 }];
+    }
+  });
 
-  const handleAddToCart = (product) => {
-    setCartItems((prev) => [...prev, product]); // add product to cart
-    setCartItemCount((prev) => prev + 1);       // update count
-    setIsCartOpen(true);                        // optional: open cart modal when added
-  };
+  setIsCartOpen(true); // Open the cart modal
+};
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -413,7 +428,7 @@ const navigationItems = React.useMemo(() => {
                       <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
                       <div>
                         <p className="text-sm font-medium">{item.name}</p>
-                        <p className="text-xs text-muted-foreground">Qty: 1</p>
+                       <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
                       </div>
                     </div>
                     <span className="text-sm font-medium">
@@ -427,7 +442,8 @@ const navigationItems = React.useMemo(() => {
             {/* Footer */}
             <div className="mt-6 flex justify-between items-center">
               <span className="font-medium">
-                Total: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(cartItems.reduce((acc, item) => acc + item.price, 0))}
+                Total: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0)
+)}
               </span>
               <button
                 onClick={() => {

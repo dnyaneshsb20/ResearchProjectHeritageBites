@@ -4,12 +4,14 @@ import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from "react-router-dom";
+import { useCart } from '../../../context/CartContext';
 
 const ProductCard = ({ product, onAddToCart, onToggleWishlist, onProductClick }) => {
   const [isWishlisted, setIsWishlisted] = useState(product?.isWishlisted || false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   
 
   const handleWishlistToggle = (e) => {
@@ -18,19 +20,27 @@ const ProductCard = ({ product, onAddToCart, onToggleWishlist, onProductClick })
     onToggleWishlist(product?.id, !isWishlisted);
   };
 
-  const handleAddToCart = async (e) => {
-    e?.stopPropagation();
+const handleAddToCart = async (e) => {
+  e?.stopPropagation();
 
-    if (!user) {
-      // User not signed in → redirect to sign-in
-      navigate("/signin");
-      return;
-    }
+  if (!user) {
+    navigate("/signin");
+    return;
+  }
 
-    setIsAddingToCart(true);
+  setIsAddingToCart(true);
+
+  // Add to cart context to open modal
+  addToCart(product);
+
+  // Optional: if you still have parent handler
+  if (onAddToCart) {
     await onAddToCart(product);
-    setIsAddingToCart(false);
-  };
+  }
+
+  setIsAddingToCart(false);
+};
+
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', {
