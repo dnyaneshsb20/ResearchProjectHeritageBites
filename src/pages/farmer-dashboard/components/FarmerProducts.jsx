@@ -115,7 +115,7 @@ const FarmerProducts = () => {
             <AddProductModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
-              onProductAdded={(newProduct) => setProducts(prev => [newProduct, ...prev])}
+              onProductAdded={(newProduct) => setProducts((prev) => [newProduct, ...prev])}
             />
           </div>
 
@@ -129,6 +129,7 @@ const FarmerProducts = () => {
                 <table className="w-full text-sm table-auto border-separate border-spacing-0">
                   <thead className="bg-white text-foreground font-medium sticky top-0 z-10 border-b border-border">
                     <tr>
+                      <th className="px-4 py-3 text-left">Sr. No.</th>
                       <th className="px-4 py-3 text-left">Product Name</th>
                       <th className="px-4 py-3 text-left">Price (₹)</th>
                       <th className="px-4 py-3 text-left">Stock</th>
@@ -140,16 +141,20 @@ const FarmerProducts = () => {
                     {products.map((p, idx) => (
                       <tr
                         key={p.product_id}
-                        className={`border-t hover:bg-muted/20 transition-all duration-150 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                          }`}
+                        className={`border-t hover:bg-muted/20 transition-all duration-150 ${
+                          idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        }`}
                       >
                         {editingProductId === p.product_id ? (
                           <>
+                            <td className="px-4 py-3">{idx + 1}</td>
                             <td className="px-4 py-3">
                               <input
                                 type="text"
                                 value={editData.name}
-                                onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                                onChange={(e) =>
+                                  setEditData({ ...editData, name: e.target.value })
+                                }
                                 className="input w-full h-12"
                               />
                             </td>
@@ -158,7 +163,10 @@ const FarmerProducts = () => {
                                 type="number"
                                 value={editData.price}
                                 onChange={(e) =>
-                                  setEditData({ ...editData, price: parseFloat(e.target.value) })
+                                  setEditData({
+                                    ...editData,
+                                    price: parseFloat(e.target.value),
+                                  })
                                 }
                                 className="input w-full h-12"
                               />
@@ -168,7 +176,10 @@ const FarmerProducts = () => {
                                 type="number"
                                 value={editData.stock}
                                 onChange={(e) =>
-                                  setEditData({ ...editData, stock: parseInt(e.target.value) })
+                                  setEditData({
+                                    ...editData,
+                                    stock: parseInt(e.target.value),
+                                  })
                                 }
                                 className="input w-full h-12"
                               />
@@ -176,7 +187,11 @@ const FarmerProducts = () => {
                             <td className="px-4 py-3">
                               <input
                                 type="text"
-                                value={p.created_at ? new Date(p.created_at).toLocaleDateString() : "-"}
+                                value={
+                                  p.created_at
+                                    ? new Date(p.created_at).toLocaleDateString()
+                                    : "-"
+                                }
                                 disabled
                                 className="input w-full h-12 bg-gray-100 cursor-not-allowed"
                               />
@@ -200,17 +215,24 @@ const FarmerProducts = () => {
                           </>
                         ) : (
                           <>
+                            <td className="px-4 py-3">{idx + 1}</td>
                             <td className="px-4 py-3 font-medium text-foreground">{p.name}</td>
-                            <td className="px-4 py-3 text-foreground">₹ {p.price?.toFixed(2)}</td>
+                            <td className="px-4 py-3 text-foreground">
+                              ₹ {p.price?.toFixed(2)}
+                            </td>
                             <td className="px-4 py-3">
                               {p.stock > 0 ? (
                                 <span className="text-success font-medium">{p.stock}</span>
                               ) : (
-                                <span className="text-destructive font-medium">Out of Stock</span>
+                                <span className="text-destructive font-medium">
+                                  Out of Stock
+                                </span>
                               )}
                             </td>
                             <td className="px-4 py-3 text-foreground">
-                              {p.created_at ? new Date(p.created_at).toLocaleDateString() : "-"}
+                              {p.created_at
+                                ? new Date(p.created_at).toLocaleDateString()
+                                : "-"}
                             </td>
                             <td className="px-4 py-3 flex justify-center items-center gap-2">
                               <Button size="sm" onClick={() => handleEditClick(p)}>
