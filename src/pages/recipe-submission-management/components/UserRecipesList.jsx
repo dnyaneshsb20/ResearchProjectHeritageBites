@@ -3,7 +3,8 @@ import { supabase } from "../../../supabaseClient";
 import Button from "../../../components/ui/Button";
 import Icon from "../../../components/AppIcon";
 
-const UserRecipesList = ({ onNewRecipe }) => {
+const UserRecipesList = ({ onNewRecipe, onViewRecipe, onEditRecipe }) => {
+
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -131,7 +132,7 @@ const UserRecipesList = ({ onNewRecipe }) => {
                     variant="outline"
                     size="sm"
                     className="w-full justify-center"
-                    onClick={() => onViewRecipe?.(recipe.recipe_id)}
+                    onClick={() => onViewRecipe?.(recipe.indg_recipe_id)}
                     iconName="Eye"
                   >
                     View
@@ -140,7 +141,7 @@ const UserRecipesList = ({ onNewRecipe }) => {
                     variant="secondary"
                     size="sm"
                     className="w-full justify-center"
-                    onClick={() => onEditRecipe?.(recipe.recipe_id)}
+                    onClick={() => onEditRecipe?.(recipe.indg_recipe_id)}
                     iconName="Edit3"
                   >
                     Edit
