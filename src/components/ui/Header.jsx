@@ -5,7 +5,7 @@ import Button from './Button';
 import Input from './Input';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { supabase } from "../../supabaseClient"; 
+import { supabase } from "../../supabaseClient";
 import { useCart } from '../../context/CartContext';// make sure this points to your Supabase client
 
 const Header = () => {
@@ -18,7 +18,17 @@ const Header = () => {
   //const [cartItems, setCartItems] = useState([]); // stores all products added to cart
   //const [cartItemCount, setCartItemCount] = useState(0); // count of items in cart
   //const [isCartOpen, setIsCartOpen] = useState(false); // already exists, keep it
-   const { cartItems, isCartOpen, setIsCartOpen } = useCart();
+  const {
+    cartItems,
+    setCartItems,
+    isCartOpen,
+    setIsCartOpen,
+    addToCart,
+    removeFromCart,
+    increaseQty,
+    decreaseQty,
+  } = useCart();
+
   const cartItemCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const location = useLocation();
   const searchRef = useRef(null);
@@ -26,37 +36,37 @@ const Header = () => {
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [userProfile, setUserProfile] = useState(null); // fetched from Supabase
 
- // 👇 Add this just before defining navigationItems
-const userRole = userProfile?.role || "user";
+  // 👇 Add this just before defining navigationItems
+  const userRole = userProfile?.role || "user";
 
-// 👇 Conditional navigation
-const navigationItems = React.useMemo(() => {
-  if (userRole === "farmer") {
+  // 👇 Conditional navigation
+  const navigationItems = React.useMemo(() => {
+    if (userRole === "farmer") {
+      return [
+        { path: "/farmer-dashboard", label: "Dashboard", icon: "LayoutDashboard" },
+        { path: "/farmer-products", label: "My Products", icon: "Package" },
+        { path: "/farmer-orders", label: "Orders", icon: "ClipboardList" },
+        { path: "/farmer-profile", label: "Profile", icon: "User" },
+      ];
+    }
     return [
-      { path: "/farmer-dashboard", label: "Dashboard", icon: "LayoutDashboard" },
-      { path: "/farmer-products", label: "My Products", icon: "Package" },
-      { path: "/farmer-orders", label: "Orders", icon: "ClipboardList" },
-      { path: "/farmer-profile", label: "Profile", icon: "User" },
+      { path: "/recipe-discovery-dashboard", label: "Discover", icon: "Search" },
+      { path: "/ingredient-marketplace", label: "Marketplace", icon: "ShoppingBag" },
+      { path: "/user-profile-health-goals", label: "Profile", icon: "User", protected: true },
+      { path: "/recipe-submission-management", label: "Contribute", icon: "Plus", protected: true },
     ];
-  }
-  return [
-    { path: "/recipe-discovery-dashboard", label: "Discover", icon: "Search" },
-    { path: "/ingredient-marketplace", label: "Marketplace", icon: "ShoppingBag" },
-    { path: "/user-profile-health-goals", label: "Profile", icon: "User", protected: true },
-    { path: "/recipe-submission-management", label: "Contribute", icon: "Plus", protected: true },
-  ];
-}, [userRole]);
+  }, [userRole]);
 
   const isActiveRoute = (path) => location?.pathname === path;
 
   const handleProtectedNavigation = (path) => {
-  setIsUserMenuOpen(false);
-  if (!isAuthenticated) {
-    setShowAuthPopup(true);
-    return;
-  }
-  navigate(path);
-};
+    setIsUserMenuOpen(false);
+    if (!isAuthenticated) {
+      setShowAuthPopup(true);
+      return;
+    }
+    navigate(path);
+  };
 
   const handleSearchSubmit = (e) => {
     e?.preventDefault();
@@ -83,23 +93,23 @@ const navigationItems = React.useMemo(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-const handleAddToCart = (product) => { // removed ": ProductType"
-  setCartItems(prev => {
-    // Check if item is already in cart
-    const existing = prev.find(item => item.id === product.id);
-    if (existing) {
-      // Increase quantity
-      return prev.map(item =>
-        item.id === product.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
-      );
-    } else {
-      // Add new item
-      return [...prev, { ...product, quantity: 1 }];
-    }
-  });
+  const handleAddToCart = (product) => { // removed ": ProductType"
+    setCartItems(prev => {
+      // Check if item is already in cart
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) {
+        // Increase quantity
+        return prev.map(item =>
+          item.id === product.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+        );
+      } else {
+        // Add new item
+        return [...prev, { ...product, quantity: 1 }];
+      }
+    });
 
-  setIsCartOpen(true); // Open the cart modal
-};
+    setIsCartOpen(true); // Open the cart modal
+  };
 
 
   useEffect(() => {
@@ -244,7 +254,7 @@ const handleAddToCart = (product) => { // removed ": ProductType"
           </div>
 
           {/* Shopping Cart */}
-          {isAuthenticated && userProfile?.role !== "farmer" &&( 
+          {isAuthenticated && userProfile?.role !== "farmer" && (
             <div className="relative">
               <Button
                 variant="ghost"
@@ -417,33 +427,63 @@ const handleAddToCart = (product) => { // removed ": ProductType"
               </button>
             </div>
 
-            {/* Cart Items Placeholder */}
             <div className="space-y-4">
               {cartItems.length === 0 ? (
                 <p className="text-sm text-muted-foreground">Your cart is empty.</p>
               ) : (
-                cartItems.map((item, index) => (
-                  <div key={index} className="flex justify-between items-center border-b border-border pb-2">
+                cartItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex justify-between items-center border-b border-border pb-2"
+                  >
                     <div className="flex items-center space-x-2">
-                      <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
-                      <div>
-                        <p className="text-sm font-medium">{item.name}</p>
-                       <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-12 h-12 object-cover rounded"
+                      />
+
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">{item.name}</span>
+
+                        <div className="flex items-center space-x-2 mt-1">
+                          <button
+                            onClick={() => decreaseQty(item.id)}
+                            className="px-2 py-1 bg-muted rounded hover:bg-muted/80 text-lg font-medium"
+                          >
+                            −
+                          </button>
+
+                          <span className="text-sm font-medium">{item.quantity ?? 1}</span>
+
+                          <button
+                            onClick={() => increaseQty(item.id)}
+                            className="px-2 py-1 bg-muted rounded hover:bg-muted/80 text-lg font-medium"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                     </div>
+
                     <span className="text-sm font-medium">
-                      {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(item.price)}
+                      {new Intl.NumberFormat('en-IN', {
+                        style: 'currency',
+                        currency: 'INR',
+                        minimumFractionDigits: 0,
+                      }).format(item.price * (item.quantity ?? 1))}
                     </span>
                   </div>
                 ))
               )}
             </div>
 
+
             {/* Footer */}
             <div className="mt-6 flex justify-between items-center">
               <span className="font-medium">
                 Total: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0)
-)}
+                )}
               </span>
               <button
                 onClick={() => {

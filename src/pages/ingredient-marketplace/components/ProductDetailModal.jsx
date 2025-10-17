@@ -1,26 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
+import { supabase } from '../../../supabaseClient';
 
 const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const [selectedUnit, setSelectedUnit] = useState(product?.units?.[0] || 'kg');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [farmerInfo, setFarmerInfo] = useState(null);
+  const [loadingFarmer, setLoadingFarmer] = useState(false);
+
+
+  useEffect(() => {
+    const fetchFarmerInfo = async () => {
+      if (!product?.farmer_id) return;
+
+      console.log('Fetching farmer for ID:', product.farmer_id);
+      setLoadingFarmer(true);
+
+      const { data, error } = await supabase
+        .from('farmers')
+        .select(`
+        farmer_id,
+        user_id,
+        users:user_id (   -- <--- aliasing 'users' via the foreign key column
+        name,
+        )
+        `)
+        .eq('farmer_id', product.farmer_id)
+        .maybeSingle();
+
+
+      if (error) console.error('Error fetching farmer:', error);
+      else console.log('Farmer data:', data);
+
+      setFarmerInfo(data || null);
+      setLoadingFarmer(false);
+    };
+
+    if (isOpen) fetchFarmerInfo();
+  }, [isOpen, product?.farmer_id]);
 
   if (!isOpen || !product) return null;
 
-  const handleAddToCart = async () => {
-    setIsAddingToCart(true);
-    await onAddToCart({
-      ...product,
-      quantity,
-      selectedUnit
-    });
-    setIsAddingToCart(false);
-  };
+  // const handleAddToCart = async () => {
+  //   setIsAddingToCart(true);
+  //   await onAddToCart({
+  //     ...product,
+  //     quantity,
+  //     selectedUnit
+  //   });
+  //   setIsAddingToCart(false);
+  // };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', {
@@ -85,16 +118,15 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              
+
               {product?.images && product?.images?.length > 1 && (
                 <div className="flex space-x-2 overflow-x-auto">
                   {product?.images?.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 ${
-                        selectedImageIndex === index ? 'border-primary' : 'border-border'
-                      }`}
+                      className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 ${selectedImageIndex === index ? 'border-primary' : 'border-border'
+                        }`}
                     >
                       <Image
                         src={image}
@@ -134,85 +166,60 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
               <div className="mb-4">
                 <div className="flex items-center space-x-2 mb-2">
                   <span className="text-3xl font-body font-bold text-foreground">
-                    {formatPrice(calculateBulkPrice(product?.price, quantity))}
+                    {formatPrice(product?.price)}
                   </span>
                   {product?.originalPrice && (
                     <span className="text-lg text-muted-foreground line-through">
                       {formatPrice(product?.originalPrice)}
                     </span>
                   )}
-                  <span className="text-sm text-muted-foreground">per {selectedUnit}</span>
                 </div>
-                {quantity >= 5 && (
-                  <p className="text-sm text-success">
-                    Bulk discount applied! Save {quantity >= 10 ? '10%' : '5%'}
-                  </p>
-                )}
               </div>
 
               {/* Farmer Info */}
               <div className="bg-muted rounded-lg p-4 mb-4">
-                <div className="flex items-center space-x-3 mb-2">
-                  <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
-                    <Icon name="User" size={16} color="white" />
-                  </div>
-                  <div>
-                    <h3 className="font-body font-semibold text-foreground">{product?.farmer?.name}</h3>
-                    <div className="flex items-center space-x-1">
-                      <Icon name="MapPin" size={12} className="text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">{product?.farmer?.location}</span>
+                {loadingFarmer ? (
+                  <p className="text-sm text-muted-foreground">Loading farmer info...</p>
+                ) : farmerInfo ? (
+                  <>
+                    <div className="flex items-center space-x-3 mb-2">
+                      <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
+                        <Icon name="User" size={16} color="white" />
+                      </div>
+                      <div>
+                        <h3 className="font-body font-semibold text-foreground">
+                          {farmerInfo?.users?.name || 'Unknown Farmer'}
+                        </h3>
+                        <div className="flex items-center space-x-1">
+                          <Icon name="MapPin" size={12} className="text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">
+                            {farmerInfo?.location || 'Location not available'}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">{product?.farmer?.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {farmerInfo?.bio || 'No bio available'}
+                    </p>
+                    {farmerInfo?.certifications && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {farmerInfo.certifications.split(',').map((cert, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-success/10 text-success text-sm font-caption font-medium rounded-full border border-success/20"
+                          >
+                            <Icon name="Shield" size={12} className="inline mr-1" />
+                            {cert.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Farmer details not available.</p>
+                )}
               </div>
 
-              {/* Quantity and Unit Selection */}
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-body font-medium text-foreground mb-2">
-                    Quantity
-                  </label>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    >
-                      <Icon name="Minus" size={16} />
-                    </Button>
-                    <Input
-                      type="number"
-                      value={quantity}
-                      onChange={(e) => setQuantity(Math.max(1, parseInt(e?.target?.value) || 1))}
-                      className="w-20 text-center"
-                      min="1"
-                    />
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => setQuantity(quantity + 1)}
-                    >
-                      <Icon name="Plus" size={16} />
-                    </Button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-body font-medium text-foreground mb-2">
-                    Unit
-                  </label>
-                  <select
-                    value={selectedUnit}
-                    onChange={(e) => setSelectedUnit(e?.target?.value)}
-                    className="w-full px-3 py-2 border border-border rounded-lg bg-background text-foreground"
-                  >
-                    {(product?.units || ['kg', '500g', '250g'])?.map((unit) => (
-                      <option key={unit} value={unit}>{unit}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
 
               {/* Certifications */}
               <div className="flex flex-wrap gap-2 mb-4">
@@ -229,19 +236,21 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
 
               {/* Stock Status */}
               <div className="flex items-center space-x-2 mb-6">
-                <div className={`w-3 h-3 rounded-full ${
-                  product?.stock > 10 ? 'bg-success' : 
+                <div className={`w-3 h-3 rounded-full ${product?.stock > 10 ? 'bg-success' :
                   product?.stock > 0 ? 'bg-warning' : 'bg-destructive'
-                }`} />
+                  }`} />
                 <span className="text-sm text-muted-foreground">
-                  {product?.stock > 10 ? 'In Stock' : 
-                   product?.stock > 0 ? `Only ${product?.stock} left` : 'Out of Stock'}
+                  {product?.stock > 10 ? 'In Stock' :
+                    product?.stock > 0 ? `Only ${product?.stock} left` : 'Out of Stock'}
                 </span>
               </div>
 
               {/* Add to Cart */}
+              {/* Add to Cart
               <Button
-                onClick={handleAddToCart}
+                onClick={() => {
+                  handleAddToCart();
+                }}
                 disabled={product?.stock === 0 || isAddingToCart}
                 loading={isAddingToCart}
                 iconName="ShoppingCart"
@@ -249,8 +258,12 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                 className="w-full mb-4"
                 size="lg"
               >
-                Add to Cart - {formatPrice(calculateBulkPrice(product?.price, quantity) * quantity)}
-              </Button>
+                Add to Cart – {new Intl.NumberFormat('en-IN', {
+                  style: 'currency',
+                  currency: 'INR',
+                  minimumFractionDigits: 0,
+                }).format(product?.price)}
+              </Button> */}
 
               {/* Delivery Info */}
               <div className="bg-muted rounded-lg p-4">
@@ -298,7 +311,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                 <p className="text-muted-foreground mb-4">
                   {product?.description || `${product?.name} is a premium quality indigenous ingredient sourced directly from verified farmers. This traditional variety has been cultivated using time-tested methods that preserve its authentic flavor and nutritional value.`}
                 </p>
-                
+
                 <h4 className="font-body font-semibold text-foreground mb-2">Key Features:</h4>
                 <ul className="list-disc list-inside text-muted-foreground space-y-1">
                   <li>100% natural and chemical-free</li>
