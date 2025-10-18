@@ -34,70 +34,152 @@ const IngredientMarketplace = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
   const productsPerPage = 12;
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setIsLoading(true);
+useEffect(() => {
+  const fetchProducts = async () => {
+    setIsLoading(true);
 
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
-    product_id,
-    name,
-    price,
-    unit,
-    stock,
-    certifications,
-    image_url,
-    farmer_id,
-    ingredient_id,
-    farmers (
-      location,
-      user:users (
-        name
-      )
-    ),
-    ingredients (
-      ingredient_id,
-      name,
-      nutritional_info,
-      category_id
-    )
-  `);
+    try {
+      let productData = [];
 
-      if (error) {
-        console.error('Error fetching products:', error);
+      if (activeCategory === 'all') {
+        // 🟢 Fetch all products (default)
+        const { data, error } = await supabase
+          .from('products')
+          .select(`
+            product_id,
+            name,
+            price,
+            unit,
+            stock,
+            certifications,
+            image_url,
+            farmer_id,
+            ingredient_id,
+            farmers (
+              location,
+              user:users (
+                name
+              )
+            ),
+            ingredients (
+              ingredient_id,
+              name,
+              nutritional_info,
+              category_id,
+              categories (
+                name
+              )
+            )
+          `);
+
+        if (error) throw error;
+        productData = data;
       } else {
-        const products = data.map((item) => ({
-          id: item.product_id,
-          name: item.name || item.ingredients?.name || 'Unnamed Product',
-          image: item.image_url || 'https://placehold.co/400x400?text=Product',
-          price: Number(item.price) || 0,
-          unit: item.unit || '1kg',
-          stock: item.stock || 0,
-          rating: 4.5,
-          reviewCount: Math.floor(Math.random() * 200),
-          category: item.ingredients?.category_id || 'general',
-          isOrganic: item.certifications?.toLowerCase()?.includes('organic'),
-          farmer: {
-            name: item.farmers?.user?.name || 'Farmer',         // placeholder for list
-            location: item.farmers?.location || 'India',       // placeholder for list
-          },
-          farmer_id: item.farmer_id,  // <--- send this to ProductDetailModal
-          certifications: item.certifications
-            ? item.certifications.split(',').map((c) => c.trim())
-            : [],
-          description: item.ingredients?.nutritional_info || '',
-        }));
+        // 🟡 Map frontend ID → actual DB name
+        const categoryMap = {
+          'grains-cereals': 'Grains & Cereals',
+          'spices-condiments': 'Spices & Condiments',
+          'oil-seeds': 'Oil Seeds',
+          'pulses-legumes': 'Pulses & Legumes',
+          'millets': 'Millets',
+          'fruits-vegetables': 'Fruits & Vegetables'
+        };
+        const selectedCategoryName = categoryMap[activeCategory];
 
-        setAllProducts(products);
-        setFilteredProducts(products);
+        // 1️⃣ Get category_id
+        const { data: categoryData, error: catError } = await supabase
+          .from('categories')
+          .select('category_id')
+          .eq('name', selectedCategoryName)
+          .single();
+
+        if (catError || !categoryData) throw catError || new Error('Category not found');
+
+        // 2️⃣ Get ingredients for that category
+        const { data: ingredients, error: ingError } = await supabase
+          .from('ingredients')
+          .select('ingredient_id')
+          .eq('category_id', categoryData.category_id);
+
+        if (ingError) throw ingError;
+
+        const ingredientIds = ingredients.map((i) => i.ingredient_id);
+
+        if (ingredientIds.length === 0) {
+          setAllProducts([]);
+          setFilteredProducts([]);
+          setIsLoading(false);
+          return;
+        }
+
+        // 3️⃣ Get products linked to those ingredients
+        const { data, error } = await supabase
+          .from('products')
+          .select(`
+            product_id,
+            name,
+            price,
+            unit,
+            stock,
+            certifications,
+            image_url,
+            farmer_id,
+            ingredient_id,
+            farmers (
+              location,
+              user:users (
+                name
+              )
+            ),
+            ingredients (
+              ingredient_id,
+              name,
+              nutritional_info,
+              category_id,
+              categories (
+                name
+              )
+            )
+          `)
+          .in('ingredient_id', ingredientIds);
+
+        if (error) throw error;
+        productData = data;
       }
 
-      setIsLoading(false);
-    };
+      // 🧩 Format data
+      const products = productData.map((item) => ({
+        id: item.product_id,
+        name: item.name || item.ingredients?.name || 'Unnamed Product',
+        image: item.image_url || 'https://placehold.co/400x400?text=Product',
+        price: Number(item.price) || 0,
+        unit: item.unit || '1kg',
+        stock: item.stock || 0,
+        rating: 4.5,
+        reviewCount: Math.floor(Math.random() * 200),
+        category: item.ingredients?.categories?.name || 'General',
+        isOrganic: item.certifications?.toLowerCase()?.includes('organic'),
+        farmer: {
+          name: item.farmers?.user?.name || 'Farmer',
+          location: item.farmers?.location || 'India'
+        },
+        certifications: item.certifications
+          ? item.certifications.split(',').map((c) => c.trim())
+          : [],
+        description: item.ingredients?.nutritional_info || ''
+      }));
 
-    fetchProducts();
-  }, []);
+      setAllProducts(products);
+      setFilteredProducts(products);
+    } catch (err) {
+      console.error('Error fetching products:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchProducts();
+}, [activeCategory]);
 
 
   // Filter and search logic
