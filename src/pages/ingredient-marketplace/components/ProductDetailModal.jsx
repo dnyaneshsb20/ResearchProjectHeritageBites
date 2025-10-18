@@ -24,14 +24,15 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
         .from('farmers')
         .select(`
         farmer_id,
-        user_id,
-        users:user_id (   -- <--- aliasing 'users' via the foreign key column
-        name,
+        location,
+        bio,
+        certifications,
+        users:user_id (
+          name
         )
-        `)
+      `)
         .eq('farmer_id', product.farmer_id)
         .maybeSingle();
-
 
       if (error) console.error('Error fetching farmer:', error);
       else console.log('Farmer data:', data);
@@ -141,12 +142,22 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
 
             {/* Product Info */}
             <div>
-              <h1 className="text-2xl font-heading font-bold text-foreground mb-2">
+              <h1 className="text-2xl font-heading font-bold text-foreground mb-1">
                 {product?.name}
               </h1>
+              {/* Stock Status */}
+              <div className="flex items-center space-x-2 mb-1">
+                <div className={`w-3 h-3 rounded-full ${product?.stock > 10 ? 'bg-success' :
+                  product?.stock > 0 ? 'bg-warning' : 'bg-destructive'
+                  }`} />
+                <span className="text-sm text-muted-foreground">
+                  {product?.stock > 10 ? 'In Stock' :
+                    product?.stock > 0 ? `Only ${product?.stock} left` : 'Out of Stock'}
+                </span>
+              </div>
 
               {/* Rating */}
-              <div className="flex items-center space-x-2 mb-4">
+              <div className="flex items-center space-x-2 mb-2">
                 <div className="flex items-center">
                   {[...Array(5)]?.map((_, i) => (
                     <Icon
@@ -162,8 +173,23 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                 </span>
               </div>
 
+              {/* Certifications */}
+              <div className="flex flex-wrap gap-2 mb-2">
+                {product?.certifications?.map((cert, index) => (
+
+                  <span
+                    key={index}
+                    className="px-0 py-1 bg-success/10 text-success text-sm font-caption font-medium rounded-full border border-success/20"
+                  >
+                    <span className="text-sm font-semibold text-foreground">Product Certification: </span>
+                    <Icon name="Shield" size={13} className="inline mb-1" />
+                    {cert} Certified Product
+                  </span>
+                ))}
+              </div>
+
               {/* Price */}
-              <div className="mb-4">
+              <div className="mb-2">
                 <div className="flex items-center space-x-2 mb-2">
                   <span className="text-3xl font-body font-bold text-foreground">
                     {formatPrice(product?.price)}
@@ -177,12 +203,13 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
               </div>
 
               {/* Farmer Info */}
-              <div className="bg-muted rounded-lg p-4 mb-4">
+              <div className="bg-muted rounded-lg p-4 mb-2">
                 {loadingFarmer ? (
                   <p className="text-sm text-muted-foreground">Loading farmer info...</p>
                 ) : farmerInfo ? (
                   <>
-                    <div className="flex items-center space-x-3 mb-2">
+                    {/* Farmer Basic Info */}
+                    <div className="flex items-center space-x-3 mb-4">
                       <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
                         <Icon name="User" size={16} color="white" />
                       </div>
@@ -198,18 +225,26 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                         </div>
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {farmerInfo?.bio || 'No bio available'}
-                    </p>
+
+                    {/* Bio Section */}
+                    <div className="mb-3 flex flex-wrap items-center -mt-2">
+                      <span className="text-sm font-semibold text-foreground">Bio:</span>
+                      <span className="text-sm text-muted-foreground">
+                        {farmerInfo?.bio || 'No bio available'}
+                      </span>
+                    </div>
+
+                    {/* Farmer Certifications Section */}
                     {farmerInfo?.certifications && (
-                      <div className="mt-2 flex flex-wrap gap-2">
+                      <div className="flex flex-wrap items-center -mt-3">
+                        <span className="text-sm font-semibold text-foreground">Farmer Certification:</span>
                         {farmerInfo.certifications.split(',').map((cert, index) => (
                           <span
                             key={index}
-                            className="px-3 py-1 bg-success/10 text-success text-sm font-caption font-medium rounded-full border border-success/20"
+                            className="px-2 py-1 bg-success/10 text-success text-sm font-caption font-medium rounded-full border border-success/20"
                           >
-                            <Icon name="Shield" size={12} className="inline mr-1" />
-                            {cert.trim()}
+                            <Icon name="Shield" size={13} className="inline mb-1" />
+                            {cert.trim()} Certified Farmer
                           </span>
                         ))}
                       </div>
@@ -220,33 +255,8 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                 )}
               </div>
 
-
-              {/* Certifications */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {product?.certifications?.map((cert, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-success/10 text-success text-sm font-caption font-medium rounded-full border border-success/20"
-                  >
-                    <Icon name="Shield" size={12} className="inline mr-1" />
-                    {cert}
-                  </span>
-                ))}
-              </div>
-
-              {/* Stock Status */}
-              <div className="flex items-center space-x-2 mb-6">
-                <div className={`w-3 h-3 rounded-full ${product?.stock > 10 ? 'bg-success' :
-                  product?.stock > 0 ? 'bg-warning' : 'bg-destructive'
-                  }`} />
-                <span className="text-sm text-muted-foreground">
-                  {product?.stock > 10 ? 'In Stock' :
-                    product?.stock > 0 ? `Only ${product?.stock} left` : 'Out of Stock'}
-                </span>
-              </div>
-
               {/* Add to Cart */}
-              {/* Add to Cart
+              {/*
               <Button
                 onClick={() => {
                   handleAddToCart();

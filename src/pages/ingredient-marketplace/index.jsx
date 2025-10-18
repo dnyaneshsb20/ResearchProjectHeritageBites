@@ -31,64 +31,73 @@ const IngredientMarketplace = () => {
     certifications: [],
     priceRanges: []
   });
-const [allProducts, setAllProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
   const productsPerPage = 12;
-useEffect(() => {
-  const fetchProducts = async () => {
-    setIsLoading(true);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
 
-    const { data, error } = await supabase
-      .from('products')
-      .select(`
-        product_id,
-        name,
-        price,
-        unit,
-        stock,
-        certifications,
-        image_url,
-        ingredients (
-          ingredient_id,
-          name,
-          nutritional_info,
-          category_id
-        )
-      `);
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+    product_id,
+    name,
+    price,
+    unit,
+    stock,
+    certifications,
+    image_url,
+    farmer_id,
+    ingredient_id,
+    farmers (
+      location,
+      user:users (
+        name
+      )
+    ),
+    ingredients (
+      ingredient_id,
+      name,
+      nutritional_info,
+      category_id
+    )
+  `);
 
-    if (error) {
-      console.error('Error fetching products:', error);
-    } else {
-      const products = data.map((item) => ({
-        id: item.product_id,
-        name: item.name || item.ingredients?.name || 'Unnamed Product',
-        image: item.image_url || 'https://placehold.co/400x400?text=Product',
-        price: Number(item.price) || 0,
-        unit: item.unit || '1kg',
-        stock: item.stock || 0,
-        rating: 4.5, // placeholder, can later come from reviews table
-        reviewCount: Math.floor(Math.random() * 200), // mock count
-        category: item.ingredients?.category_id || 'general',
-        isOrganic: item.certifications?.toLowerCase()?.includes('organic'),
-        farmer: {
-          name: 'Farmer',
-          location: 'India',
-        },
-        certifications: item.certifications
-          ? item.certifications.split(',').map((c) => c.trim())
-          : [],
-        description: item.ingredients?.nutritional_info || '',
-      }));
+      if (error) {
+        console.error('Error fetching products:', error);
+      } else {
+        const products = data.map((item) => ({
+          id: item.product_id,
+          name: item.name || item.ingredients?.name || 'Unnamed Product',
+          image: item.image_url || 'https://placehold.co/400x400?text=Product',
+          price: Number(item.price) || 0,
+          unit: item.unit || '1kg',
+          stock: item.stock || 0,
+          rating: 4.5,
+          reviewCount: Math.floor(Math.random() * 200),
+          category: item.ingredients?.category_id || 'general',
+          isOrganic: item.certifications?.toLowerCase()?.includes('organic'),
+          farmer: {
+            name: item.farmers?.user?.name || 'Farmer',         // placeholder for list
+            location: item.farmers?.location || 'India',       // placeholder for list
+          },
+          farmer_id: item.farmer_id,  // <--- send this to ProductDetailModal
+          certifications: item.certifications
+            ? item.certifications.split(',').map((c) => c.trim())
+            : [],
+          description: item.ingredients?.nutritional_info || '',
+        }));
 
-      setAllProducts(products);
-      setFilteredProducts(products);
-    }
+        setAllProducts(products);
+        setFilteredProducts(products);
+      }
 
-    setIsLoading(false);
-  };
+      setIsLoading(false);
+    };
 
-  fetchProducts();
-}, []);
+    fetchProducts();
+  }, []);
 
 
   // Filter and search logic
@@ -116,8 +125,8 @@ useEffect(() => {
 
     if (filters?.certifications?.length > 0) {
       filtered = filtered?.filter(product =>
-        product?.certifications?.some(cert => 
-          filters?.certifications?.some(filterCert => 
+        product?.certifications?.some(cert =>
+          filters?.certifications?.some(filterCert =>
             cert?.toLowerCase()?.includes(filterCert?.toLowerCase())
           )
         )
@@ -224,7 +233,7 @@ useEffect(() => {
         <Header />
 
         {/* Category Navigation */}
-        <CategoryTabs 
+        <CategoryTabs
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
         />
@@ -236,7 +245,7 @@ useEffect(() => {
               <div className="sticky top-32">
                 <FilterDrawer
                   isOpen={true}
-                  onClose={() => {}}
+                  onClose={() => { }}
                   filters={filters}
                   onFilterChange={setFilters}
                   onClearFilters={handleClearFilters}
@@ -248,7 +257,7 @@ useEffect(() => {
             <div className="flex-1">
               {/* Search Bar */}
               <div className="mb-6">
-                <SearchBar 
+                <SearchBar
                   onSearch={handleSearch}
                   onRecipeSearch={handleRecipeSearch}
                 />
@@ -317,9 +326,8 @@ useEffect(() => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                 </div>
               ) : currentProducts?.length > 0 ? (
-                <div className={`grid gap-6 mb-8 ${
-                  viewMode === 'grid' ?'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' :'grid-cols-1'
-                }`}>
+                <div className={`grid gap-6 mb-8 ${viewMode === 'grid' ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4' : 'grid-cols-1'
+                  }`}>
                   {currentProducts?.map((product) => (
                     <ProductCard
                       key={product?.id}
@@ -360,7 +368,7 @@ useEffect(() => {
                   >
                     Previous
                   </Button>
-                  
+
                   <div className="flex items-center space-x-1">
                     {[...Array(Math.min(5, totalPages))]?.map((_, i) => {
                       const pageNum = i + 1;
@@ -408,7 +416,7 @@ useEffect(() => {
           onClose={() => setIsProductModalOpen(false)}
           onAddToCart={handleAddToCart}
         />
-        <Footer/>
+        <Footer />
       </div>
     </>
   );
