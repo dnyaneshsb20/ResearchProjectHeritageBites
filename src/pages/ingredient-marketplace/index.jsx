@@ -34,18 +34,18 @@ const IngredientMarketplace = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
   const productsPerPage = 12;
-useEffect(() => {
-  const fetchProducts = async () => {
-    setIsLoading(true);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
 
-    try {
-      let productData = [];
+      try {
+        let productData = [];
 
-      if (activeCategory === 'all') {
-        // 🟢 Fetch all products (default)
-        const { data, error } = await supabase
-          .from('products')
-          .select(`
+        if (activeCategory === 'all') {
+          // 🟢 Fetch all products (default)
+          const { data, error } = await supabase
+            .from('products')
+            .select(`
             product_id,
             name,
             price,
@@ -72,50 +72,50 @@ useEffect(() => {
             )
           `);
 
-        if (error) throw error;
-        productData = data;
-      } else {
-        // 🟡 Map frontend ID → actual DB name
-        const categoryMap = {
-          'grains-cereals': 'Grains & Cereals',
-          'spices-condiments': 'Spices & Condiments',
-          'oil-seeds': 'Oil Seeds',
-          'pulses-legumes': 'Pulses & Legumes',
-          'millets': 'Millets',
-          'fruits-vegetables': 'Fruits & Vegetables'
-        };
-        const selectedCategoryName = categoryMap[activeCategory];
+          if (error) throw error;
+          productData = data;
+        } else {
+          // 🟡 Map frontend ID → actual DB name
+          const categoryMap = {
+            'grains-cereals': 'Grains & Cereals',
+            'spices-condiments': 'Spices & Condiments',
+            'oil-seeds': 'Oil Seeds',
+            'pulses-legumes': 'Pulses & Legumes',
+            'millets': 'Millets',
+            'fruits-vegetables': 'Fruits & Vegetables'
+          };
+          const selectedCategoryName = categoryMap[activeCategory];
 
-        // 1️⃣ Get category_id
-        const { data: categoryData, error: catError } = await supabase
-          .from('categories')
-          .select('category_id')
-          .eq('name', selectedCategoryName)
-          .single();
+          // 1️⃣ Get category_id
+          const { data: categoryData, error: catError } = await supabase
+            .from('categories')
+            .select('category_id')
+            .eq('name', selectedCategoryName)
+            .single();
 
-        if (catError || !categoryData) throw catError || new Error('Category not found');
+          if (catError || !categoryData) throw catError || new Error('Category not found');
 
-        // 2️⃣ Get ingredients for that category
-        const { data: ingredients, error: ingError } = await supabase
-          .from('ingredients')
-          .select('ingredient_id')
-          .eq('category_id', categoryData.category_id);
+          // 2️⃣ Get ingredients for that category
+          const { data: ingredients, error: ingError } = await supabase
+            .from('ingredients')
+            .select('ingredient_id')
+            .eq('category_id', categoryData.category_id);
 
-        if (ingError) throw ingError;
+          if (ingError) throw ingError;
 
-        const ingredientIds = ingredients.map((i) => i.ingredient_id);
+          const ingredientIds = ingredients.map((i) => i.ingredient_id);
 
-        if (ingredientIds.length === 0) {
-          setAllProducts([]);
-          setFilteredProducts([]);
-          setIsLoading(false);
-          return;
-        }
+          if (ingredientIds.length === 0) {
+            setAllProducts([]);
+            setFilteredProducts([]);
+            setIsLoading(false);
+            return;
+          }
 
-        // 3️⃣ Get products linked to those ingredients
-        const { data, error } = await supabase
-          .from('products')
-          .select(`
+          // 3️⃣ Get products linked to those ingredients
+          const { data, error } = await supabase
+            .from('products')
+            .select(`
             product_id,
             name,
             price,
@@ -141,45 +141,45 @@ useEffect(() => {
               )
             )
           `)
-          .in('ingredient_id', ingredientIds);
+            .in('ingredient_id', ingredientIds);
 
-        if (error) throw error;
-        productData = data;
+          if (error) throw error;
+          productData = data;
+        }
+
+        // 🧩 Format data
+        const products = productData.map((item) => ({
+          id: item.product_id,
+          name: item.name || item.ingredients?.name || 'Unnamed Product',
+          image: item.image_url || 'https://placehold.co/400x400?text=Product',
+          price: Number(item.price) || 0,
+          unit: item.unit || '1kg',
+          stock: item.stock || 0,
+          rating: 4.5,
+          reviewCount: Math.floor(Math.random() * 200),
+          category: item.ingredients?.categories?.name || 'General',
+          isOrganic: item.certifications?.toLowerCase()?.includes('organic'),
+          farmer: {
+            name: item.farmers?.user?.name || 'Farmer',
+            location: item.farmers?.location || 'India'
+          },
+          certifications: item.certifications
+            ? item.certifications.split(',').map((c) => c.trim())
+            : [],
+          description: item.ingredients?.nutritional_info || ''
+        }));
+
+        setAllProducts(products);
+        setFilteredProducts(products);
+      } catch (err) {
+        console.error('Error fetching products:', err);
+      } finally {
+        setIsLoading(false);
       }
+    };
 
-      // 🧩 Format data
-      const products = productData.map((item) => ({
-        id: item.product_id,
-        name: item.name || item.ingredients?.name || 'Unnamed Product',
-        image: item.image_url || 'https://placehold.co/400x400?text=Product',
-        price: Number(item.price) || 0,
-        unit: item.unit || '1kg',
-        stock: item.stock || 0,
-        rating: 4.5,
-        reviewCount: Math.floor(Math.random() * 200),
-        category: item.ingredients?.categories?.name || 'General',
-        isOrganic: item.certifications?.toLowerCase()?.includes('organic'),
-        farmer: {
-          name: item.farmers?.user?.name || 'Farmer',
-          location: item.farmers?.location || 'India'
-        },
-        certifications: item.certifications
-          ? item.certifications.split(',').map((c) => c.trim())
-          : [],
-        description: item.ingredients?.nutritional_info || ''
-      }));
-
-      setAllProducts(products);
-      setFilteredProducts(products);
-    } catch (err) {
-      console.error('Error fetching products:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  fetchProducts();
-}, [activeCategory]);
+    fetchProducts();
+  }, [activeCategory]);
 
 
   // Filter and search logic
@@ -308,17 +308,17 @@ useEffect(() => {
   return (
     <>
       <Helmet>
-        <title>Ingredient Marketplace - DishCover | Authentic Indian Ingredients</title>
+        <title>Ingredient Marketplace - Heritage Bites | Authentic Indian Ingredients</title>
         <meta name="description" content="Discover authentic indigenous ingredients directly from verified farmers. Shop organic spices, grains, oils, and traditional ingredients for your Indian recipes." />
       </Helmet>
       <div className="min-h-screen bg-background">
         <Header />
 
         {/* Category Navigation */}
-        <CategoryTabs
+        {/* <CategoryTabs
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
-        />
+        /> */}
 
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col lg:flex-row gap-6">
@@ -337,6 +337,10 @@ useEffect(() => {
 
             {/* Main Content */}
             <div className="flex-1">
+              <CategoryTabs
+                activeCategory={activeCategory}
+                onCategoryChange={setActiveCategory}
+              />
               {/* Search Bar */}
               <div className="mb-6">
                 <SearchBar

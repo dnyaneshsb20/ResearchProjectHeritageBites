@@ -8,7 +8,7 @@ const CategoryTabs = ({ activeCategory, onCategoryChange }) => {
     { id: 'spices-condiments', label: 'Spices & Condiments', icon: 'Flame' },
     { id: 'oil-seeds', label: 'Oil Seeds', icon: 'Droplets' },
     { id: 'pulses-legumes', label: 'Pulses & Legumes', icon: 'Circle' },
-    { id: 'millets', label: 'Millets', icon: 'Grain' },
+    { id: 'millets', label: 'Millets', icon: 'Seedling' },
     { id: 'fruits-vegetables', label: 'Fruits & Vegetables', icon: 'Leaf' }
   ];
 
