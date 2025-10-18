@@ -3,6 +3,7 @@ import { supabase } from "../../../supabaseClient";
 import Button from "../../../components/ui/Button";
 import Image from "../../../components/AppImage";
 import Icon from "../../../components/AppIcon";
+import { Utensils, ChefHat, Salad, ScrollText, History, Heart } from "lucide-react";
 
 const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
   const [recipe, setRecipe] = useState(null);
@@ -39,13 +40,6 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
       <div className="flex items-center justify-between p-6 border-b bg-gray-50">
         <Button variant="ghost" onClick={onBack} iconName="ArrowLeft">
           Back
-        </Button>
-        <Button
-          variant="secondary"
-          iconName="Edit3"
-          onClick={() => onEdit(recipe.indg_recipe_id)}
-        >
-          Edit Recipe
         </Button>
       </div>
 
@@ -129,9 +123,10 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
       <div className="p-8 space-y-12">
         {/* Ingredients Section */}
         <section>
-          <h2 className="text-3xl font-semibold mb-6 border-b-2 border-primary pb-2 inline-block">
-            🧂 Ingredients
-          </h2>
+          <div className="flex items-center gap-2 mb-6 border-b-2 border-primary pb-2 w-fit">
+            <Utensils className="w-7 h-7 text-primary" />
+            <h2 className="text-3xl font-semibold">Ingredients</h2>
+          </div>
           {ingredients.length > 0 ? (
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {ingredients.map((ing, idx) => (
@@ -156,9 +151,10 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
 
         {/* Instructions Section */}
         <section>
-          <h2 className="text-3xl font-semibold mb-6 border-b-2 border-primary pb-2 inline-block">
-            🍳 Cooking Instructions
-          </h2>
+          <div className="flex items-center gap-2 mb-6 border-b-2 border-primary pb-2 w-fit">
+            <ChefHat className="w-7 h-7 text-primary" />
+            <h2 className="text-3xl font-semibold">Cooking Instructions</h2>
+          </div>
           {instructions.length > 0 ? (
             <ol className="space-y-8">
               {instructions.map((step, idx) => (
@@ -196,9 +192,10 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
 
         {/* Nutrition Section */}
         <section>
-          <h2 className="text-3xl font-semibold mb-6 border-b-2 border-primary pb-2 inline-block">
-            🥗 Nutrition Information
-          </h2>
+          <div className="flex items-center gap-2 mb-6 border-b-2 border-primary pb-2 w-fit">
+            <Salad className="w-7 h-7 text-primary" />
+            <h2 className="text-3xl font-semibold">Nutrition Information</h2>
+          </div>
           {Object.keys(nutrition).length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {Object.entries(nutrition).map(([key, val]) => (
@@ -221,9 +218,11 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
         {/* Cultural Heritage Section */}
         {(recipe.origin_story || recipe.family_tradition || recipe.heritage_significance) && (
           <section>
-            <h2 className="text-3xl font-semibold mb-6 border-b-2 border-primary pb-2 inline-block">
-              🌍 Cultural Heritage
-            </h2>
+            <div className="flex items-center gap-2 mb-6 border-b-2 border-primary pb-2 w-fit">
+              <ScrollText className="w-7 h-7 text-primary" />
+              <h2 className="text-3xl font-semibold">Cultural Heritage</h2>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {recipe.origin_story && (
                 <div className="bg-white shadow p-5 rounded-lg border-t-4 border-blue-500">
@@ -235,7 +234,12 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
                 <div className="bg-white shadow p-5 rounded-lg border-t-4 border-green-500">
                   <h4 className="font-medium text-lg mb-2">Family Traditions</h4>
                   <p className="text-sm text-gray-600">{recipe.family_tradition}</p>
-                  <p className="text-xs text-gray-400 mt-1">{recipe.recipe_source}</p>
+                </div>
+              )}
+              {recipe.family_tradition && (
+                <div className="bg-white shadow p-5 rounded-lg border-t-4 border-yellow-500">
+                  <h4 className="font-medium text-lg mb-2">Recipe Source</h4>
+                  <p className="text-sm text-gray-600">{recipe.recipe_source}</p>
                 </div>
               )}
               {recipe.heritage_significance && (
