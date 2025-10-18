@@ -14,7 +14,6 @@ import Icon from '../../components/AppIcon';
 import Footer from '../dashboard/components/Footer';
 import { supabase } from "../../supabaseClient";
 import UserRecipeView from './components/UserRecipeView';
-import UserRecipeEdit from './components/UserRecipeEdit';
 
 
 const RecipeSubmissionManagement = () => {
@@ -40,18 +39,49 @@ const RecipeSubmissionManagement = () => {
       } else {
         console.log("✅ Loaded recipe for editing:", data);
         setFormData({
-          dishName: data.name,
-          shortDescription: data.description,
-          heroImage: data.image_url,
-          state_id: data.state_id,
-          category: data.meal_type,
-          cookTime: data.cooking_time,
-          prepTime: data.prep_time,
-          serves: data.serves,
-          originStory: data.origin_story,
-          heritageSignificance: data.heritage_significance,
-          // add other mapped fields here as needed
-        });
+  // 🥘 Basic Info
+  dishName: data.name || "",
+  shortDescription: data.description || "",
+  heroImage: data.image_url,
+  state_id: data.state_id || "",
+  category: data.meal_type || "",
+  festivalTag: data.festival_tag || "",
+  dietaryType: data.dietary_type || "",
+  difficulty: data.difficulty_level || "",
+  cookTime: data.cooking_time || "",
+  prepTime: data.prep_time || "",
+  serves: data.serves || "",
+
+  // 🧂 Ingredients & Instructions (JSONB)
+  ingredients: data.ingredients || [],
+  instructions: data.instructions || [],
+
+  // 🏺 Cultural Context
+  originStory: data.origin_story || "",
+  heritageSignificance: data.heritage_significance || "",
+  familyTraditions: data.family_tradition || "",
+  recipeSource: data.recipe_source || "",
+  regionalVariations: data.regional_variations || "",
+  festivals: data.associated_festivals || [],
+  additionalNotes: data.additional_notes || "",
+
+  // 🍎 Nutrition (JSONB)
+  calories: data.nutrition_info?.calories || "",
+  carbs: data.nutrition_info?.carbs || "",
+  protein: data.nutrition_info?.protein || "",
+  fat: data.nutrition_info?.fat || "",
+  fiber: data.nutrition_info?.fiber || "",
+  sugar: data.nutrition_info?.sugar || "",
+  ingredientBenefits: data.nutrition_info?.ingredient_benefits || "",
+
+  // ⚕️ Health / Dietary
+  dietaryCategories: data.dietary_categories || [],
+  allergens: data.allergens || "",
+  medicalConsiderations: data.medical_conditions || "",
+  ayurvedicProperties: data.ayurvedic_properties || "",
+  healthBenefits: data.health_considerations || [],
+});
+
         setCurrentStep(1); // start at Step 1 with filled data
       }
     };
@@ -184,7 +214,7 @@ try {
   const recipeData = {
     name: formData.dishName || '',
     description: formData.shortDescription || '',
-    image_url: formData.heroImage || null,
+    heroImage: formData.image_url || null,
     state_id: formData.state_id || null,
     meal_type: formData.category || null,
     festival_tag: formData.festivalTag || null,
@@ -201,7 +231,7 @@ try {
     instructions: formData.instructions ? JSON.parse(JSON.stringify(formData.instructions)) : null,
 
     // 🏺 Cultural Context
-    origin_story: formData.originStory || null,
+    origin_story: formData.origin_story || null,
     heritage_significance: formData.heritageSignificance || null,
     family_tradition: formData.familyTraditions || null,
     recipe_source: formData.recipeSource || null,
