@@ -10,6 +10,7 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
   const [loading, setLoading] = useState(true)
   const [selectedFarmerId, setSelectedFarmerId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false); // ✅ new state for toggle
 
   useEffect(() => {
     fetchFarmers()
@@ -20,19 +21,18 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
     const { data, error } = await supabase
       .from("farmers")
       .select(`
-    farmer_id,
-    bio,
-    certifications,
-    contact_info,
-    users:user_id (
-      name,
-      email,
-      location,
-      role
-    ),
-    products:products!products_farmer_id_fkey (product_id) -- fetch related products
-  `);
-
+        farmer_id,
+        bio,
+        certifications,
+        contact_info,
+        users:user_id (
+          name,
+          email,
+          location,
+          role
+        ),
+        products:products!products_farmer_id_fkey (product_id)
+      `);
 
     if (error) {
       console.error('Error fetching farmers:', error)
@@ -45,10 +45,14 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
   if (loading) {
     return <p className="text-muted-foreground p-4">Loading farmers...</p>
   }
+
   const handleViewProducts = (farmerId) => {
-    setSelectedFarmerId(farmerId); // set the current farmer
-    setIsModalOpen(true);           // open modal
+    setSelectedFarmerId(farmerId);
+    setIsModalOpen(true);
   };
+
+  // ✅ Limit displayed farmers based on toggle
+  const displayedFarmers = showAll ? farmers : farmers.slice(0, 3);
 
   return (
     <div className="bg-card border border-border rounded-lg p-6 mb-6">
@@ -59,13 +63,25 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
             Meet the guardians of indigenous ingredients
           </p>
         </div>
-        <Button variant="outline" size="sm">
-          View All Farmers
-        </Button>
+
+        {/* ✅ Show toggle button only if more than 3 farmers */}
+        {farmers.length > 3 && (
+          <Button
+            variant="ghost2"
+            size="sm"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? "View Less" : "View All Farmers"}
+          </Button>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {farmers.map((farmer) => (
+      <div
+        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-all duration-300 ${
+          showAll ? "max-h-full" : "overflow-hidden"
+        }`}
+      >
+        {displayedFarmers.map((farmer) => (
           <div
             key={farmer.farmer_id}
             className="bg-background border border-border rounded-lg p-4 hover:shadow-warm-md transition-all duration-200 cursor-pointer"
@@ -134,19 +150,23 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
             )}
 
             <Button
-              variant="outline"
+              variant="ghost2"
               size="sm"
               iconName="ArrowRight"
               iconPosition="right"
               className="w-full"
-              onClick={() => handleViewProducts(farmer.farmer_id)} // open modal
+              onClick={(e) => {
+                e.stopPropagation();
+                handleViewProducts(farmer.farmer_id);
+              }}
             >
               View Products
             </Button>
+
             <ViewProductModal
-              farmerId={selectedFarmerId} // pass the selected farmer
-              isOpen={isModalOpen}        // control visibility
-              onClose={() => setIsModalOpen(false)} // close modal
+              farmerId={selectedFarmerId}
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
             />
           </div>
         ))}
