@@ -22,6 +22,11 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
     };
     fetchStates();
   }, []);
+  useEffect(() => {
+  if (formData?.heroImage) {
+    setImagePreview(formData.heroImage);
+  }
+}, [formData?.heroImage]);
   const categoryOptions = [
     { value: 'breakfast', label: 'Breakfast' },
     { value: 'lunch', label: 'Lunch' },

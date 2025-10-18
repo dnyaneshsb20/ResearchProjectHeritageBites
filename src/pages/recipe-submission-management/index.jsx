@@ -214,7 +214,7 @@ try {
   const recipeData = {
     name: formData.dishName || '',
     description: formData.shortDescription || '',
-    heroImage: formData.image_url || null,
+   image_url: formData.heroImage || null,
     state_id: formData.state_id || null,
     meal_type: formData.category || null,
     festival_tag: formData.festivalTag || null,
@@ -231,7 +231,7 @@ try {
     instructions: formData.instructions ? JSON.parse(JSON.stringify(formData.instructions)) : null,
 
     // 🏺 Cultural Context
-    origin_story: formData.origin_story || null,
+    origin_story: formData.originStory || null,
     heritage_significance: formData.heritageSignificance || null,
     family_tradition: formData.familyTraditions || null,
     recipe_source: formData.recipeSource || null,
@@ -261,27 +261,38 @@ try {
 
   console.log("🧾 Submitting recipe:", recipeData);
 
-  const { data, error } = await supabase
-    .from("rec_contributions")
-    .insert([recipeData])
-    .select();
+      const isEditing = currentView === "edit" && selectedRecipeId;
 
-  if (error) {
-    console.error("❌ Error submitting recipe:", error);
+    let error;
+    if (isEditing) {
+      // 🔄 UPDATE existing recipe
+      ({ error } = await supabase
+        .from("rec_contributions")
+        .update(recipeData)
+        .eq("indg_recipe_id", selectedRecipeId));
+    } else {
+      // 🆕 INSERT new recipe
+      ({ error } = await supabase
+        .from("rec_contributions")
+        .insert([recipeData]));
+    }
+
+    if (error) {
+      console.error("❌ Error saving recipe:", error);
+      alert("There was an error saving your recipe. Please try again.");
+    } else {
+      alert(isEditing ? "✅ Recipe updated successfully!" : "🎉 Recipe submitted successfully!");
+      localStorage.removeItem("recipe-draft");
+      setFormData({});
+      setCurrentStep(1);
+      setCurrentView("list");
+    }
+  } catch (error) {
+    console.error("❌ Submission error:", error);
     alert("There was an error submitting your recipe. Please try again.");
-  } else {
-    alert("🎉 Recipe submitted successfully!");
-    localStorage.removeItem("recipe-draft");
-    setFormData({});
-    setCurrentStep(1);
-    setCurrentView("list");
+  } finally {
+    setIsSubmitting(false);
   }
-} catch (error) {
-  console.error("❌ Submission error:", error);
-  alert("There was an error submitting your recipe. Please try again.");
-} finally {
-  setIsSubmitting(false);
-}
 };
   const handleSaveDraft = () => {
     saveDraft();

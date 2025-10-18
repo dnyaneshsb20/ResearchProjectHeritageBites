@@ -61,8 +61,8 @@ const CulturalContextStep = ({ formData, updateFormData, onNext, onPrevious }) =
                 className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent resize-none"
                 rows={4}
                 placeholder="Share the historical background and origin story of this dish..."
-                value={formData?.origin_story || ''}
-                onChange={(e) => handleInputChange('dishHistory', e?.target?.value)}
+                value={formData?.originStory || ''}
+                onChange={(e) => handleInputChange('originStory', e?.target?.value)}
               />
             </div>
             
