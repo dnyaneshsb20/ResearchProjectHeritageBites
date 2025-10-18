@@ -112,7 +112,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Product Images */}
             <div>
-              <div className="aspect-square mb-4 overflow-hidden rounded-lg border border-border">
+              <div className="w-[415px] h-[435px] aspect-square mb-4 overflow-hidden rounded-lg border border-border">
                 <Image
                   src={product?.images?.[selectedImageIndex] || product?.image}
                   alt={product?.name}
