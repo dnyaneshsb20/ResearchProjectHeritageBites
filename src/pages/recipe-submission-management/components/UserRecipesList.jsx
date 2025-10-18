@@ -129,7 +129,7 @@ const UserRecipesList = ({ onNewRecipe, onViewRecipe, onEditRecipe }) => {
                 </div>
                 <div className="flex justify-between items-center gap-3 border-t pt-4 mt-3">
                   <Button
-                    variant="outline"
+                    variant="ghost2"
                     size="sm"
                     className="w-full justify-center"
                     onClick={() => onViewRecipe?.(recipe.indg_recipe_id)}

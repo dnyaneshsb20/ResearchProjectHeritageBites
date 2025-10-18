@@ -12,10 +12,7 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
     const fetchRecipe = async () => {
       const { data, error } = await supabase
         .from("rec_contributions")
-        .select(`
-          *,
-          states (state_name, region)
-        `)
+        .select(`*, states (state_name, region)`)
         .eq("indg_recipe_id", recipeId)
         .single();
 
@@ -27,22 +24,19 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
     fetchRecipe();
   }, [recipeId]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!recipe) return <p>Recipe not found.</p>;
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (!recipe) return <p className="text-center mt-10">Recipe not found.</p>;
 
   const nutrition = recipe?.nutrition_info || {};
   const ingredients = recipe?.ingredients || [];
   const instructions = recipe?.instructions || [];
 
-  const formatList = (arr) =>
-    Array.isArray(arr) && arr.length > 0 ? arr.join(", ") : "None specified";
-
   const formatTime = (time) => (time ? `${time} mins` : "Not specified");
 
   return (
-    <div className="max-w-5xl mx-auto mt-8 bg-card rounded-xl shadow p-6">
-      {/* Header Section */}
-      <div className="flex items-center justify-between mb-6">
+    <div className="max-w-6xl mx-auto mt-8 bg-white rounded-xl shadow-lg overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b bg-gray-50">
         <Button variant="ghost" onClick={onBack} iconName="ArrowLeft">
           Back
         </Button>
@@ -55,226 +49,206 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
         </Button>
       </div>
 
-      {/* Hero Image */}
+      {/* Hero Image + Tags */}
       {recipe.image_url && (
-        <div className="relative mb-6">
+        <div className="relative">
           <Image
             src={recipe.image_url}
             alt={recipe.name}
-            className="w-full h-72 object-cover rounded-lg"
+            className="w-full h-[450px] object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg" />
-          <div className="absolute bottom-4 left-4 text-white">
-            <h1 className="text-3xl font-heading font-bold mb-1">
-              {recipe.name}
-            </h1>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div className="absolute bottom-6 left-6 text-white">
+            <h1 className="text-5xl font-bold mb-3">{recipe.name}</h1>
             {recipe.description && (
-              <p className="text-sm opacity-90 max-w-lg">{recipe.description}</p>
+              <p className="text-lg opacity-90 max-w-3xl">{recipe.description}</p>
             )}
+
+            <div className="flex flex-wrap gap-2 mt-4">
+              {recipe?.states?.state_name && (
+                <span className="px-3 py-1 bg-blue-600 text-white text-xs rounded-full">
+                  {recipe.states.state_name}
+                </span>
+              )}
+              {recipe.meal_type && (
+                <span className="px-3 py-1 bg-purple-600 text-white text-xs rounded-full">
+                  {recipe.meal_type}
+                </span>
+              )}
+              {(recipe.dietary_categories || []).map((diet) => (
+                <span
+                  key={diet}
+                  className="px-3 py-1 bg-green-600 text-white text-xs rounded-full"
+                >
+                  {diet}
+                </span>
+              ))}
+              {recipe.festival_tag && (
+                <span className="px-3 py-1 bg-pink-600 text-white text-xs rounded-full">
+                  {recipe.festival_tag}
+                </span>
+              )}
+              {recipe.dietary_type && (
+                <span className="px-3 py-1 bg-teal-600 text-white text-xs rounded-full">
+                  {recipe.dietary_type}
+                </span>
+              )}
+              {(recipe.associated_festivals || []).map((fest) => (
+                <span
+                  key={fest}
+                  className="px-3 py-1 bg-yellow-600 text-white text-xs rounded-full"
+                >
+                  {fest}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* Quick Info */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <Icon name="Clock" size={20} className="mx-auto mb-1 text-primary" />
-          <p className="text-xs text-muted-foreground">Prep Time</p>
-          <p className="font-body font-medium">{formatTime(recipe.prep_time)}</p>
-        </div>
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <Icon name="ChefHat" size={20} className="mx-auto mb-1 text-primary" />
-          <p className="text-xs text-muted-foreground">Cook Time</p>
-          <p className="font-body font-medium">{formatTime(recipe.cooking_time)}</p>
-        </div>
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <Icon name="Users" size={20} className="mx-auto mb-1 text-primary" />
-          <p className="text-xs text-muted-foreground">Serves</p>
-          <p className="font-body font-medium">{recipe.serves || "N/A"}</p>
-        </div>
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <Icon name="Flame" size={20} className="mx-auto mb-1 text-primary" />
-          <p className="text-xs text-muted-foreground">Difficulty</p>
-          <p className="font-body font-medium capitalize">
-            {recipe.difficulty_level || "N/A"}
-          </p>
-        </div>
+      {/* Recipe Overview Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-6 py-8 bg-gray-50">
+        {[
+          { icon: "Clock", label: "Prep Time", value: formatTime(recipe.prep_time) },
+          { icon: "ChefHat", label: "Cook Time", value: formatTime(recipe.cooking_time) },
+          { icon: "Users", label: "Serves", value: recipe.serves || "N/A" },
+          { icon: "Flame", label: "Difficulty", value: recipe.difficulty_level || "N/A" },
+        ].map((item, idx) => (
+          <div
+            key={idx}
+            className="flex flex-col items-center justify-center bg-white shadow rounded-lg p-4 hover:shadow-md transition"
+          >
+            <Icon name={item.icon} size={26} className="text-primary mb-2" />
+            <p className="text-sm text-gray-500">{item.label}</p>
+            <p className="font-semibold">{item.value}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {recipe?.states?.state_name && (
-          <span className="px-3 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full">
-            {recipe.states.state_name}
-          </span>
-        )}
-        {recipe.meal_type && (
-          <span className="px-3 py-1 bg-secondary text-secondary-foreground text-xs font-medium rounded-full">
-            {recipe.meal_type}
-          </span>
-        )}
-        {(recipe.dietary_categories || []).map((diet) => (
-          <span
-            key={diet}
-            className="px-3 py-1 bg-success text-success-foreground text-xs font-medium rounded-full"
-          >
-            {diet}
-          </span>
-        ))}
-      
-      {/* Extra tags (below existing ones) */}
-      {recipe.festival_tag && (
-        <span className="px-3 py-1 bg-accent text-accent-foreground text-xs font-medium rounded-full">
-          {recipe.festival_tag}
-        </span>
-      )}
-      {recipe.dietary_type && (
-        <span className="px-3 py-1 bg-info text-info-foreground text-xs font-medium rounded-full">
-          {recipe.dietary_type}
-        </span>
-      )}
-      {(recipe.associated_festivals || []).map((fest) => (
-        <span
-          key={fest}
-          className="px-3 py-1 bg-warning text-warning-foreground text-xs font-medium rounded-full"
-        >
-          {fest}
-        </span>
-      ))}
-</div>
-      {/* Ingredients & Nutrition */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-        <div>
-          <h3 className="text-lg font-heading font-semibold mb-3">
-            Ingredients ({ingredients.length})
-          </h3>
+      {/* Main Content */}
+      <div className="p-8 space-y-12">
+        {/* Ingredients Section */}
+        <section>
+          <h2 className="text-3xl font-semibold mb-6 border-b-2 border-primary pb-2 inline-block">
+            🧂 Ingredients
+          </h2>
           {ingredients.length > 0 ? (
-            <div className="space-y-2">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {ingredients.map((ing, idx) => (
-                <div
+                <li
                   key={idx}
-                  className="flex items-center space-x-3 p-2 bg-muted rounded"
+                  className="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition"
                 >
-                  <div className="w-2 h-2 bg-primary rounded-full" />
-                  <span className="font-body font-medium">{ing.name}</span>
-                  <span className="text-sm text-muted-foreground">
+                  <p className="font-medium">{ing.name}</p>
+                  <p className="text-sm text-gray-600">
                     {ing.quantity} {ing.unit}
-                  </span>
+                  </p>
                   {ing.notes && (
-                    <span className="text-xs italic text-muted-foreground">
-                      ({ing.notes})
-                    </span>
+                    <p className="text-xs italic text-gray-400 mt-1">({ing.notes})</p>
                   )}
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           ) : (
-            <p className="text-muted-foreground">No ingredients added</p>
+            <p className="text-gray-400">No ingredients available.</p>
           )}
-        </div>
+        </section>
 
-        <div>
-          <h3 className="text-lg font-heading font-semibold mb-3">
-            Nutrition (per serving)
-          </h3>
+        {/* Instructions Section */}
+        <section>
+          <h2 className="text-3xl font-semibold mb-6 border-b-2 border-primary pb-2 inline-block">
+            🍳 Cooking Instructions
+          </h2>
+          {instructions.length > 0 ? (
+            <ol className="space-y-8">
+              {instructions.map((step, idx) => (
+                <li
+                  key={idx}
+                  className="flex flex-col md:flex-row items-start gap-6 bg-gray-50 p-5 rounded-lg shadow-sm hover:shadow-md transition"
+                >
+                  <div className="flex items-center justify-center w-10 h-10 bg-primary text-white font-semibold rounded-full">
+                    {idx + 1}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium mb-1">{step.step}</h4>
+                    <p className="text-sm text-gray-600 mb-2">{step.description}</p>
+                    {step.image && (
+                      <Image
+                        src={step.image}
+                        alt={`Step ${idx + 1}`}
+                        className="w-full max-w-md h-40 object-cover rounded shadow"
+                      />
+                    )}
+                    {step.tips && (
+                      <div className="mt-2 p-2 bg-yellow-50 rounded text-xs text-yellow-800">
+                        <Icon name="Lightbulb" size={12} className="inline mr-1" />
+                        {step.tips}
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="text-gray-400">No instructions provided.</p>
+          )}
+        </section>
+
+        {/* Nutrition Section */}
+        <section>
+          <h2 className="text-3xl font-semibold mb-6 border-b-2 border-primary pb-2 inline-block">
+            🥗 Nutrition Information
+          </h2>
           {Object.keys(nutrition).length > 0 ? (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {Object.entries(nutrition).map(([key, val]) => (
-                <div key={key} className="p-3 bg-muted rounded">
-                  <p className="text-xs text-muted-foreground capitalize">
+                <div
+                  key={key}
+                  className="bg-gray-50 p-4 rounded-lg shadow-sm text-center hover:shadow-md transition"
+                >
+                  <p className="text-xs uppercase text-gray-500">
                     {key.replace("_", " ")}
                   </p>
-                  <p className="font-body font-medium">{val}</p>
+                  <p className="font-semibold">{val}</p>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-muted-foreground">No nutrition data provided</p>
+            <p className="text-gray-400">No nutrition data available.</p>
           )}
-        </div>
-      </div>
+        </section>
 
-      {/* Instructions */}
-      <div className="mt-8">
-        <h3 className="text-lg font-heading font-semibold mb-3">
-          Instructions ({instructions.length})
-        </h3>
-        {instructions.length > 0 ? (
-          <div className="space-y-4">
-            {instructions.map((step, idx) => (
-              <div key={idx} className="flex space-x-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">
-                  {idx + 1}
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-body font-medium mb-1">{step.step}</h4>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {step.description}
-                  </p>
-                  {step.image && (
-                    <Image
-                      src={step.image}
-                      alt={`Step ${idx + 1}`}
-                      className="w-full max-w-md h-32 object-cover rounded mb-2"
-                    />
-                  )}
-                  {step.tips && (
-                    <div className="p-2 bg-warning/10 rounded text-xs text-warning-foreground">
-                      <Icon name="Lightbulb" size={12} className="inline mr-1" />
-                      {step.tips}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-muted-foreground">No instructions added</p>
-        )}
-      </div>
-
-      {/* Cultural Heritage */}
-      {(recipe.origin_story ||
-        recipe.family_tradition ||
-        recipe.heritage_significance) && (
-          <div className="mt-10 pt-6 border-t border-border">
-            <h3 className="text-lg font-heading font-semibold mb-4">
-              Cultural Heritage
-            </h3>
-            <div className="space-y-4">
+        {/* Cultural Heritage Section */}
+        {(recipe.origin_story || recipe.family_tradition || recipe.heritage_significance) && (
+          <section>
+            <h2 className="text-3xl font-semibold mb-6 border-b-2 border-primary pb-2 inline-block">
+              🌍 Cultural Heritage
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {recipe.origin_story && (
-                <div>
-                  <h4 className="font-medium mb-1">History & Origin</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {recipe.origin_story}
-                  </p>
+                <div className="bg-white shadow p-5 rounded-lg border-t-4 border-blue-500">
+                  <h4 className="font-medium text-lg mb-2">History & Origin</h4>
+                  <p className="text-sm text-gray-600">{recipe.origin_story}</p>
                 </div>
               )}
               {recipe.family_tradition && (
-                <div>
-                  <h4 className="font-medium mb-1">Family Traditions</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {recipe.family_tradition}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {recipe.recipe_source}
-                  </p>
+                <div className="bg-white shadow p-5 rounded-lg border-t-4 border-green-500">
+                  <h4 className="font-medium text-lg mb-2">Family Traditions</h4>
+                  <p className="text-sm text-gray-600">{recipe.family_tradition}</p>
+                  <p className="text-xs text-gray-400 mt-1">{recipe.recipe_source}</p>
                 </div>
               )}
               {recipe.heritage_significance && (
-                <div>
-                  <h4 className="font-medium mb-1">Cultural Significance</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {recipe.heritage_significance}
-                  </p>
+                <div className="bg-white shadow p-5 rounded-lg border-t-4 border-yellow-500">
+                  <h4 className="font-medium text-lg mb-2">Cultural Significance</h4>
+                  <p className="text-sm text-gray-600">{recipe.heritage_significance}</p>
                 </div>
               )}
             </div>
-          </div>
-          
+          </section>
         )}
+      </div>
     </div>
-    
   );
 };
 
