@@ -11,48 +11,41 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [farmerInfo, setFarmerInfo] = useState(null);
   const [loadingFarmer, setLoadingFarmer] = useState(false);
+useEffect(() => {
+  const fetchFarmerInfo = async () => {
+    if (!product?.farmer_id) return;
 
+    setLoadingFarmer(true);
 
-  useEffect(() => {
-    const fetchFarmerInfo = async () => {
-      if (!product?.farmer_id) return;
-
-      console.log('Fetching farmer for ID:', product.farmer_id);
-      setLoadingFarmer(true);
-
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
-          product_id,
+    const { data, error } = await supabase
+      .from('farmers')
+      .select(`
+        farmer_id,
+        bio,
+        certifications,
+        location,
+        contact_info,
+       user:users!farmers_user_id_fkey (
           name,
-          price,
-          stock,
-          certifications,
-          image_url,
-          description,
-          farmer:farmers!products_farmer_id_fkey (
-            farmer_id,
-            bio,
-            contact_info,
-            location,
-            user:users!farmers_user_id_fkey (
-              name,
-              email
-            )
-          )
-        `)
-        .eq('product_id', productId)
-        .maybeSingle();
+          email
+        )
+      `)
+      .eq('farmer_id', product.farmer_id)
+      .maybeSingle();
 
-      if (error) console.error('Error fetching farmer:', error);
-      else console.log('Farmer data:', data);
+    if (error) {
+      console.error('Error fetching farmer:', error);
+      setFarmerInfo(null);
+    } else {
+      setFarmerInfo(data);
+    }
 
-      setFarmerInfo(data || null);
-      setLoadingFarmer(false);
-    };
+    setLoadingFarmer(false);
+  };
 
-    if (isOpen) fetchFarmerInfo();
-  }, [isOpen, product?.farmer_id]);
+  if (isOpen) fetchFarmerInfo();
+}, [isOpen, product?.farmer_id]);
+
 
   if (!isOpen || !product) return null;
 
@@ -198,7 +191,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                       </div>
                       <div>
                         <h3 className="font-body font-semibold text-foreground">
-                          {farmerInfo?.users?.name || 'Unknown Farmer'}
+                          {farmerInfo?.user?.name || 'Unknown Farmer'}
                         </h3>
                         <div className="flex items-center space-x-1">
                           <Icon name="MapPin" size={12} className="text-muted-foreground" />
