@@ -83,8 +83,22 @@ const UserRecipesList = ({ onNewRecipe, onViewRecipe, onEditRecipe }) => {
                   alt={recipe.name}
                   className="w-full h-48 object-cover"
                 />
-                <span className="absolute top-3 right-3 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
-                  Published
+                <span
+                  className={`absolute top-3 right-3 text-white text-xs font-semibold px-2 py-1 rounded-full
+    ${recipe.status === "approved"
+                      ? "bg-green-600"
+                      : recipe.status === "pending"
+                        ? "bg-yellow-500"
+                        : recipe.status === "under-review"
+                          ? "bg-blue-500"
+                          : recipe.status === "rejected"
+                            ? "bg-red-600"
+                            : "bg-gray-400"
+                    }`}
+                >
+                  {recipe.status
+                    ? recipe.status.charAt(0).toUpperCase() + recipe.status.slice(1)
+                    : "Unknown"}
                 </span>
               </div>
 
