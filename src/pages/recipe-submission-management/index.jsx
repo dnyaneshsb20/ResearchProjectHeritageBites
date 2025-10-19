@@ -39,48 +39,48 @@ const RecipeSubmissionManagement = () => {
       } else {
         console.log("✅ Loaded recipe for editing:", data);
         setFormData({
-  // 🥘 Basic Info
-  dishName: data.name || "",
-  shortDescription: data.description || "",
-  heroImage: data.image_url,
-  state_id: data.state_id || "",
-  category: data.meal_type || "",
-  festivalTag: data.festival_tag || "",
-  dietaryType: data.dietary_type || "",
-  difficulty: data.difficulty_level || "",
-  cookTime: data.cooking_time || "",
-  prepTime: data.prep_time || "",
-  serves: data.serves || "",
+          // 🥘 Basic Info
+          dishName: data.name || "",
+          shortDescription: data.description || "",
+          heroImage: data.image_url,
+          state_id: data.state_id || "",
+          category: data.meal_type || "",
+          festivalTag: data.festival_tag || "",
+          dietaryType: data.dietary_type || "",
+          difficulty: data.difficulty_level || "",
+          cookTime: data.cooking_time || "",
+          prepTime: data.prep_time || "",
+          serves: data.serves || "",
 
-  // 🧂 Ingredients & Instructions (JSONB)
-  ingredients: data.ingredients || [],
-  instructions: data.instructions || [],
+          // 🧂 Ingredients & Instructions (JSONB)
+          ingredients: data.ingredients || [],
+          instructions: data.instructions || [],
 
-  // 🏺 Cultural Context
-  originStory: data.origin_story || "",
-  heritageSignificance: data.heritage_significance || "",
-  familyTraditions: data.family_tradition || "",
-  recipeSource: data.recipe_source || "",
-  regionalVariations: data.regional_variations || "",
-  festivals: data.associated_festivals || [],
-  additionalNotes: data.additional_notes || "",
+          // 🏺 Cultural Context
+          originStory: data.origin_story || "",
+          heritageSignificance: data.heritage_significance || "",
+          familyTraditions: data.family_tradition || "",
+          recipeSource: data.recipe_source || "",
+          regionalVariations: data.regional_variations || "",
+          festivals: data.associated_festivals || [],
+          additionalNotes: data.additional_notes || "",
 
-  // 🍎 Nutrition (JSONB)
-  calories: data.nutrition_info?.calories || "",
-  carbs: data.nutrition_info?.carbs || "",
-  protein: data.nutrition_info?.protein || "",
-  fat: data.nutrition_info?.fat || "",
-  fiber: data.nutrition_info?.fiber || "",
-  sugar: data.nutrition_info?.sugar || "",
-  ingredientBenefits: data.nutrition_info?.ingredient_benefits || "",
+          // 🍎 Nutrition (JSONB)
+          calories: data.nutrition_info?.calories || "",
+          carbs: data.nutrition_info?.carbs || "",
+          protein: data.nutrition_info?.protein || "",
+          fat: data.nutrition_info?.fat || "",
+          fiber: data.nutrition_info?.fiber || "",
+          sugar: data.nutrition_info?.sugar || "",
+          ingredientBenefits: data.nutrition_info?.ingredient_benefits || "",
 
-  // ⚕️ Health / Dietary
-  dietaryCategories: data.dietary_categories || [],
-  allergens: data.allergens || "",
-  medicalConsiderations: data.medical_conditions || "",
-  ayurvedicProperties: data.ayurvedic_properties || "",
-  healthBenefits: data.health_considerations || [],
-});
+          // ⚕️ Health / Dietary
+          dietaryCategories: data.dietary_categories || [],
+          allergens: data.allergens || "",
+          medicalConsiderations: data.medical_conditions || "",
+          ayurvedicProperties: data.ayurvedic_properties || "",
+          healthBenefits: data.health_considerations || [],
+        });
 
         setCurrentStep(1); // start at Step 1 with filled data
       }
@@ -200,100 +200,100 @@ const RecipeSubmissionManagement = () => {
   //     setIsSubmitting(false);
   //   }
   // };
- const handleSubmit = async () => {
-setIsSubmitting(true);
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
 
-try {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    alert("Please log in to submit a recipe.");
-    setIsSubmitting(false);
-    return;
-  }
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        alert("Please log in to submit a recipe.");
+        setIsSubmitting(false);
+        return;
+      }
 
-  const recipeData = {
-    name: formData.dishName || '',
-    description: formData.shortDescription || '',
-   image_url: formData.heroImage || null,
-    state_id: formData.state_id || null,
-    meal_type: formData.category || null,
-    festival_tag: formData.festivalTag || null,
-    dietary_type: formData.dietaryType || null,
-    difficulty_level: formData.difficulty
-      ? formData.difficulty.charAt(0).toUpperCase() + formData.difficulty.slice(1).toLowerCase()
-      : null,
-    prep_time: formData.prepTime ? parseInt(formData.prepTime, 10) : null,
-    cooking_time: formData.cookTime ? parseInt(formData.cookTime, 10) : null,
-    serves: formData.serves ? parseInt(formData.serves, 10) : null,
+      const recipeData = {
+        name: formData.dishName || '',
+        description: formData.shortDescription || '',
+        image_url: formData.heroImage || null,
+        state_id: formData.state_id || null,
+        meal_type: formData.category || null,
+        festival_tag: formData.festivalTag || null,
+        dietary_type: formData.dietaryType || null,
+        difficulty_level: formData.difficulty
+          ? formData.difficulty.charAt(0).toUpperCase() + formData.difficulty.slice(1).toLowerCase()
+          : null,
+        prep_time: formData.prepTime ? parseInt(formData.prepTime, 10) : null,
+        cooking_time: formData.cookTime ? parseInt(formData.cookTime, 10) : null,
+        serves: formData.serves ? parseInt(formData.serves, 10) : null,
 
-    // 🍅 Ingredients & Instructions
-    ingredients: formData.ingredients ? JSON.parse(JSON.stringify(formData.ingredients)) : null,
-    instructions: formData.instructions ? JSON.parse(JSON.stringify(formData.instructions)) : null,
+        // 🍅 Ingredients & Instructions
+        ingredients: formData.ingredients ? JSON.parse(JSON.stringify(formData.ingredients)) : null,
+        instructions: formData.instructions ? JSON.parse(JSON.stringify(formData.instructions)) : null,
 
-    // 🏺 Cultural Context
-    origin_story: formData.originStory || null,
-    heritage_significance: formData.heritageSignificance || null,
-    family_tradition: formData.familyTraditions || null,
-    recipe_source: formData.recipeSource || null,
-    regional_variations: formData.regionalVariations || null,
-    associated_festivals: formData.festivals || [],
-    additional_notes: formData.additionalNotes || null,
+        // 🏺 Cultural Context
+        origin_story: formData.originStory || null,
+        heritage_significance: formData.heritageSignificance || null,
+        family_tradition: formData.familyTraditions || null,
+        recipe_source: formData.recipeSource || null,
+        regional_variations: formData.regionalVariations || null,
+        associated_festivals: formData.festivals || [],
+        additional_notes: formData.additionalNotes || null,
 
-    // 🍎 Nutrition (combine into one JSON field)
-    nutrition_info: {
-      calories: formData.calories || null,
-      carbs: formData.carbs || null,
-      protein: formData.protein || null,
-      fat: formData.fat || null,
-      fiber: formData.fiber || null,
-      sugar: formData.sugar || null,
-      ingredient_benefits: formData.ingredientBenefits || null,
-    },
-    dietary_categories: formData.dietaryCategories || [],
-    allergens: formData.allergens || null,
-    medical_conditions: formData.medicalConsiderations || null,
-    ayurvedic_properties: formData.ayurvedicProperties || null,
-    health_considerations: formData.healthBenefits || [],
+        // 🍎 Nutrition (combine into one JSON field)
+        nutrition_info: {
+          calories: formData.calories || null,
+          carbs: formData.carbs || null,
+          protein: formData.protein || null,
+          fat: formData.fat || null,
+          fiber: formData.fiber || null,
+          sugar: formData.sugar || null,
+          ingredient_benefits: formData.ingredientBenefits || null,
+        },
+        dietary_categories: formData.dietaryCategories || [],
+        allergens: formData.allergens || null,
+        medical_conditions: formData.medicalConsiderations || null,
+        ayurvedic_properties: formData.ayurvedicProperties || null,
+        health_considerations: formData.healthBenefits || [],
 
-    created_by: user.id,
-    status: 'pending',
-  };
+        created_by: user.id,
+        status: 'pending',
+      };
 
-  console.log("🧾 Submitting recipe:", recipeData);
+      console.log("🧾 Submitting recipe:", recipeData);
 
       const isEditing = currentView === "edit" && selectedRecipeId;
 
-    let error;
-    if (isEditing) {
-      // 🔄 UPDATE existing recipe
-      ({ error } = await supabase
-        .from("rec_contributions")
-        .update(recipeData)
-        .eq("indg_recipe_id", selectedRecipeId));
-    } else {
-      // 🆕 INSERT new recipe
-      ({ error } = await supabase
-        .from("rec_contributions")
-        .insert([recipeData]));
-    }
+      let error;
+      if (isEditing) {
+        // 🔄 UPDATE existing recipe
+        ({ error } = await supabase
+          .from("rec_contributions")
+          .update(recipeData)
+          .eq("indg_recipe_id", selectedRecipeId));
+      } else {
+        // 🆕 INSERT new recipe
+        ({ error } = await supabase
+          .from("rec_contributions")
+          .insert([recipeData]));
+      }
 
-    if (error) {
-      console.error("❌ Error saving recipe:", error);
-      alert("There was an error saving your recipe. Please try again.");
-    } else {
-      alert(isEditing ? "✅ Recipe updated successfully!" : "🎉 Recipe submitted successfully!");
-      localStorage.removeItem("recipe-draft");
-      setFormData({});
-      setCurrentStep(1);
-      setCurrentView("list");
+      if (error) {
+        console.error("❌ Error saving recipe:", error);
+        alert("There was an error saving your recipe. Please try again.");
+      } else {
+        alert(isEditing ? "✅ Recipe updated successfully!" : "🎉 Recipe submitted successfully!");
+        localStorage.removeItem("recipe-draft");
+        setFormData({});
+        setCurrentStep(1);
+        setCurrentView("list");
+      }
+    } catch (error) {
+      console.error("❌ Submission error:", error);
+      alert("There was an error submitting your recipe. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error("❌ Submission error:", error);
-    alert("There was an error submitting your recipe. Please try again.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
   const handleSaveDraft = () => {
     saveDraft();
     alert('Draft saved successfully!');
@@ -332,9 +332,10 @@ try {
   // }
   if (currentView === 'list') {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen flex flex-col bg-background">
         <Header />
-        <main className="container mx-auto px-4 py-8">
+
+        <main className="flex-grow container mx-auto px-4 py-8">
           <UserRecipesList
             onNewRecipe={() => setCurrentView('form')}
             onViewRecipe={(id) => {
@@ -347,6 +348,7 @@ try {
             }}
           />
         </main>
+
         <Footer />
       </div>
     );
