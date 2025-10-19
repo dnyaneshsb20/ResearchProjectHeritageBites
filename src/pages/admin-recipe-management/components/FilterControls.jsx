@@ -9,20 +9,18 @@ const FilterControls = ({
   onFilterChange, 
   onClearFilters, 
   onBulkAction,
-  selectedCount 
+  selectedCount,
+  states // dynamically passed from parent
 }) => {
+
+  // Use dynamic states for regionOptions
   const regionOptions = [
-    { value: '', label: 'All Regions' },
-    { value: 'north', label: 'North India' },
-    { value: 'south', label: 'South India' },
-    { value: 'east', label: 'East India' },
-    { value: 'west', label: 'West India' },
-    { value: 'northeast', label: 'Northeast India' },
-    { value: 'central', label: 'Central India' }
+    { value: '', label: 'Select States' },
+    ...states?.map((s) => ({ value: s.state_name, label: s.state_name }))
   ];
 
   const categoryOptions = [
-    { value: '', label: 'All Categories' },
+    { value: '', label: 'Select Categories' },
     { value: 'main-course', label: 'Main Course' },
     { value: 'appetizer', label: 'Appetizer' },
     { value: 'dessert', label: 'Dessert' },
@@ -32,7 +30,7 @@ const FilterControls = ({
   ];
 
   const statusOptions = [
-    { value: '', label: 'All Status' },
+    { value: '', label: 'Select Status' },
     { value: 'pending', label: 'Pending Review' },
     { value: 'under-review', label: 'Under Review' },
     { value: 'needs-modification', label: 'Needs Changes' },
@@ -41,7 +39,7 @@ const FilterControls = ({
   ];
 
   const contributorRatingOptions = [
-    { value: '', label: 'All Ratings' },
+    { value: '', label: 'Select Ratings' },
     { value: '5', label: '5 Stars' },
     { value: '4', label: '4+ Stars' },
     { value: '3', label: '3+ Stars' },
@@ -101,14 +99,15 @@ const FilterControls = ({
           </Button>
         </div>
       </div>
+
       {/* Filter Controls */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Select
-          label="Region"
+          label="State"
           options={regionOptions}
           value={filters?.region}
           onChange={(value) => onFilterChange('region', value)}
-          placeholder="Select region"
+          placeholder="Select State"
         />
 
         <Select
@@ -135,6 +134,7 @@ const FilterControls = ({
           placeholder="Select rating"
         />
       </div>
+
       {/* Date Range Filters */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
@@ -150,6 +150,7 @@ const FilterControls = ({
           onChange={(e) => onFilterChange('toDate', e?.target?.value)}
         />
       </div>
+
       {/* Bulk Actions */}
       {selectedCount > 0 && (
         <div className="border-t border-border pt-4">
