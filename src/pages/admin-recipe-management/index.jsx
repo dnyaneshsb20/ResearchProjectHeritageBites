@@ -125,7 +125,7 @@ const AdminRecipeManagement = () => {
   };
 
   const handlePreviewRecipe = (recipe) => {
-    setPreviewRecipe(recipe);
+    setPreviewRecipe(recipe.indg_recipe_id); // pass only the ID
   };
 
   const handleApprove = (submissionId) => {
@@ -189,11 +189,10 @@ const AdminRecipeManagement = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center space-x-2 px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
-                activeTab === tab.id
-                  ? 'text-primary border-primary'
-                  : 'text-muted-foreground border-transparent hover:text-foreground hover:border-muted'
-              }`}
+              className={`flex items-center space-x-2 px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab.id
+                ? 'text-primary border-primary'
+                : 'text-muted-foreground border-transparent hover:text-foreground hover:border-muted'
+                }`}
             >
               <Icon name={tab.icon} size={16} />
               <span>{tab.label}</span>
@@ -244,7 +243,7 @@ const AdminRecipeManagement = () => {
       {/* Recipe Preview Modal */}
       {previewRecipe && (
         <RecipePreviewPanel
-          recipe={previewRecipe}
+          recipeId={previewRecipe} // pass ID here
           onClose={() => setPreviewRecipe(null)}
           onApprove={handleApprove}
           onReject={handleReject}
