@@ -70,33 +70,6 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
     return basePrice;
   };
 
-  const reviews = [
-    {
-      id: 1,
-      user: "Priya Sharma",
-      rating: 5,
-      comment: "Excellent quality! The aroma and taste are authentic. Will definitely order again.",
-      date: "2025-08-10",
-      verified: true
-    },
-    {
-      id: 2,
-      user: "Rajesh Kumar",
-      rating: 4,
-      comment: "Good product, fast delivery. The packaging was also very good.",
-      date: "2025-08-08",
-      verified: true
-    },
-    {
-      id: 3,
-      user: "Meera Patel",
-      rating: 5,
-      comment: "This is exactly what I was looking for. Traditional quality at reasonable price.",
-      date: "2025-08-05",
-      verified: false
-    }
-  ];
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 mt-18">
       <div className="bg-background rounded-lg max-w-4xl w-full max-h-[85vh] overflow-y-auto">
