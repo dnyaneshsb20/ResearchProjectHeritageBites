@@ -77,9 +77,8 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
       </div>
 
       <div
-        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-all duration-300 ${
-          showAll ? "max-h-full" : "overflow-hidden"
-        }`}
+        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-all duration-300 ${showAll ? "max-h-full" : "overflow-hidden"
+          }`}
       >
         {displayedFarmers.map((farmer) => (
           <div
@@ -94,12 +93,17 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
                   alt={farmer.users?.name || "Unnamed Farmer"}
                   className="w-12 h-12 rounded-full object-cover"
                 />
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-background flex items-center justify-center">
+                {/* <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-background flex items-center justify-center">
                   <Icon name="Check" size={8} color="white" />
-                </div>
+                </div> */}
               </div>
               <div className="flex-1">
-                <h3 className="font-body font-semibold text-foreground">{farmer.users?.name || "Unnamed Farmer"}</h3>
+                <h3 className="font-body font-semibold text-foreground flex items-center gap-1">
+                  {farmer.users?.name || "Unnamed Farmer"}
+                  <div className="w-4 h-4 bg-success rounded-full border-2 border-background flex items-center justify-center">
+                    <Icon name="Check" size={8} color="white" />
+                  </div>
+                </h3>
                 <div className="flex items-center space-x-1">
                   <Icon name="MapPin" size={12} className="text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">{farmer.users?.location || "Unknown location"}</span>
@@ -108,7 +112,7 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
             </div>
 
             <p className="text-sm text-foreground mb-2 font-medium">
-              {farmer.speciality || '—'}
+              {farmer.bio || '—'}
             </p>
             <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
               {farmer.story || 'No story available'}
@@ -129,9 +133,11 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
                 {farmer.certifications.split(',').map((cert, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-success/10 text-success text-xs font-caption font-medium rounded"
+                    className="py-1 bg-success/10 text-success text-xs font-caption font-medium rounded"
                   >
-                    {cert}
+                    <span className="text-sm font-semibold text-foreground">Farmer Certification: </span>
+                    <Icon name="Shield" size={13} className="inline mb-1" />
+                    {cert} Certified Farmer
                   </span>
                 ))}
               </div>

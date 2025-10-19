@@ -304,20 +304,26 @@ const AdminRecipeManagement = () => {
 
   // Filter submissions based on current filters
   const filteredSubmissions = submissions?.filter(submission => {
-    const matchesSearch = !filters?.search || 
+    const matchesSearch = !filters?.search ||
       submission?.title?.toLowerCase()?.includes(filters?.search?.toLowerCase()) ||
       submission?.contributorName?.toLowerCase()?.includes(filters?.search?.toLowerCase());
-    
+
     const matchesRegion = !filters?.region || submission?.region?.toLowerCase()?.includes(filters?.region?.toLowerCase());
     const matchesCategory = !filters?.category || submission?.category?.toLowerCase()?.includes(filters?.category?.toLowerCase());
     const matchesStatus = !filters?.status || submission?.status === filters?.status;
     const matchesRating = !filters?.contributorRating || submission?.contributorRating >= parseInt(filters?.contributorRating);
-    
+
     const matchesDateRange = (!filters?.fromDate || new Date(submission.submissionDate) >= new Date(filters.fromDate)) &&
-                            (!filters?.toDate || new Date(submission.submissionDate) <= new Date(filters.toDate));
+      (!filters?.toDate || new Date(submission.submissionDate) <= new Date(filters.toDate));
 
     return matchesSearch && matchesRegion && matchesCategory && matchesStatus && matchesRating && matchesDateRange;
   });
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -325,12 +331,12 @@ const AdminRecipeManagement = () => {
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
         {/* Page Header */}
         <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-1">{getGreeting()}! Admin</h1>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
-            <span>Admin</span>
-            <Icon name="ChevronRight" size={16} />
-            <span>Recipe Management</span>
+            <p className="text-muted-foreground">
+              Admin Dashboard and Recipe Management
+            </p>
           </div>
-          <h1 className="text-3xl font-bold text-foreground">Recipe Management</h1>
           <p className="text-muted-foreground mt-2">
             Review, approve, and curate community-submitted recipes while maintaining platform quality and cultural authenticity.
           </p>
@@ -342,10 +348,9 @@ const AdminRecipeManagement = () => {
             <button
               key={tab?.id}
               onClick={() => setActiveTab(tab?.id)}
-              className={`flex items-center space-x-2 px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
-                activeTab === tab?.id
-                  ? 'text-primary border-primary' :'text-muted-foreground border-transparent hover:text-foreground hover:border-muted'
-              }`}
+              className={`flex items-center space-x-2 px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab?.id
+                ? 'text-primary border-primary' : 'text-muted-foreground border-transparent hover:text-foreground hover:border-muted'
+                }`}
             >
               <Icon name={tab?.icon} size={16} />
               <span>{tab?.label}</span>
@@ -368,7 +373,7 @@ const AdminRecipeManagement = () => {
               onBulkAction={handleBulkAction}
               selectedCount={selectedSubmissions?.length}
             />
-            
+
             <PendingSubmissionsTable
               submissions={filteredSubmissions}
               selectedSubmissions={selectedSubmissions}
@@ -403,7 +408,7 @@ const AdminRecipeManagement = () => {
           onRequestModification={handleRequestModification}
         />
       )}
-      <Footer/>
+      <Footer />
     </div>
   );
 };
