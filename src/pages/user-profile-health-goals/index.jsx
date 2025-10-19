@@ -242,48 +242,48 @@ const UserProfileHealthGoals = () => {
           />
 
           {/* Health Goals */}
-          <HealthGoalsSection
+          {/*<HealthGoalsSection
             isExpanded={expandedSections?.healthGoals}
             onToggle={() => toggleSection('healthGoals')}
             healthGoals={healthGoals}
             onUpdate={handleHealthGoalsUpdate}
-          />
+          />*/}
 
           {/* Dietary Restrictions */}
-          <DietaryRestrictionsSection
+          {/*<DietaryRestrictionsSection
             isExpanded={expandedSections?.dietaryRestrictions}
             onToggle={() => toggleSection('dietaryRestrictions')}
             restrictions={dietaryRestrictions}
             onUpdate={handleDietaryRestrictionsUpdate}
-          />
+          />*/}
 
           {/* Taste Preferences */}
-          <TastePreferencesSection
+          {/*<TastePreferencesSection
             isExpanded={expandedSections?.tastePreferences}
             onToggle={() => toggleSection('tastePreferences')}
             preferences={tastePreferences}
             onUpdate={handleTastePreferencesUpdate}
-          />
+          />*/}
 
           {/* Regional Favorites */}
-          <RegionalFavoritesSection
+          {/*<RegionalFavoritesSection
             isExpanded={expandedSections?.regionalFavorites}
             onToggle={() => toggleSection('regionalFavorites')}
             favorites={regionalFavorites}
             onUpdate={handleRegionalFavoritesUpdate}
-          />
+          />*/}
 
           {/* Recipe History */}
-          <RecipeHistorySection
+          {/*<RecipeHistorySection
             isExpanded={expandedSections?.recipeHistory}
             onToggle={() => toggleSection('recipeHistory')}
-          />
+          />*/}
 
           {/* Achievement Badges */}
-          <AchievementBadgesSection
+          {/*<AchievementBadgesSection
             isExpanded={expandedSections?.achievements}
             onToggle={() => toggleSection('achievements')}
-          />
+          />*/}
         </div>
 
         {/* Action Buttons */}

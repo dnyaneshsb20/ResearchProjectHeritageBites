@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown } from 'lucide-react'; // ✅ using lucide-react icons (already available in your project)
+import { ChevronDown } from 'lucide-react';
 
-const Select = ({ label, options, value, onChange, placeholder }) => {
+const Select = ({ label, options, value, onChange, placeholder, disabled = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef(null);
 
-  // ✅ Close dropdown when clicking outside
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (selectRef.current && !selectRef.current.contains(event.target)) {
@@ -17,22 +17,36 @@ const Select = ({ label, options, value, onChange, placeholder }) => {
   }, []);
 
   const handleSelect = (val) => {
+    if (disabled) return; // prevent selection when disabled
     onChange(val);
     setIsOpen(false);
   };
 
+  const toggleDropdown = () => {
+    if (!disabled) setIsOpen((prev) => !prev);
+  };
+
   return (
     <div ref={selectRef} className="relative">
-      {label && <label className="block text-sm font-medium mb-1">{label}</label>}
+      {label && (
+        <label className="block text-sm font-medium mb-1">
+          {label}
+        </label>
+      )}
 
       {/* Dropdown Button */}
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full border rounded-md px-3 py-2 text-left bg-background flex items-center justify-between"
+        onClick={toggleDropdown}
+        disabled={disabled}
+        className={`w-full border rounded-md px-3 py-2 text-left flex items-center justify-between transition ${
+          disabled
+            ? 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-70'
+            : 'bg-background cursor-pointer'
+        }`}
       >
         <span>
-          {options.find((o) => o.value === value)?.label || placeholder}
+          {options.find((o) => o.value === value)?.label || placeholder || 'Select an option'}
         </span>
         <ChevronDown
           size={18}
@@ -43,7 +57,7 @@ const Select = ({ label, options, value, onChange, placeholder }) => {
       </button>
 
       {/* Dropdown Menu */}
-      {isOpen && (
+      {isOpen && !disabled && (
         <div className="absolute z-10 w-full bg-white border rounded-md mt-1 max-h-48 overflow-y-auto shadow">
           {options.map((option) => (
             <div

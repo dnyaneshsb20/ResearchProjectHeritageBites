@@ -6,12 +6,14 @@ import Input from "../../../components/ui/Input";
 import Select from "../../../components/ui/Select";
 import { supabase } from "../../../supabaseClient";
 import { User } from "lucide-react";
+import { toast } from "react-hot-toast";
 
-const PersonalInfoSection = ({ isExpanded, onToggle, userData, onUpdate, onUpdateCompletion }) => {
+
+const PersonalInfoSection = ({ isExpanded, onToggle }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [formData, setFormData] = useState(userData || {});
-  const [dbUser, setDbUser] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [dbUser, setDbUser] = useState({});
 
   const genderOptions = [
     { value: "male", label: "Male" },
@@ -38,10 +40,7 @@ const PersonalInfoSection = ({ isExpanded, onToggle, userData, onUpdate, onUpdat
   ];
 
   const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSave = async () => {
@@ -49,7 +48,7 @@ const PersonalInfoSection = ({ isExpanded, onToggle, userData, onUpdate, onUpdat
       setIsSaving(true);
 
       const { data: authData, error: authError } = await supabase.auth.getUser();
-      if (authError || !authData?.user) return;
+      if (authError || !authData?.user) throw authError;
 
       const userId = authData.user.id;
 
@@ -78,94 +77,82 @@ const PersonalInfoSection = ({ isExpanded, onToggle, userData, onUpdate, onUpdat
             activity_level: formData.activityLevel || null,
             preferences: formData.preferences || null,
             health_goals: formData.healthGoals || null,
+            mobile_number: formData.phone || null, // ✅ mobile number
           },
           { onConflict: "user_id" }
         );
 
       if (profileError) throw profileError;
 
-      onUpdate?.(formData);
-      onUpdateCompletion?.();
-
+      // ✅ Update local state and reset editing
+      setDbUser({ ...formData });
       setIsEditing(false);
+      toast.success("Profile updated successfully!", { duration: 3000 }); // ✅ success popup
     } catch (err) {
       console.error("Error saving profile:", err);
+      toast.error("Failed to update profile. Please try again.", { duration: 3000 });
     } finally {
-      setIsSaving(false);
+      setIsSaving(false); // ✅ reset button
     }
   };
 
   const handleCancel = () => {
-    if (dbUser) {
-      setFormData((prev) => ({
-        ...userData,
-        name: dbUser.name,
-        email: dbUser.email,
-      }));
-    } else {
-      setFormData(userData);
-    }
+    setFormData(dbUser);
     setIsEditing(false);
   };
 
   useEffect(() => {
-    let mounted = true;
-
-    const fetchSignedInUser = async () => {
+    const fetchUserData = async () => {
       try {
         const { data: authData } = await supabase.auth.getUser();
-        const user = authData?.user;
-        if (!user) return;
+        if (!authData?.user) return;
+
+        const userId = authData.user.id;
 
         const { data: userData, error: userError } = await supabase
           .from("users")
           .select("name, email, location, created_at")
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .single();
 
         if (userError) throw userError;
 
         const { data: profileData, error: profileError } = await supabase
           .from("user_profile")
-          .select("age_group, gender, height_cm, weight_kg, activity_level, preferences, health_goals")
-          .eq("user_id", user.id)
+          .select("age_group, gender, height_cm, weight_kg, activity_level, preferences, health_goals, mobile_number")
+          .eq("user_id", userId)
           .single();
 
         if (profileError && profileError.code !== "PGRST116") throw profileError;
 
-        if (mounted) {
-          setDbUser(userData);
-          setFormData({
-            name: userData?.name ?? "",
-            email: userData?.email ?? "",
-            location: userData?.location ?? "",
-            joinDate: userData?.created_at ?? "",
-            ageGroup: profileData?.age_group ?? "",
-            gender: profileData?.gender ?? "",
-            height: profileData?.height_cm ?? "",
-            weight: profileData?.weight_kg ?? "",
-            activityLevel: profileData?.activity_level ?? "",
-            preferences: profileData?.preferences ?? "",
-            healthGoals: profileData?.health_goals ?? "",
-          });
-        }
+        const combinedData = {
+          name: userData.name ?? "",
+          email: userData.email ?? "",
+          location: userData.location ?? "",
+          joinDate: userData.created_at ?? "",
+          ageGroup: profileData?.age_group ?? "",
+          gender: profileData?.gender ?? "",
+          height: profileData?.height_cm ?? "",
+          weight: profileData?.weight_kg ?? "",
+          activityLevel: profileData?.activity_level ?? "",
+          preferences: profileData?.preferences ?? "",
+          healthGoals: profileData?.health_goals ?? "",
+          phone: profileData?.mobile_number ?? "", // ✅ mobile number
+        };
+
+        setDbUser(combinedData);
+        setFormData(combinedData);
       } catch (err) {
-        console.error("Unexpected error fetching user:", err);
+        console.error("Error fetching profile:", err);
       }
     };
 
-    fetchSignedInUser();
-    return () => {
-      mounted = false;
-    };
+    fetchUserData();
   }, []);
 
   return (
     <div className="bg-card rounded-lg border border-border shadow-warm">
-      <div
-        className="flex items-center justify-between p-6 cursor-pointer"
-        onClick={onToggle}
-      >
+      <div className="flex items-center justify-between p-6 cursor-pointer" onClick={onToggle}>
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
             <Icon name="User" size={20} className="text-primary" />
@@ -179,167 +166,34 @@ const PersonalInfoSection = ({ isExpanded, onToggle, userData, onUpdate, onUpdat
             </p>
           </div>
         </div>
-        <Icon
-          name={isExpanded ? "ChevronUp" : "ChevronDown"}
-          size={20}
-          className="text-muted-foreground"
-        />
+        <Icon name={isExpanded ? "ChevronUp" : "ChevronDown"} size={20} className="text-muted-foreground" />
       </div>
 
       {isExpanded && (
         <div className="px-6 pb-6 border-t border-border">
           <div className="mt-6">
-            {/* Profile Picture */}
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="relative">
-                <div className="w-20 h-20 rounded-full overflow-hidden bg-muted">
-                  {formData?.profilePicture ? (
-                    <Image
-                      src={formData.profilePicture}
-                      alt="Profile Picture"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-200 rounded-full">
-                      <User className="w-10 h-10 text-gray-500" />
-                    </div>
-                  )}
-                </div>
-                {isEditing && (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-background"
-                  >
-                    <Icon name="Camera" size={14} />
-                  </Button>
-                )}
-              </div>
-
-              <div>
-                <h4 className="font-body font-medium text-foreground">
-                  {formData?.name ?? ""}
-                </h4>
-                <p className="text-sm text-muted-foreground">
-                  Member since{" "}
-                  {formData?.joinDate
-                    ? new Date(formData.joinDate).toLocaleDateString()
-                    : ""}
-                </p>
-              </div>
-            </div>
-
-            {/* Form Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label="Full Name"
-                type="text"
-                value={formData?.name ?? ""}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                disabled={!isEditing}
-                required
-              />
-
-              <Input
-                label="Email Address"
-                type="email"
-                value={formData?.email ?? ""}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                disabled={!isEditing}
-                required
-              />
-
-              <Input
-                label="Phone Number"
-                type="tel"
-                value={formData?.phone ?? ""}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-                disabled={!isEditing}
-                placeholder="+91 XXXXX XXXXX"
-              />
-
-              <Select
-                label="Gender"
-                options={genderOptions}
-                value={formData?.gender ?? ""}
-                onChange={(value) => handleInputChange("gender", value)}
-                disabled={!isEditing}
-              />
-
-              <Select
-                label="Age Group"
-                options={ageGroupOptions}
-                value={formData?.ageGroup ?? ""}
-                onChange={(value) => handleInputChange("ageGroup", value)}
-                disabled={!isEditing}
-                required
-              />
-
-              <Input
-                label="Location"
-                type="text"
-                value={formData?.location ?? ""}
-                onChange={(e) => handleInputChange("location", e.target.value)}
-                disabled={!isEditing}
-                placeholder="City, State"
-              />
-
-              <Input
-                label="Height (cm)"
-                type="number"
-                value={formData?.height ?? ""}
-                onChange={(e) => handleInputChange("height", e.target.value)}
-                disabled={!isEditing}
-                min="100"
-                max="250"
-              />
-
-              <Input
-                label="Weight (kg)"
-                type="number"
-                value={formData?.weight ?? ""}
-                onChange={(e) => handleInputChange("weight", e.target.value)}
-                disabled={!isEditing}
-                min="30"
-                max="200"
-              />
-
+              <Input label="Full Name" type="text" value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} disabled required />
+              <Input label="Email Address" type="email" value={formData.email} onChange={(e) => handleInputChange("email", e.target.value)} disabled required />
+              <Input label="Phone Number" type="tel" value={formData.phone} onChange={(e) => handleInputChange("phone", e.target.value)} disabled={!isEditing} placeholder="+91 XXXXX XXXXX" />
+              <Select label="Gender" options={genderOptions} value={formData.gender} onChange={(val) => handleInputChange("gender", val)} disabled={!isEditing} />
+              <Select label="Age Group" options={ageGroupOptions} value={formData.ageGroup} onChange={(val) => handleInputChange("ageGroup", val)} disabled={!isEditing} />
+              <Input label="Location" type="text" value={formData.location} onChange={(e) => handleInputChange("location", e.target.value)} disabled={!isEditing} />
+              <Input label="Height (cm)" type="number" value={formData.height} onChange={(e) => handleInputChange("height", e.target.value)} disabled={!isEditing} />
+              <Input label="Weight (kg)" type="number" value={formData.weight} onChange={(e) => handleInputChange("weight", e.target.value)} disabled={!isEditing} />
               <div className="md:col-span-2">
-                <Select
-                  label="Activity Level"
-                  options={activityLevelOptions}
-                  value={formData?.activityLevel ?? ""}
-                  onChange={(value) => handleInputChange("activityLevel", value)}
-                  disabled={!isEditing}
-                  description="Helps calculate your daily calorie needs"
-                />
+                <Select label="Activity Level" options={activityLevelOptions} value={formData.activityLevel} onChange={(val) => handleInputChange("activityLevel", val)} disabled={!isEditing} />
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex items-center justify-end space-x-3 mt-6 pt-4 border-t border-border">
               {isEditing ? (
                 <>
-                  <Button variant="outline" onClick={handleCancel}>
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="default"
-                    onClick={handleSave}
-                    disabled={isSaving}
-                  >
-                    {isSaving ? "Saving..." : "Save Changes"}
-                  </Button>
+                  <Button variant="outline" onClick={handleCancel}>Cancel</Button>
+                  <Button variant="default" onClick={handleSave} disabled={isSaving}>{isSaving ? "Saving..." : "Save Changes"}</Button>
                 </>
               ) : (
-                <Button
-                  variant="outline"
-                  onClick={() => setIsEditing(true)}
-                  iconName="Edit"
-                  iconPosition="left"
-                >
-                  Edit Profile
-                </Button>
+                <Button variant="ghost2" onClick={() => setIsEditing(true)}>Edit Profile</Button>
               )}
             </div>
           </div>
