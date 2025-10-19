@@ -178,7 +178,7 @@ useEffect(() => {
                 </div>
               </div>
 
-              {/* Farmer Info */}
+           
               <div className="bg-muted rounded-lg p-4 mb-2">
                 {loadingFarmer ? (
                   <p className="text-sm text-muted-foreground">Loading farmer info...</p>
