@@ -8,6 +8,8 @@ import FilterControls from './components/FilterControls';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import ContributorManagement from './components/ContributorManagement';
 import Footer from '../dashboard/components/Footer';
+import AdminRecipeView from './components/AdminRecipeView';
+import { supabase } from "../../supabaseClient";
 
 const AdminRecipeManagement = () => {
   const [activeTab, setActiveTab] = useState('submissions');
@@ -124,9 +126,22 @@ const AdminRecipeManagement = () => {
     setSelectedSubmissions([]);
   };
 
-  const handlePreviewRecipe = (recipe) => {
-    setPreviewRecipe(recipe.indg_recipe_id); // pass only the ID
-  };
+  const handlePreviewRecipe = async (submission) => {
+  const { data, error } = await supabase
+    .from('rec_contributions')
+    .select('*')
+    .eq('indg_recipe_id', submission.id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    alert('Failed to load recipe.');
+    return;
+  }
+
+  setPreviewRecipe(data); // pass full recipe to AdminRecipeView
+};
+
 
   const handleApprove = (submissionId) => {
     console.log('Approving submission:', submissionId);
@@ -241,15 +256,18 @@ const AdminRecipeManagement = () => {
       </div>
 
       {/* Recipe Preview Modal */}
-      {previewRecipe && (
-        <RecipePreviewPanel
-          recipeId={previewRecipe} // pass ID here
+      {previewRecipe ? (
+        <AdminRecipeView
+          recipe={previewRecipe}
           onClose={() => setPreviewRecipe(null)}
           onApprove={handleApprove}
           onReject={handleReject}
           onRequestModification={handleRequestModification}
         />
+      ) : (
+        <Footer />
       )}
+
       <Footer />
     </div>
   );
