@@ -21,17 +21,27 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
       setLoadingFarmer(true);
 
       const { data, error } = await supabase
-        .from('farmers')
+        .from('products')
         .select(`
-        farmer_id,
-        location,
-        bio,
-        certifications,
-        users:user_id (
-          name
-        )
-      `)
-        .eq('farmer_id', product.farmer_id)
+          product_id,
+          name,
+          price,
+          stock,
+          certifications,
+          image_url,
+          description,
+          farmer:farmers!products_farmer_id_fkey (
+            farmer_id,
+            bio,
+            contact_info,
+            location,
+            user:users!farmers_user_id_fkey (
+              name,
+              email
+            )
+          )
+        `)
+        .eq('product_id', productId)
         .maybeSingle();
 
       if (error) console.error('Error fetching farmer:', error);
