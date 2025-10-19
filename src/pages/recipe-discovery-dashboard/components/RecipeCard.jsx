@@ -39,7 +39,8 @@ const RecipeCard = ({ recipe, className = '' }) => {
   };
 
   return (
-    <Link to="/recipe-detail-instructions" className={`block ${className}`}>
+  <Link to={`/recipe-detail-instructions?id=${id}`} className={`block ${className}`}>
+
       <div className="bg-card border border-border rounded-xl overflow-hidden shadow-warm hover:shadow-warm-md transition-all duration-200 animate-scale-hover h-[360px]">
         {/* Image Container */}
         <div className="relative aspect-[4/3] overflow-hidden">

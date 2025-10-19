@@ -79,7 +79,8 @@ const CookingInstructions = ({ instructions, videos }) => {
       )}
       {/* Instructions List */}
       <div className="space-y-6">
-        {instructions?.map((step, index) => (
+     {Array.isArray(instructions) && instructions.length > 0 ? (
+  instructions.map((step, index) => (
           <div
             key={index}
             className={`flex space-x-4 p-4 rounded-lg border transition-all ${
@@ -141,7 +142,7 @@ const CookingInstructions = ({ instructions, videos }) => {
                 completedSteps?.has(index)
                   ? 'text-success/80' :'text-foreground'
               }`}>
-                {step?.instruction}
+                 {step?.instruction || step?.text}
               </p>
 
               {/* Step Image */}
@@ -168,7 +169,10 @@ const CookingInstructions = ({ instructions, videos }) => {
               )}
             </div>
           </div>
-        ))}
+     ))
+) : (
+  <p className="text-muted-foreground">No instructions available.</p>
+)}
       </div>
       {/* Completion Message */}
       {completedSteps?.size === instructions?.length && (

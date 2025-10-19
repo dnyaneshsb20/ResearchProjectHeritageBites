@@ -6,13 +6,13 @@ const QuickStats = ({ recipe }) => {
     {
       icon: 'Clock',
       label: 'Prep Time',
-      value: recipe?.prepTime,
+      value: recipe?.prep_time,
       color: 'text-primary'
     },
     {
       icon: 'ChefHat',
       label: 'Cook Time',
-      value: recipe?.cookTime,
+      value: recipe?.cooking_time,
       color: 'text-secondary'
     },
     {
@@ -24,7 +24,7 @@ const QuickStats = ({ recipe }) => {
     {
       icon: 'TrendingUp',
       label: 'Difficulty',
-      value: recipe?.difficulty,
+      value: recipe?.difficulty_level,
       color: 'text-warning'
     }
   ];

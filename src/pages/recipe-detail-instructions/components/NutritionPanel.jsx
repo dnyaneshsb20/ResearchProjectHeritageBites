@@ -21,10 +21,10 @@ const NutritionPanel = ({ nutrition, healthBenefits }) => {
     },
     {
       name: 'Carbs',
-      value: nutrition?.carbs,
+      value: nutrition?.carbohydrates,
       unit: 'g',
       color: 'bg-warning',
-      percentage: (nutrition?.carbs / 300) * 100 // Assuming 300g daily target
+      percentage: (nutrition?.carbohydrates / 300) * 100 // Assuming 300g daily target
     },
     {
       name: 'Fat',
@@ -92,10 +92,10 @@ const NutritionPanel = ({ nutrition, healthBenefits }) => {
         className="flex items-center justify-center w-full py-2 text-sm font-body font-medium text-primary hover:text-primary-foreground hover:bg-primary rounded-lg transition-all"
       >
         <span>{isExpanded ? 'Show Less' : 'Show Detailed Nutrition'}</span>
-        <Icon 
-          name={isExpanded ? "ChevronUp" : "ChevronDown"} 
-          size={16} 
-          className="ml-1" 
+        <Icon
+          name={isExpanded ? "ChevronUp" : "ChevronDown"}
+          size={16}
+          className="ml-1"
         />
       </button>
       {/* Detailed Nutrition */}
@@ -104,7 +104,7 @@ const NutritionPanel = ({ nutrition, healthBenefits }) => {
           <h3 className="font-heading font-semibold text-foreground">
             Detailed Breakdown
           </h3>
-          
+
           <div className="grid gap-3">
             {micronutrients?.map((nutrient, index) => {
               const percentage = (nutrient?.value / nutrient?.dailyValue) * 100;
@@ -134,30 +134,25 @@ const NutritionPanel = ({ nutrition, healthBenefits }) => {
         </div>
       )}
       {/* Health Benefits */}
-      {healthBenefits && healthBenefits?.length > 0 && (
-        <div className="mt-6 pt-6 border-t border-border">
-          <h3 className="font-heading font-semibold text-foreground mb-4">
-            Health Benefits
-          </h3>
-          <div className="space-y-3">
-            {healthBenefits?.map((benefit, index) => (
-              <div key={index} className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-success/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Icon name="Heart" size={12} className="text-success" />
-                </div>
-                <div>
-                  <h4 className="font-body font-medium text-foreground">
-                    {benefit?.title}
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    {benefit?.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+      {healthBenefits && healthBenefits.length > 0 && (
+  <div className="mt-6 pt-6 border-t border-border">
+    <h3 className="font-heading font-semibold text-foreground mb-4">
+      Health Benefits
+    </h3>
+    <div className="space-y-3">
+      {healthBenefits.map((benefit, index) => (
+        <div key={index} className="flex items-center space-x-3">
+          <div className="w-6 h-6 bg-success/20 rounded-full flex items-center justify-center flex-shrink-0">
+            <Icon name="Heart" size={12} className="text-success" />
           </div>
+          <p className="text-sm text-foreground">
+            {typeof benefit === 'object' ? `${benefit.title}: ${benefit.description}` : benefit}
+          </p>
         </div>
-      )}
+      ))}
+    </div>
+  </div>
+)}
       {/* Dietary Tags */}
       <div className="mt-6 pt-6 border-t border-border">
         <h3 className="font-heading font-semibold text-foreground mb-3">
