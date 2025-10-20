@@ -14,7 +14,7 @@ import Icon from '../../components/AppIcon';
 import Footer from '../dashboard/components/Footer';
 import { supabase } from "../../supabaseClient";
 import UserRecipeView from './components/UserRecipeView';
-
+import { toast } from "react-hot-toast";
 
 const RecipeSubmissionManagement = () => {
   const [currentView, setCurrentView] = useState('list'); // 'list' or 'form'
@@ -153,7 +153,7 @@ const RecipeSubmissionManagement = () => {
   //   try {
   //     const { data: { user } } = await supabase.auth.getUser();
   //     if (!user) {
-  //       alert("Please log in to submit a recipe.");
+  //       toast.success("Please log in to submit a recipe.");
   //       setIsSubmitting(false);
   //       return;
   //     }
@@ -185,9 +185,9 @@ const RecipeSubmissionManagement = () => {
 
   //     if (error) {
   //       console.error("❌ Error submitting recipe:", error);
-  //       alert("There was an error submitting your recipe. Please try again.");
+  //       toast.error("There was an error submitting your recipe. Please try again.");
   //     } else {
-  //       alert("🎉 Recipe submitted successfully!");
+  //       toast.success("🎉 Recipe submitted successfully!");
   //       localStorage.removeItem("recipe-draft");
   //       setFormData({});
   //       setCurrentStep(1);
@@ -195,7 +195,7 @@ const RecipeSubmissionManagement = () => {
   //     }
   //   } catch (error) {
   //     console.error("❌ Submission error:", error);
-  //     alert("There was an error submitting your recipe. Please try again.");
+  //     toast.error("There was an error submitting your recipe. Please try again.");
   //   } finally {
   //     setIsSubmitting(false);
   //   }
@@ -206,7 +206,7 @@ const RecipeSubmissionManagement = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        alert("Please log in to submit a recipe.");
+        toast.success("Please log in to submit a recipe.");
         setIsSubmitting(false);
         return;
       }
@@ -278,25 +278,23 @@ const RecipeSubmissionManagement = () => {
       }
 
       if (error) {
-        console.error("❌ Error saving recipe:", error);
-        alert("There was an error saving your recipe. Please try again.");
+        toast.error("There was an error saving your recipe. Please try again.");
       } else {
-        alert(isEditing ? "✅ Recipe updated successfully!" : "🎉 Recipe submitted successfully!");
+        toast.success(isEditing ? "Recipe updated successfully!" : "Recipe submitted successfully!");
         localStorage.removeItem("recipe-draft");
         setFormData({});
         setCurrentStep(1);
         setCurrentView("list");
       }
     } catch (error) {
-      console.error("❌ Submission error:", error);
-      alert("There was an error submitting your recipe. Please try again.");
+      toast.error("There was an error submitting your recipe. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
   const handleSaveDraft = () => {
     saveDraft();
-    alert('Draft saved successfully!');
+    toast.success('Draft saved successfully!');
   };
 
   const startNewRecipe = () => {

@@ -10,6 +10,7 @@ import ContributorManagement from './components/ContributorManagement';
 import Footer from '../dashboard/components/Footer';
 import AdminRecipeView from './components/AdminRecipeView';
 import { supabase } from "../../supabaseClient";
+import toast from 'react-hot-toast';
 
 const AdminRecipeManagement = () => {
   const [activeTab, setActiveTab] = useState('submissions');
@@ -135,7 +136,7 @@ const AdminRecipeManagement = () => {
 
   if (error) {
     console.error(error);
-    alert('Failed to load recipe.');
+    toast.error('Failed to load recipe.');
     return;
   }
 

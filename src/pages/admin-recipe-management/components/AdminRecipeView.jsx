@@ -4,6 +4,7 @@ import Image from "../../../components/AppImage";
 import Icon from "../../../components/AppIcon";
 import { Utensils, ChefHat, Salad, ScrollText } from "lucide-react";
 import { supabase } from "../../../supabaseClient";
+import { toast } from "react-hot-toast";
 
 const AdminRecipeView = ({ recipe, onClose, onApprove, onReject, onRequestModification }) => {
   const [updating, setUpdating] = useState(false);
@@ -25,9 +26,9 @@ const AdminRecipeView = ({ recipe, onClose, onApprove, onReject, onRequestModifi
       .eq("indg_recipe_id", recipeId);
 
     if (error) {
-      alert("Error updating status: " + error.message);
+      toast.error("Error updating status: " + error.message);
     } else {
-      alert(`Recipe ${newStatus} successfully!`);
+      toast.success(`Recipe ${newStatus} successfully!`);
       if (newStatus === "approved") onApprove(recipeId);
       else if (newStatus === "rejected") onReject(recipeId);
       else onRequestModification(recipeId);

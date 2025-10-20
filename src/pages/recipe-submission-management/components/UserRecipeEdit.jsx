@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../../supabaseClient";
 import Button from "../../../components/ui/Button";
+import toast from "react-hot-toast";
 
 const UserRecipeEdit = ({ recipeId, onBack }) => {
   const [recipe, setRecipe] = useState(null);
@@ -26,7 +27,7 @@ const UserRecipeEdit = ({ recipeId, onBack }) => {
   };
 
   const handleSave = async () => {
-    if (!recipe.name) return alert("Recipe name is required.");
+    if (!recipe.name) return toast.error("Recipe name is required.");
     setSaving(true);
 
     const { error } = await supabase
@@ -53,9 +54,9 @@ const UserRecipeEdit = ({ recipeId, onBack }) => {
 
     setSaving(false);
 
-    if (error) alert("❌ Error saving recipe: " + error.message);
+    if (error) toast.error("Error saving recipe: " + error.message);
     else {
-      alert("✅ Recipe updated successfully!");
+      toast.success("Recipe updated successfully!");
       onBack();
     }
   };

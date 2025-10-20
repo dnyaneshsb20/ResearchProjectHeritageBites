@@ -11,6 +11,7 @@ import SimilarRecipes from './components/SimilarRecipes';
 import ReviewsSection from './components/ReviewsSection';
 import Footer from 'pages/dashboard/components/Footer';
 import { supabase } from "../../supabaseClient";
+import toast from 'react-hot-toast';
 
 
 const RecipeDetailInstructions = () => {
@@ -114,14 +115,14 @@ useEffect(() => {
     } else {
       // Fallback to copying URL
       navigator.clipboard?.writeText(window.location?.href);
-      alert('Recipe link copied to clipboard!');
+      toast.success('Recipe link copied to clipboard!');
     }
   };
 
   const handleBuyIngredients = (ingredients) => {
     console.log('Adding ingredients to cart:', ingredients);
     // Implement cart functionality
-    alert(`Added ${ingredients?.length} ingredients to cart!`);
+    toast.success(`Added ${ingredients?.length} ingredients to cart!`);
   };
 
 const handleSubmitReview = async (reviewData) => {
@@ -141,9 +142,9 @@ const handleSubmitReview = async (reviewData) => {
 
   if (error) {
     console.error("Error submitting review:", error);
-    alert("Failed to submit review. Try again.");
+    toast.error("Failed to submit review. Try again.");
   } else {
-    alert("Review submitted successfully!");
+    toast.success("Review submitted successfully!");
     setReviews((prev) => [data[0], ...prev]); // instantly update list
   }
 };

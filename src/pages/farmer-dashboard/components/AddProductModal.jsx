@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../../../supabaseClient";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
+import toast from "react-hot-toast";
 
 const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
     const fetchFarmerId = async () => {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       if (sessionError || !session) {
-        alert("Farmer not logged in. Please log in again.");
+        toast.success("Farmer not logged in. Please log in again.");
         return;
       }
 
@@ -34,7 +35,7 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
 
       if (error || !farmer) {
         console.error("Error fetching farmer_id:", error);
-        alert("Farmer ID not found. Please log in again.");
+        toast.error("Farmer ID not found. Please log in again.");
       } else {
         setFarmerId(farmer.farmer_id);
       }
@@ -50,7 +51,7 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!farmerId) {
-      alert("Farmer ID not found. Please log in again.");
+      toast.error("Farmer ID not found. Please log in again.");
       return;
     }
 
@@ -101,7 +102,7 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
 
       if (error) throw error;
 
-      alert("✅ Product added successfully!");
+      toast.success("Product added successfully!");
       onProductAdded(data);
       onClose();
 
@@ -115,7 +116,7 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
       });
     } catch (err) {
       console.error("Error adding product:", err);
-      alert("Failed to add product");
+      toast.error("Failed to add product");
     } finally {
       setLoading(false);
     }

@@ -6,6 +6,7 @@ import Button from "../../../components/ui/Button";
 import Icon from "../../../components/AppIcon";
 import Header from "../../../components/ui/Header";
 import Footer from "../../dashboard/components/Footer";
+import toast from "react-hot-toast";
 
 const FarmerProfileSection = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -64,10 +65,10 @@ const FarmerProfileSection = () => {
 
       setIsEditing(false);
       setDbUser(formData);
-      alert("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Error saving farmer profile:", error);
-      alert("Error saving profile. Please try again.");
+      toast.error("Error saving profile. Please try again.");
     }
   };
 

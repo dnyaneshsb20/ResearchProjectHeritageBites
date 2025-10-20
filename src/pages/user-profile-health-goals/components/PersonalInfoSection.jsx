@@ -8,7 +8,6 @@ import { supabase } from "../../../supabaseClient";
 import { User } from "lucide-react";
 import { toast } from "react-hot-toast";
 
-
 const PersonalInfoSection = ({ isExpanded, onToggle }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
