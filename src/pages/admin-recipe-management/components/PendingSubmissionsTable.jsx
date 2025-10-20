@@ -13,7 +13,7 @@ const PendingSubmissionsTable = ({
   const [submissions, setSubmissions] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'created_at', direction: 'desc' });
 
-  // Fetch recipes with contributor name and state
+  // Fetch recipes with contributor name, state, and review_reason
   const fetchRecipes = async () => {
     const { data, error } = await supabase
       .from('rec_contributions')
@@ -25,6 +25,7 @@ const PendingSubmissionsTable = ({
         state_id,
         meal_type,
         status,
+        review_reason,
         created_at,
         created_by (
           name
@@ -46,6 +47,7 @@ const PendingSubmissionsTable = ({
         region: item.state_id?.state_name || 'Unknown',
         category: item.meal_type,
         status: item.status,
+        reviewReason: item.review_reason, // include review_reason
         submissionDate: item.created_at,
         contributorName: item.created_by?.name || 'Unknown',
         contributorRating: 0
@@ -82,18 +84,27 @@ const PendingSubmissionsTable = ({
     return bValue?.localeCompare(aValue);
   });
 
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status, reviewReason) => {
     const statusConfig = {
       pending: { color: 'bg-warning text-warning-foreground', label: 'Pending Review' },
+      changes_requested: { color: 'bg-warning text-warning-foreground', label: 'Changes Requested' },
       approved: { color: 'bg-success text-success-foreground', label: 'Approved' },
       rejected: { color: 'bg-destructive text-destructive-foreground', label: 'Rejected' }
     };
 
     const config = statusConfig?.[status] || statusConfig?.pending;
+
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${config?.color}`}>
-        {config?.label}
-      </span>
+      <div className="flex flex-col items-center">
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${config?.color}`}>
+          {config?.label}
+        </span>
+        {status === 'changes_requested' && reviewReason && (
+          <p className="text-xs text-warning-foreground mt-1 max-w-xs text-center">
+            {reviewReason}
+          </p>
+        )}
+      </div>
     );
   };
 
@@ -138,9 +149,10 @@ const PendingSubmissionsTable = ({
           </div>
         </div>
       </div>
+
       {/* Desktop Table */}
       <div className="hidden lg:block overflow-x-auto">
-        <table className="w-full table-fixed text-center align-middle"> {/* center all columns */}
+        <table className="w-full table-fixed text-center align-middle">
           <thead className="bg-muted/50">
             <tr>
               <th className="w-1/12 px-4 py-3">
@@ -206,13 +218,11 @@ const PendingSubmissionsTable = ({
                     className="mx-auto"
                   />
                 </td>
-
                 <td className="px-4 py-4 whitespace-nowrap text-sm">
                   <div className="flex flex-col items-center">
                     {formatDate(submission?.submissionDate)}
                   </div>
                 </td>
-
                 <td className="px-4 py-4">
                   <div className="flex flex-col items-center space-y-1">
                     <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
@@ -222,7 +232,6 @@ const PendingSubmissionsTable = ({
                     <p className="text-xs text-muted-foreground">Rating: {submission?.contributorRating}/5</p>
                   </div>
                 </td>
-
                 <td className="px-4 py-4">
                   <div className="flex flex-col items-center space-y-1">
                     <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted">
@@ -237,7 +246,9 @@ const PendingSubmissionsTable = ({
                   </div>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-sm">{submission?.region}</td>
-                <td className="px-4 py-4 whitespace-nowrap">{getStatusBadge(submission?.status)}</td>
+                <td className="px-4 py-4 whitespace-nowrap">
+                  {getStatusBadge(submission?.status, submission?.reviewReason)}
+                </td>
                 <td className="px-4 py-4">
                   <Button
                     variant="ghost2"
@@ -284,7 +295,7 @@ const PendingSubmissionsTable = ({
                     <h4 className="text-sm font-medium text-foreground">{submission?.title}</h4>
                     <p className="text-xs text-muted-foreground">{submission?.category} • {submission?.region}</p>
                   </div>
-                  {getStatusBadge(submission?.status)}
+                  {getStatusBadge(submission?.status, submission?.reviewReason)}
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">

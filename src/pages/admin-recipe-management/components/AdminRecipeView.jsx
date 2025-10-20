@@ -1,38 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../../components/ui/Button";
 import Image from "../../../components/AppImage";
 import Icon from "../../../components/AppIcon";
-import { Utensils, ChefHat, Salad, ScrollText } from "lucide-react";
 import { supabase } from "../../../supabaseClient";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 
-const AdminRecipeView = ({ recipe, onClose, onApprove, onReject, onRequestModification }) => {
+const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, onRequestModification }) => {
+  const [recipe, setRecipe] = useState(initialRecipe || null);
   const [updating, setUpdating] = useState(false);
-  if (!recipe) return <p className="text-center mt-10">Recipe not found.</p>;
+  const [activeTab, setActiveTab] = useState("overview");
 
-  const recipeId = recipe?.indg_recipe_id;
+  // Request changes modal state
+  const [showChangesModal, setShowChangesModal] = useState(false);
+  const [changeReason, setChangeReason] = useState("");
 
+  const recipeId = initialRecipe?.indg_recipe_id;
 
-  const handleStatusUpdate = async (newStatus) => {
+  useEffect(() => {
     if (!recipeId) return;
+
+    const fetchRecipeDetails = async () => {
+      const { data, error } = await supabase
+        .from("rec_contributions")
+        .select(`
+          *,
+          created_by:users(user_id, name),
+          state_id:states(state_id, state_name, region)
+        `)
+        .eq("indg_recipe_id", recipeId)
+        .single();
+
+      if (error) {
+        console.error("Error fetching recipe:", error);
+        toast.error("Failed to load recipe.");
+        return;
+      }
+
+      setRecipe({
+        ...data,
+        contributorName: data.created_by?.name || "Anonymous",
+        region: data.state_id?.state_name || "Unknown",
+      });
+    };
+
+    fetchRecipeDetails();
+  }, [recipeId]);
+
+  if (!recipe) return <p className="text-center mt-10">Loading recipe...</p>;
+
+  const handleStatusUpdate = async (newStatus, reason) => {
+    if (!recipe.indg_recipe_id) return;
     setUpdating(true);
 
     const { error } = await supabase
       .from("rec_contributions")
       .update({
         status: newStatus,
+        review_reason: reason || null,
         reviewed_by: (await supabase.auth.getUser()).data.user?.id || null,
       })
-      .eq("indg_recipe_id", recipeId);
+      .eq("indg_recipe_id", recipe.indg_recipe_id);
 
     if (error) {
       toast.error("Error updating status: " + error.message);
     } else {
       toast.success(`Recipe ${newStatus} successfully!`);
-      if (newStatus === "approved") onApprove(recipeId);
-      else if (newStatus === "rejected") onReject(recipeId);
-      else onRequestModification(recipeId);
+      if (newStatus === "approved") onApprove(recipe.indg_recipe_id);
+      else if (newStatus === "rejected") onReject(recipe.indg_recipe_id);
+      else if (newStatus === "changes requested") onRequestModification(recipe.indg_recipe_id);
+
+      // Close both modals if changes requested
+      setShowChangesModal(false);
       onClose();
+      setChangeReason("");
     }
 
     setUpdating(false);
@@ -44,143 +84,178 @@ const AdminRecipeView = ({ recipe, onClose, onApprove, onReject, onRequestModifi
 
   const formatTime = (time) => (time ? `${time} mins` : "Not specified");
 
+  const tabs = [
+    { id: "overview", label: "Overview", icon: "FileText" },
+    { id: "ingredients", label: "Ingredients", icon: "List" },
+    { id: "instructions", label: "Instructions", icon: "BookOpen" },
+    { id: "nutrition", label: "Nutrition", icon: "Heart" },
+  ];
+
   return (
-    <div className="relative max-w-6xl mx-auto mb-10">
-      {/* Main Card */}
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-        {/* Hero Image + Tags */}
-        {recipe.image_url && (
-          <div className="relative">
-            <Image src={recipe.image_url} alt={recipe.name} className="w-full h-[450px] object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-6 left-6 text-white">
-              <h1 className="text-5xl font-bold mb-3">{recipe.name}</h1>
-              {recipe.description && <p className="text-lg opacity-90 max-w-3xl">{recipe.description}</p>}
-              <div className="flex flex-wrap gap-2 mt-4">
-                {recipe.meal_type && <span className="px-3 py-1 bg-purple-600 text-white text-xs rounded-full">{recipe.meal_type}</span>}
-                {recipe.dietary_type && <span className="px-3 py-1 bg-teal-600 text-white text-xs rounded-full">{recipe.dietary_type}</span>}
-                {(recipe.dietary_categories || []).map((diet) => (
-                  <span key={diet} className="px-3 py-1 bg-green-600 text-white text-xs rounded-full">{diet}</span>
-                ))}
-                {recipe.festival_tag && <span className="px-3 py-1 bg-pink-600 text-white text-xs rounded-full">{recipe.festival_tag}</span>}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/50">
+      <div className="bg-card rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="flex items-start justify-between p-6 border-b border-border">
+          <div className="flex items-center space-x-4">
+            {recipe.image_url && (
+              <div className="w-28 h-28 rounded-xl overflow-hidden bg-muted flex-shrink-0">
+                <Image src={recipe.image_url} alt={recipe.name} className="w-full h-full object-cover" />
+              </div>
+            )}
+            <div className="flex flex-col">
+              <h2 className="text-3xl font-bold text-foreground">{recipe.name}</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                {recipe.meal_type || recipe.dietary_type} • {recipe.region || "Unknown"}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Submitted by <span className="font-medium">{recipe.contributorName || "Anonymous"}</span>
+              </p>
+
+              {/* Status Buttons */}
+              <div className="flex gap-2 mt-3">
+                <Button variant="default" disabled={updating} onClick={() => handleStatusUpdate("approved")}>
+                  <Icon name="Check" size={16} /> Approve
+                </Button>
+                <Button variant="destructive" disabled={updating} onClick={() => handleStatusUpdate("rejected")}>
+                  <Icon name="X" size={16} /> Reject
+                </Button>
+                <Button variant="outline" disabled={updating} onClick={() => setShowChangesModal(true)}>
+                  <Icon name="Edit" size={16} /> Request Changes
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <Icon name="X" size={24} />
+          </Button>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex border-b border-border bg-muted/10">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 flex justify-center items-center py-3 text-sm font-semibold transition-all border-b-2 ${
+                activeTab === tab.id
+                  ? "border-primary text-primary bg-background"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Icon name={tab.icon} size={18} className="mr-2" />
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {activeTab === "overview" && (
+            <div className="space-y-4">
+              <p className="text-muted-foreground leading-relaxed">{recipe.description}</p>
+              <p className="text-muted-foreground leading-relaxed font-medium">
+                {recipe.origin_story || recipe.family_tradition || recipe.heritage_significance}
+              </p>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-muted rounded-lg p-4 text-center">
+                  <Icon name="Clock" size={24} className="text-primary mx-auto mb-2" />
+                  <p className="text-sm font-medium">{formatTime(recipe.prep_time)}</p>
+                  <p className="text-xs text-muted-foreground">Prep Time</p>
+                </div>
+                <div className="bg-muted rounded-lg p-4 text-center">
+                  <Icon name="ChefHat" size={24} className="text-primary mx-auto mb-2" />
+                  <p className="text-sm font-medium">{formatTime(recipe.cooking_time)}</p>
+                  <p className="text-xs text-muted-foreground">Cook Time</p>
+                </div>
+                <div className="bg-muted rounded-lg p-4 text-center">
+                  <Icon name="Users" size={24} className="text-primary mx-auto mb-2" />
+                  <p className="text-sm font-medium">{recipe.serves || "N/A"}</p>
+                  <p className="text-xs text-muted-foreground">Servings</p>
+                </div>
+                <div className="bg-muted rounded-lg p-4 text-center">
+                  <Icon name="Flame" size={24} className="text-primary mx-auto mb-2" />
+                  <p className="text-sm font-medium">{recipe.difficulty_level || "N/A"}</p>
+                  <p className="text-xs text-muted-foreground">Difficulty</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "ingredients" && (
+            <div className="space-y-3">
+              {ingredients.map((ing, idx) => (
+                <div key={idx} className="flex items-center justify-between bg-muted rounded-lg p-3">
+                  <span className="font-medium">{ing.quantity}</span>
+                  <span className="text-muted-foreground">{ing.name}</span>
+                  {ing.notes && <span className="text-xs italic text-muted-foreground">({ing.notes})</span>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {activeTab === "instructions" && (
+            <ol className="space-y-4">
+              {instructions.map((step, idx) => (
+                <li key={idx} className="flex space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">
+                    {idx + 1}
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <p>{step.step || step}</p>
+                    {step.image && (
+                      <Image
+                        src={step.image}
+                        alt={`Step ${idx + 1}`}
+                        className="w-full max-w-lg h-44 object-cover rounded shadow"
+                      />
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          )}
+
+          {activeTab === "nutrition" && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {Object.entries(nutrition).map(([key, value]) => (
+                <div key={key} className="bg-muted rounded-lg p-4 text-center">
+                  <p className="text-lg font-semibold">{value}</p>
+                  <p className="text-sm capitalize text-muted-foreground">{key.replace("_", " ")}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Request Changes Modal */}
+        {showChangesModal && (
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-6 bg-black/50">
+            <div className="bg-card rounded-xl shadow-2xl max-w-lg w-full p-6 flex flex-col space-y-4">
+              <h3 className="text-xl font-bold">Changes Needed</h3>
+              <textarea
+                className="w-full p-3 border border-border rounded-md resize-none"
+                rows={4}
+                placeholder="Please describe why this recipe needs changes"
+                value={changeReason}
+                onChange={(e) => setChangeReason(e.target.value)}
+              />
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="default"
+                  disabled={updating || !changeReason.trim()}
+                  onClick={() => handleStatusUpdate("changes requested", changeReason)}
+                >
+                  Submit
+                </Button>
+                <Button variant="outline" disabled={updating} onClick={() => setShowChangesModal(false)}>
+                  Cancel
+                </Button>
               </div>
             </div>
           </div>
         )}
-
-        {/* Recipe Overview Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-6 py-8 bg-gray-50">
-          {[
-            { icon: "Clock", label: "Prep Time", value: formatTime(recipe.prep_time) },
-            { icon: "ChefHat", label: "Cook Time", value: formatTime(recipe.cooking_time) },
-            { icon: "Users", label: "Serves", value: recipe.serves || "N/A" },
-            { icon: "Flame", label: "Difficulty", value: recipe.difficulty_level || "N/A" },
-          ].map((item, idx) => (
-            <div key={idx} className="flex flex-col items-center justify-center bg-white shadow rounded-lg p-4 hover:shadow-md transition">
-              <Icon name={item.icon} size={26} className="text-primary mb-2" />
-              <p className="text-sm text-gray-500">{item.label}</p>
-              <p className="font-semibold">{item.value}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Main Content */}
-        <div className="p-8 space-y-12">
-          {/* Ingredients */}
-          <section>
-            <div className="flex items-center gap-2 mb-6 border-b-2 border-primary pb-2 w-fit">
-              <Utensils className="w-7 h-7 text-primary" />
-              <h2 className="text-3xl font-semibold">Ingredients</h2>
-            </div>
-            {ingredients.length > 0 ? (
-              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {ingredients.map((ing, idx) => (
-                  <li key={ing.id || idx} className="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition">
-                    <p className="font-medium">{ing.name}</p>
-                    <p className="text-sm text-gray-600">{ing.quantity} {ing.unit}</p>
-                    {ing.notes && <p className="text-xs italic text-gray-400 mt-1">({ing.notes})</p>}
-                  </li>
-                ))}
-              </ul>
-            ) : <p className="text-gray-400">No ingredients available.</p>}
-          </section>
-
-          {/* Instructions */}
-          <section>
-            <div className="flex items-center gap-2 mb-6 border-b-2 border-primary pb-2 w-fit">
-              <ChefHat className="w-7 h-7 text-primary" />
-              <h2 className="text-3xl font-semibold">Cooking Instructions</h2>
-            </div>
-            {instructions.length > 0 ? (
-              <ol className="space-y-8">
-                {instructions.map((step, idx) => (
-                  <li key={step.id || idx} className="flex flex-col md:flex-row items-start gap-6 bg-gray-50 p-5 rounded-lg shadow-sm hover:shadow-md transition">
-                    <div className="flex items-center justify-center w-10 h-10 bg-primary text-white font-semibold rounded-full">{idx + 1}</div>
-                    <div className="flex-1">
-                      <h4 className="font-medium mb-1">{step.step}</h4>
-                      <p className="text-sm text-gray-600 mb-2">{step.description}</p>
-                      {step.image && <Image src={step.image} alt={`Step ${idx + 1}`} className="w-full max-w-md h-40 object-cover rounded shadow" />}
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            ) : <p className="text-gray-400">No instructions provided.</p>}
-          </section>
-
-          {/* Nutrition */}
-          <section>
-            <div className="flex items-center gap-2 mb-6 border-b-2 border-primary pb-2 w-fit">
-              <Salad className="w-7 h-7 text-primary" />
-              <h2 className="text-3xl font-semibold">Nutrition Information</h2>
-            </div>
-            {Object.keys(nutrition).length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {Object.entries(nutrition).map(([key, val]) => (
-                  <div key={key} className="bg-gray-50 p-4 rounded-lg shadow-sm text-center hover:shadow-md transition">
-                    <p className="text-xs uppercase text-gray-500">{key.replace("_", " ")}</p>
-                    <p className="font-semibold">{val}</p>
-                  </div>
-                ))}
-              </div>
-            ) : <p className="text-gray-400">No nutrition data available.</p>}
-          </section>
-
-          {/* Cultural Heritage */}
-          {(recipe.origin_story || recipe.family_tradition || recipe.heritage_significance) && (
-            <section>
-              <div className="flex items-center gap-2 mb-6 border-b-2 border-primary pb-2 w-fit">
-                <ScrollText className="w-7 h-7 text-primary" />
-                <h2 className="text-3xl font-semibold">Cultural Heritage</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {recipe.origin_story && (
-                  <div className="bg-white shadow p-5 rounded-lg border-t-4 border-blue-500">
-                    <h4 className="font-medium text-lg mb-2">History & Origin</h4>
-                    <p className="text-sm text-gray-600">{recipe.origin_story}</p>
-                  </div>
-                )}
-                {recipe.family_tradition && (
-                  <div className="bg-white shadow p-5 rounded-lg border-t-4 border-green-500">
-                    <h4 className="font-medium text-lg mb-2">Family Traditions</h4>
-                    <p className="text-sm text-gray-600">{recipe.family_tradition}</p>
-                  </div>
-                )}
-                {recipe.heritage_significance && (
-                  <div className="bg-white shadow p-5 rounded-lg border-t-4 border-yellow-500">
-                    <h4 className="font-medium text-lg mb-2">Cultural Significance</h4>
-                    <p className="text-sm text-gray-600">{recipe.heritage_significance}</p>
-                  </div>
-                )}
-              </div>
-            </section>
-          )}
-        </div>
-
-        {/* Approve/Reject Buttons */}
-        <div className="flex justify-end gap-4 p-6 border-t bg-gray-50">
-          <Button variant="outline" disabled={updating} onClick={() => handleStatusUpdate("rejected")}>Reject</Button>
-          <Button variant="default" disabled={updating} onClick={() => handleStatusUpdate("approved")}>Approve</Button>
-        </div>
       </div>
     </div>
   );
