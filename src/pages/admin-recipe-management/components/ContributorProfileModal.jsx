@@ -67,6 +67,24 @@ const ContributorProfileModal = ({ contributorId, isOpen, onClose }) => {
 
     if (!contributor && !loading) return null;
 
+    // Helper: initials + color generator
+    const getInitials = (name) => {
+        if (!name) return "U";
+        const parts = name.trim().split(" ");
+        if (parts.length === 1) return parts[0][0].toUpperCase();
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+    };
+
+    const getColorFromName = (name) => {
+        if (!name) return "#999";
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const hue = Math.abs(hash % 360);
+        return `hsl(${hue}, 70%, 60%)`; // nice pastel range
+    };
+
     return (
         <Dialog.Root open={isOpen} onOpenChange={onClose}>
             <Dialog.Portal>
@@ -77,8 +95,23 @@ const ContributorProfileModal = ({ contributorId, isOpen, onClose }) => {
                     ) : (
                         <div className="space-y-4">
                             <div className="flex items-center space-x-4">
-                                <div className="w-16 h-16 rounded-full overflow-hidden bg-muted">
-                                    <Image src={contributor.avatar} alt={contributor.name} className="w-full h-full object-cover" />
+                                <div
+                                    className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center text-white text-2xl"
+                                    style={{
+                                        backgroundColor: contributor.image_url
+                                            ? "transparent"
+                                            : getColorFromName(contributor.name),
+                                    }}
+                                >
+                                    {contributor.image_url ? (
+                                        <Image
+                                            src={contributor.image_url}
+                                            alt={contributor.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        getInitials(contributor.name)
+                                    )}
                                 </div>
                                 <div>
                                     <h2 className="text-xl font-semibold text-foreground">{contributor.name}</h2>
@@ -127,7 +160,7 @@ const ContributorProfileModal = ({ contributorId, isOpen, onClose }) => {
 
                             <div className="flex justify-end space-x-2">
                                 <Dialog.Close asChild>
-                                    <Button variant="outline" size="sm">
+                                    <Button variant="ghost2" size="sm">
                                         Close
                                     </Button>
                                 </Dialog.Close>
