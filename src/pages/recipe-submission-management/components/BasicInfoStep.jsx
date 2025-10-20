@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import Button from '../../../components/ui/Button';
@@ -13,7 +13,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
 
   useEffect(() => {
     const fetchStates = async () => {
-      const { data, error } = await supabase.from("states").select("*");
+      const { data, error } = await supabase.from("states").select("*").order("state_name", { ascending: true });
       if (error) {
         console.error("Error fetching states:", error);
       } else {
@@ -23,10 +23,10 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
     fetchStates();
   }, []);
   useEffect(() => {
-  if (formData?.heroImage) {
-    setImagePreview(formData.heroImage);
-  }
-}, [formData?.heroImage]);
+    if (formData?.heroImage) {
+      setImagePreview(formData.heroImage);
+    }
+  }, [formData?.heroImage]);
   const categoryOptions = [
     { value: 'breakfast', label: 'Breakfast' },
     { value: 'lunch', label: 'Lunch' },
@@ -35,7 +35,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
     { value: 'desserts', label: 'Desserts' },
     { value: 'beverages', label: 'Beverages' },
     { value: 'festival', label: 'Festival Special' }
-  ];
+  ].sort((a, b) => a.label.localeCompare(b.label));
 
   const handleInputChange = (field, value) => {
     updateFormData({ [field]: value });
@@ -145,7 +145,7 @@ const BasicInfoStep = ({ formData, updateFormData, onNext }) => {
 
             <div
               className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${isDragging
-                  ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+                ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
                 }`}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
