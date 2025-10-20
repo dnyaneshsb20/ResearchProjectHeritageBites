@@ -5,6 +5,7 @@ import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import { supabase } from '../../../supabaseClient';
+import ContributorProfileModal from './ContributorProfileModal';
 
 const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
   const [contributors, setContributors] = useState([]);
@@ -12,6 +13,8 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('submissions');
   const [filterRating, setFilterRating] = useState('');
+  const [selectedContributorId, setSelectedContributorId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const sortOptions = [
     { value: 'submissions', label: 'Most Submissions' },
@@ -149,6 +152,10 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
   if (loading) {
     return <p className="text-muted-foreground p-4">Loading contributors...</p>;
   }
+  const handleViewContributor = (id) => {
+    setSelectedContributorId(id);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -202,7 +209,10 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-foreground">{contributor.name}</h3>
-                  <p className="text-sm text-muted-foreground">{contributor.location}</p>
+                  <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                    <Icon name="MapPin" size={12} className="text-muted-foreground" />
+                    <span>{contributor.location || 'Unknown'}</span>
+                  </div>
                 </div>
               </div>
               {getStatusBadge(contributor.status)}
@@ -230,9 +240,9 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
             </div>
 
             {/* Specialties */}
-            <div className="mb-4">
-              <p className="text-sm text-muted-foreground mb-2">Specialties</p>
-              <div className="flex flex-wrap gap-1">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Specialties</span>
+              <div className="flex flex-wrap gap-1 justify-end">
                 {contributor.specialties.slice(0, 3).map((specialty, index) => (
                   <span key={index} className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">
                     {specialty}
@@ -248,19 +258,24 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
 
             {/* Actions */}
             <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" onClick={() => onViewContributor(contributor.id)} className="flex-1">
+              <Button variant="ghost2" size="sm" onClick={() => handleViewContributor(contributor.id)} className="flex-1">
                 <Icon name="Eye" size={14} />
                 <span className="ml-1">View Profile</span>
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => onUpdateContributor(contributor.id, 'message')}>
+              {/* <Button variant="ghost" size="sm" onClick={() => onUpdateContributor(contributor.id, 'message')}>
                 <Icon name="MessageCircle" size={16} />
               </Button>
               <Button variant="ghost" size="sm" onClick={() => onUpdateContributor(contributor.id, 'settings')}>
                 <Icon name="Settings" size={16} />
-              </Button>
+              </Button> */}
             </div>
           </div>
         ))}
+        <ContributorProfileModal
+          contributorId={selectedContributorId}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </div>
 
       {filteredContributors.length === 0 && (
