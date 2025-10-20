@@ -10,7 +10,7 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
   const [loading, setLoading] = useState(true)
   const [selectedFarmerId, setSelectedFarmerId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showAll, setShowAll] = useState(false); // ✅ new state for toggle
+  const [showAll, setShowAll] = useState(false); 
 
   useEffect(() => {
     fetchFarmers()
@@ -25,10 +25,10 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
         bio,
         certifications,
         contact_info,
+        location,
         users:user_id (
           name,
           email,
-          location,
           role
         ),
         products:products!products_farmer_id_fkey (product_id)
@@ -106,7 +106,7 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
                 </h3>
                 <div className="flex items-center space-x-1">
                   <Icon name="MapPin" size={12} className="text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">{farmer.users?.location || "Unknown location"}</span>
+                  <span className="text-sm text-muted-foreground">{farmer.location || "Unknown location"}</span>
                 </div>
               </div>
             </div>
