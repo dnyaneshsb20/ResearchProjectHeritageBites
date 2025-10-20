@@ -7,25 +7,19 @@ const Footer = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  // Simple email validation regex
-  const isValidEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubscribe = () => {
     if (!email) {
       setMessage("Email cannot be empty.");
       return;
     }
-
     if (!isValidEmail(email)) {
       setMessage("Please enter a valid email address.");
       return;
     }
-
-    // Simulate sending mail (for now just show message)
     setMessage(`Thank you for subscribing! A confirmation has been sent to ${email}.`);
-    setEmail(""); // Clear input
+    setEmail("");
   };
 
   return (
@@ -107,9 +101,15 @@ const Footer = () => {
             © 2025 HeritageBites. Preserving India's culinary heritage.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link to="/privacy-policy" className="text-white/60 hover:text-golden transition-colors text-sm">Privacy Policy</Link>
-            <Link to="/terms-of-service" className="text-white/60 hover:text-golden transition-colors text-sm">Terms of Service</Link>
-            <Link to="/support" className="text-white/60 hover:text-golden transition-colors text-sm">Support</Link>
+            <Link to="/privacy-policy" className="text-white/60 hover:text-golden transition-colors text-sm">
+              Privacy Policy
+            </Link>
+            <Link to="/terms-of-service" className="text-white/60 hover:text-golden transition-colors text-sm">
+              Terms of Service
+            </Link>
+            <Link to="/support" className="text-white/60 hover:text-golden transition-colors text-sm">
+              Support
+            </Link>
           </div>
         </div>
       </div>
