@@ -10,7 +10,7 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
   const [loading, setLoading] = useState(true)
   const [selectedFarmerId, setSelectedFarmerId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showAll, setShowAll] = useState(false); 
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     fetchFarmers()
@@ -54,6 +54,25 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
   // ✅ Limit displayed farmers based on toggle
   const displayedFarmers = showAll ? farmers : farmers.slice(0, 3);
 
+  // Generate initials from name
+  const getInitials = (name) => {
+    if (!name) return "F";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+  // Generate consistent color from name
+  const getColorFromName = (name) => {
+    if (!name) return "#ccc";
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 65%)`; // pastel tone
+  };
+
   return (
     <div className="bg-card border border-border rounded-lg p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
@@ -88,11 +107,20 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
           >
             <div className="flex items-center space-x-3 mb-3">
               <div className="relative">
-                <Image
-                  src={farmer.image_url || 'https://via.placeholder.com/150'}
-                  alt={farmer.users?.name || "Unnamed Farmer"}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
+                {farmer.image_url ? (
+                  <Image
+                    src={farmer.image_url}
+                    alt={farmer.users?.name || "Unnamed Farmer"}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center text-white text-xl"
+                    style={{ backgroundColor: getColorFromName(farmer.users?.name) }}
+                  >
+                    {getInitials(farmer.users?.name)}
+                  </div>
+                )}
                 {/* <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-background flex items-center justify-center">
                   <Icon name="Check" size={8} color="white" />
                 </div> */}

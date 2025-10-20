@@ -133,6 +133,24 @@ const PendingSubmissionsTable = ({
     }
   };
 
+  // Helper: initials + color generator
+  const getInitials = (name) => {
+    if (!name) return "U";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+  const getColorFromName = (name) => {
+    if (!name) return "#999";
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 60%)`; // nice pastel range
+  };
+
   const isAllSelected = selectedSubmissions?.length === sortedSubmissions?.length && sortedSubmissions?.length > 0;
   const isIndeterminate = selectedSubmissions?.length > 0 && selectedSubmissions?.length < sortedSubmissions?.length;
 
@@ -225,8 +243,11 @@ const PendingSubmissionsTable = ({
                 </td>
                 <td className="px-4 py-4">
                   <div className="flex flex-col items-center space-y-1">
-                    <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
-                      <Icon name="User" size={16} color="white" />
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-semibold"
+                      style={{ backgroundColor: getColorFromName(submission?.contributorName) }}
+                    >
+                      {getInitials(submission?.contributorName)}
                     </div>
                     <p className="text-sm font-medium">{submission?.contributorName}</p>
                     <p className="text-xs text-muted-foreground">Rating: {submission?.contributorRating}/5</p>

@@ -156,6 +156,23 @@ const Header = () => {
     fetchUserProfile();
   }, []);
 
+  const getInitials = (name) => {
+    if (!name) return "U";
+    const words = name.trim().split(" ");
+    if (words.length === 1) return words[0][0].toUpperCase();
+    return (words[0][0] + words[1][0]).toUpperCase();
+  };
+
+  const getColorFromName = (name) => {
+    if (!name) return "#888";
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 50%)`;
+  };
+
   return (
     <header className="sticky top-0 z-100 bg-background border-b border-border shadow-warm">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
@@ -277,14 +294,14 @@ const Header = () => {
               <>
                 {/* Profile Button */}
                 <Button
-                  variant="ghost"
+                  variant="default"
                   size="icon"
                   onClick={toggleUserMenu}
-                  className="rounded-full"
-                >
-                  <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
-                    <Icon name="User" size={16} color="white" />
-                  </div>
+                  className="rounded-full text-md"
+                  style={{
+                    backgroundColor: getColorFromName(userProfile?.name),
+                  }}>
+                  {getInitials(userProfile?.name)}
                 </Button>
 
                 {isUserMenuOpen && (

@@ -157,6 +157,24 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
     setIsModalOpen(true);
   };
 
+  // Helper functions for avatar initials & color
+  const getInitials = (name) => {
+    if (!name) return "U";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+  const getColorFromName = (name) => {
+    if (!name) return "#999";
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 60%)`; // pastel color tone
+  };
+
   return (
     <div className="space-y-6">
       {/* Header & Controls */}
@@ -204,8 +222,11 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
           <div key={contributor.id} className="bg-card rounded-lg border border-border p-6 hover:shadow-warm-md transition-shadow">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 rounded-full overflow-hidden bg-muted">
-                  <Image src={contributor.avatar} alt={contributor.name} className="w-full h-full object-cover" />
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg"
+                  style={{ backgroundColor: getColorFromName(contributor.name) }}
+                >
+                  {getInitials(contributor.name)}
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-foreground">{contributor.name}</h3>

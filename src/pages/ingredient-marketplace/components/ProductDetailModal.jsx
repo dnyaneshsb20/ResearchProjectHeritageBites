@@ -11,15 +11,15 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [farmerInfo, setFarmerInfo] = useState(null);
   const [loadingFarmer, setLoadingFarmer] = useState(false);
-useEffect(() => {
-  const fetchFarmerInfo = async () => {
-    if (!product?.farmer_id) return;
+  useEffect(() => {
+    const fetchFarmerInfo = async () => {
+      if (!product?.farmer_id) return;
 
-    setLoadingFarmer(true);
+      setLoadingFarmer(true);
 
-    const { data, error } = await supabase
-      .from('farmers')
-      .select(`
+      const { data, error } = await supabase
+        .from('farmers')
+        .select(`
         farmer_id,
         bio,
         certifications,
@@ -30,21 +30,21 @@ useEffect(() => {
           email
         )
       `)
-      .eq('farmer_id', product.farmer_id)
-      .maybeSingle();
+        .eq('farmer_id', product.farmer_id)
+        .maybeSingle();
 
-    if (error) {
-      console.error('Error fetching farmer:', error);
-      setFarmerInfo(null);
-    } else {
-      setFarmerInfo(data);
-    }
+      if (error) {
+        console.error('Error fetching farmer:', error);
+        setFarmerInfo(null);
+      } else {
+        setFarmerInfo(data);
+      }
 
-    setLoadingFarmer(false);
-  };
+      setLoadingFarmer(false);
+    };
 
-  if (isOpen) fetchFarmerInfo();
-}, [isOpen, product?.farmer_id]);
+    if (isOpen) fetchFarmerInfo();
+  }, [isOpen, product?.farmer_id]);
 
 
   if (!isOpen || !product) return null;
@@ -71,6 +71,23 @@ useEffect(() => {
     if (qty >= 10) return basePrice * 0.9; // 10% discount
     if (qty >= 5) return basePrice * 0.95; // 5% discount
     return basePrice;
+  };
+
+  const getInitials = (name) => {
+    if (!name) return "U";
+    const words = name.trim().split(" ");
+    if (words.length === 1) return words[0][0].toUpperCase();
+    return (words[0][0] + words[1][0]).toUpperCase();
+  };
+
+  const getColorFromName = (name) => {
+    if (!name) return "#888";
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 50%)`;
   };
 
   return (
@@ -178,7 +195,7 @@ useEffect(() => {
                 </div>
               </div>
 
-           
+
               <div className="bg-muted rounded-lg p-4 mb-2">
                 {loadingFarmer ? (
                   <p className="text-sm text-muted-foreground">Loading farmer info...</p>
@@ -186,8 +203,12 @@ useEffect(() => {
                   <>
                     {/* Farmer Basic Info */}
                     <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
-                        <Icon name="User" size={16} color="white" />
+                      <div
+                        className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white"
+                        style={{
+                          backgroundColor: getColorFromName(farmerInfo?.user?.name),
+                        }}>
+                        {getInitials(farmerInfo?.user?.name)}
                       </div>
                       <div>
                         <h3 className="font-body font-semibold text-foreground">
