@@ -156,7 +156,7 @@ const calculateQuantity = (baseQuantity, unit) => {
         ))}
       </div>
       {/* Buy All Ingredients Button */}
-      <Button
+      {/* <Button
         variant="default"
         fullWidth
         onClick={() => onBuyIngredients(ingredients?.filter(ing => ing?.available))}
@@ -165,7 +165,7 @@ const calculateQuantity = (baseQuantity, unit) => {
         className="mb-4"
       >
         Add All Available Ingredients to Cart
-      </Button>
+      </Button> */}
       {/* Shopping Tips */}
       <div className="bg-muted/50 rounded-lg p-4">
         <div className="flex items-start space-x-3">
