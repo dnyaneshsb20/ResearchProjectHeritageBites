@@ -93,7 +93,7 @@ useEffect(() => {
     if (!recipeId) return;
 
     const { data, error } = await supabase
-      .from("recipe_reviews")
+      .from("reviews")
       .select("*")
       .eq("recipe_id", recipeId)
       .order("created_at", { ascending: false });
@@ -134,7 +134,7 @@ const handleSubmitReview = async (reviewData) => {
   const { rating, comment, user_name } = reviewData;
 
   const { data, error } = await supabase
-    .from("recipe_reviews")
+    .from("reviews")
     .insert([
       {
         recipe_id: recipeId,
