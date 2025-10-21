@@ -3,8 +3,9 @@ import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 import Image from '../../../components/AppImage';
 
-const IngredientsList = ({ ingredients, onBuyIngredients }) => {
-  const [servings, setServings] = useState(4);
+const IngredientsList = ({ ingredients, baseServings, onBuyIngredients }) => {
+  const [servings, setServings] = useState(baseServings);
+
   const [checkedIngredients, setCheckedIngredients] = useState(new Set());
 
   const adjustServings = (change) => {
@@ -22,11 +23,29 @@ const IngredientsList = ({ ingredients, onBuyIngredients }) => {
     setCheckedIngredients(newChecked);
   };
 
-  const calculateQuantity = (baseQuantity, baseServings = 4) => {
-    const multiplier = servings / baseServings;
-    const quantity = parseFloat(baseQuantity) * multiplier;
-    return quantity % 1 === 0 ? quantity?.toString() : quantity?.toFixed(1);
-  };
+  // const calculateQuantity = (baseQuantity, baseServings = 4) => {
+  //   const multiplier = servings / baseServings;
+  //   const quantity = parseFloat(baseQuantity) * multiplier;
+  //   return quantity % 1 === 0 ? quantity?.toString() : quantity?.toFixed(1);
+  // };
+const calculateQuantity = (baseQuantity, unit) => {
+  if (!baseQuantity) return "";
+
+  // Extract numeric and unit parts from something like "1 cup" or "½ tsp"
+  const match = baseQuantity.match(/^([\d.,¼½¾⅓⅔⅛⅜⅝⅞\s/]+)\s*(.*)$/);
+  let qtyPart = match ? match[1].trim() : baseQuantity;
+  let unitPart = match ? match[2].trim() : "";
+
+  const qty = parseFloat(qtyPart.replace(/[^\d.]/g, "")); // get numeric part
+  if (isNaN(qty)) return `${baseQuantity}`; // fallback for text like "to taste"
+
+  const multiplier = servings / baseServings;
+  const quantity = qty * multiplier;
+  const displayQty = quantity % 1 === 0 ? quantity : quantity.toFixed(1);
+
+  return `${displayQty} ${unitPart || unit || ""}`.trim();
+};
+
 
   return (
     <div className="bg-card border border-border rounded-lg p-6">
@@ -34,7 +53,7 @@ const IngredientsList = ({ ingredients, onBuyIngredients }) => {
         <h2 className="text-xl font-heading font-semibold text-foreground">
           Ingredients
         </h2>
-        
+
         {/* Servings Adjuster */}
         <div className="flex items-center space-x-3">
           <span className="text-sm font-body text-muted-foreground">Serves:</span>
@@ -67,50 +86,46 @@ const IngredientsList = ({ ingredients, onBuyIngredients }) => {
         {ingredients?.map((ingredient, index) => (
           <div
             key={index}
-            className={`flex items-center space-x-3 p-3 rounded-lg border transition-all ${
-              checkedIngredients?.has(index)
-                ? 'bg-muted border-primary/50 opacity-60' :'bg-background border-border hover:bg-muted/50'
-            }`}
+            className={`flex items-center space-x-3 p-3 rounded-lg border transition-all ${checkedIngredients?.has(index)
+                ? 'bg-muted border-primary/50 opacity-60' : 'bg-background border-border hover:bg-muted/50'
+              }`}
           >
             {/* Checkbox */}
             <button
               onClick={() => toggleIngredient(index)}
-              className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
-                checkedIngredients?.has(index)
-                  ? 'bg-primary border-primary' :'border-muted-foreground hover:border-primary'
-              }`}
+              className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${checkedIngredients?.has(index)
+                  ? 'bg-primary border-primary' : 'border-muted-foreground hover:border-primary'
+                }`}
             >
               {checkedIngredients?.has(index) && (
                 <Icon name="Check" size={12} color="white" />
               )}
             </button>
 
-            {/* Ingredient Image */}
+            {/* Ingredient Image
             <div className="w-10 h-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
               <Image
                 src={ingredient?.image}
                 alt={ingredient?.name}
                 className="w-full h-full object-cover"
               />
-            </div>
+            </div> */}
 
             {/* Ingredient Details */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <h3 className={`font-body font-medium ${
-                  checkedIngredients?.has(index)
+                <h3 className={`font-body font-medium ${checkedIngredients?.has(index)
                     ? 'line-through text-muted-foreground'
                     : 'text-foreground'
-                }`}>
+                  }`}>
                   {ingredient?.name}
                 </h3>
                 <div className="flex items-center space-x-2">
-                  <span className={`font-heading font-semibold ${
-                    checkedIngredients?.has(index)
+                  <span className={`font-heading font-semibold ${checkedIngredients?.has(index)
                       ? 'line-through text-muted-foreground'
                       : 'text-foreground'
-                  }`}>
-                    {calculateQuantity(ingredient?.quantity)} {ingredient?.unit}
+                    }`}>
+                    {calculateQuantity(ingredient?.quantity, ingredient?.unit)}
                   </span>
                   {ingredient?.available && (
                     <Button
@@ -160,7 +175,7 @@ const IngredientsList = ({ ingredients, onBuyIngredients }) => {
               Shopping Tips
             </h4>
             <p className="text-sm text-muted-foreground">
-              Fresh ingredients are sourced from local farmers. Dry spices and grains 
+              Fresh ingredients are sourced from local farmers. Dry spices and grains
               are available year-round. Check availability for seasonal items.
             </p>
           </div>

@@ -61,10 +61,10 @@ const QuickStats = ({ recipe }) => {
           </div>
         ))}
       </div>
-      {/* Rating */}
+      {/* Rating
       <div className="flex items-center justify-center mt-4 pt-4 border-t border-border">
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-1">
+        <div className="flex items-center space-x-2"> */}
+          {/* <div className="flex items-center space-x-1">
             {[1, 2, 3, 4, 5]?.map((star) => (
               <Icon
                 key={star}
@@ -76,15 +76,15 @@ const QuickStats = ({ recipe }) => {
                 }`}
               />
             ))}
-          </div>
-          <span className="font-body font-medium text-foreground">
+          </div> */}
+          {/* <span className="font-body font-medium text-foreground">
             {recipe?.rating}
           </span>
           <span className="text-sm text-muted-foreground">
             ({recipe?.reviewCount} reviews)
-          </span>
-        </div>
-      </div>
+          </span> */}
+        {/* </div>
+      </div> */}
     </div>
   );
 };

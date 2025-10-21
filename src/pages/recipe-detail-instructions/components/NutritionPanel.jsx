@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Icon from '../../../components/AppIcon';
 
-const NutritionPanel = ({ nutrition, healthBenefits }) => {
+const NutritionPanel = ({ nutrition, healthBenefits , dietary_type}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const macronutrients = [
@@ -159,14 +159,11 @@ const NutritionPanel = ({ nutrition, healthBenefits }) => {
           Dietary Information
         </h3>
         <div className="flex flex-wrap gap-2">
-          {nutrition?.dietaryTags?.map((tag, index) => (
-            <span
-              key={index}
-              className="px-3 py-1 bg-muted text-muted-foreground text-xs font-body font-medium rounded-full"
-            >
-              {tag}
+          {dietary_type && (
+    <span className="px-3 py-1 bg-muted text-muted-foreground text-xs font-body font-medium rounded-full">
+      {dietary_type}
             </span>
-          ))}
+          )}
         </div>
       </div>
     </div>

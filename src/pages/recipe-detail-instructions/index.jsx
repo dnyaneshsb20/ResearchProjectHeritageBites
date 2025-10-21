@@ -68,12 +68,17 @@ setRecipe({
   region: data.states?.state_name || "Unknown Region",
   images: data.images || [data.image_url],
   healthBenefits: data.health_benefits,
-  regionalInfo: data.regional_info,
+  regionalInfo: {
+    significance: data.regional_info?.origin_story || "N/A",
+     origin: `${data.regional_info?.district || "N/A"}, ${data.regional_info?.state || "N/A"}`,
+    popularIn: data.regional_info?.region || "N/A",
+  },
    instructions: Array.isArray(data.instructions)
     ? data.instructions
     : data.instructions
       ? JSON.parse(data.instructions)
-      : [], // default empty arra
+      : [], // default empty array
+     servings: parseInt(data.servings) || 1,
 });
 
       }
@@ -214,11 +219,11 @@ const handleSubmitReview = async (reviewData) => {
               videos={recipe?.videos}
             />
 
-            <ReviewsSection
+            {/* <ReviewsSection
               reviews={reviews}
               recipeId={recipe?.id}
               onSubmitReview={handleSubmitReview}
-            />
+            /> */}
 
           </div>
 
@@ -226,12 +231,14 @@ const handleSubmitReview = async (reviewData) => {
           <div className="space-y-6">
             <IngredientsList
               ingredients={recipe?.ingredients}
+               baseServings={recipe?.servings} 
               onBuyIngredients={handleBuyIngredients}
             />
 
             <NutritionPanel
               nutrition={recipe?.nutrition}
               healthBenefits={recipe?.healthBenefits}
+               dietary_type= {recipe.dietary_type}
             />
 
             <CulturalStory

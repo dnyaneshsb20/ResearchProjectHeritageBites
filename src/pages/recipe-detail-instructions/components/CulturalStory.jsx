@@ -67,7 +67,7 @@ const CulturalStory = ({ story, chef, region }) => {
           </div>
         </div>
       </div>
-      {/* Chef/Contributor Profile */}
+      {/* Chef/Contributor Profile
       {chef && (
         <div className="border-t border-border pt-6">
           <h3 className="font-heading font-semibold text-foreground mb-4">
@@ -90,9 +90,9 @@ const CulturalStory = ({ story, chef, region }) => {
               </p>
               <p className="text-sm text-foreground mb-3">
                 {chef?.bio}
-              </p>
+              </p> */}
               
-              {/* Chef Stats */}
+              {/* Chef Stats
               <div className="flex items-center space-x-4 text-xs text-muted-foreground">
                 <div className="flex items-center space-x-1">
                   <Icon name="BookOpen" size={12} />
@@ -105,13 +105,13 @@ const CulturalStory = ({ story, chef, region }) => {
                 <div className="flex items-center space-x-1">
                   <Icon name="Star" size={12} />
                   <span>{chef?.rating} rating</span>
-                </div>
-              </div>
+                </div> */}
+              {/* </div>
             </div>
           </div>
         </div>
-      )}
-      {/* Cultural Tags */}
+      )} */}
+      {/* Cultural Tags
       <div className="mt-6 pt-6 border-t border-border">
         <h3 className="font-heading font-semibold text-foreground mb-3">
           Cultural Tags
@@ -124,10 +124,10 @@ const CulturalStory = ({ story, chef, region }) => {
             >
               {tag}
             </span>
-          ))}
-        </div>
-      </div>
-      {/* Fun Facts */}
+          ))} */}
+        {/* </div>
+      </div> */}
+      {/* Fun Facts
       {story?.funFacts && story?.funFacts?.length > 0 && (
         <div className="mt-6 pt-6 border-t border-border">
           <h3 className="font-heading font-semibold text-foreground mb-4">
@@ -144,7 +144,7 @@ const CulturalStory = ({ story, chef, region }) => {
             ))}
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
