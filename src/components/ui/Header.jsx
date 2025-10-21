@@ -6,11 +6,14 @@ import Input from './Input';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../supabaseClient";
-import { useCart } from '../../context/CartContext';// make sure this points to your Supabase client
+import { useCart } from '../../context/CartContext';
+
+// make sure this points to your Supabase client
 
 const Header = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+ const { user, logout, setUser, setRole } = useAuth();
+
   const isAuthenticated = !!user;
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,7 +37,10 @@ const Header = () => {
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
-  const [userProfile, setUserProfile] = useState(null); // fetched from Supabase
+  const [userProfile, setUserProfile] = useState(null);
+
+
+  // fetched from Supabase
 
   // 👇 Add this just before defining navigationItems
   const userRole = userProfile?.role || "user";
@@ -114,6 +120,14 @@ const Header = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        console.log("No Supabase session — defaulting to guest role");
+        setUser(null);
+        setRole("guest"); // fallback role
+        return;
+      }
       // Get the current auth user
       const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
 
@@ -154,6 +168,7 @@ const Header = () => {
     };
 
     fetchUserProfile();
+    console.log("Current role:", setRole);
   }, []);
 
   const getInitials = (name) => {

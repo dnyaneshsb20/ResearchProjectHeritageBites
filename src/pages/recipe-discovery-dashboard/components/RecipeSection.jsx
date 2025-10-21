@@ -99,9 +99,9 @@ const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) =
           className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2"
           style={{ scrollSnapType: 'x mandatory' }}
         >
-          {recipes?.map((recipe) => (
+          {recipes?.map((recipe, index) => (
             <RecipeCard
-              key={recipe?.id}
+                key={`recipe-${recipe?.recipe_id || index}`}
               recipe={recipe}
               className="flex-none w-72 sm:w-80 scroll-snap-align-start"
             />
