@@ -13,6 +13,7 @@ import { supabase } from "../../supabaseClient";
 const RecipeDiscoveryDashboard = () => {
   const [activeFilters, setActiveFilters] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState(null);
+
   const [showFilters, setShowFilters] = useState(false);
   const [healthGoalRecipes, setHealthGoalRecipes] = useState([]);
   const [regionalRecipes, setRegionalRecipes] = useState([]);
@@ -20,6 +21,40 @@ const RecipeDiscoveryDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [culturalStories, setCulturalStories] = useState([]);
 
+useEffect(() => {
+  if (!selectedRegion) return;
+
+  const fetchRegionalRecipes = async () => {
+    const { data, error } = await supabase
+      .from('recipes')
+      .select(`
+        recipe_id,
+        name,
+        image_url,
+        meal_type,
+        difficulty_level,
+        cooking_time,
+        prep_time,
+        state_id
+      `)
+      // Adjust this depending on how you want to filter by region
+     .in('state_id', selectedRegion.stateIds) 
+
+    if (error) return console.error(error);
+
+    setRegionalRecipes(
+      data.map(item => ({
+        id: item.recipe_id,
+        title: item.name,
+        image: item.image_url,
+        cookingTime: `${item.cooking_time} min`,
+        difficulty: item.difficulty_level
+      }))
+    );
+  };
+
+  fetchRegionalRecipes();
+}, [selectedRegion]);
 
   // Mock data for personalized recommendations
 
