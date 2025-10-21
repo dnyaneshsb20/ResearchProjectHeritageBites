@@ -23,10 +23,104 @@ const RecipeDiscoveryDashboard = () => {
 
   // Mock data for personalized recommendations
 
-  const handleFilterChange = (filters) => {
-    setActiveFilters(filters);
-    console.log('Active filters:', filters);
+  const handleFilterChange = async (filters) => {
+  setActiveFilters(filters);
+  setLoading(true);
+
+  if (!filters.length) {
+    // fetch all recipes if no filter selected
+    fetchRecipes();
+    return;
+  }
+
+  // Map filter IDs to DB columns & values
+  const filterMapping = {
+    // Meal Type
+    breakfast: { column: 'meal_type', value: 'Breakfast' },
+    lunch: { column: 'meal_type', value: 'Lunch' },
+    dinner: { column: 'meal_type', value: 'Dinner' },
+    snacks: { column: 'meal_type', value: 'Snacks' },
+
+    // Dietary
+    vegetarian: { column: 'dietary_type', value: 'Vegetarian' },
+    vegan: { column: 'dietary_type', value: 'Vegan' },
+    'gluten-free': { column: 'dietary_type', value: 'Gluten Free' },
+    'dairy-free': { column: 'dietary_type', value: 'Dairy Free' },
+
+    // Festival
+    diwali: { column: 'festival_tag', value: 'Diwali' },
+    holi: { column: 'festival_tag', value: 'Holi' },
+    eid: { column: 'festival_tag', value: 'Eid' },
+    navratri: { column: 'festival_tag', value: 'Navratri' },
+
+    // Difficulty
+    easy: { column: 'difficulty_level', value: 'Easy' },
+    medium: { column: 'difficulty_level', value: 'Medium' },
+    hard: { column: 'difficulty_level', value: 'Hard' },
+
+    // Cooking Time (total_time in minutes)
+    quick: { column: 'total_time', range: [0, 30] },
+    medium: { column: 'total_time', range: [30, 60] },
+    long: { column: 'total_time', range: [60, null] },
   };
+
+  let query = supabase.from("recipes").select(`
+    recipe_id,
+    name,
+    description,
+    image_url,
+    meal_type,
+    difficulty_level,
+    cooking_time,
+    prep_time,
+    created_at,
+    states ( state_name, region )
+  `).order("created_at", { ascending: false });
+
+  // Apply all filters
+  filters.forEach((filterId) => {
+    const map = filterMapping[filterId];
+    if (!map) return;
+
+    if (map.range) {
+      const [min, max] = map.range;
+      if (min != null) query = query.gte(map.column, min);
+      if (max != null) query = query.lte(map.column, max);
+    } else {
+      query = query.ilike(map.column, `%${map.value}%`);
+    }
+  });
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error fetching filtered recipes:", error);
+    setLoading(false);
+    return;
+  }
+
+  // Map data for UI sections
+  const formatted = data.map((item) => ({
+    id: item.recipe_id,
+    title: item.name,
+    description: item.description,
+    image: item.image_url,
+    region: item.states?.state_name || "Unknown Region",
+    cookingTime: `${item.cooking_time} min`,
+    difficulty: item.difficulty_level,
+    rating: Math.random() * 2 + 3, // Temporary mock rating
+    reviewCount: Math.floor(Math.random() * 200), // Mock reviews
+    tags: [item.meal_type, item.dietary_type].filter(Boolean),
+  }));
+
+  // Update sections (you can adjust slices for different UI sections)
+  setHealthGoalRecipes(formatted.slice(0, 4));
+  setRegionalRecipes(formatted.slice(4, 8));
+  setTrendingRecipes(formatted.slice(8, 12));
+
+  setLoading(false);
+};
+
 
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);

@@ -60,12 +60,12 @@ const FilterChips = ({ onFilterChange }) => {
     }
   ];
 
-  const quickFilters = [
-    { id: 'trending', label: 'Trending', icon: 'TrendingUp' },
-    { id: 'new', label: 'New Recipes', icon: 'Plus' },
-    { id: 'seasonal', label: 'Seasonal', icon: 'Leaf' },
-    { id: 'healthy', label: 'Healthy', icon: 'Heart' }
-  ];
+  // const quickFilters = [
+  //   { id: 'trending', label: 'Trending', icon: 'TrendingUp' },
+  //   { id: 'new', label: 'New Recipes', icon: 'Plus' },
+  //   { id: 'seasonal', label: 'Seasonal', icon: 'Leaf' },
+  //   { id: 'healthy', label: 'Healthy', icon: 'Heart' }
+  // ];
 
   const toggleFilter = (filterId) => {
     const newActiveFilters = activeFilters?.includes(filterId)
@@ -84,7 +84,7 @@ const FilterChips = ({ onFilterChange }) => {
   return (
     <div className="space-y-4">
       {/* Quick Filters */}
-      <div className="flex flex-wrap gap-2">
+      {/* <div className="flex flex-wrap gap-2">
         {quickFilters?.map((filter) => (
           <button
             key={filter?.id}
@@ -99,7 +99,7 @@ const FilterChips = ({ onFilterChange }) => {
             <span>{filter?.label}</span>
           </button>
         ))}
-      </div>
+      </div> */}
       {/* Category Filters */}
       <div className="space-y-3">
         {filterCategories?.map((category) => (
