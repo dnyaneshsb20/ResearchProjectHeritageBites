@@ -4,6 +4,7 @@ import Image from "../../../components/AppImage";
 import Icon from "../../../components/AppIcon";
 import { supabase } from "../../../supabaseClient";
 import toast from "react-hot-toast";
+import { FaFire, FaDrumstickBite, FaEgg, FaBreadSlice, FaTint, FaAppleAlt } from "react-icons/fa";
 
 const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, onRequestModification }) => {
   const [recipe, setRecipe] = useState(initialRecipe || null);
@@ -13,7 +14,14 @@ const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, 
   // Request changes modal state
   const [showChangesModal, setShowChangesModal] = useState(false);
   const [changeReason, setChangeReason] = useState("");
-
+  const nutrientIcons = {
+    calories: <FaFire className="text-yellow-500 w-6 h-6" />,
+    protein: <FaDrumstickBite className="text-red-500 w-6 h-6" />,
+    fat: <FaEgg className="text-orange-500 w-6 h-6" />,
+    carbohydrates: <FaBreadSlice className="text-yellow-600 w-6 h-6" />,
+    water: <FaTint className="text-blue-400 w-6 h-6" />,
+    fiber: <FaAppleAlt className="text-green-500 w-6 h-6" />,
+  };
   const recipeId = initialRecipe?.indg_recipe_id;
 
   useEffect(() => {
@@ -93,7 +101,7 @@ const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/50">
-      <div className="bg-card rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-card rounded-xl shadow-2xl max-w-5xl w-full h-[85vh] flex flex-col overflow-hidden mt-18">
         {/* Header */}
         <div className="flex items-start justify-between p-6 border-b border-border">
           <div className="flex items-center space-x-4">
@@ -137,11 +145,10 @@ const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, 
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex justify-center items-center py-3 text-sm font-semibold transition-all border-b-2 ${
-                activeTab === tab.id
-                  ? "border-primary text-primary bg-background"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
+              className={`flex-1 flex justify-center items-center py-3 text-sm font-semibold transition-all border-b-2 ${activeTab === tab.id
+                ? "border-primary text-primary bg-background"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
             >
               <Icon name={tab.icon} size={18} className="mr-2" />
               {tab.label}
@@ -184,32 +191,58 @@ const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, 
           )}
 
           {activeTab === "ingredients" && (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {ingredients.map((ing, idx) => (
-                <div key={idx} className="flex items-center justify-between bg-muted rounded-lg p-3">
-                  <span className="font-medium">{ing.quantity}</span>
-                  <span className="text-muted-foreground">{ing.name}</span>
-                  {ing.notes && <span className="text-xs italic text-muted-foreground">({ing.notes})</span>}
+                <div
+                  key={idx}
+                  className="flex justify-between items-center bg-gray-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  {/* Ingredient Name on the Left */}
+                  <span className="font-semibold text-gray-800">{ing.name}</span>
+
+                  {/* Quantity + Notes on the Right */}
+                  <div className="text-right">
+                    <span className="font-medium text-gray-700">{ing.quantity}</span>
+                    {ing.notes && (
+                      <div className="text-xs italic text-gray-500">({ing.notes})</div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
           )}
 
           {activeTab === "instructions" && (
-            <ol className="space-y-4">
+            <ol className="space-y-6">
               {instructions.map((step, idx) => (
-                <li key={idx} className="flex space-x-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">
+                <li
+                  key={idx}
+                  className="bg-white rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow flex flex-col md:flex-row gap-5 border border-gray-100"
+                >
+                  {/* Step Number */}
+                  <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-lg md:text-xl font-bold shadow">
                     {idx + 1}
                   </div>
-                  <div className="flex-1 space-y-2">
-                    <p>{step.step || step}</p>
+
+                  {/* Step Content */}
+                  <div className="flex-1 space-y-3">
+                    {/* Main step instruction */}
+                    <p className="text-gray-900 leading-relaxed text-base md:text-lg font-medium">{step.step || step}</p>
+
+                    {/* Optional description / notes */}
+                    {step.description && (
+                      <p className="text-gray-500 text-sm md:text-base italic">{step.description}</p>
+                    )}
+
+                    {/* Step image */}
                     {step.image && (
-                      <Image
-                        src={step.image}
-                        alt={`Step ${idx + 1}`}
-                        className="w-full max-w-lg h-44 object-cover rounded shadow"
-                      />
+                      <div className="w-full h-48 md:h-44 lg:h-48 overflow-hidden rounded-xl shadow-sm">
+                        <Image
+                          src={step.image}
+                          alt={`Step ${idx + 1}`}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                      </div>
                     )}
                   </div>
                 </li>
@@ -218,11 +251,22 @@ const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, 
           )}
 
           {activeTab === "nutrition" && (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {Object.entries(nutrition).map(([key, value]) => (
-                <div key={key} className="bg-muted rounded-lg p-4 text-center">
-                  <p className="text-lg font-semibold">{value}</p>
-                  <p className="text-sm capitalize text-muted-foreground">{key.replace("_", " ")}</p>
+                <div
+                  key={key}
+                  className="bg-gray-50 rounded-xl p-6 flex flex-col items-center justify-center shadow-md hover:shadow-lg transition-shadow h-40"
+                >
+                  {/* Icon */}
+                  <div className="mb-3">
+                    {nutrientIcons[key.toLowerCase()] || <FaAppleAlt className="text-gray-400 w-6 h-6" />}
+                  </div>
+
+                  {/* Nutrient Value */}
+                  <p className="text-2xl font-bold text-gray-800">{value}</p>
+
+                  {/* Nutrient Name */}
+                  <p className="text-sm capitalize text-gray-500 mt-1">{key.replace("_", " ")}</p>
                 </div>
               ))}
             </div>
