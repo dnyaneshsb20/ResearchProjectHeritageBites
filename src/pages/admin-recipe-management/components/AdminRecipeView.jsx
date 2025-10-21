@@ -32,8 +32,8 @@ const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, 
         .from("rec_contributions")
         .select(`
           *,
-          created_by:users(user_id, name),
-          state_id:states(state_id, state_name, region)
+          users!rec_contributions_created_by_fkey(user_id, name),
+          states!rec_contributions_state_id_fkey(state_id, state_name, region)
         `)
         .eq("indg_recipe_id", recipeId)
         .single();
@@ -46,8 +46,8 @@ const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, 
 
       setRecipe({
         ...data,
-        contributorName: data.created_by?.name || "Anonymous",
-        region: data.state_id?.state_name || "Unknown",
+        contributorName: data.users?.name || "Anonymous",
+        region: data.states?.state_name || "Unknown",
       });
     };
 
@@ -112,10 +112,11 @@ const AdminRecipeView = ({ recipe: initialRecipe, onClose, onApprove, onReject, 
             )}
             <div className="flex flex-col">
               <h2 className="text-3xl font-bold text-foreground">{recipe.name}</h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                {recipe.meal_type || recipe.dietary_type} • {recipe.region || "Unknown"}
+              <p className="text-sm text-foreground mt-1 flex items-center gap-1">
+                <Icon name="MapPin" size={12} className="text-foreground" />
+                {recipe.region || "Unknown"} • {recipe.meal_type || recipe.dietary_type}
               </p>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-foreground mt-1">
                 Submitted by <span className="font-medium">{recipe.contributorName || "Anonymous"}</span>
               </p>
 
