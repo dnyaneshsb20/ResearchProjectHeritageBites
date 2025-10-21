@@ -212,11 +212,11 @@ const AdminRecipeManagement = () => {
             >
               <Icon name={tab.icon} size={16} />
               <span>{tab.label}</span>
-              {tab.count !== null && (
+              {/* {tab.count !== null && (
                 <span className="bg-muted text-muted-foreground px-2 py-1 rounded-full text-xs">
                   {tab.count}
                 </span>
-              )}
+              )} */}
             </button>
           ))}
         </div>
