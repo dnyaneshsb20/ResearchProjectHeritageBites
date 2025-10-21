@@ -268,9 +268,7 @@ const AdminRecipeManagement = () => {
       ) : (
         <Footer />
       )}
-
-      <Footer />
-    </div>
+          </div>
   );
 };
 
