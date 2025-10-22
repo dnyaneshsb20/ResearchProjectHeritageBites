@@ -196,15 +196,14 @@ const FeaturedFarmers = ({ onFarmerClick }) => {
             >
               View Products
             </Button>
-
-            <ViewProductModal
-              farmerId={selectedFarmerId}
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-            />
           </div>
         ))}
       </div>
+      <ViewProductModal
+        farmerId={selectedFarmerId}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   )
 }
