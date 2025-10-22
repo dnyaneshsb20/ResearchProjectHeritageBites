@@ -34,44 +34,7 @@ const RecipeHero = ({ recipe, onBookmark, onShare }) => {
           className="w-full h-full object-cover"
         />
 
-
-        {/* Navigation Arrows */}
-        {/* {recipe?.images?.length > 1 && (
-          <>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={prevImage}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70 w-10 h-10"
-            >
-              <Icon name="ChevronLeft" size={20} />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={nextImage}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white hover:bg-black/70 w-10 h-10"
-            >
-              <Icon name="ChevronRight" size={20} />
-            </Button>
-          </>
-        )} */}
-
-        {/* Image Indicators */}
-        {/* {recipe?.images?.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-            {recipe?.images?.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentImageIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all ${index === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                  }`}
-              />
-            ))}
-          </div>
-        )} */}
-
-        {/* Overlay Content */}
+        {/* Overlay Gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         {/* Action Buttons */}
@@ -97,16 +60,27 @@ const RecipeHero = ({ recipe, onBookmark, onShare }) => {
           </Button>
         </div>
 
-        {/* Recipe Title and Region */}
+        {/* Recipe Title, Festival Badge, and Region */}
         <div className="absolute bottom-4 left-4 right-4">
           <h1 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2">
             {recipe?.name}
           </h1>
-          <div className="flex items-center space-x-2 text-white/90">
-            <Icon name="MapPin" size={16} />
-            <span className="text-sm font-body">{recipe?.region}</span>
-            {/* <span className="text-sm">•</span>
-            <span className="text-sm font-body">{recipe?.cuisine}</span> */}
+
+          <div className="flex items-center flex-wrap gap-2 text-white/90">
+            {/* Festival Tag Badge */}
+            {recipe?.festival_tag && (
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary text-primary-foreground">
+                {recipe.festival_tag}
+              </span>
+            )}
+
+            {/* Region */}
+            {recipe?.region && (
+              <>
+                <Icon name="MapPin" size={16} />
+                <span className="text-sm font-body">{recipe.region}</span>
+              </>
+            )}
           </div>
         </div>
       </div>
