@@ -12,7 +12,7 @@ const ProductCard = ({ product, onAddToCart, onToggleWishlist, onProductClick })
   const { user } = useAuth();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  
+
 
   const handleWishlistToggle = (e) => {
     e?.stopPropagation();
@@ -20,26 +20,26 @@ const ProductCard = ({ product, onAddToCart, onToggleWishlist, onProductClick })
     onToggleWishlist(product?.id, !isWishlisted);
   };
 
-const handleAddToCart = async (e) => {
-  e?.stopPropagation();
+  const handleAddToCart = async (e) => {
+    e?.stopPropagation();
 
-  if (!user) {
-    navigate("/signin");
-    return;
-  }
+    if (!user) {
+      navigate("/signin");
+      return;
+    }
 
-  setIsAddingToCart(true);
+    setIsAddingToCart(true);
 
-  // Add to cart context to open modal
-  addToCart(product);
+    // Add to cart context to open modal
+    addToCart(product);
 
-  // Optional: if you still have parent handler
-  if (onAddToCart) {
-    await onAddToCart(product);
-  }
+    // Optional: if you still have parent handler
+    if (onAddToCart) {
+      await onAddToCart(product);
+    }
 
-  setIsAddingToCart(false);
-};
+    setIsAddingToCart(false);
+  };
 
 
   const formatPrice = (price) => {
@@ -48,6 +48,24 @@ const handleAddToCart = async (e) => {
       currency: 'INR',
       minimumFractionDigits: 0
     })?.format(price);
+  };
+
+  const getInitials = (name) => {
+    if (!name) return "F";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+  // Generate consistent color from name
+  const getColorFromName = (name) => {
+    if (!name) return "#ccc";
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 65%)`; // pastel tone
   };
 
   return (
@@ -103,9 +121,20 @@ const handleAddToCart = async (e) => {
 
         {/* Farmer Info */}
         <div className="flex items-center space-x-2 mb-2">
-          <div className="w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
-            <Icon name="User" size={12} color="white" />
-          </div>
+          {(() => {
+            const farmerName = product?.farmer?.name;
+            const initials = getInitials(farmerName);
+            const bgColor = getColorFromName(farmerName);
+
+            return (
+              <div
+                className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold text-white"
+                style={{ backgroundColor: bgColor }}
+              >
+                {initials}
+              </div>
+            );
+          })()}
           <span className="text-sm text-muted-foreground">{product?.farmer?.name}</span>
           <div className="flex items-center space-x-1">
             <Icon name="MapPin" size={12} className="text-muted-foreground" />
