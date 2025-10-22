@@ -14,7 +14,46 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
   const [ingredientInfo, setIngredientInfo] = useState(null);
   const [loadingIngredient, setLoadingIngredient] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(false);
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!product?.product_id) return;
 
+      setLoadingReviews(true);
+
+      const { data, error } = await supabase
+        .from('reviews')
+        .select(`
+        review_id,
+        rating,
+        comment,
+        created_at,
+        user:user_id (
+          name
+        )
+      `)
+        .eq('product_id', product.product_id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching reviews:', error);
+        setReviews([]);
+      } else {
+        setReviews(data || []);
+      }
+
+      setLoadingReviews(false);
+    };
+
+    if (isOpen) fetchReviews();
+  }, [isOpen, product?.product_id]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setActiveTab("description"); // reset to description whenever modal opens
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const fetchIngredientInfo = async () => {
@@ -408,8 +447,11 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                 <div className="prose max-w-none text-foreground">
                   {loadingIngredient ? (
                     <p>Loading nutritional info...</p>
+
                   ) : ingredientInfo?.nutritional_info ? (
+
                     <div>
+                      <h4 className="font-body font-semibold text-foreground mb-2">Nutritional Information Overview</h4>
                       {Object.entries(ingredientInfo.nutritional_info).map(([key, value]) => (
                         <p key={key}>
                           <strong>{key}:</strong> {value}
@@ -421,49 +463,48 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                   )}
                 </div>
               )}
-
-
-              {activeTab === "reviews" && (
-                <div className="text-muted-foreground">
-                  <p className="italic">Reviews section coming soon...</p>
-                </div>
-              )}
             </div>
 
           </div>
 
           {/* Reviews Section */}
-          {/* <div className="mt-8">
-            <h3 className="text-lg font-heading font-semibold text-foreground mb-4">Customer Reviews</h3>
-            <div className="space-y-4">
-              {reviews?.map((review) => (
-                <div key={review?.id} className="border border-border rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-body font-medium text-foreground">{review?.user}</span>
-                      {review?.verified && (
-                        <span className="px-2 py-1 bg-success/10 text-success text-xs font-caption rounded">
-                          Verified Purchase
+          {activeTab === "reviews" && (
+            <div className="prose max-w-none text-muted-foreground">
+              <h3 className="text-lg font-heading font-semibold text-foreground">Customer Reviews</h3>
+
+              {loadingReviews ? (
+                <p className="text-muted-foreground">Loading reviews...</p>
+              ) : reviews.length === 0 ? (
+                <p className="text-muted-foreground italic">No reviews yet for this product.</p>
+              ) : (
+                <div className="space-y-4">
+                  {reviews.map((review) => (
+                    <div key={review.review_id} className="border border-border rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-2">
+                          <span className="font-body font-medium text-foreground">{review.user?.name || "Anonymous"}</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {new Date(review.created_at).toLocaleDateString()}
                         </span>
-                      )}
+                      </div>
+                      <div className="flex items-center space-x-1 mb-2">
+                        {[...Array(5)].map((_, i) => (
+                          <Icon
+                            key={i}
+                            name="Star"
+                            size={14}
+                            className={i < review.rating ? "text-warning fill-current" : "text-muted-foreground"}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-muted-foreground">{review.comment}</p>
                     </div>
-                    <span className="text-sm text-muted-foreground">{review?.date}</span>
-                  </div>
-                  <div className="flex items-center space-x-1 mb-2">
-                    {[...Array(5)]?.map((_, i) => (
-                      <Icon
-                        key={i}
-                        name="Star"
-                        size={14}
-                        className={i < review?.rating ? "text-warning fill-current" : "text-muted-foreground"}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground">{review?.comment}</p>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          </div> */}
+          )}
         </div>
       </div>
     </div>
