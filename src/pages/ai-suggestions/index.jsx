@@ -14,6 +14,7 @@ const AISuggestions = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showAttachMenu, setShowAttachMenu] = useState(false);
   const isChatEmpty = messages.length === 0;
+  const [isLoading, setIsLoading] = useState(false);
 
   const sentences = [
     "What are you working on?",
@@ -34,8 +35,8 @@ const AISuggestions = () => {
     const text = query.trim();
     if (!text) return;
 
-    // Remove welcome sentence on first user message
     if (isChatEmpty) setWelcomeSentence("");
+    setIsLoading(true);
 
     controls.start({
       x: [0, 40, -40, 0],
@@ -47,9 +48,11 @@ const AISuggestions = () => {
 
     setMessages((prev) => [...prev, { role: "user", text }]);
     setQuery("");
+
     const greetings = ["hi", "hello", "hey", "hii"];
     if (greetings.includes(text.toLowerCase())) {
       setMessages((prev) => [...prev, { role: "ai", text: "Hello! Tell me what ingredients you have, and I’ll suggest a dish for you." }]);
+      setIsLoading(false);
       return;
     }
 
@@ -65,11 +68,8 @@ const AISuggestions = () => {
           messages: [
             { role: "system", content: "You are a helpful Indian recipe assistant." },
             {
-              role: "user", content: `
-Suggest a recipe for: ${text}.
-Return it strictly in JSON format:
-{ "name": "", "ingredients": [""], "steps": [""] }
-` },
+              role: "user", content: `Suggest a recipe for: ${text}. Return it strictly in JSON format: { "name": "", "ingredients": [""], "steps": [""] }`
+            },
           ],
           max_tokens: 600,
           temperature: 0.7,
@@ -102,9 +102,11 @@ Return it strictly in JSON format:
       );
 
       setMessages((prev) => [...prev, { role: "ai", text: formattedReply }]);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error:", error);
       setMessages((prev) => [...prev, { role: "ai", text: "⚠️ Sorry, something went wrong. Please try again." }]);
+      setIsLoading(false);
     }
   };
 
@@ -128,6 +130,7 @@ Return it strictly in JSON format:
     <div className="flex h-screen bg-background text-foreground">
       {/* Sidebar */}
       <aside className={`relative ${isSidebarOpen ? "w-64" : "w-20"} bg-popover border-r border-border flex flex-col transition-all duration-300 ease-in-out`}>
+        {/* Sidebar content unchanged */}
         <div className="flex items-center gap-3 p-4 border-b border-border">
           <div className="flex items-center justify-center w-11 h-11 bg-primary rounded-lg">
             <span className="text-white text-xl font-bold">HB</span>
@@ -178,7 +181,9 @@ Return it strictly in JSON format:
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} items-end gap-2`}>
                   {m.role === "ai" ? (
                     <>
-                      <div className="flex-shrink-0 mt-[2px]"><Icon name="Sparkles" size={20} /></div>
+                      <div className="flex-shrink-0 mt-[2px]">
+                        <Icon name="Sparkles" size={20} className="text-yellow-500" />
+                      </div>
                       <div className="px-4 py-2 rounded-2xl text-base shadow break-words inline-block max-w-max" style={{ background: "#FFF7E6", color: "#000", border: "1px solid #F9BC06" }}>
                         {m.text}
                       </div>
@@ -193,18 +198,36 @@ Return it strictly in JSON format:
                   )}
                 </div>
               ))}
+
+              {/* Loading star + blinking text */}
+              {isLoading && (
+                <div className="flex justify-start items-center gap-2 mt-2">
+                  <motion.div
+                    animate={{ y: [0, -5, 0] }}
+                    transition={{ repeat: Infinity, duration: 0.6 }}
+                    className="flex-shrink-0 mt-[2px]"
+                  >
+                    <Icon name="Sparkles" size={20} className="text-yellow-500" />
+                  </motion.div>
+                  <motion.div
+                    animate={{ opacity: [0.2, 1, 0.2] }}
+                    transition={{ repeat: Infinity, duration: 1 }}
+                    className="px-4 py-2 rounded-2xl text-base shadow break-words inline-block max-w-max bg-[#FFF7E6] border border-[#F9BC06]"
+                  >
+                    AI is thinking...
+                  </motion.div>
+                </div>
+              )}
+
               <div ref={chatEndRef} />
             </div>
           </main>
         )}
 
-        {/* Input Bar */}
+        {/* Input Bar and rest of the code remains unchanged */}
         <form
           onSubmit={handleAskAI}
-          className={`p-4 border-t border-border bg-popover transition-all duration-500 ${isChatEmpty
-            ? "border-none bg-transparent flex flex-col justify-center items-center h-full text-center"
-            : ""
-            }`}
+          className={`p-4 border-t border-border bg-popover transition-all duration-500 ${isChatEmpty ? "border-none bg-transparent flex flex-col justify-center items-center h-full text-center" : ""}`}
         >
           {isChatEmpty && (
             <div className="mb-4">
@@ -214,17 +237,13 @@ Return it strictly in JSON format:
             </div>
           )}
 
-          <div
-            className={`flex gap-2 items-center justify-center transition-all duration-500 ${isChatEmpty ? "w-full max-w-3xl" : "max-w-4xl mx-auto"
-              }`}
-          >
+          <div className={`flex gap-2 items-center justify-center transition-all duration-500 ${isChatEmpty ? "w-full max-w-3xl" : "max-w-4xl mx-auto"}`}>
             {/* Input Section */}
             <div ref={attachRef} className="relative flex-1 w-full max-w-[800px]">
               <button
                 type="button"
                 onClick={() => setShowAttachMenu(!showAttachMenu)}
-                className={`absolute left-2 top-[30%] text-xl text-primary z-10 transition-transform duration-300 ${showAttachMenu ? "rotate-45" : "rotate-0"
-                  }`}
+                className={`absolute left-2 top-[30%] text-xl text-primary z-10 transition-transform duration-300 ${showAttachMenu ? "rotate-45" : "rotate-0"}`}
               >
                 <FiPlus />
               </button>
