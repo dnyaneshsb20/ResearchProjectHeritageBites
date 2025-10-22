@@ -62,7 +62,8 @@ const RegionalMap = ({ onRegionSelect }) => {
       east: 'bg-green-500',
       west: 'bg-orange-500',
       central: 'bg-yellow-500',
-      northeast: 'bg-purple-500'
+      northeast: 'bg-purple-500',
+      northwest:'bg-pink-500'
     };
     return colors[id] || 'bg-gray-400';
   };
