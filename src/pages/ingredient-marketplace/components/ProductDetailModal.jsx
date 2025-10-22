@@ -11,6 +11,43 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [farmerInfo, setFarmerInfo] = useState(null);
   const [loadingFarmer, setLoadingFarmer] = useState(false);
+  const [ingredientInfo, setIngredientInfo] = useState(null);
+  const [loadingIngredient, setLoadingIngredient] = useState(false);
+  const [activeTab, setActiveTab] = useState("description");
+
+
+  useEffect(() => {
+    const fetchIngredientInfo = async () => {
+      if (!product?.ingredient_id) return;
+
+      setLoadingIngredient(true);
+      console.log("Fetching ingredient for ID:", product.ingredient_id);
+
+      const { data, error } = await supabase
+        .from("ingredients")
+        .select(`
+        name,
+        description,
+        nutritional_info,
+        seasonality,
+        soil_type,
+        ideal_region,
+        cultivation_method,
+        harvest_method
+      `)
+        .eq("ingredient_id", product.ingredient_id)
+        .maybeSingle();
+
+      if (error) console.error("Error fetching ingredient:", error);
+      if (!data) console.warn("No ingredient found for ID", product?.ingredient_id);
+
+      setIngredientInfo(data);
+      setLoadingIngredient(false);
+    };
+
+    if (isOpen) fetchIngredientInfo();
+  }, [isOpen, product?.ingredient_id]);
+
   useEffect(() => {
     const fetchFarmerInfo = async () => {
       if (!product?.farmer_id) return;
@@ -297,38 +334,102 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
           <div className="mt-8">
             <div className="border-b border-border">
               <nav className="flex space-x-8">
-                <button className="py-2 px-1 border-b-2 border-primary text-primary font-body font-medium">
-                  Description
-                </button>
-                <button className="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground">
-                  Cultivation
-                </button>
-                <button className="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground">
-                  Nutrition
-                </button>
-                <button className="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground">
-                  Reviews
-                </button>
+                {["description", "cultivation", "nutrition", "reviews"].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`py-2 px-1 border-b-2 font-body font-medium transition-colors ${activeTab === tab
+                      ? "border-primary text-primary"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
+                      }`}
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                ))}
               </nav>
+
             </div>
 
             <div className="py-6">
-              {/* Description */}
-              <div className="prose max-w-none">
-                <p className="text-muted-foreground mb-4">
-                  {product?.description || `${product?.name} is a premium quality indigenous ingredient sourced directly from verified farmers. This traditional variety has been cultivated using time-tested methods that preserve its authentic flavor and nutritional value.`}
-                </p>
+              {activeTab === "description" && (
+                <div className="prose max-w-none">
+                  <p className="text-muted-foreground mb-4">
+                    {`${product?.name} – ${ingredientInfo?.description}`}
+                  </p>
 
-                <h4 className="font-body font-semibold text-foreground mb-2">Key Features:</h4>
-                <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                  <li>100% natural and chemical-free</li>
-                  <li>Traditional cultivation methods</li>
-                  <li>Direct from farmer to your kitchen</li>
-                  <li>Rich in essential nutrients</li>
-                  <li>Authentic regional variety</li>
-                </ul>
-              </div>
+                  <h4 className="font-body font-semibold text-foreground mb-2">Key Features:</h4>
+                  <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                    <li>100% natural and chemical-free</li>
+                    <li>Traditional cultivation methods</li>
+                    <li>Direct from farmer to your kitchen</li>
+                    <li>Rich in essential nutrients</li>
+                    <li>Authentic regional variety</li>
+                  </ul>
+                </div>
+              )}
+
+              {activeTab === "cultivation" && (
+                <div className="prose max-w-none text-muted-foreground">
+                  {loadingIngredient ? (
+                    <p>Loading cultivation details...</p>
+                  ) : ingredientInfo ? (
+                    <>
+                      <h4 className="font-body font-semibold text-foreground mb-2">Cultivation Overview</h4>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>
+                          <span className="font-semibold text-foreground">Soil Type:</span>{" "}
+                          {ingredientInfo.soil_type || "Not specified"}
+                        </li>
+                        <li>
+                          <span className="font-semibold text-foreground">Ideal Region:</span>{" "}
+                          {ingredientInfo.ideal_region || "Not specified"}
+                        </li>
+                        <li>
+                          <span className="font-semibold text-foreground">Cultivation Method:</span>{" "}
+                          {ingredientInfo.cultivation_method || "Not specified"}
+                        </li>
+                        <li>
+                          <span className="font-semibold text-foreground">Harvest Method:</span>{" "}
+                          {ingredientInfo.harvest_method || "Not specified"}
+                        </li>
+                        <li>
+                          <span className="font-semibold text-foreground">Seasonality:</span>{" "}
+                          {ingredientInfo.seasonality || "Not specified"}
+                        </li>
+                      </ul>
+                    </>
+                  ) : (
+                    <p>No cultivation information available for this ingredient.</p>
+                  )}
+                </div>
+              )}
+
+              {activeTab === "nutrition" && (
+                <div className="prose max-w-none text-foreground">
+                  {loadingIngredient ? (
+                    <p>Loading nutritional info...</p>
+                  ) : ingredientInfo?.nutritional_info ? (
+                    <div>
+                      {Object.entries(ingredientInfo.nutritional_info).map(([key, value]) => (
+                        <p key={key}>
+                          <strong>{key}:</strong> {value}
+                        </p>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>No nutritional details available for this ingredient.</p>
+                  )}
+                </div>
+              )}
+
+
+              {activeTab === "reviews" && (
+                <div className="text-muted-foreground">
+                  <p className="italic">Reviews section coming soon...</p>
+                </div>
+              )}
             </div>
+
           </div>
 
           {/* Reviews Section */}

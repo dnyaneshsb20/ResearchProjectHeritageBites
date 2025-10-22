@@ -146,6 +146,7 @@ const IngredientMarketplace = () => {
 
         const products = productData.map((item) => ({
           id: item.product_id,
+           ingredient_id: item.ingredient_id, 
           name: item.name || item.ingredients?.name || 'Unnamed Product',
           image: item.image_url || 'https://placehold.co/400x400?text=Product',
           price: Number(item.price) || 0,
