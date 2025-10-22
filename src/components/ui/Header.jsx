@@ -12,7 +12,7 @@ import { useCart } from '../../context/CartContext';
 
 const Header = () => {
   const navigate = useNavigate();
- const { user, logout, setUser, setRole } = useAuth();
+  const { user, logout, setUser, setRole } = useAuth();
 
   const isAuthenticated = !!user;
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -38,9 +38,10 @@ const Header = () => {
   const userMenuRef = useRef(null);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
-
-
-  // fetched from Supabase
+  const [suggestions, setSuggestions] = useState([]);
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
+  const suggestionsRef = useRef(null);
+  const debounceRef = useRef(null);
 
   // 👇 Add this just before defining navigationItems
   const userRole = userProfile?.role || "user";
@@ -76,7 +77,13 @@ const Header = () => {
 
   const handleSearchSubmit = (e) => {
     e?.preventDefault();
-    if (searchQuery?.trim()) console.log('Searching for:', searchQuery);
+    const q = (searchQuery || '').trim();
+    if (!q) return;
+
+    // Navigate to ingredient marketplace with query param
+    navigate(`/ingredient-marketplace?q=${encodeURIComponent(q)}`);
+    // Keep search expanded or collapse as you prefer:
+    setIsSearchExpanded(false);
   };
 
   const handleSearchExpand = () => {
@@ -188,6 +195,90 @@ const Header = () => {
     return `hsl(${hue}, 70%, 50%)`;
   };
 
+  useEffect(() => {
+    if (!searchQuery || searchQuery.trim().length < 2) {
+      setSuggestions([]);
+      setIsSuggestionsOpen(false);
+      return;
+    }
+
+    // Clear previous timer
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(async () => {
+      try {
+        // Query supabase for quick matches (products and ingredients)
+        const q = `%${searchQuery.trim()}%`;
+        // Search products table (adjust fields as needed)
+        const { data: prodData } = await supabase
+          .from('products')
+          .select('product_id, name, image_url')
+          .ilike('name', q)
+          .limit(5);
+
+        // Search ingredients as fallback
+        const { data: ingData } = await supabase
+          .from('ingredients')
+          .select('ingredient_id, name')
+          .ilike('name', q)
+          .limit(5);
+
+        const prodResults = (prodData || []).map(p => ({
+          type: 'product',
+          id: p.product_id,
+          name: p.name,
+          image: p.image_url
+        }));
+
+        const ingResults = (ingData || []).map(i => ({
+          type: 'ingredient',
+          id: i.ingredient_id,
+          name: i.name
+        }));
+
+        const merged = [...prodResults, ...ingResults].slice(0, 6);
+        setSuggestions(merged);
+        setIsSuggestionsOpen(merged.length > 0);
+      } catch (err) {
+        console.error('Suggestion fetch error', err);
+        setSuggestions([]);
+        setIsSuggestionsOpen(false);
+      }
+    }, 350); // 350ms debounce
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [searchQuery]);
+
+  const handleClickOutside = (event) => {
+    if (userMenuRef?.current && !userMenuRef?.current?.contains(event?.target)) {
+      setIsUserMenuOpen(false);
+    }
+    if (suggestionsRef?.current && !suggestionsRef?.current?.contains(event?.target)) {
+      setIsSuggestionsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q') || '';
+    if (q) {
+      setSearchQuery(q);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setIsSuggestionsOpen(false);
+        setIsSearchExpanded(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   return (
     <header className="sticky top-0 z-100 bg-background border-b border-border shadow-warm">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
@@ -274,15 +365,57 @@ const Header = () => {
                   placeholder="Search recipes, ingredients..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e?.target?.value)}
-                  className="w-80 pl-10"
+                  className="w-80"
                 />
-                <Icon
-                  name="Search"
-                  size={16}
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
-                />
+                <Button
+                  type="submit"
+                  className="absolute right-1 top-1/2 transform -translate-y-1/2 p-2 rounded h-8"
+                  aria-label="Search"
+                  variant="ghost2"
+                >
+                  <Icon name="Search" size={16} variant="ghost2" />
+                </Button>
               </div>
             </form>
+            {/* Suggestions dropdown */}
+            {isSuggestionsOpen && (
+              <div
+                ref={suggestionsRef}
+                className="absolute mt-10 w-80 bg-popover border border-border rounded shadow-lg z-50"
+              >
+                <ul>
+                  {suggestions.map((sug, idx) => (
+                    <li
+                      key={sug.id + '-' + idx}
+                      className="px-3 py-2 hover:bg-muted cursor-pointer flex items-center gap-2"
+                      onMouseDown={(e) => {
+                        // Use onMouseDown so the click registers before input blur
+                        e.preventDefault();
+                        // if product, navigate to product page; if ingredient, navigate to marketplace with ingredient filter
+                        if (sug.type === 'product') {
+                          navigate(`/product/${sug.id}`);
+                        } else {
+                          navigate(`/ingredient-marketplace?q=${encodeURIComponent(sug.name)}`);
+                        }
+                        setIsSuggestionsOpen(false);
+                      }}
+                    >
+                      {sug.image ? (
+                        <img src={sug.image} alt={sug.name} className="w-8 h-8 rounded object-cover" />
+                      ) : (
+                        <div className="w-8 h-8 bg-muted rounded flex items-center justify-center text-xs">
+                          {sug.name?.slice(0, 2).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="text-sm">
+                        <div className="font-medium text-foreground">{sug.name}</div>
+                        <div className="text-xs text-muted-foreground">{sug.type === 'product' ? 'Product' : 'Ingredient'}</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Shopping Cart */}
