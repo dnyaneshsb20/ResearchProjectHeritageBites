@@ -4,7 +4,6 @@ import HeroCarousel from './components/HeroCarousel';
 import FilterChips from './components/FilterChips';
 import RecipeSection from './components/RecipeSection';
 import RegionalMap from './components/RegionalMap';
-import StoryCard from './components/StoryCard';
 import FloatingActionButton from './components/FloatingActionButton';
 import Icon from '../../components/AppIcon';
 import Footer from '../dashboard/components/Footer';
@@ -14,13 +13,10 @@ const RecipeDiscoveryDashboard = () => {
   const [activeFilters, setActiveFilters] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [healthGoalRecipes, setHealthGoalRecipes] = useState([]);
-  const [regionalRecipes, setRegionalRecipes] = useState([]);
-  const [trendingRecipes, setTrendingRecipes] = useState([]);
+  const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [culturalStories, setCulturalStories] = useState([]);
 
-  // Fetch all recipes initially
+  // ✅ Fetch all recipes initially
   useEffect(() => {
     fetchRecipes();
   }, []);
@@ -42,7 +38,7 @@ const RecipeDiscoveryDashboard = () => {
         created_at,
         states ( state_name, region )
       `)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false }); // newest first
 
     if (error) {
       console.error("Error fetching recipes:", error);
@@ -50,7 +46,7 @@ const RecipeDiscoveryDashboard = () => {
       return;
     }
 
-    // Map Supabase fields to RecipeCard props
+    // Format recipe data
     const formatted = data.map((item) => ({
       id: item.recipe_id,
       title: item.name,
@@ -59,25 +55,24 @@ const RecipeDiscoveryDashboard = () => {
       region: item.states?.state_name || "Unknown Region",
       cookingTime: `${item.cooking_time} min`,
       difficulty: item.difficulty_level,
-      rating: item.rating || Math.random() * 2 + 3, // temporary mock rating if rating is null
-      reviewCount: item.review_count || Math.floor(Math.random() * 200), // mock review count
+      rating: item.rating || Math.random() * 2 + 3,
+      reviewCount: item.review_count || Math.floor(Math.random() * 200),
       tags: [item.meal_type, item.dietary_type].filter(Boolean),
     }));
 
-    // ✅ Instead of slicing, show all recipes
-    setHealthGoalRecipes(formatted);
-    setRegionalRecipes(formatted);
-    setTrendingRecipes(formatted);
+    // ✅ Ensure unique recipes only once
+    const uniqueRecipes = [...new Map(formatted.map(item => [item.id, item])).values()];
 
+    setRecipes(uniqueRecipes);
     setLoading(false);
   };
 
+  // ✅ Filter logic
   const handleFilterChange = async (filters) => {
     setActiveFilters(filters);
     setLoading(true);
 
     if (!filters.length) {
-      // fetch all recipes if no filter selected
       fetchRecipes();
       return;
     }
@@ -99,7 +94,7 @@ const RecipeDiscoveryDashboard = () => {
       medium: { column: 'difficulty_level', value: 'Medium' },
       hard: { column: 'difficulty_level', value: 'Hard' },
       quick: { column: 'total_time', range: [0, 30] },
-      medium: { column: 'total_time', range: [30, 60] },
+      medium_time: { column: 'total_time', range: [30, 60] },
       long: { column: 'total_time', range: [60, null] },
     };
 
@@ -116,7 +111,7 @@ const RecipeDiscoveryDashboard = () => {
       states ( state_name, region )
     `).order("created_at", { ascending: false });
 
-    // Apply filters
+    // Apply filters dynamically
     filters.forEach((filterId) => {
       const map = filterMapping[filterId];
       if (!map) return;
@@ -151,13 +146,12 @@ const RecipeDiscoveryDashboard = () => {
       tags: [item.meal_type, item.dietary_type].filter(Boolean),
     }));
 
-    setHealthGoalRecipes(formatted);
-    setRegionalRecipes(formatted);
-    setTrendingRecipes(formatted);
-
+    const uniqueRecipes = [...new Map(formatted.map(item => [item.id, item])).values()];
+    setRecipes(uniqueRecipes);
     setLoading(false);
   };
 
+  // ✅ Handle region selection
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);
     console.log('Selected region:', region);
@@ -183,7 +177,7 @@ const RecipeDiscoveryDashboard = () => {
 
       if (error) return console.error(error);
 
-      setRegionalRecipes(
+      setRecipes(
         data.map(item => ({
           id: item.recipe_id,
           title: item.name,
@@ -203,6 +197,7 @@ const RecipeDiscoveryDashboard = () => {
       <main className="container mx-auto px-4 lg:px-6 py-6 space-y-8">
         <HeroCarousel />
 
+        {/* Filters on mobile */}
         <div className="lg:hidden">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-heading font-semibold text-foreground">
@@ -225,6 +220,7 @@ const RecipeDiscoveryDashboard = () => {
           )}
         </div>
 
+        {/* Desktop layout */}
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
           <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-24 space-y-6">
@@ -245,17 +241,7 @@ const RecipeDiscoveryDashboard = () => {
                 Loading recipes...
               </p>
             ) : (
-              <>
-                <RecipeSection recipes={healthGoalRecipes} />
-                <div className="lg:hidden">
-                  <RegionalMap onRegionSelect={handleRegionSelect} />
-                </div>
-                <RecipeSection recipes={regionalRecipes} />
-                <section className="space-y-4">
-                  {/* Cultural Stories can remain commented as before */}
-                </section>
-                <RecipeSection recipes={trendingRecipes} />
-              </>
+              <RecipeSection recipes={recipes} />
             )}
           </div>
         </div>
