@@ -38,13 +38,13 @@ const IngredientMarketplace = () => {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-      let productData = [];
+        let productData = [];
 
-      if (activeCategory === 'all') {
+        if (activeCategory === 'all') {
 
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
+          const { data, error } = await supabase
+            .from('products')
+            .select(`
     product_id,
     name,
     price,
@@ -70,49 +70,49 @@ const IngredientMarketplace = () => {
               )
             )
           `);
-      if (error) throw error;
-        productData = data;
-      } else {
-         const categoryMap = {
-          'grains-cereals': 'Grains & Cereals',
-          'spices-condiments': 'Spices & Condiments',
-          'oil-seeds': 'Oil Seeds',
-          'pulses-legumes': 'Pulses & Legumes',
-          'millets': 'Millets',
-          'fruits-vegetables': 'Fruits & Vegetables'
-        };
-        const selectedCategoryName = categoryMap[activeCategory];
+          if (error) throw error;
+          productData = data;
+        } else {
+          const categoryMap = {
+            'grains-cereals': 'Grains & Cereals',
+            'spices-condiments': 'Spices & Condiments',
+            'oil-seeds': 'Oil Seeds',
+            'pulses-legumes': 'Pulses & Legumes',
+            'millets': 'Millets',
+            'fruits-vegetables': 'Fruits & Vegetables'
+          };
+          const selectedCategoryName = categoryMap[activeCategory];
 
-        // 1️⃣ Get category_id
-        const { data: categoryData, error: catError } = await supabase
-          .from('categories')
-          .select('category_id')
-          .eq('name', selectedCategoryName)
-          .single();
+          // 1️⃣ Get category_id
+          const { data: categoryData, error: catError } = await supabase
+            .from('categories')
+            .select('category_id')
+            .eq('name', selectedCategoryName)
+            .single();
 
-        if (catError || !categoryData) throw catError || new Error('Category not found');
+          if (catError || !categoryData) throw catError || new Error('Category not found');
 
-        // 2️⃣ Get ingredients for that category
-        const { data: ingredients, error: ingError } = await supabase
-          .from('ingredients')
-          .select('ingredient_id')
-          .eq('category_id', categoryData.category_id);
+          // 2️⃣ Get ingredients for that category
+          const { data: ingredients, error: ingError } = await supabase
+            .from('ingredients')
+            .select('ingredient_id')
+            .eq('category_id', categoryData.category_id);
 
-        if (ingError) throw ingError;
+          if (ingError) throw ingError;
 
-        const ingredientIds = ingredients.map((i) => i.ingredient_id);
+          const ingredientIds = ingredients.map((i) => i.ingredient_id);
 
-        if (ingredientIds.length === 0) {
-          setAllProducts([]);
-          setFilteredProducts([]);
-          setIsLoading(false);
-          return;
-        }
+          if (ingredientIds.length === 0) {
+            setAllProducts([]);
+            setFilteredProducts([]);
+            setIsLoading(false);
+            return;
+          }
 
-        // 3️⃣ Get products linked to those ingredients
-        const { data, error } = await supabase
-          .from('products')
-          .select(`
+          // 3️⃣ Get products linked to those ingredients
+          const { data, error } = await supabase
+            .from('products')
+            .select(`
             product_id,
             name,
             price,
@@ -138,11 +138,11 @@ const IngredientMarketplace = () => {
               )
             )
           `)
-          .in('ingredient_id', ingredientIds);
+            .in('ingredient_id', ingredientIds);
 
-        if (error) throw error;
-        productData = data;
-      }
+          if (error) throw error;
+          productData = data;
+        }
 
         const products = productData.map((item) => ({
           id: item.product_id,
@@ -169,15 +169,15 @@ const IngredientMarketplace = () => {
 
         setAllProducts(products);
         setFilteredProducts(products);
-       } catch (err) {
-      console.error('Error fetching products:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      } catch (err) {
+        console.error('Error fetching products:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  fetchProducts();
-}, [activeCategory]);
+    fetchProducts();
+  }, [activeCategory]);
 
   // Filter and search logic
   useEffect(() => {
@@ -359,11 +359,13 @@ const IngredientMarketplace = () => {
                     Filters
                   </Button>
 
-                  <div className="text-sm text-muted-foreground">
-                    {filteredProducts?.length} products found
-                    {searchQuery && (
-                      <span> for "{searchQuery}"</span>
-                    )}
+                  <div>
+                    <h2 className="text-xl font-heading font-semibold text-foreground">
+                      Featured Indigenous Products
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                      Handpicked treasures from our farmers and local artisans
+                    </p>
                   </div>
                 </div>
 
