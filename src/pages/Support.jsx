@@ -59,7 +59,7 @@ const Support = () => {
   };
 
   return (
-    <div className="bg-white text-black min-h-screen flex flex-col">
+    <div className="bg-background text-black min-h-screen flex flex-col">
       <Helmet>
         <title>Support | HeritageBites</title>
       </Helmet>

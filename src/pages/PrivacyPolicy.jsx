@@ -6,7 +6,7 @@ import Button from "../components/ui/Button";
 
 const PrivacyPolicy = () => {
   return (
-    <div className="bg-white text-black min-h-screen flex flex-col">
+    <div className="bg-background text-black min-h-screen flex flex-col">
       <Helmet>
         <title>Privacy Policy | HeritageBites</title>
       </Helmet>

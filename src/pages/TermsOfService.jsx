@@ -6,7 +6,7 @@ import Button from "../components/ui/Button";
 
 const TermsOfService = () => {
     return (
-        <div className="bg-white text-black min-h-screen flex flex-col">
+        <div className="bg-background text-black min-h-screen flex flex-col">
             <Header />
             <Helmet>
                 <title>Terms of Service | HeritageBites</title>
