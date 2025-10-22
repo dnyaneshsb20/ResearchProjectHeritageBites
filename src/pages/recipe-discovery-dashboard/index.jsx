@@ -15,12 +15,15 @@ const RecipeDiscoveryDashboard = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filterCategories, setFilterCategories] = useState([]);
 
-  // ✅ Fetch all recipes initially
+  // ✅ Fetch recipes and filters initially
   useEffect(() => {
     fetchRecipes();
+    fetchAvailableFilters();
   }, []);
 
+  // Fetch all recipes
   const fetchRecipes = async () => {
     setLoading(true);
 
@@ -36,9 +39,11 @@ const RecipeDiscoveryDashboard = () => {
         cooking_time,
         prep_time,
         created_at,
+        dietary_type,
+        festival_tag,
         states ( state_name, region )
       `)
-      .order("created_at", { ascending: false }); // newest first
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching recipes:", error);
@@ -46,7 +51,6 @@ const RecipeDiscoveryDashboard = () => {
       return;
     }
 
-    // Format recipe data
     const formatted = data.map((item) => ({
       id: item.recipe_id,
       title: item.name,
@@ -60,14 +64,49 @@ const RecipeDiscoveryDashboard = () => {
       tags: [item.meal_type, item.dietary_type].filter(Boolean),
     }));
 
-    // ✅ Ensure unique recipes only once
     const uniqueRecipes = [...new Map(formatted.map(item => [item.id, item])).values()];
-
     setRecipes(uniqueRecipes);
     setLoading(false);
   };
 
-  // ✅ Filter logic
+  // Fetch unique filter options dynamically from database
+  const fetchAvailableFilters = async () => {
+    const { data, error } = await supabase
+      .from('recipes')
+      .select(`
+        meal_type,
+        dietary_type,
+        festival_tag,
+        difficulty_level,
+        cooking_time
+      `);
+
+    if (error) return console.error("Error fetching filter options:", error);
+
+    const mealOptions = [...new Set(data.map(d => d.meal_type).filter(Boolean))]
+      .map(v => ({ id: v.toLowerCase(), label: v, icon: 'Utensils' }));
+    const dietaryOptions = [...new Set(data.map(d => d.dietary_type).filter(Boolean))]
+      .map(v => ({ id: v.toLowerCase().replace(' ', '-'), label: v, icon: 'Leaf' }));
+    const festivalOptions = [...new Set(data.map(d => d.festival_tag).filter(Boolean))]
+      .map(v => ({ id: v.toLowerCase(), label: v, icon: 'Calendar' }));
+    const difficultyOptions = [...new Set(data.map(d => d.difficulty_level).filter(Boolean))]
+      .map(v => ({ id: v.toLowerCase(), label: v, icon: 'BarChart3' }));
+    const timeOptions = [
+      { id: 'quick', label: '< 30 min', icon: 'Zap' },
+      { id: 'medium_time', label: '30-60 min', icon: 'Clock' },
+      { id: 'long', label: '> 1 hour', icon: 'Timer' }
+    ];
+
+    setFilterCategories([
+      { id: 'meal', label: 'Meal Type', options: mealOptions },
+      { id: 'dietary', label: 'Dietary', options: dietaryOptions },
+      { id: 'festival', label: 'Festival', options: festivalOptions },
+      { id: 'difficulty', label: 'Difficulty', options: difficultyOptions },
+      { id: 'time', label: 'Time', options: timeOptions }
+    ]);
+  };
+
+  // ✅ Handle filter changes (multi-select OR logic per category)
   const handleFilterChange = async (filters) => {
     setActiveFilters(filters);
     setLoading(true);
@@ -78,51 +117,64 @@ const RecipeDiscoveryDashboard = () => {
     }
 
     const filterMapping = {
-      breakfast: { column: 'meal_type', value: 'Breakfast' },
-      lunch: { column: 'meal_type', value: 'Lunch' },
-      dinner: { column: 'meal_type', value: 'Dinner' },
-      snacks: { column: 'meal_type', value: 'Snacks' },
-      vegetarian: { column: 'dietary_type', value: 'Vegetarian' },
-      vegan: { column: 'dietary_type', value: 'Vegan' },
-      'gluten-free': { column: 'dietary_type', value: 'Gluten Free' },
-      'dairy-free': { column: 'dietary_type', value: 'Dairy Free' },
-      diwali: { column: 'festival_tag', value: 'Diwali' },
-      holi: { column: 'festival_tag', value: 'Holi' },
-      eid: { column: 'festival_tag', value: 'Eid' },
-      navratri: { column: 'festival_tag', value: 'Navratri' },
-      easy: { column: 'difficulty_level', value: 'Easy' },
-      medium: { column: 'difficulty_level', value: 'Medium' },
-      hard: { column: 'difficulty_level', value: 'Hard' },
-      quick: { column: 'total_time', range: [0, 30] },
-      medium_time: { column: 'total_time', range: [30, 60] },
-      long: { column: 'total_time', range: [60, null] },
+      breakfast: { column: 'meal_type', value: 'Breakfast', category: 'meal' },
+      lunch: { column: 'meal_type', value: 'Lunch', category: 'meal' },
+      dinner: { column: 'meal_type', value: 'Dinner', category: 'meal' },
+      snacks: { column: 'meal_type', value: 'Snacks', category: 'meal' },
+      vegetarian: { column: 'dietary_type', value: 'Vegetarian', category: 'dietary' },
+      vegan: { column: 'dietary_type', value: 'Vegan', category: 'dietary' },
+      'gluten-free': { column: 'dietary_type', value: 'Gluten Free', category: 'dietary' },
+      'dairy-free': { column: 'dietary_type', value: 'Dairy Free', category: 'dietary' },
+      easy: { column: 'difficulty_level', value: 'Easy', category: 'difficulty' },
+      medium: { column: 'difficulty_level', value: 'Medium', category: 'difficulty' },
+      hard: { column: 'difficulty_level', value: 'Hard', category: 'difficulty' },
+      quick: { column: 'cooking_time', range: [0, 30], category: 'time' },
+      medium_time: { column: 'cooking_time', range: [30, 60], category: 'time' },
+      long: { column: 'cooking_time', range: [60, null], category: 'time' }
     };
 
-    let query = supabase.from("recipes").select(`
-      recipe_id,
-      name,
-      description,
-      image_url,
-      meal_type,
-      difficulty_level,
-      cooking_time,
-      prep_time,
-      created_at,
-      states ( state_name, region )
-    `).order("created_at", { ascending: false });
-
-    // Apply filters dynamically
+    // Group filters by category
+    const groupedFilters = {};
     filters.forEach((filterId) => {
       const map = filterMapping[filterId];
       if (!map) return;
+      if (!groupedFilters[map.category]) groupedFilters[map.category] = [];
+      groupedFilters[map.category].push(map);
+    });
 
-      if (map.range) {
-        const [min, max] = map.range;
-        if (min != null) query = query.gte(map.column, min);
-        if (max != null) query = query.lte(map.column, max);
-      } else {
-        query = query.ilike(map.column, `%${map.value}%`);
-      }
+    let query = supabase
+      .from("recipes")
+      .select(`
+        recipe_id,
+        name,
+        description,
+        image_url,
+        meal_type,
+        difficulty_level,
+        cooking_time,
+        prep_time,
+        created_at,
+        dietary_type,
+        festival_tag,
+        states ( state_name, region )
+      `)
+      .order("created_at", { ascending: false });
+
+    // Apply filters per category (OR within category)
+    Object.values(groupedFilters).forEach((filterGroup) => {
+      query = query.or(
+        filterGroup
+          .map((f) => {
+            if (f.range) {
+              const [min, max] = f.range;
+              if (min != null && max != null) return `cooking_time.gte.${min},cooking_time.lte.${max}`;
+              if (min != null) return `cooking_time.gte.${min}`;
+              if (max != null) return `cooking_time.lte.${max}`;
+            }
+            return `${f.column}.ilike.%${f.value}%`;
+          })
+          .join(',')
+      );
     });
 
     const { data, error } = await query;
@@ -154,7 +206,6 @@ const RecipeDiscoveryDashboard = () => {
   // ✅ Handle region selection
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);
-    console.log('Selected region:', region);
   };
 
   useEffect(() => {
@@ -215,7 +266,10 @@ const RecipeDiscoveryDashboard = () => {
 
           {showFilters && (
             <div className="bg-card border border-border rounded-xl p-4 mb-6">
-              <FilterChips onFilterChange={handleFilterChange} />
+              <FilterChips
+                categories={filterCategories}
+                onFilterChange={handleFilterChange}
+              />
             </div>
           )}
         </div>
@@ -228,7 +282,10 @@ const RecipeDiscoveryDashboard = () => {
                 <h3 className="text-lg font-heading font-semibold text-foreground mb-4">
                   Refine Your Search
                 </h3>
-                <FilterChips onFilterChange={handleFilterChange} />
+                <FilterChips
+                  categories={filterCategories}
+                  onFilterChange={handleFilterChange}
+                />
               </div>
 
               <RegionalMap onRegionSelect={handleRegionSelect} />
