@@ -230,7 +230,8 @@ const RecipeDiscoveryDashboard = () => {
 
     const uniqueRecipes = [...new Map(formatted.map(item => [item.id, item])).values()];
     setRecipes(uniqueRecipes);
-
+    const grouped = groupByMealType(uniqueRecipes);
+    setGroupedRecipes(grouped);
     setLoading(false);
   };
 
