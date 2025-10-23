@@ -530,7 +530,7 @@ const Header = () => {
                         <span>My Recipes</span>
                       </button>
                       <Link
-                        to="/ingredient-marketplace"
+                        to="/order-history"
                         className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors"
                         onClick={() => setIsUserMenuOpen(false)}
                       >

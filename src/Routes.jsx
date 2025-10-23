@@ -22,6 +22,7 @@ import Checkout from './pages/checkout/Checkout';
 import Payment from "./pages/Payment/Payment";
 import OrderConfirmation from "./pages/order-confirmation";
 import OrderDetails from "./pages/order-confirmation/OrderDetails";
+import OrderHistory from './pages/OrderHistory/OrderHistory';
 
 // New pages
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -50,6 +51,7 @@ const Routes = () => {
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/order-details/:orderId" element={<OrderDetails />} />
         <Route path="/feedback" element={<Feedback/>}/>
+        <Route path="/order-history" element={<OrderHistory />} />
 
         {/* Farmer dashboard routes */}
         <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
