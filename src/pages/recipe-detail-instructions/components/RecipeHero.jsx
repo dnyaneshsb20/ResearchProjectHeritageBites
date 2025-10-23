@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Image from '../../../components/AppImage';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
+import { useNavigate } from 'react-router-dom';
 
 const RecipeHero = ({ recipe, onBookmark, onShare }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const navigate = useNavigate();
 
   const handleBookmark = () => {
     setIsBookmarked(!isBookmarked);
@@ -36,6 +38,18 @@ const RecipeHero = ({ recipe, onBookmark, onShare }) => {
 
         {/* Overlay Gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+        <div className="absolute top-4 left-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate('/recipe-discovery-dashboard')}
+            className="bg-black/50 text-white hover:bg-black/70 w-10 h-10"
+            aria-label="Go Back"
+          >
+            <Icon name="ArrowLeft" size={18} />
+          </Button>
+        </div>
 
         {/* Action Buttons */}
         <div className="absolute top-4 right-4 flex space-x-2">

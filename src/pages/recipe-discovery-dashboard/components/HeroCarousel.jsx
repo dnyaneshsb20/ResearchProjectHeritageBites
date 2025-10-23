@@ -44,7 +44,7 @@ const HeroCarousel = () => {
           cookingTime: recipe.cooking_time ? `${recipe.cooking_time} mins` : 'N/A',
           difficulty: recipe.difficulty_level || 'Medium',
           badge: recipe.festival_tag || '',
-          link: `/recipe-detail-instructions/${recipe.recipe_id}`
+          link: `/recipe-detail-instructions?id=${recipe.recipe_id}`
         }));
         setFeaturedContent(slides);
       }
