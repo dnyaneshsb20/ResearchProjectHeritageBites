@@ -26,6 +26,7 @@ import OrderConfirmation from "./pages/order-confirmation";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Support from "./pages/Support";
+import Feedback from "./pages/Feedback";
 
 const Routes = () => {
   return (
@@ -46,6 +47,7 @@ const Routes = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/feedback" element={<Feedback/>}/>
 
         {/* Farmer dashboard routes */}
         <Route path="/farmer-dashboard" element={<FarmerDashboard />} />

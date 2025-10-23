@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import Button from '../../../components/ui/Button';
 import { Link } from 'react-router-dom';
+import Feedback from "pages/Feedback";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -101,6 +102,9 @@ const Footer = () => {
             © 2025 HeritageBites. Preserving India's culinary heritage.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
+            <Link to="/feedback" className="text-white/60 hover:text-golden transition-colors text-sm">
+              Feedback
+            </Link>
             <Link to="/privacy-policy" className="text-white/60 hover:text-golden transition-colors text-sm">
               Privacy Policy
             </Link>
