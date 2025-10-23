@@ -467,7 +467,7 @@ const Header = () => {
           {isAuthenticated && userProfile?.role !== "farmer" && (
             <div className="relative">
               <Button
-                variant="ghost"
+                variant="ghost2"
                 size="icon"
                 onClick={() => setIsCartOpen(true)} // ✅ open modal
               >
@@ -695,22 +695,23 @@ const Header = () => {
                 Total: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0)
                 )}
               </span>
-              <button
+              <Button
                 onClick={() => {
                   if (cartItemCount > 0) {
                     setIsCartOpen(false);
-                    navigate("/checkout");
+                    navigate("/checkout", { state: { cartItems } });
                   }
                 }}
                 disabled={cartItemCount === 0}
                 className={`px-4 py-2 rounded transition-colors
-    ${cartItemCount === 0
+  ${cartItemCount === 0
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                     : "bg-gradient-to-r from-[#f87d46] to-[#fa874f] text-white hover:opacity-90"
                   }`}
               >
                 Checkout
-              </button>
+              </Button>
+
             </div>
           </div>
         </div>

@@ -18,6 +18,9 @@ import FarmerDashboard from "./pages/farmer-dashboard/components/FarmerDashboard
 import FarmerProducts from "./pages/farmer-dashboard/components/FarmerProducts";
 import FarmerOrders from "./pages/farmer-dashboard/components/FarmerOrders";
 import FarmerProfileSection from "./pages/farmer-dashboard/components/FarmerProfileSection";
+import Checkout from './pages/checkout/Checkout';
+import Payment from "./pages/Payment/Payment";
+import OrderConfirmation from "./pages/order-confirmation";
 
 // New pages
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -40,6 +43,9 @@ const Routes = () => {
         <Route path="/recipe-discovery-dashboard" element={<RecipeDiscoveryDashboard />} />
         <Route path="/ai-suggestions" element={<AISuggestions />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
 
         {/* Farmer dashboard routes */}
         <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
