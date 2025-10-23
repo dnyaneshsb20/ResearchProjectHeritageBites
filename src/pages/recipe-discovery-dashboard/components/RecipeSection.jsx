@@ -5,6 +5,8 @@ import RecipeCard from './RecipeCard';
 
 const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showAll, setShowAll] = useState(false);
+
   const scrollContainerRef = useRef(null);
 
   const itemsPerView = {
@@ -56,16 +58,19 @@ const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) =
           </div>
         </div>
 
-        {/* {showViewAll && (
-          <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
+        {showViewAll && (
+          <button
+            onClick={() => setShowAll(true)} // replace with navigation logic
+            className="flex items-center text-primary font-medium hover:text-primary/80 transition-colors"
+          >
             View All
             <Icon name="ArrowRight" size={16} className="ml-1" />
-          </Button>
-        )} */}
+          </button>
+        )}
       </div>
       {/* Desktop Grid View */}
       <div className="hidden lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {recipes?.map((recipe) => (
+        {(showAll ? recipes : recipes.slice(0, 4))?.map((recipe) => (
           <RecipeCard key={recipe?.recipe_id || recipe?.indg_recipe_id} recipe={recipe} />
 
         ))}
@@ -101,7 +106,7 @@ const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) =
         >
           {recipes?.map((recipe, index) => (
             <RecipeCard
-                key={`recipe-${recipe?.recipe_id || index}`}
+              key={`recipe-${recipe?.recipe_id || index}`}
               recipe={recipe}
               className="flex-none w-72 sm:w-80 scroll-snap-align-start"
             />
@@ -114,10 +119,9 @@ const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) =
             <button
               key={index}
               onClick={() => scrollToIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                Math.floor(currentIndex / itemsPerView?.mobile) === index
-                  ? 'bg-primary' :'bg-muted-foreground/30'
-              }`}
+              className={`w-2 h-2 rounded-full transition-all duration-200 ${Math.floor(currentIndex / itemsPerView?.mobile) === index
+                  ? 'bg-primary' : 'bg-muted-foreground/30'
+                }`}
               aria-label={`Go to page ${index + 1}`}
             />
           ))}
