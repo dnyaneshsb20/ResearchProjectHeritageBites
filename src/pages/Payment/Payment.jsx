@@ -18,17 +18,17 @@ const Payment = () => {
 
     const [userId, setUserId] = useState(null);
 
-useEffect(() => {
-  const fetchUser = async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (data?.user) setUserId(data.user.id);
-    else toast.error("User not logged in");
-  };
-  fetchUser();
-}, []);
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data, error } = await supabase.auth.getUser();
+            if (data?.user) setUserId(data.user.id);
+            else toast.error("User not logged in");
+        };
+        fetchUser();
+    }, []);
 
     const [cardType, setCardType] = useState("");
-    
+
 
     const [cardDetails, setCardDetails] = useState({
         name: "",
@@ -78,44 +78,39 @@ useEffect(() => {
         toast.loading("Processing payment...", { id: "payment" });
 
         try {
-            // 1️⃣ Create a new order
-            const { data: order, error: orderError } = await supabase
+            // Prepare items for jsonb
+            const orderItems = cartItems.map(item => ({
+                product_id: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity || 1
+            }));
+
+            // Insert order with items in jsonb
+            const { data: createdOrder, error: orderError } = await supabase
                 .from("orders")
                 .insert([
-{ user_id: userId, total_amount: totalAmount, payment_method: selectedMethod }
-
-
+                    {
+                        user_id: userId,
+                        total_amount: totalAmount,
+                        payment_method: selectedMethod,
+                        items: orderItems
+                    }
                 ])
                 .select()
                 .single();
 
-            if (orderError || !order) throw orderError || new Error("Failed to create order");
+            if (orderError || !createdOrder) throw orderError || new Error("Failed to create order");
 
-            const orderId = order.order_id;
+            // Clear cart
+            setCartItems([]);
 
-            // 2️⃣ Insert order items
-            const itemsToInsert = cartItems.map(item => ({
-                order_id: orderId,
-                product_id: item.id,
-                quantity: item.quantity || 1,
-                price: item.price
-            }));
-
-            const { error: itemsError } = await supabase
-                .from("order_items")
-                .insert(itemsToInsert);
-
-            if (itemsError) throw itemsError;
-
-            // ✅ Payment simulated / order saved
+            // Show success
             toast.dismiss("payment");
             toast.success("Order placed successfully 🎉");
 
-            // 3️⃣ Clear cart
-            setCartItems([]);
-
-            // 4️⃣ Navigate to order confirmation
-            navigate("/order-confirmation", { state: { order } });
+            // Navigate to confirmation
+            navigate("/order-confirmation", { state: { order: createdOrder } });
 
         } catch (err) {
             console.error("Order placement error:", err);
@@ -123,6 +118,7 @@ useEffect(() => {
             toast.error("Failed to place order. Please try again.");
         }
     };
+
 
     return (
         <div className="min-h-screen bg-background">
