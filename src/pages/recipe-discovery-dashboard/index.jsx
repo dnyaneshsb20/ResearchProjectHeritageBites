@@ -119,7 +119,7 @@ const RecipeDiscoveryDashboard = () => {
     ];
 
     setFilterCategories([
-      { id: 'meal', label: 'Meal Type', options: mealOptions },
+      // { id: 'meal', label: 'Meal Type', options: mealOptions },
       { id: 'dietary', label: 'Dietary', options: dietaryOptions },
       { id: 'festival', label: 'Festival', options: festivalOptions },
       { id: 'difficulty', label: 'Difficulty', options: difficultyOptions },
