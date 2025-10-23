@@ -29,6 +29,7 @@ const AISuggestions = () => {
   const [showAttachMenu, setShowAttachMenu] = useState(false);
   const isChatEmpty = messages.length === 0;
   const [isLoading, setIsLoading] = useState(false);
+  const [aiName, setAiName] = useState("BiteBot");
 
   const sentences = [
     "What are you working on?",
@@ -69,7 +70,7 @@ const AISuggestions = () => {
         ...prev,
         {
           role: "ai",
-          text: "Hello! Tell me what ingredients you have, and I’ll suggest a dish for you.",
+          text: `Hello! Tell me what ingredients you have, and I’ll suggest a dish for you. I’m ${aiName}.`,
         },
       ]);
       setIsLoading(false);
@@ -159,7 +160,7 @@ const AISuggestions = () => {
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-        style={{ backgroundImage: `url(${heroFood})` }}
+        style={{ backgroundImage: `url(${heroFood})`, filter: "blur(5px)" }}
       />
 
       {/* Hamburger Icon */}
@@ -190,7 +191,7 @@ const AISuggestions = () => {
               HeritageBites
             </span>
             <h1 className="text-sm font-semibold text-white">
-              AI Recipe Assistant
+              {aiName} Assistant
             </h1>
           </div>
         </div>
@@ -222,7 +223,7 @@ const AISuggestions = () => {
             <Icon name="Sparkles" size={20} className="text-white" />
           </div>
           <h1 className="text-lg font-semibold whitespace-nowrap text-white">
-            AI Recipe Assistant
+            {aiName} Assistant
           </h1>
         </header>
 
@@ -286,7 +287,7 @@ const AISuggestions = () => {
                     transition={{ repeat: Infinity, duration: 1 }}
                     className="px-4 py-2 rounded-2xl text-base shadow break-words inline-block max-w-max bg-[#FFF7E6] border border-[#F9BC06]"
                   >
-                    AI is thinking...
+                    {aiName} is thinking...
                   </motion.div>
                 </div>
               )}
