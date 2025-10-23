@@ -42,6 +42,8 @@ const Header = () => {
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const suggestionsRef = useRef(null);
   const debounceRef = useRef(null);
+  const isDiscoverPage = location.pathname.includes("/recipe-discovery-dashboard");
+  const isMarketplacePage = location.pathname.includes("/ingredient-marketplace");
 
   // 👇 Add this just before defining navigationItems
   const userRole = userProfile?.role || "user";
@@ -76,13 +78,19 @@ const Header = () => {
   };
 
   const handleSearchSubmit = (e) => {
-    e?.preventDefault();
-    const q = (searchQuery || '').trim();
+    e.preventDefault();
+    const q = searchQuery.trim();
     if (!q) return;
 
-    // Navigate to ingredient marketplace with query param
-    navigate(`/ingredient-marketplace?q=${encodeURIComponent(q)}`);
-    // Keep search expanded or collapse as you prefer:
+    if (isDiscoverPage) {
+      navigate(`/recipe-discovery-dashboard?q=${encodeURIComponent(q)}`);
+    } else if (isMarketplacePage) {
+      navigate(`/ingredient-marketplace?q=${encodeURIComponent(q)}`);
+    } else {
+      // fallback
+      navigate(`/ingredient-marketplace?q=${encodeURIComponent(q)}`);
+    }
+
     setIsSearchExpanded(false);
   };
 
@@ -178,6 +186,11 @@ const Header = () => {
     console.log("Current role:", setRole);
   }, []);
 
+  useEffect(() => {
+    setSuggestions([]);
+    setIsSuggestionsOpen(false);
+  }, [isDiscoverPage, isMarketplacePage]);
+
   const getInitials = (name) => {
     if (!name) return "U";
     const words = name.trim().split(" ");
@@ -196,60 +209,75 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (!searchQuery || searchQuery.trim().length < 2) {
+    // If search is empty, reset suggestions
+    if (!searchQuery || searchQuery.trim().length === 0) {
       setSuggestions([]);
       setIsSuggestionsOpen(false);
       return;
     }
 
-    // Clear previous timer
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
+    // Debounce to avoid too many calls while typing
     debounceRef.current = setTimeout(async () => {
       try {
-        // Query supabase for quick matches (products and ingredients)
-        const q = `%${searchQuery.trim()}%`;
-        // Search products table (adjust fields as needed)
-        const { data: prodData } = await supabase
-          .from('products')
-          .select('product_id, name, image_url')
-          .ilike('name', q)
-          .limit(5);
+        const q = `%${searchQuery.trim()}%`; // partial match
+        let results = [];
 
-        // Search ingredients as fallback
-        const { data: ingData } = await supabase
-          .from('ingredients')
-          .select('ingredient_id, name')
-          .ilike('name', q)
-          .limit(5);
+        if (isDiscoverPage) {
+          // Search recipes
+          const { data: recipeData } = await supabase
+            .from('recipes')
+            .select('recipe_id, name, image_url')
+            .ilike('name', q)
+            .limit(5);
 
-        const prodResults = (prodData || []).map(p => ({
-          type: 'product',
-          id: p.product_id,
-          name: p.name,
-          image: p.image_url
-        }));
+          results = (recipeData || []).map(r => ({
+            type: 'recipe',
+            id: r.recipe_id,
+            name: r.name,
+            image: r.image_url
+          }));
+        } else if (isMarketplacePage) {
+          // Search marketplace products
+          const { data: prodData } = await supabase
+            .from('products')
+            .select('product_id, name, image_url')
+            .ilike('name', q)
+            .limit(5);
 
-        const ingResults = (ingData || []).map(i => ({
-          type: 'ingredient',
-          id: i.ingredient_id,
-          name: i.name
-        }));
+          const { data: ingData } = await supabase
+            .from('ingredients')
+            .select('ingredient_id, name')
+            .ilike('name', q)
+            .limit(5);
 
-        const merged = [...prodResults, ...ingResults].slice(0, 6);
-        setSuggestions(merged);
-        setIsSuggestionsOpen(merged.length > 0);
+          results = [
+            ...(prodData || []).map(p => ({
+              type: 'product',
+              id: p.product_id,
+              name: p.name,
+              image: p.image_url
+            })),
+            ...(ingData || []).map(i => ({
+              type: 'ingredient',
+              id: i.ingredient_id,
+              name: i.name
+            }))
+          ];
+        }
+
+        setSuggestions(results);
+        setIsSuggestionsOpen(results.length > 0);
       } catch (err) {
         console.error('Suggestion fetch error', err);
         setSuggestions([]);
         setIsSuggestionsOpen(false);
       }
-    }, 350); // 350ms debounce
+    }, 150); // smaller debounce for instant feedback
 
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [searchQuery]);
+    return () => clearTimeout(debounceRef.current);
+  }, [searchQuery, isDiscoverPage, isMarketplacePage]);
 
   const handleClickOutside = (event) => {
     if (userMenuRef?.current && !userMenuRef?.current?.contains(event?.target)) {
@@ -381,39 +409,56 @@ const Header = () => {
             {isSuggestionsOpen && (
               <div
                 ref={suggestionsRef}
-                className="absolute mt-10 w-80 bg-popover border border-border rounded shadow-lg z-50"
+                className="absolute mt-2 w-80 bg-popover border border-border rounded shadow-lg z-50"
               >
-                <ul>
-                  {suggestions.map((sug, idx) => (
-                    <li
-                      key={sug.id + '-' + idx}
-                      className="px-3 py-2 hover:bg-muted cursor-pointer flex items-center gap-2"
-                      onMouseDown={(e) => {
-                        // Use onMouseDown so the click registers before input blur
-                        e.preventDefault();
-                        // if product, navigate to product page; if ingredient, navigate to marketplace with ingredient filter
-                        if (sug.type === 'product') {
-                          navigate(`/product/${sug.id}`);
-                        } else {
-                          navigate(`/ingredient-marketplace?q=${encodeURIComponent(sug.name)}`);
-                        }
-                        setIsSuggestionsOpen(false);
-                      }}
-                    >
-                      {sug.image ? (
-                        <img src={sug.image} alt={sug.name} className="w-8 h-8 rounded object-cover" />
-                      ) : (
-                        <div className="w-8 h-8 bg-muted rounded flex items-center justify-center text-xs">
-                          {sug.name?.slice(0, 2).toUpperCase()}
+                {suggestions.length > 0 ? (
+                  <ul>
+                    {suggestions.map((sug, idx) => (
+                      <li
+                        key={sug.id + '-' + idx}
+                        className="px-3 py-2 hover:bg-muted cursor-pointer flex items-center gap-2"
+                        onMouseDown={(e) => {
+                          // Prevent input blur before navigation
+                          e.preventDefault();
+
+                          // Navigate based on type
+                          if (sug.type === 'product') {
+                            navigate(`/product/${sug.id}`);
+                          } else if (sug.type === 'ingredient') {
+                            navigate(`/ingredient-marketplace?q=${encodeURIComponent(sug.name)}`);
+                          } else if (sug.type === 'recipe') {
+                            navigate(`/recipe/${sug.id}`);
+                          }
+
+                          setIsSuggestionsOpen(false);
+                        }}
+                      >
+                        {sug.image ? (
+                          <img
+                            src={sug.image}
+                            alt={sug.name}
+                            className="w-8 h-8 rounded object-cover"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 bg-muted rounded flex items-center justify-center text-xs">
+                            {sug.name?.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
+
+                        <div className="text-sm">
+                          <div className="font-medium text-foreground">{sug.name}</div>
+                          <div className="text-xs text-muted-foreground capitalize">
+                            {sug.type}
+                          </div>
                         </div>
-                      )}
-                      <div className="text-sm">
-                        <div className="font-medium text-foreground">{sug.name}</div>
-                        <div className="text-xs text-muted-foreground">{sug.type === 'product' ? 'Product' : 'Ingredient'}</div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="px-3 py-2 text-sm text-muted-foreground text-center">
+                    No results found in this section.
+                  </div>
+                )}
               </div>
             )}
           </div>
