@@ -65,7 +65,7 @@ const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) =
       </div>
       {/* Desktop Grid View */}
       <div className="hidden lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {recipes?.slice(0, 8)?.map((recipe) => (
+        {recipes?.map((recipe) => (
           <RecipeCard key={recipe?.recipe_id || recipe?.indg_recipe_id} recipe={recipe} />
 
         ))}

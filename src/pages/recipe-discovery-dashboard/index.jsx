@@ -9,13 +9,30 @@ import Icon from '../../components/AppIcon';
 import Footer from '../dashboard/components/Footer';
 import { supabase } from "../../supabaseClient";
 
+const groupByMealType = (recipes) => {
+  const groups = {};
+  recipes.forEach(recipe => {
+    const meal = recipe.tags?.[0] || recipe.meal_type || 'Other';
+    if (!groups[meal]) groups[meal] = [];
+    groups[meal].push(recipe);
+  });
+  return groups;
+};
+
+
 const RecipeDiscoveryDashboard = () => {
   const [activeFilters, setActiveFilters] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
   const [recipes, setRecipes] = useState([]);
+
+  const [groupedRecipes, setGroupedRecipes] = useState({});
+
   const [loading, setLoading] = useState(true);
   const [filterCategories, setFilterCategories] = useState([]);
+  const mealOrder = ["Breakfast", "Lunch", "Dinner", "Snacks", "Dessert"];
+
+
 
   useEffect(() => {
     fetchRecipes();
@@ -64,6 +81,8 @@ const RecipeDiscoveryDashboard = () => {
 
     const uniqueRecipes = [...new Map(formatted.map(item => [item.id, item])).values()];
     setRecipes(uniqueRecipes);
+    const groupedRecipes = groupByMealType(uniqueRecipes);
+    setGroupedRecipes(groupedRecipes);
     setLoading(false);
   };
 
@@ -211,6 +230,8 @@ const RecipeDiscoveryDashboard = () => {
 
     const uniqueRecipes = [...new Map(formatted.map(item => [item.id, item])).values()];
     setRecipes(uniqueRecipes);
+    const grouped = groupByMealType(uniqueRecipes);
+    setGroupedRecipes(grouped);
     setLoading(false);
   };
 
@@ -295,9 +316,30 @@ const RecipeDiscoveryDashboard = () => {
             {loading ? (
               <p className="text-center text-muted-foreground py-12">Loading recipes...</p>
             ) : (
-              <RecipeSection recipes={recipes} />
+              <>
+                {Object.entries(groupedRecipes)
+                  // Sort by our preferred meal order
+                  .sort(([a], [b]) => mealOrder.indexOf(a) - mealOrder.indexOf(b))
+                  .map(([mealType, mealRecipes]) => (
+                    <RecipeSection
+                      key={mealType}
+                      title={`${mealType} Recipes`}
+                      subtitle={`Explore delicious ${mealType.toLowerCase()} ideas`}
+                      icon={
+                        mealType.toLowerCase().includes("breakfast") ? "Coffee" :
+                          mealType.toLowerCase().includes("lunch") ? "Utensils" :
+                            mealType.toLowerCase().includes("dinner") ? "Moon" :
+                              mealType.toLowerCase().includes("snack") ? "Cookie" :
+                                "ChefHat"
+                      }
+                      recipes={mealRecipes}
+                    />
+                  ))}
+
+              </>
             )}
           </div>
+
         </div>
       </main>
       <FloatingActionButton />
