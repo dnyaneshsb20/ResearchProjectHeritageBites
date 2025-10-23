@@ -1,6 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FiMessageSquare, FiBook, FiSettings, FiSend, FiUser, FiPlus, FiMic, FiFileText, FiImage, FiVideo, FiFile } from "react-icons/fi";
+import {
+  FiMessageSquare,
+  FiBook,
+  FiSettings,
+  FiSend,
+  FiUser,
+  FiPlus,
+  FiMic,
+  FiFileText,
+  FiImage,
+  FiVideo,
+  FiFile,
+  FiMenu,
+} from "react-icons/fi";
 import Button from "../../components/ui/Button";
+import heroFood from "../../assets/hero-food.jpg";
 import Input from "../../components/ui/Input";
 import Icon from "../../components/AppIcon";
 import { motion, useAnimation } from "framer-motion";
@@ -23,7 +37,7 @@ const AISuggestions = () => {
     "Where should we begin?",
     "How can I help, User?",
     "Hey, User. Ready to dive in?",
-    "Good to see you, User."
+    "Good to see you, User.",
   ];
 
   const [welcomeSentence, setWelcomeSentence] = useState(
@@ -51,7 +65,13 @@ const AISuggestions = () => {
 
     const greetings = ["hi", "hello", "hey", "hii"];
     if (greetings.includes(text.toLowerCase())) {
-      setMessages((prev) => [...prev, { role: "ai", text: "Hello! Tell me what ingredients you have, and I’ll suggest a dish for you." }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          text: "Hello! Tell me what ingredients you have, and I’ll suggest a dish for you.",
+        },
+      ]);
       setIsLoading(false);
       return;
     }
@@ -61,14 +81,15 @@ const AISuggestions = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
           messages: [
             { role: "system", content: "You are a helpful Indian recipe assistant." },
             {
-              role: "user", content: `Suggest a recipe for: ${text}. Return it strictly in JSON format: { "name": "", "ingredients": [""], "steps": [""] }`
+              role: "user",
+              content: `Suggest a recipe for: ${text}. Return it strictly in JSON format: { "name": "", "ingredients": [""], "steps": [""] }`,
             },
           ],
           max_tokens: 600,
@@ -92,11 +113,15 @@ const AISuggestions = () => {
           <h2 className="font-semibold text-lg">{recipe.name}</h2>
           <h3 className="mt-2 font-medium">Ingredients:</h3>
           <ul className="list-disc ml-5">
-            {recipe.ingredients.map((i, idx) => <li key={idx}>{i}</li>)}
+            {recipe.ingredients.map((i, idx) => (
+              <li key={idx}>{i}</li>
+            ))}
           </ul>
           <h3 className="mt-2 font-medium">Steps:</h3>
           <ol className="list-decimal ml-5">
-            {recipe.steps.map((s, idx) => <li key={idx}>{s}</li>)}
+            {recipe.steps.map((s, idx) => (
+              <li key={idx}>{s}</li>
+            ))}
           </ol>
         </div>
       );
@@ -105,7 +130,10 @@ const AISuggestions = () => {
       setIsLoading(false);
     } catch (error) {
       console.error("Error:", error);
-      setMessages((prev) => [...prev, { role: "ai", text: "⚠️ Sorry, something went wrong. Please try again." }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", text: "⚠️ Sorry, something went wrong. Please try again." },
+      ]);
       setIsLoading(false);
     }
   };
@@ -127,79 +155,121 @@ const AISuggestions = () => {
   }, []);
 
   return (
-    <div className="flex h-screen bg-background text-foreground">
+    <div className="flex h-screen bg-background text-foreground relative">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+        style={{ backgroundImage: `url(${heroFood})` }}
+      />
+
+      {/* Hamburger Icon */}
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="absolute left-3 top-4 w-8 h-8 flex flex-col items-center justify-center rounded-md bg-primary text-white shadow-md hover:bg-primary/90 transition-all z-50"
+        title={isSidebarOpen ? 'Close Sidebar' : 'Open Sidebar'}
+      >
+        <div className="space-y-[4px]">
+          <span className="block w-4 h-[2px] bg-white"></span>
+          <span className="block w-4 h-[2px] bg-white"></span>
+          <span className="block w-4 h-[2px] bg-white"></span>
+        </div>
+      </button>
+
       {/* Sidebar */}
-      <aside className={`relative ${isSidebarOpen ? "w-64" : "w-20"} bg-popover border-r border-border flex flex-col transition-all duration-300 ease-in-out`}>
-        {/* Sidebar content unchanged */}
-        <div className="flex items-center gap-3 p-4 border-b border-border">
+      <aside
+        className={`mt-12 fixed top-0 left-0 h-full bg-popover/90 border-r border-none flex flex-col transform transition-transform duration-500 ease-in-out z-40
+        ${isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-full w-64"}`}
+      >
+        {/* Sidebar Header */}
+        <div className="flex items-center gap-3 p-4 border-b border-none">
           <div className="flex items-center justify-center w-11 h-11 bg-primary rounded-lg">
             <span className="text-white text-xl font-bold">HB</span>
           </div>
-          {isSidebarOpen && (
-            <div className="flex flex-col">
-              <span className="text-xl font-heading font-semibold text-foreground">HeritageBites</span>
-              <h1 className="text-sm font-semibold text-foreground/80">AI Recipe Assistant</h1>
-            </div>
-          )}
+          <div className="flex flex-col">
+            <span className="text-xl font-heading font-semibold text-white">
+              HeritageBites
+            </span>
+            <h1 className="text-sm font-semibold text-white">
+              AI Recipe Assistant
+            </h1>
+          </div>
         </div>
 
-        <button
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="absolute -right-3 top-16 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center shadow-md hover:bg-primary/90 transition-all"
-          title={isSidebarOpen ? "Collapse" : "Expand"}
-        >
-          {isSidebarOpen ? "<" : ">"}
-        </button>
-
-        <div className="flex flex-col flex-1 overflow-y-auto p-3 space-y-2">
-          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-muted transition">
+        {/* Sidebar Menu */}
+        <div className="flex flex-col flex-1 overflow-y-auto p-3 space-y-2 text-white">
+          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-primary transition">
             <FiMessageSquare className="text-lg" />
-            {isSidebarOpen && <span className="font-medium">Start New Chat</span>}
+            <span className="font-medium">Start New Chat</span>
           </button>
-          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-muted transition">
+          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-primary transition">
             <FiBook className="text-lg" />
-            {isSidebarOpen && <span className="font-medium">My Saved Recipes</span>}
+            <span className="font-medium">My Saved Recipes</span>
           </button>
-          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-muted transition">
+          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-primary transition">
             <FiSettings className="text-lg" />
-            {isSidebarOpen && <span className="font-medium">Settings</span>}
+            <span className="font-medium">Settings</span>
           </button>
         </div>
       </aside>
 
       {/* Main Chat Area */}
-      <div className={`flex flex-col flex-1 transition-all duration-500 ${isChatEmpty ? "justify-center items-center" : ""}`}>
-        <header className="p-4 border-b border-border bg-popover flex items-center gap-3">
-          <Icon name="Sparkles" size={20} />
-          <h1 className="text-lg font-semibold">AI Recipe Assistant</h1>
+      <div
+        className={`flex flex-col flex-1 transition-all duration-500 relative ${isChatEmpty ? "justify-center items-center" : ""
+          }`}
+      >
+        <header className="p-4 pl-16 border-b border-none bg-popover/90 flex items-center gap-3 relative transition-all duration-500">
+          <div className="w-8 h-8 flex items-center justify-center bg-yellow-500 rounded-full">
+            <Icon name="Sparkles" size={20} className="text-white" />
+          </div>
+          <h1 className="text-lg font-semibold whitespace-nowrap text-white">
+            AI Recipe Assistant
+          </h1>
         </header>
 
         {!isChatEmpty && (
-          <main className="flex-1 overflow-y-auto px-4 py-6 bg-[#FFFDF9]">
+          <main className="flex-1 overflow-y-auto px-4 py-6 border-none relative z-10">
             <div className="max-w-4xl mx-auto space-y-4">
               {messages.map((m, i) => (
-                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} items-end gap-2`}>
+                <div
+                  key={i}
+                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"
+                    } items-end gap-2`}
+                >
                   {m.role === "ai" ? (
                     <>
-                      <div className="flex-shrink-0 mt-[2px]">
-                        <Icon name="Sparkles" size={20} className="text-yellow-500" />
+                      <div className="w-8 h-8 flex items-center justify-center bg-yellow-500 rounded-full flex-shrink-0 mt-[2px]">
+                        <Icon name="Sparkles" size={20} className="text-white" />
                       </div>
-                      <div className="px-4 py-2 rounded-2xl text-base shadow break-words inline-block max-w-max" style={{ background: "#FFF7E6", color: "#000", border: "1px solid #F9BC06" }}>
+                      <div
+                        className="px-4 py-2 rounded-2xl text-base shadow break-words inline-block max-w-2xl"
+                        style={{
+                          background: "#FFF7E6",
+                          color: "#000",
+                          border: "1px solid #F9BC06",
+                        }}
+                      >
                         {m.text}
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="px-4 py-2 rounded-2xl text-base shadow break-words inline-block max-w-max" style={{ background: "linear-gradient(to right, #f87d46, #fa874f)", color: "#fff" }}>
+                      <div
+                        className="px-4 py-2 rounded-2xl text-base shadow break-words inline-block max-w-3xl"
+                        style={{
+                          background: "linear-gradient(to right, #f87d46, #fa874f)",
+                          color: "#fff",
+                        }}
+                      >
                         {m.text}
                       </div>
-                      <div className="flex-shrink-0 mt-[2px]"><FiUser className="text-primary text-xl" /></div>
+                      <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-[#f87d46] to-[#fa874f] rounded-full flex-shrink-0 mt-[2px]">
+                        <FiUser className="text-white text-xl" />
+                      </div>
                     </>
                   )}
                 </div>
               ))}
 
-              {/* Loading star + blinking text */}
               {isLoading && (
                 <div className="flex justify-start items-center gap-2 mt-2">
                   <motion.div
@@ -207,7 +277,9 @@ const AISuggestions = () => {
                     transition={{ repeat: Infinity, duration: 0.6 }}
                     className="flex-shrink-0 mt-[2px]"
                   >
-                    <Icon name="Sparkles" size={20} className="text-yellow-500" />
+                    <div className="w-8 h-8 flex items-center justify-center bg-yellow-500 rounded-full">
+                      <Icon name="Sparkles" size={20} className="text-white" />
+                    </div>
                   </motion.div>
                   <motion.div
                     animate={{ opacity: [0.2, 1, 0.2] }}
@@ -224,26 +296,33 @@ const AISuggestions = () => {
           </main>
         )}
 
-        {/* Input Bar and rest of the code remains unchanged */}
+        {/* Input Bar */}
         <form
           onSubmit={handleAskAI}
-          className={`p-4 border-t border-border bg-popover transition-all duration-500 ${isChatEmpty ? "border-none bg-transparent flex flex-col justify-center items-center h-full text-center" : ""}`}
+          className={`p-4 border-t border-none bg-popover/90 transition-all duration-500 ${isChatEmpty
+            ? "border-none bg-transparent flex flex-col justify-center items-center h-full text-center"
+            : ""
+            }`}
         >
           {isChatEmpty && (
-            <div className="mb-4">
-              <h1 className="text-2xl font-semibold text-foreground/90">
+            <div className="mb-4 -mt-36">
+              <h1 className="text-3xl font-semibold  text-white">
                 {welcomeSentence || "What can I help with?"}
               </h1>
             </div>
           )}
 
-          <div className={`flex gap-2 items-center justify-center transition-all duration-500 ${isChatEmpty ? "w-full max-w-3xl" : "max-w-4xl mx-auto"}`}>
+          <div
+            className={`flex gap-2 items-center justify-center transition-all duration-500 ${isChatEmpty ? "w-full max-w-3xl" : "max-w-4xl mx-auto"
+              }`}
+          >
             {/* Input Section */}
             <div ref={attachRef} className="relative flex-1 w-full max-w-[800px]">
               <button
                 type="button"
                 onClick={() => setShowAttachMenu(!showAttachMenu)}
-                className={`absolute left-2 top-[30%] text-xl text-primary z-10 transition-transform duration-300 ${showAttachMenu ? "rotate-45" : "rotate-0"}`}
+                className={`absolute left-2 top-[30%] text-xl text-primary z-10 transition-transform duration-300 ${showAttachMenu ? "rotate-45" : "rotate-0"
+                  }`}
               >
                 <FiPlus />
               </button>
@@ -288,13 +367,13 @@ const AISuggestions = () => {
             <Button
               type="submit"
               variant="hero"
-              className="h-12 px-6 rounded-xl bg-gradient-to-r from-[#f87d46] to-[#fa874f] text-[#fdfbff] flex items-center gap-2 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-12 px-6 rounded-xl bg-gradient-to-r from-[#f87d46] to-[#fa874f] text-[#fdfbff] flex items-center justify-center gap-2 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed w-auto md:w-auto"
               disabled={!query.trim()}
             >
               <motion.div animate={controls} className="flex items-center">
                 <FiSend className="text-lg" />
               </motion.div>
-              <span>Send Recipe</span>
+              <span className="hidden md:inline">Send Recipe</span>
             </Button>
           </div>
         </form>
