@@ -1,10 +1,22 @@
 import React from "react";
 import Header from "../../components/ui/Header";
 import { CheckCircle2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+
+
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { order } = location.state || {};
+  if (!order) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Order not found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -30,11 +42,11 @@ const OrderConfirmation = () => {
           <h2 className="font-semibold text-lg mb-3">Order Summary</h2>
           <div className="flex justify-between text-sm mb-2">
             <span>Order ID:</span>
-            <span>#HB{Math.floor(Math.random() * 100000)}</span>
+            <span>#{order.order_id}</span>
           </div>
           <div className="flex justify-between text-sm mb-2">
             <span>Payment Method:</span>
-            <span>Online Payment</span>
+            <span>{order.payment_method}</span>
           </div>
           <div className="flex justify-between text-sm mb-2">
             <span>Estimated Delivery:</span>
@@ -55,6 +67,12 @@ const OrderConfirmation = () => {
             className="px-6 py-3 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition"
           >
             Explore More Recipes
+          </button>
+          <button
+            onClick={() => navigate(`/order-details/${order.order_id}`, { state: { order } })}
+            className="px-6 py-3 bg-primary text-white rounded-lg shadow hover:opacity-90 transition"
+          >
+            View Order Details
           </button>
         </div>
       </main>

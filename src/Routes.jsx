@@ -21,6 +21,7 @@ import FarmerProfileSection from "./pages/farmer-dashboard/components/FarmerProf
 import Checkout from './pages/checkout/Checkout';
 import Payment from "./pages/Payment/Payment";
 import OrderConfirmation from "./pages/order-confirmation";
+import OrderDetails from "./pages/order-confirmation/OrderDetails";
 
 // New pages
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -47,6 +48,7 @@ const Routes = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/order-details/:orderId" element={<OrderDetails />} />
         <Route path="/feedback" element={<Feedback/>}/>
 
         {/* Farmer dashboard routes */}

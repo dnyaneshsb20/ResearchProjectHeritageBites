@@ -1,18 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import Header from "../../components/ui/Header";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { CreditCard, Smartphone, Wallet, QrCode } from "lucide-react";
 import toast from "react-hot-toast";
+import { supabase } from "../../supabaseClient";
+import { useAuth } from "../../context/AuthContext";
+
 
 const Payment = () => {
     const { cartItems, setCartItems } = useCart();
     const navigate = useNavigate();
-
     const [selectedMethod, setSelectedMethod] = useState(null);
     const [upiOption, setUpiOption] = useState(null);
     const [upiId, setUpiId] = useState("");
+
+    const [userId, setUserId] = useState(null);
+
+useEffect(() => {
+  const fetchUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (data?.user) setUserId(data.user.id);
+    else toast.error("User not logged in");
+  };
+  fetchUser();
+}, []);
+
     const [cardType, setCardType] = useState("");
+    
+
     const [cardDetails, setCardDetails] = useState({
         name: "",
         number: "",
@@ -25,7 +42,29 @@ const Payment = () => {
         0
     );
 
-    const handlePayment = () => {
+    // const handlePayment = () => {
+    //     if (selectedMethod === "upi") {
+    //         if (!upiOption) return toast.error("Please select a UPI option");
+    //         if (upiOption === "id" && !upiId.trim()) return toast.error("Please enter your UPI ID");
+    //     } else if (selectedMethod === "card") {
+    //         if (!cardType) return toast.error("Please select a card type");
+    //         const { name, number, expiry, cvv } = cardDetails;
+    //         if (!name || !number || !expiry || !cvv)
+    //             return toast.error("Please fill all card details");
+    //     }
+
+    //     toast.loading("Processing payment...", { id: "payment" });
+
+    //     setTimeout(() => {
+    //         toast.dismiss("payment");
+    //         toast.success("Order placed successfully 🎉");
+    //         setCartItems([]);
+    //         navigate("/order-confirmation");
+    //     }, 2000);
+    // };
+    const handlePayment = async () => {
+        if (!selectedMethod) return toast.error("Please select a payment method");
+
         if (selectedMethod === "upi") {
             if (!upiOption) return toast.error("Please select a UPI option");
             if (upiOption === "id" && !upiId.trim()) return toast.error("Please enter your UPI ID");
@@ -38,12 +77,51 @@ const Payment = () => {
 
         toast.loading("Processing payment...", { id: "payment" });
 
-        setTimeout(() => {
+        try {
+            // 1️⃣ Create a new order
+            const { data: order, error: orderError } = await supabase
+                .from("orders")
+                .insert([
+{ user_id: userId, total_amount: totalAmount, payment_method: selectedMethod }
+
+
+                ])
+                .select()
+                .single();
+
+            if (orderError || !order) throw orderError || new Error("Failed to create order");
+
+            const orderId = order.order_id;
+
+            // 2️⃣ Insert order items
+            const itemsToInsert = cartItems.map(item => ({
+                order_id: orderId,
+                product_id: item.id,
+                quantity: item.quantity || 1,
+                price: item.price
+            }));
+
+            const { error: itemsError } = await supabase
+                .from("order_items")
+                .insert(itemsToInsert);
+
+            if (itemsError) throw itemsError;
+
+            // ✅ Payment simulated / order saved
             toast.dismiss("payment");
             toast.success("Order placed successfully 🎉");
+
+            // 3️⃣ Clear cart
             setCartItems([]);
-            navigate("/order-confirmation");
-        }, 2000);
+
+            // 4️⃣ Navigate to order confirmation
+            navigate("/order-confirmation", { state: { order } });
+
+        } catch (err) {
+            console.error("Order placement error:", err);
+            toast.dismiss("payment");
+            toast.error("Failed to place order. Please try again.");
+        }
     };
 
     return (
@@ -249,11 +327,12 @@ const Payment = () => {
                 </div>
 
                 {/* Pay / Place Order Button */}
+                {/* Pay / Place Order Button */}
                 <button
                     onClick={handlePayment}
                     disabled={!selectedMethod}
                     className={`mt-8 w-full text-white px-4 py-3 rounded-lg text-lg font-medium transition 
-            ${selectedMethod === "cod"
+        ${selectedMethod === "cod"
                             ? "bg-gradient-to-r from-[#4caf50] to-[#66bb6a] hover:opacity-90"
                             : "bg-gradient-to-r from-[#f87d46] to-[#fa874f] hover:opacity-90"
                         } ${!selectedMethod ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -262,6 +341,7 @@ const Payment = () => {
                         ? "Place Order (Cash on Delivery)"
                         : `Pay ₹${totalAmount} & Place Order`}
                 </button>
+
             </main>
         </div>
     );
