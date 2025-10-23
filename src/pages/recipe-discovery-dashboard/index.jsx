@@ -146,43 +146,49 @@ const RecipeDiscoveryDashboard = () => {
       groupedFilters[map.category].push(map);
     });
 
+    // Start Supabase query
     let query = supabase
       .from("recipes")
       .select(`
-        recipe_id,
-        name,
-        description,
-        image_url,
-        meal_type,
-        dietary_type,
-        festival_tag,
-        difficulty_level,
-        cooking_time,
-        prep_time,
-        created_at,
-        states ( state_name, region )
-      `)
+      recipe_id,
+      name,
+      description,
+      image_url,
+      meal_type,
+      dietary_type,
+      festival_tag,
+      difficulty_level,
+      cooking_time,
+      prep_time,
+      created_at,
+      states ( state_name, region )
+    `)
       .order("created_at", { ascending: false });
 
     // Apply filters: OR within category, AND across categories
     Object.values(groupedFilters).forEach(filterGroup => {
-      query = query.or(
-        filterGroup.map(f => {
-          // Fix for Time filter
-          if (f.range) {
-            const [min, max] = f.range;
-            if (min != null && max != null) return `(cooking_time.gte.${min},cooking_time.lte.${max})`;
-            if (min != null) return `(cooking_time.gte.${min})`;
-            if (max != null) return `(cooking_time.lte.${max})`;
-          }
-          // Difficulty exact match
-          if (f.category === 'difficulty') return `${f.column}.eq.${f.value}`;
-          // Other filters
-          return `${f.column}.ilike.%${f.value}%`;
-        }).join(',')
-      );
+      const timeFilters = filterGroup.filter(f => f.range);          // Time filters
+      const normalFilters = filterGroup.filter(f => !f.range);       // Other filters
+
+      // Apply time filters using .gte() and .lte()
+      timeFilters.forEach(f => {
+        const [min, max] = f.range;
+        if (min != null) query = query.gte('cooking_time', min);
+        if (max != null) query = query.lte('cooking_time', max);
+      });
+
+      // Apply normal filters using OR within category
+      if (normalFilters.length) {
+        query = query.or(
+          normalFilters.map(f => {
+            if (f.category === 'difficulty') return `${f.column}.eq.${f.value}`;
+            return `${f.column}.ilike.%${f.value}%`;
+          }).join(',')
+        );
+      }
     });
 
+    // Fetch filtered recipes
     const { data, error } = await query;
     if (error) {
       console.error("Error fetching filtered recipes:", error);
