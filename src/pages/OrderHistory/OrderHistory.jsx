@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import Header from "../../components/ui/Header";
 import Button from "../../components/ui/Button";
+import { useNavigate } from "react-router-dom";
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -10,6 +11,7 @@ const OrderHistory = () => {
   const [user, setUser] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserAndOrders = async () => {
@@ -99,7 +101,7 @@ const OrderHistory = () => {
             <p className="text-sm text-muted-foreground mb-4">
               Book your first order now!
             </p>
-            <Button onClick={() => (window.location.href = "/")}>
+            <Button onClick={() => navigate("/ingredient-marketplace")}>
               Book Now
             </Button>
           </div>
@@ -126,7 +128,11 @@ const OrderHistory = () => {
                       {order.order_id.slice(0, 8)}
                     </td>
                     <td className="px-4 py-2">
-                      {new Date(order.created_at).toLocaleDateString()}
+                      {new Date(order.created_at).toLocaleString("en-IN", {
+                        timeZone: "Asia/Kolkata",
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                      })}
                     </td>
                     <td className="px-4 py-2">{order.items?.length || 0}</td>
                     <td className="px-4 py-2">
@@ -173,7 +179,11 @@ const OrderHistory = () => {
                 </p>
                 <p>
                   <span className="font-medium">Date:</span>{" "}
-                  {new Date(selectedOrder.created_at).toLocaleString()}
+                  {new Date(selectedOrder.created_at).toLocaleString("en-IN", {
+                    timeZone: "Asia/Kolkata",
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
                 </p>
                 <p>
                   <span className="font-medium">Status:</span>{" "}
