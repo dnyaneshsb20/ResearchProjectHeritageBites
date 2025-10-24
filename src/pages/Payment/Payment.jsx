@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-
 import Header from "../../components/ui/Header";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
-import { CreditCard, Smartphone, Wallet, QrCode } from "lucide-react";
 import toast from "react-hot-toast";
 import { supabase } from "../../supabaseClient";
-import { useAuth } from "../../context/AuthContext";
-
+import { FaCreditCard, FaUniversity, FaWallet, FaMobileAlt, FaCashRegister, FaWallet as FaDigitalWallet } from "react-icons/fa";
+import { SiPhonepe, SiPaytm } from "react-icons/si";
+import { FaGooglePay, FaCcAmazonPay } from "react-icons/fa";
+import { BsBank2 } from "react-icons/bs";
+import { SiHdfcbank, SiIcicibank } from "react-icons/si";
+import { RiBankFill } from "react-icons/ri";
+import { RiVisaFill } from "react-icons/ri";
+import { FaCcMastercard } from "react-icons/fa";
 
 const Payment = () => {
     const { cartItems, setCartItems } = useCart();
@@ -20,7 +24,7 @@ const Payment = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const { data, error } = await supabase.auth.getUser();
+            const { data } = await supabase.auth.getUser();
             if (data?.user) setUserId(data.user.id);
             else toast.error("User not logged in");
         };
@@ -28,8 +32,6 @@ const Payment = () => {
     }, []);
 
     const [cardType, setCardType] = useState("");
-
-
     const [cardDetails, setCardDetails] = useState({
         name: "",
         number: "",
@@ -37,31 +39,14 @@ const Payment = () => {
         cvv: "",
     });
 
+    const [netBankingBank, setNetBankingBank] = useState("");
+    const [digitalWallet, setDigitalWallet] = useState("");
+
     const totalAmount = cartItems.reduce(
         (acc, item) => acc + (item.price * (item.quantity || 1)),
         0
     );
 
-    // const handlePayment = () => {
-    //     if (selectedMethod === "upi") {
-    //         if (!upiOption) return toast.error("Please select a UPI option");
-    //         if (upiOption === "id" && !upiId.trim()) return toast.error("Please enter your UPI ID");
-    //     } else if (selectedMethod === "card") {
-    //         if (!cardType) return toast.error("Please select a card type");
-    //         const { name, number, expiry, cvv } = cardDetails;
-    //         if (!name || !number || !expiry || !cvv)
-    //             return toast.error("Please fill all card details");
-    //     }
-
-    //     toast.loading("Processing payment...", { id: "payment" });
-
-    //     setTimeout(() => {
-    //         toast.dismiss("payment");
-    //         toast.success("Order placed successfully 🎉");
-    //         setCartItems([]);
-    //         navigate("/order-confirmation");
-    //     }, 2000);
-    // };
     const handlePayment = async () => {
         if (!selectedMethod) return toast.error("Please select a payment method");
 
@@ -73,12 +58,15 @@ const Payment = () => {
             const { name, number, expiry, cvv } = cardDetails;
             if (!name || !number || !expiry || !cvv)
                 return toast.error("Please fill all card details");
+        } else if (selectedMethod === "netbanking" && !netBankingBank) {
+            return toast.error("Please select your bank");
+        } else if (selectedMethod === "digitalWallet" && !digitalWallet) {
+            return toast.error("Please select your digital wallet");
         }
 
         toast.loading("Processing payment...", { id: "payment" });
 
         try {
-            // Prepare items for jsonb
             const orderItems = cartItems.map(item => ({
                 product_id: item.id,
                 name: item.name,
@@ -86,32 +74,23 @@ const Payment = () => {
                 quantity: item.quantity || 1
             }));
 
-            // Insert order with items in jsonb
             const { data: createdOrder, error: orderError } = await supabase
                 .from("orders")
-                .insert([
-                    {
-                        user_id: userId,
-                        total_amount: totalAmount,
-                        payment_method: selectedMethod,
-                        items: orderItems
-                    }
-                ])
+                .insert([{
+                    user_id: userId,
+                    total_amount: totalAmount,
+                    payment_method: selectedMethod,
+                    items: orderItems
+                }])
                 .select()
                 .single();
 
             if (orderError || !createdOrder) throw orderError || new Error("Failed to create order");
 
-            // Clear cart
             setCartItems([]);
-
-            // Show success
             toast.dismiss("payment");
             toast.success("Order placed successfully 🎉");
-
-            // Navigate to confirmation
             navigate("/order-confirmation", { state: { order: createdOrder } });
-
         } catch (err) {
             console.error("Order placement error:", err);
             toast.dismiss("payment");
@@ -119,59 +98,172 @@ const Payment = () => {
         }
     };
 
-
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-gray-50">
             <Header />
 
-            <main className="container mx-auto px-4 py-8 max-w-3xl">
-                <h1 className="text-2xl font-bold mb-6">Payment</h1>
+            <main className="container mx-auto px-4 py-10 max-w-4xl">
+                <h1 className="text-3xl font-semibold mb-8 text-gray-800">Payment</h1>
 
-                {/* Order Summary */}
-                <div className="bg-popover rounded-lg p-4 shadow mb-6">
-                    <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-                    {cartItems.length === 0 ? (
-                        <p>Your cart is empty.</p>
-                    ) : (
-                        <>
-                            {cartItems.map((item) => (
-                                <div key={item.id} className="flex justify-between mb-2">
-                                    <span>
-                                        {item.name} × {item.quantity || 1}
-                                    </span>
-                                    <span>₹{item.price * (item.quantity || 1)}</span>
-                                </div>
-                            ))}
-                            <div className="flex justify-between font-bold mt-4 border-t pt-2">
-                                <span>Total</span>
-                                <span>₹{totalAmount}</span>
-                            </div>
-                        </>
-                    )}
-                </div>
+                <div className="bg-white shadow rounded-lg p-6 space-y-4">
 
-                {/* Payment Methods */}
-                <div className="bg-popover rounded-lg p-4 shadow space-y-3">
-                    <h2 className="text-lg font-semibold mb-4">Select Payment Method</h2>
-
-                    {/* UPI Option */}
+                    {/* Credit/Debit Card */}
+                    {/* Card Payment Option */}
                     <button
-                        onClick={() => {
-                            setSelectedMethod("upi");
-                            setUpiOption(null);
-                        }}
+                        onClick={() => setSelectedMethod("card")}
                         className={`flex items-center justify-between w-full px-4 py-3 border rounded-lg transition 
-              ${selectedMethod === "upi" ? "border-primary bg-primary/10" : "hover:bg-muted"}`}
+    ${selectedMethod === "card" ? "border-primary bg-primary/10" : "hover:bg-gray-100"}`}
                     >
                         <div className="flex items-center gap-3">
-                            <Smartphone size={20} />
-                            <span>UPI / QR Code</span>
+                            <FaCreditCard size={20} />
+                            <span>Credit / Debit Card</span>
                         </div>
-                        {selectedMethod === "upi" && (
-                            <span className="text-primary font-medium">Selected</span>
-                        )}
+                        {selectedMethod === "card" && <span className="text-primary font-medium">Selected</span>}
                     </button>
 
+                    {selectedMethod === "card" && (
+                        <div className="ml-6 mt-3 space-y-3 border-l pl-4">
+                            {/* Card Type Selection with Logos */}
+                            <div className="flex gap-4 items-center">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="cardType"
+                                        value="credit"
+                                        checked={cardType === "credit"}
+                                        onChange={(e) => setCardType(e.target.value)}
+                                        className="accent-primary"
+                                    />
+                                    Credit Card
+                                    <div className="flex items-center gap-1 ml-2">
+                                        <RiVisaFill size={20} className="text-blue-700" />
+                                        <FaCcMastercard size={20} className="text-red-600" />
+                                    </div>
+                                </label>
+
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="cardType"
+                                        value="debit"
+                                        checked={cardType === "debit"}
+                                        onChange={(e) => setCardType(e.target.value)}
+                                        className="accent-primary"
+                                    />
+                                    Debit Card
+                                    <div className="flex items-center gap-1 ml-2">
+                                        <RiVisaFill size={20} className="text-blue-700" />
+                                        <FaCcMastercard size={20} className="text-red-600" />
+                                    </div>
+                                </label>
+                            </div>
+
+                            {/* Card Details Form */}
+                            <div className="space-y-2 mt-2">
+                                <input
+                                    type="text"
+                                    placeholder="Cardholder Name"
+                                    value={cardDetails.name}
+                                    onChange={(e) => setCardDetails({ ...cardDetails, name: e.target.value })}
+                                    className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Card Number"
+                                    maxLength="16"
+                                    value={cardDetails.number}
+                                    onChange={(e) => setCardDetails({ ...cardDetails, number: e.target.value })}
+                                    className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
+                                />
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        placeholder="MM/YY"
+                                        maxLength="5"
+                                        value={cardDetails.expiry}
+                                        onChange={(e) => setCardDetails({ ...cardDetails, expiry: e.target.value })}
+                                        className="border rounded px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                    />
+                                    <input
+                                        type="password"
+                                        placeholder="CVV"
+                                        maxLength="3"
+                                        value={cardDetails.cvv}
+                                        onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value })}
+                                        className="border rounded px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Net Banking */}
+                    <button
+                        onClick={() => setSelectedMethod("netbanking")}
+                        className={`flex items-center justify-between w-full px-4 py-3 border rounded-lg transition 
+    ${selectedMethod === "netbanking" ? "border-primary bg-primary/10" : "hover:bg-gray-100"}`}
+                    >
+                        <div className="flex items-center gap-3">
+                            <BsBank2 size={20} />
+                            <span>Net Banking</span>
+                        </div>
+                        {selectedMethod === "netbanking" && <span className="text-primary font-medium">Selected</span>}
+                    </button>
+
+                    {selectedMethod === "netbanking" && (
+                        <div className="ml-6 mt-3 border-l pl-4">
+                            <div className="grid grid-cols-2 gap-3">
+                                {[
+                                    "HDFC Bank",
+                                    "ICICI Bank",
+                                    "State Bank of India",
+                                    "Bank Of India",
+                                    "Axis Bank",
+                                    "Punjab National Bank",
+                                    "Bank Of Baroda",
+                                    "Bank Of Maharashtra",
+                                    "Kotak Mahindra Bank",
+                                    "Central Bank of India",
+                                    "Canara Bank",
+                                    "Union Bank Of India",
+                                    "India Post Payments Bank"
+                                ].map(bank => {
+                                    let BankIcon;
+                                    if (bank === "HDFC Bank") BankIcon = SiHdfcbank;
+                                    else if (bank === "ICICI Bank") BankIcon = SiIcicibank;
+                                    else BankIcon = RiBankFill;
+
+                                    return (
+                                        <label key={bank} className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="netBank"
+                                                value={bank}
+                                                checked={netBankingBank === bank}
+                                                onChange={() => setNetBankingBank(bank)}
+                                                className="accent-primary"
+                                            />
+                                            <BankIcon size={24} />
+                                            <span>{bank}</span>
+                                        </label>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* UPI */}
+                    <button
+                        onClick={() => { setSelectedMethod("upi"); setUpiOption(null); }}
+                        className={`flex items-center justify-between w-full px-4 py-3 border rounded-lg transition 
+                        ${selectedMethod === "upi" ? "border-primary bg-primary/10" : "hover:bg-gray-100"}`}
+                    >
+                        <div className="flex items-center gap-3">
+                            <FaMobileAlt size={20} />
+                            <span>UPI / QR Code</span>
+                        </div>
+                        {selectedMethod === "upi" && <span className="text-primary font-medium">Selected</span>}
+                    </button>
                     {selectedMethod === "upi" && (
                         <div className="ml-6 mt-3 space-y-3 border-l pl-4">
                             <div className="flex gap-4">
@@ -200,108 +292,50 @@ const Payment = () => {
                             {upiOption === "id" && (
                                 <input
                                     type="text"
-                                    placeholder="Enter your UPI ID (e.g. user@upi)"
+                                    placeholder="Enter your UPI ID"
                                     value={upiId}
                                     onChange={(e) => setUpiId(e.target.value)}
                                     className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
                                 />
                             )}
-
-                            {upiOption === "qr" && (
-                                <div className="flex flex-col items-center text-center">
-                                    <QrCode size={60} className="text-primary mb-2" />
-                                    <p className="text-sm text-muted-foreground">
-                                        Scan this QR using your UPI app to complete payment.
-                                    </p>
-                                </div>
-                            )}
                         </div>
                     )}
 
-                    {/* Card Option */}
+                    {/* Digital Wallets */}
                     <button
-                        onClick={() => setSelectedMethod("card")}
+                        onClick={() => setSelectedMethod("digitalWallet")}
                         className={`flex items-center justify-between w-full px-4 py-3 border rounded-lg transition 
-              ${selectedMethod === "card" ? "border-primary bg-primary/10" : "hover:bg-muted"}`}
+    ${selectedMethod === "digitalWallet" ? "border-primary bg-primary/10" : "hover:bg-gray-100"}`}
                     >
                         <div className="flex items-center gap-3">
-                            <CreditCard size={20} />
-                            <span>Credit / Debit Card</span>
+                            <FaWallet size={20} />
+                            <span>Digital Wallets</span>
                         </div>
-                        {selectedMethod === "card" && (
-                            <span className="text-primary font-medium">Selected</span>
-                        )}
+                        {selectedMethod === "digitalWallet" && <span className="text-primary font-medium">Selected</span>}
                     </button>
 
-                    {selectedMethod === "card" && (
-                        <div className="ml-6 mt-3 space-y-3 border-l pl-4">
-                            {/* Card type */}
-                            <div className="flex gap-4">
-                                <label className="flex items-center gap-2">
-                                    <input
-                                        type="radio"
-                                        name="cardType"
-                                        value="credit"
-                                        checked={cardType === "credit"}
-                                        onChange={(e) => setCardType(e.target.value)}
-                                    />
-                                    Credit Card
-                                </label>
-                                <label className="flex items-center gap-2">
-                                    <input
-                                        type="radio"
-                                        name="cardType"
-                                        value="debit"
-                                        checked={cardType === "debit"}
-                                        onChange={(e) => setCardType(e.target.value)}
-                                    />
-                                    Debit Card
-                                </label>
-                            </div>
-
-                            {/* Card details form */}
-                            <div className="space-y-2">
-                                <input
-                                    type="text"
-                                    placeholder="Cardholder Name"
-                                    value={cardDetails.name}
-                                    onChange={(e) =>
-                                        setCardDetails({ ...cardDetails, name: e.target.value })
-                                    }
-                                    className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Card Number"
-                                    maxLength="16"
-                                    value={cardDetails.number}
-                                    onChange={(e) =>
-                                        setCardDetails({ ...cardDetails, number: e.target.value })
-                                    }
-                                    className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary"
-                                />
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        placeholder="MM/YY"
-                                        maxLength="5"
-                                        value={cardDetails.expiry}
-                                        onChange={(e) =>
-                                            setCardDetails({ ...cardDetails, expiry: e.target.value })
-                                        }
-                                        className="border rounded px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-primary"
-                                    />
-                                    <input
-                                        type="password"
-                                        placeholder="CVV"
-                                        maxLength="3"
-                                        value={cardDetails.cvv}
-                                        onChange={(e) =>
-                                            setCardDetails({ ...cardDetails, cvv: e.target.value })
-                                        }
-                                        className="border rounded px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-primary"
-                                    />
-                                </div>
+                    {selectedMethod === "digitalWallet" && (
+                        <div className="ml-6 mt-3 border-l pl-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                {[
+                                    { name: "Paytm", icon: <SiPaytm size={24} /> },
+                                    { name: "PhonePe", icon: <SiPhonepe size={24} /> },
+                                    { name: "Google Pay", icon: <FaGooglePay size={24} /> },
+                                    { name: "Amazon Pay", icon: <FaCcAmazonPay size={24} /> },
+                                ].map(wallet => (
+                                    <label key={wallet.name} className="flex items-center gap-2 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="digitalWallet"
+                                            value={wallet.name}
+                                            checked={digitalWallet === wallet.name}
+                                            onChange={() => setDigitalWallet(wallet.name)}
+                                            className="accent-primary"
+                                        />
+                                        {wallet.icon}
+                                        <span>{wallet.name}</span>
+                                    </label>
+                                ))}
                             </div>
                         </div>
                     )}
@@ -310,34 +344,30 @@ const Payment = () => {
                     <button
                         onClick={() => setSelectedMethod("cod")}
                         className={`flex items-center justify-between w-full px-4 py-3 border rounded-lg transition 
-              ${selectedMethod === "cod" ? "border-primary bg-primary/10" : "hover:bg-muted"}`}
+                        ${selectedMethod === "cod" ? "border-primary bg-primary/10" : "hover:bg-gray-100"}`}
                     >
                         <div className="flex items-center gap-3">
-                            <Wallet size={20} />
+                            <FaCashRegister size={20} />
                             <span>Cash on Delivery</span>
                         </div>
-                        {selectedMethod === "cod" && (
-                            <span className="text-primary font-medium">Selected</span>
-                        )}
+                        {selectedMethod === "cod" && <span className="text-primary font-medium">Selected</span>}
+                    </button>
+
+                    {/* Pay / Place Order Button */}
+                    <button
+                        onClick={handlePayment}
+                        disabled={!selectedMethod}
+                        className={`mt-6 w-full text-white px-4 py-3 rounded-lg text-lg font-medium transition
+                        ${selectedMethod === "cod"
+                                ? "bg-gradient-to-r from-green-500 to-green-400 hover:opacity-90"
+                                : "bg-gradient-to-r from-[#f87d46] to-[#fa874f] hover:opacity-90"
+                            } ${!selectedMethod ? "opacity-50 cursor-not-allowed" : ""}`}
+                    >
+                        {selectedMethod === "cod"
+                            ? "Place Order (Cash on Delivery)"
+                            : `Pay ₹${totalAmount} & Place Order`}
                     </button>
                 </div>
-
-                {/* Pay / Place Order Button */}
-                {/* Pay / Place Order Button */}
-                <button
-                    onClick={handlePayment}
-                    disabled={!selectedMethod}
-                    className={`mt-8 w-full text-white px-4 py-3 rounded-lg text-lg font-medium transition 
-        ${selectedMethod === "cod"
-                            ? "bg-gradient-to-r from-[#4caf50] to-[#66bb6a] hover:opacity-90"
-                            : "bg-gradient-to-r from-[#f87d46] to-[#fa874f] hover:opacity-90"
-                        } ${!selectedMethod ? "opacity-50 cursor-not-allowed" : ""}`}
-                >
-                    {selectedMethod === "cod"
-                        ? "Place Order (Cash on Delivery)"
-                        : `Pay ₹${totalAmount} & Place Order`}
-                </button>
-
             </main>
         </div>
     );
