@@ -86,7 +86,7 @@ const handleSubmit = async (e) => {
     `;
 
     // Call ML API
-    const sentimentResponse = await fetch("http://127.0.0.1:8000/predict-sentiment", {
+    const sentimentResponse = await fetch("https://fastapi-sentiment-app.onrender.com/predict-sentiment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: combinedReview }),

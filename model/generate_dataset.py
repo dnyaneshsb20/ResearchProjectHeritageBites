@@ -1,39 +1,58 @@
 import pandas as pd
 import random
 
-# --- Step 1: Define sample words for positive/negative reviews ---
+# --- Sample words ---
 positive_phrases = [
     "Excellent experience", "Loved it", "Very smooth", "Super helpful",
     "Worked perfectly", "Fantastic feature", "Impressive design", "Very intuitive"
+]
+neutral_phrases = [
+    "Could be better", "Average experience", "Okay experience", "Not bad", "Satisfactory"
 ]
 negative_phrases = [
     "Bad experience", "Did not work", "Very confusing", "Needs improvement",
     "Terrible interface", "Slow and buggy", "Not satisfied", "Hard to use"
 ]
 
-# --- Step 2: Define user types ---
-user_types = ["Resident", "Admin", "Guest"]
+user_types = ["User", "Admin", "Farmer"]
+names = [
+    'Divya Shah', 'Rahul Verma', 'Ananya Singh', 'Rohan Patel', 'Sneha Reddy',
+    'Vikram Kumar', 'Aisha Khan', 'Arjun Das', 'Pooja Joshi', 'Karan Mehta'
+]
 
-# --- Step 3: Generate synthetic data ---
+# --- Generate synthetic mixed feedback ---
 data = []
-for i in range(500):  # number of records
-    name = f"User_{i+1}"
+num_records = 500
+
+for i in range(num_records):
+    name = random.choice(names)
     email = f"user{i+1}@example.com"
     user_type = random.choice(user_types)
-    
-    # Random ratings (1–5)
-    e_market_rating = random.randint(1, 5)
-    recipe_rating = random.randint(1, 5)
-    chatbot_rating = random.randint(1, 5)
-    contribution_rating = random.randint(1, 5)
-    overall_rating = random.randint(1, 5)
 
-    # Generate text reviews based on rating
+    # Overall sentiment
+    overall_rating = random.randint(1,5)
+    if overall_rating >= 4:
+        overall_sentiment = "positive"
+    elif overall_rating == 3:
+        overall_sentiment = "neutral"
+    else:
+        overall_sentiment = "negative"
+
+    # Section ratings: +/- 1 from overall, bounded 1-5
+    def section_rating(base):
+        return min(5, max(1, base + random.randint(-1,1)))
+
+    e_market_rating = section_rating(overall_rating)
+    recipe_rating = section_rating(overall_rating)
+    chatbot_rating = section_rating(overall_rating)
+    contribution_rating = section_rating(overall_rating)
+
+    # Generate review text per section
     def make_review(rating, section):
         if rating >= 4:
             return f"{section} - {random.choice(positive_phrases)}"
         elif rating == 3:
-            return f"{section} - Average experience"
+            return f"{section} - {random.choice(neutral_phrases)}"
         else:
             return f"{section} - {random.choice(negative_phrases)}"
 
@@ -42,14 +61,6 @@ for i in range(500):  # number of records
     chatbot_review = make_review(chatbot_rating, "Chatbot")
     contribution_review = make_review(contribution_rating, "Contribution section")
     overall_review = make_review(overall_rating, "Overall website")
-
-    # Simple sentiment label based on overall rating
-    if overall_rating >= 4:
-        sentiment = "positive"
-    elif overall_rating == 3:
-        sentiment = "neutral"
-    else:
-        sentiment = "negative"
 
     data.append({
         "name": name,
@@ -65,12 +76,11 @@ for i in range(500):  # number of records
         "contribution_review": contribution_review,
         "overall_rating": overall_rating,
         "overall_review": overall_review,
-        "sentiment": sentiment
+        "sentiment": overall_sentiment
     })
 
-# --- Step 4: Create DataFrame & Save ---
-df = pd.DataFrame(data)
-df.to_csv("feedback_dataset.csv", index=False)
-
-print("✅ feedback_dataset.csv generated successfully with", len(df), "records.")
+# --- Shuffle & save ---
+df = pd.DataFrame(data).sample(frac=1, random_state=42).reset_index(drop=True)
+df.to_csv("feedback_dataset_mixed.csv", index=False)
+print("✅ feedback_dataset_mixed.csv generated with mixed feedback for realistic model training")
 print(df.head())
