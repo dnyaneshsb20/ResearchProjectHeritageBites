@@ -13,6 +13,8 @@ import AdminRecipeView from './components/AdminRecipeView';
 import { supabase } from "../../supabaseClient";
 import toast from 'react-hot-toast';
 import FeedbackTable from './components/FeedbackTable';
+import FeedbackRatingsChart from './components/FeedbackRatingsChart';
+import FeedbackSentimentChart from './components/FeedbackSentimentChart';
 
 const AdminRecipeManagement = () => {
   const [activeTab, setActiveTab] = useState('submissions');
@@ -132,20 +134,20 @@ const AdminRecipeManagement = () => {
   };
 
   const handlePreviewRecipe = async (submission) => {
-  const { data, error } = await supabase
-    .from('rec_contributions')
-    .select('*')
-    .eq('indg_recipe_id', submission.id)
-    .single();
+    const { data, error } = await supabase
+      .from('rec_contributions')
+      .select('*')
+      .eq('indg_recipe_id', submission.id)
+      .single();
 
-  if (error) {
-    console.error(error);
-    toast.error('Failed to load recipe.');
-    return;
-  }
+    if (error) {
+      console.error(error);
+      toast.error('Failed to load recipe.');
+      return;
+    }
 
-  setPreviewRecipe(data); // pass full recipe to AdminRecipeView
-};
+    setPreviewRecipe(data); // pass full recipe to AdminRecipeView
+  };
 
 
   const handleApprove = (submissionId) => {
@@ -258,7 +260,18 @@ const AdminRecipeManagement = () => {
             onViewContributor={handleViewContributor}
           />
         )}
-        {activeTab === 'feedback' && <FeedbackTable />}
+        {activeTab === 'feedback' && (
+          <div className="space-y-6">
+            {/* Charts side by side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FeedbackRatingsChart />
+              <FeedbackSentimentChart />
+            </div>
+
+            {/* Detailed feedback table */}
+            <FeedbackTable />
+          </div>
+        )}
 
       </div>
 
@@ -274,7 +287,7 @@ const AdminRecipeManagement = () => {
       ) : (
         <Footer />
       )}
-          </div>
+    </div>
   );
 };
 
