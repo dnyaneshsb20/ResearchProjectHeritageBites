@@ -9,8 +9,10 @@ import AnalyticsDashboard from './components/AnalyticsDashboard';
 import ContributorManagement from './components/ContributorManagement';
 import Footer from '../dashboard/components/Footer';
 import AdminRecipeView from './components/AdminRecipeView';
+
 import { supabase } from "../../supabaseClient";
 import toast from 'react-hot-toast';
+import FeedbackTable from './components/FeedbackTable';
 
 const AdminRecipeManagement = () => {
   const [activeTab, setActiveTab] = useState('submissions');
@@ -100,7 +102,9 @@ const AdminRecipeManagement = () => {
   const tabs = [
     { id: 'submissions', label: 'Submissions', icon: 'FileText', count: submissions?.length },
     { id: 'analytics', label: 'Analytics', icon: 'BarChart3', count: null },
-    { id: 'contributors', label: 'Contributors', icon: 'Users', count: contributors?.length }
+    { id: 'contributors', label: 'Contributors', icon: 'Users', count: contributors?.length },
+    { id: 'feedback', label: 'Feedback', icon: 'MessageSquare', count: null }
+
   ];
 
   const handleFilterChange = (key, value) => {
@@ -254,6 +258,8 @@ const AdminRecipeManagement = () => {
             onViewContributor={handleViewContributor}
           />
         )}
+        {activeTab === 'feedback' && <FeedbackTable />}
+
       </div>
 
       {/* Recipe Preview Modal */}

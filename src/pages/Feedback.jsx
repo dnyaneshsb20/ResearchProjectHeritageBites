@@ -1,217 +1,241 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Star, Upload, X } from "lucide-react";
+import { Star } from "lucide-react";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import toast from "react-hot-toast";
 import Footer from "../pages/dashboard/components/Footer";
 import Header from "components/ui/Header";
+import { supabase } from "../supabaseClient";
 
 const Feedback = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    rating: 0,
-    title: "",
-    message: "",
+    eMarketRating: 0,
+    eMarketReview: "",
+    recipeRating: 0,
+    recipeReview: "",
+    chatbotRating: 0,
+    chatbotReview: "",
+    contributionRating: 0,
+    contributionReview: "",
+    overallRating: 0,
+    overallReview: "",
   });
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
 
-  const handleRatingClick = (rating) => {
-    setFormData((prev) => ({ ...prev, rating }));
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from("users")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
+
+      setUserProfile(profile);
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleRating = (field, rating) => {
+    setFormData((prev) => ({ ...prev, [field]: rating }));
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setImagePreview(reader.result);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const removeImage = () => {
-    setImageFile(null);
-    setImagePreview(null);
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const validateForm = () => {
-    if (!formData.name.trim()) {
-      toast.error("Please enter your name.");
+    if (!formData.name.trim() || !formData.email.trim()) {
+      toast.error("Please enter your name and valid email.");
       return false;
     }
-    if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) {
-      toast.error("Please enter a valid email address.");
-      return false;
-    }
-    if (formData.rating === 0) {
-      toast.error("Please select a rating.");
-      return false;
-    }
-    if (!formData.title.trim()) {
-      toast.error("Please enter a title for your feedback.");
-      return false;
-    }
-    if (!formData.message.trim()) {
-      toast.error("Please enter your feedback message.");
+    if (formData.overallRating === 0) {
+      toast.error("Please provide at least an overall rating.");
       return false;
     }
     return true;
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  setIsSubmitting(true);
 
-    setIsSubmitting(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      toast.success("Feedback submitted successfully! 🎉 Thank you!");
-      setFormData({ name: "", email: "", rating: 0, title: "", message: "" });
-      setImageFile(null);
-      setImagePreview(null);
+  try {
+    if (!userProfile) {
+      toast.error("You must be logged in to submit feedback.");
       setIsSubmitting(false);
-    }, 1000);
-  };
+      return;
+    }
+
+    // Combine all review texts
+    const combinedReview = `
+      E-Market: ${formData.eMarketReview || ""}.
+      Recipe: ${formData.recipeReview || ""}.
+      Chatbot: ${formData.chatbotReview || ""}.
+      Contribution: ${formData.contributionReview || ""}.
+      Overall: ${formData.overallReview || ""}.
+    `;
+
+    // Call ML API
+    const sentimentResponse = await fetch("http://127.0.0.1:8000/predict-sentiment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: combinedReview }),
+    });
+    const sentiment = await sentimentResponse.json();
+
+    // Format user type correctly
+    const userType = userProfile.role
+      ? userProfile.role.charAt(0).toUpperCase() + userProfile.role.slice(1).toLowerCase()
+      : "User";
+
+    // Insert into Supabase with user_id and numeric fields
+    const { error } = await supabase
+      .from("website_feedback")
+      .insert([
+        {
+          user_id: userProfile.user_id,           // ✅ include user_id
+          name: userProfile.name,
+          email: userProfile.email,
+          user_type: userType,
+          e_market_rating: Number(formData.eMarketRating),
+          e_market_review: formData.eMarketReview,
+          recipe_rating: Number(formData.recipeRating),
+          recipe_review: formData.recipeReview,
+          chatbot_rating: Number(formData.chatbotRating),
+          chatbot_review: formData.chatbotReview,
+          contribution_rating: Number(formData.contributionRating),
+          contribution_review: formData.contributionReview,
+          overall_rating: Number(formData.overallRating),
+          overall_review: formData.overallReview,
+          sentiment_label: sentiment.sentiment_label,
+          sentiment_score: parseFloat(sentiment.sentiment_score),
+          page_visited: window.location.href,
+        },
+      ]);
+
+    if (error) throw error;
+
+    toast.success("Feedback submitted successfully! 🎉");
+
+    // Reset form
+    setFormData({
+      name: "",
+      email: "",
+      eMarketRating: 0,
+      eMarketReview: "",
+      recipeRating: 0,
+      recipeReview: "",
+      chatbotRating: 0,
+      chatbotReview: "",
+      contributionRating: 0,
+      contributionReview: "",
+      overallRating: 0,
+      overallReview: "",
+    });
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to submit feedback. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+;
+
+  const sections = [
+    { key: "eMarket", label: "E-Market" },
+    { key: "recipe", label: "Recipe Section" },
+    { key: "chatbot", label: "Chatbot" },
+    { key: "contribution", label: "Contribution Section" },
+    { key: "overall", label: "Overall Website" },
+  ];
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <header className="bg-gradient-to-br from-primary via-secondary to-accent py-20 px-4 text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          We Value Your Feedback
+          Share Your Website Experience 🌐
         </h1>
         <p className="text-white/90 max-w-2xl mx-auto">
-          Share your thoughts, suggestions, or experiences with HeritageBites.
+          Your feedback helps us improve every part of HeritageBites.
         </p>
       </header>
 
-      <main className="container mx-auto max-w-2xl px-4 py-12 flex-1">
+      <main className="container mx-auto max-w-3xl px-4 py-12 flex-1">
         <motion.form
           onSubmit={handleSubmit}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-card shadow-[var(--shadow-card)] rounded-xl p-8 space-y-6"
+          className="bg-card shadow-md rounded-xl p-8 space-y-8"
         >
-          {/* Name and Email */}
+          {/* Basic Info */}
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-foreground font-medium">Name *</label>
-              <Input
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                className="bg-background/50 border-border focus:ring-2 focus:ring-golden rounded"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-foreground font-medium">Email *</label>
-              <Input
-                placeholder="your.email@example.com"
-                value={formData.email}
-                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-                className="bg-background/50 border-border focus:ring-2 focus:ring-golden rounded"
-              />
-            </div>
-          </div>
-
-          {/* Rating */}
-          <div className="space-y-2">
-            <label className="text-foreground font-medium">Rating *</label>
-            <div className="flex gap-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <motion.button
-                  key={star}
-                  type="button"
-                  onClick={() => handleRatingClick(star)}
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full"
-                  aria-label={`Rate ${star} stars`}
-                >
-                  <Star
-                    className={`w-8 h-8 transition-colors ${
-                      star <= formData.rating
-                        ? "fill-primary text-primary"
-                        : "fill-muted text-muted-foreground"
-                    }`}
-                  />
-                </motion.button>
-              ))}
-            </div>
-          </div>
-
-          {/* Feedback Title */}
-          <div className="space-y-2">
-            <label className="text-foreground font-medium">Title *</label>
             <Input
-              placeholder="Briefly describe your feedback"
-              value={formData.title}
-              onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-              className="bg-background/50 border-border focus:ring-2 focus:ring-golden rounded"
+              label="Name *"
+              placeholder="Your Name"
+              value={formData.name}
+              onChange={(e) => handleChange("name", e.target.value)}
+            />
+            <Input
+              label="Email *"
+              placeholder="your.email@example.com"
+              value={formData.email}
+              onChange={(e) => handleChange("email", e.target.value)}
             />
           </div>
 
-          {/* Feedback Message */}
-          <div className="space-y-2">
-            <label className="text-foreground font-medium">Message *</label>
-            <textarea
-              placeholder="Share your detailed feedback..."
-              value={formData.message}
-              onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
-              className="w-full min-h-[150px] px-3 py-2 border border-border rounded resize-none bg-background/50 focus:outline-none focus:ring-2 focus:ring-golden"
-            />
-          </div>
+          {/* Section Ratings + Reviews */}
+          {sections.map(({ key, label }) => (
+            <div key={key} className="space-y-3 border-b border-border pb-4">
+              <label className="text-lg font-semibold text-foreground">{label}</label>
 
-          {/* Optional Image Upload */}
-          <div className="space-y-2">
-            <label className="text-foreground font-medium">Image (Optional)</label>
-            {!imagePreview ? (
-              <label
-                htmlFor="image"
-                className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-lg cursor-pointer bg-background/50 hover:bg-accent/50 transition-colors"
-              >
-                <Upload className="w-8 h-8 text-muted-foreground mb-2" />
-                <span className="text-sm text-muted-foreground">
-                  Click to upload image
-                </span>
-                <input
-                  id="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-              </label>
-            ) : (
-              <div className="relative rounded-lg overflow-hidden">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-full h-48 object-cover rounded-lg"
-                />
-                <button
-                  type="button"
-                  onClick={removeImage}
-                  className="absolute top-2 right-2 p-1.5 bg-destructive text-destructive-foreground rounded-full hover:bg-destructive/90 transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+              {/* Star Ratings */}
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <motion.button
+                    key={star}
+                    type="button"
+                    onClick={() => handleRating(`${key}Rating`, star)}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Star
+                      className={`w-6 h-6 transition-colors ${star <= formData[`${key}Rating`]
+                        ? "fill-yellow-500 text-yellow-500"
+                        : "fill-muted text-muted-foreground"
+                        }`}
+                    />
+                  </motion.button>
+                ))}
               </div>
-            )}
-          </div>
+
+              {/* Text Review */}
+              <textarea
+                placeholder={`Share your thoughts on the ${label.toLowerCase()}...`}
+                value={formData[`${key}Review`]}
+                onChange={(e) => handleChange(`${key}Review`, e.target.value)}
+                className="w-full min-h-[80px] px-3 py-2 border border-border rounded-md bg-background/50 focus:ring-2 focus:ring-primary resize-none"
+              />
+            </div>
+          ))}
 
           {/* Submit Button */}
           <div className="flex justify-center pt-4">
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-gradient-to-r from-primary to-secondary text-white font-semibold px-10 py-3 rounded-xl shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-all duration-300"
+              className="bg-gradient-to-r from-primary to-secondary text-white font-semibold px-10 py-3 rounded-xl shadow hover:shadow-lg transition-all duration-300"
             >
               {isSubmitting ? "Submitting..." : "Submit Feedback"}
             </Button>
