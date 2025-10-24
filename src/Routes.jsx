@@ -13,7 +13,7 @@ import AdminRecipeManagement from "./pages/admin-recipe-management";
 import RecipeDetailInstructions from "./pages/recipe-detail-instructions";
 import RecipeDiscoveryDashboard from "./pages/recipe-discovery-dashboard";
 import SignIn from "./pages/sign-in";
-import AISuggestions from "./pages/ai-suggestions";
+import AISuggestions from "./pages/ai-suggestions/index.jsx";
 import FarmerDashboard from "./pages/farmer-dashboard/components/FarmerDashboard";
 import FarmerProducts from "./pages/farmer-dashboard/components/FarmerProducts";
 import FarmerOrders from "./pages/farmer-dashboard/components/FarmerOrders";
