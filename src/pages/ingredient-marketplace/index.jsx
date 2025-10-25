@@ -27,7 +27,7 @@ const IngredientMarketplace = () => {
 
   const [filters, setFilters] = useState({
     categories: [],
-    states: [],
+    regions: [],
     certifications: [],
     priceRanges: []
   });
@@ -135,18 +135,29 @@ const IngredientMarketplace = () => {
               category_id,
               categories (
                 name
-              )
-            )
-          `)
+              ),
+      ingredient_states (
+        state_id,
+        states (
+          state_name,
+          region
+        )
+      )
+    )
+  `)
             .in('ingredient_id', ingredientIds);
 
           if (error) throw error;
           productData = data;
         }
+        console.log('Raw product data:', productData.map(p => ({
+          name: p.name,
+          regions: p.ingredients?.ingredient_states
+        })));
 
         const products = productData.map((item) => ({
           id: item.product_id,
-           ingredient_id: item.ingredient_id, 
+          ingredient_id: item.ingredient_id,
           name: item.name || item.ingredients?.name || 'Unnamed Product',
           image: item.image_url || 'https://placehold.co/400x400?text=Product',
           price: Number(item.price) || 0,
@@ -165,6 +176,8 @@ const IngredientMarketplace = () => {
             ? item.certifications.split(',').map((c) => c.trim())
             : [],
           description: item.ingredients?.nutritional_info || '',
+          region: item.ingredients?.ingredient_states?.map(s => s?.states?.region).join(', ') || 'Unknown'
+
         }));
 
         setAllProducts(products);
@@ -174,6 +187,8 @@ const IngredientMarketplace = () => {
       } finally {
         setIsLoading(false);
       }
+
+
     };
 
     fetchProducts();
@@ -211,6 +226,35 @@ const IngredientMarketplace = () => {
         )
       );
     }
+    // 🌍 Region Filter
+    if (filters?.regions?.length > 0) {
+      filtered = filtered.filter(product =>
+        filters.regions.some(region =>
+          product?.region?.toLowerCase().includes(region.toLowerCase())
+        )
+      );
+    }
+
+
+    // 💰 Price Range Filter
+    if (filters?.priceRanges?.length > 0) {
+      const ranges = {
+        'under-100': { min: 0, max: 100 },
+        '100-300': { min: 100, max: 300 },
+        '300-500': { min: 300, max: 500 },
+        '500-1000': { min: 500, max: 1000 },
+        'above-1000': { min: 1000, max: Infinity },
+      };
+
+      filtered = filtered.filter(product => {
+        const price = Number(product.price) || 0;
+        return filters.priceRanges.some(rangeKey => {
+          const range = ranges[rangeKey];
+          return price >= range.min && price <= range.max;
+        });
+      });
+    }
+
 
     // Sort products
     switch (sortBy) {

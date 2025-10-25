@@ -1,40 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 import { Checkbox } from '../../../components/ui/Checkbox';
+import { supabase } from '../../../supabaseClient';
 
-const FilterDrawer = ({ 
-  isOpen, 
-  onClose, 
-  filters, 
-  onFilterChange, 
-  onClearFilters 
+const FilterDrawer = ({
+  isOpen,
+  onClose,
+  filters,
+  onFilterChange,
+  onClearFilters
 }) => {
-  const categories = [
-    { id: 'grains', label: 'Ancient Grains', count: 45 },
-    { id: 'spices', label: 'Traditional Spices', count: 78 },
-    { id: 'oils', label: 'Cold-Pressed Oils', count: 23 },
-    { id: 'pulses', label: 'Indigenous Pulses', count: 34 },
-    { id: 'millets', label: 'Organic Millets', count: 28 },
-    { id: 'herbs', label: 'Medicinal Herbs', count: 56 }
-  ];
+  const [regions, setRegions] = useState([]);
+  const [certifications, setCertifications] = useState([]);
 
-  const states = [
-    { id: 'rajasthan', label: 'Rajasthan', count: 67 },
-    { id: 'kerala', label: 'Kerala', count: 45 },
-    { id: 'punjab', label: 'Punjab', count: 38 },
-    { id: 'maharashtra', label: 'Maharashtra', count: 52 },
-    { id: 'karnataka', label: 'Karnataka', count: 41 },
-    { id: 'tamil-nadu', label: 'Tamil Nadu', count: 33 }
-  ];
-
-  const certifications = [
-    { id: 'organic', label: 'Organic Certified', count: 89 },
-    { id: 'traditional', label: 'Traditional Methods', count: 156 },
-    { id: 'fair-trade', label: 'Fair Trade', count: 67 },
-    { id: 'pesticide-free', label: 'Pesticide Free', count: 134 }
-  ];
-
+  // ✅ Static price ranges
   const priceRanges = [
     { id: 'under-100', label: 'Under ₹100', min: 0, max: 100 },
     { id: '100-300', label: '₹100 - ₹300', min: 100, max: 300 },
@@ -43,29 +23,72 @@ const FilterDrawer = ({
     { id: 'above-1000', label: 'Above ₹1000', min: 1000, max: null }
   ];
 
-  const handleCategoryChange = (categoryId, checked) => {
-    const updatedCategories = checked 
-      ? [...filters?.categories, categoryId]
-      : filters?.categories?.filter(id => id !== categoryId);
-    onFilterChange({ ...filters, categories: updatedCategories });
-  };
+  // ✅ Fetch regions and certifications dynamically
+  useEffect(() => {
+    const fetchFilterData = async () => {
+      try {
+        // 🌍 Fetch distinct regions from states
+        const { data: regionData, error: regionError } = await supabase
+          .from('states')
+          .select('region')
+          .neq('region', '');
 
-  const handleStateChange = (stateId, checked) => {
-    const updatedStates = checked 
-      ? [...filters?.states, stateId]
-      : filters?.states?.filter(id => id !== stateId);
-    onFilterChange({ ...filters, states: updatedStates });
+        if (regionError) throw regionError;
+
+        const uniqueRegions = [...new Set(regionData.map(r => r.region))]
+          .map(region => ({
+            id: region, // use the actual name
+            label: region
+          }));
+
+
+        setRegions(uniqueRegions);
+
+        // 🧾 Fetch distinct certifications from products
+        const { data: certData, error: certError } = await supabase
+          .from('products')
+          .select('certifications')
+          .not('certifications', 'is', null);
+
+        if (certError) throw certError;
+
+        // Some products may have comma-separated certifications
+        const allCerts = certData
+          .map(p => p.certifications)
+          .flatMap(cert => cert.split(',').map(c => c.trim()))
+          .filter(Boolean);
+
+        const uniqueCerts = [...new Set(allCerts)].map(cert => ({
+          id: cert.toLowerCase().replace(/\s+/g, '-'),
+          label: cert
+        }));
+
+        setCertifications(uniqueCerts);
+      } catch (error) {
+        console.error('Error fetching filter data:', error);
+      }
+    };
+
+    fetchFilterData();
+  }, []);
+
+  // ✅ Handlers
+  const handleRegionChange = (regionId, checked) => {
+    const updatedRegions = checked
+      ? [...filters?.regions, regionId]
+      : filters?.regions?.filter(id => id !== regionId);
+    onFilterChange({ ...filters, regions: updatedRegions });
   };
 
   const handleCertificationChange = (certId, checked) => {
-    const updatedCertifications = checked 
+    const updatedCertifications = checked
       ? [...filters?.certifications, certId]
       : filters?.certifications?.filter(id => id !== certId);
     onFilterChange({ ...filters, certifications: updatedCertifications });
   };
 
   const handlePriceRangeChange = (rangeId, checked) => {
-    const updatedPriceRanges = checked 
+    const updatedPriceRanges = checked
       ? [...filters?.priceRanges, rangeId]
       : filters?.priceRanges?.filter(id => id !== rangeId);
     onFilterChange({ ...filters, priceRanges: updatedPriceRanges });
@@ -75,16 +98,18 @@ const FilterDrawer = ({
 
   return (
     <>
-      {/* Mobile Overlay */}
-      <div 
+      {/* Overlay for mobile */}
+      <div
         className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
         onClick={onClose}
       />
-      {/* Filter Drawer */}
-      <div className={`fixed bottom-0 left-0 right-0 bg-background border-t border-border rounded-t-xl z-50 transform transition-transform duration-300 lg:relative lg:transform-none lg:border lg:rounded-lg lg:shadow-warm-md ${
-        isOpen ? 'translate-y-0' : 'translate-y-full lg:translate-y-0'
-      }`}>
-        {/* Header */}
+
+      {/* Drawer container */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 bg-background border-t border-border rounded-t-xl z-50 transform transition-transform duration-300 lg:relative lg:transform-none lg:border lg:rounded-lg lg:shadow-warm-md ${isOpen ? 'translate-y-0' : 'translate-y-full lg:translate-y-0'
+          }`}
+      >
+        {/* Mobile Header */}
         <div className="flex items-center justify-between p-4 border-b border-border lg:hidden">
           <h3 className="text-lg font-heading font-semibold text-foreground">Filters</h3>
           <Button variant="ghost" size="icon" onClick={onClose}>
@@ -102,67 +127,47 @@ const FilterDrawer = ({
 
         {/* Filter Content */}
         <div className="max-h-96 lg:max-h-none overflow-y-auto p-4 space-y-6">
-          {/* Categories */}
+
+          {/* 🌍 Regions */}
           <div>
-            <h4 className="font-body font-medium text-foreground mb-3">Categories</h4>
+            <h4 className="font-body font-medium text-foreground mb-3">Regions</h4>
             <div className="space-y-2">
-              {categories?.map((category) => (
-                <div key={category?.id} className="flex items-center justify-between">
-                  <Checkbox
-                    label={category?.label}
-                    checked={filters?.categories?.includes(category?.id)}
-                    onChange={(e) => handleCategoryChange(category?.id, e?.target?.checked)}
-                  />
-                  <span className="text-sm text-muted-foreground">({category?.count})</span>
-                </div>
+              {regions.map((region) => (
+                <Checkbox
+                  key={region.id}
+                  label={region.label}
+                  checked={filters?.regions?.includes(region.id)}
+                  onChange={(e) => handleRegionChange(region.id, e.target.checked)}
+                />
               ))}
             </div>
           </div>
 
-          {/* Origin State */}
-          <div>
-            <h4 className="font-body font-medium text-foreground mb-3">Origin State</h4>
-            <div className="space-y-2">
-              {states?.map((state) => (
-                <div key={state?.id} className="flex items-center justify-between">
-                  <Checkbox
-                    label={state?.label}
-                    checked={filters?.states?.includes(state?.id)}
-                    onChange={(e) => handleStateChange(state?.id, e?.target?.checked)}
-                  />
-                  <span className="text-sm text-muted-foreground">({state?.count})</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Certifications */}
+          {/* 🧾 Certifications */}
           <div>
             <h4 className="font-body font-medium text-foreground mb-3">Certifications</h4>
             <div className="space-y-2">
-              {certifications?.map((cert) => (
-                <div key={cert?.id} className="flex items-center justify-between">
-                  <Checkbox
-                    label={cert?.label}
-                    checked={filters?.certifications?.includes(cert?.id)}
-                    onChange={(e) => handleCertificationChange(cert?.id, e?.target?.checked)}
-                  />
-                  <span className="text-sm text-muted-foreground">({cert?.count})</span>
-                </div>
+              {certifications.map((cert) => (
+                <Checkbox
+                  key={cert.id}
+                  label={cert.label}
+                  checked={filters?.certifications?.includes(cert.id)}
+                  onChange={(e) => handleCertificationChange(cert.id, e.target.checked)}
+                />
               ))}
             </div>
           </div>
 
-          {/* Price Range */}
+          {/* 💰 Price Range */}
           <div>
             <h4 className="font-body font-medium text-foreground mb-3">Price Range</h4>
             <div className="space-y-2">
-              {priceRanges?.map((range) => (
+              {priceRanges.map((range) => (
                 <Checkbox
-                  key={range?.id}
-                  label={range?.label}
-                  checked={filters?.priceRanges?.includes(range?.id)}
-                  onChange={(e) => handlePriceRangeChange(range?.id, e?.target?.checked)}
+                  key={range.id}
+                  label={range.label}
+                  checked={filters?.priceRanges?.includes(range.id)}
+                  onChange={(e) => handlePriceRangeChange(range.id, e.target.checked)}
                 />
               ))}
             </div>
