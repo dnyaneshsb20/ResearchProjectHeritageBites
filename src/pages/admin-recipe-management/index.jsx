@@ -16,6 +16,7 @@ import FeedbackTable from './components/FeedbackTable';
 import FeedbackRatingsChart from './components/FeedbackRatingsChart';
 import FeedbackSentimentChart from './components/FeedbackSentimentChart';
 import CustomerOrdersTable from './components/CustomerOrdersTable';
+import UserManagement from './components/UserManagement';
 
 const AdminRecipeManagement = () => {
   const [activeTab, setActiveTab] = useState('submissions');
@@ -107,7 +108,8 @@ const AdminRecipeManagement = () => {
     { id: 'analytics', label: 'Analytics', icon: 'BarChart3', count: null },
     { id: 'contributors', label: 'Contributors', icon: 'Users', count: contributors?.length },
     { id: 'feedback', label: 'Feedback', icon: 'MessageSquare', count: null },
-    { id: 'orders', label: 'Customer Orders', icon: 'ShoppingCart', count: null }
+    { id: 'orders', label: 'Customer Orders', icon: 'ShoppingCart', count: null },
+    { id: 'users', label: 'Users', icon: 'UserCircle', count: null }
   ];
 
   const handleFilterChange = (key, value) => {
@@ -277,6 +279,12 @@ const AdminRecipeManagement = () => {
           <div className="space-y-6">
             {/* You can place your CustomerOrdersTable component here */}
             <CustomerOrdersTable />
+          </div>
+        )}
+        {activeTab === 'users' && (
+          <div className="space-y-6">
+            {/* You can place your CustomerOrdersTable component here */}
+            <UserManagement />
           </div>
         )}
       </div>
