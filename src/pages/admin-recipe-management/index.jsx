@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import FeedbackTable from './components/FeedbackTable';
 import FeedbackRatingsChart from './components/FeedbackRatingsChart';
 import FeedbackSentimentChart from './components/FeedbackSentimentChart';
+import CustomerOrdersTable from './components/CustomerOrdersTable';
 
 const AdminRecipeManagement = () => {
   const [activeTab, setActiveTab] = useState('submissions');
@@ -105,8 +106,8 @@ const AdminRecipeManagement = () => {
     { id: 'submissions', label: 'Submissions', icon: 'FileText', count: submissions?.length },
     { id: 'analytics', label: 'Analytics', icon: 'BarChart3', count: null },
     { id: 'contributors', label: 'Contributors', icon: 'Users', count: contributors?.length },
-    { id: 'feedback', label: 'Feedback', icon: 'MessageSquare', count: null }
-
+    { id: 'feedback', label: 'Feedback', icon: 'MessageSquare', count: null },
+    { id: 'orders', label: 'Customer Orders', icon: 'ShoppingCart', count: null }
   ];
 
   const handleFilterChange = (key, value) => {
@@ -272,7 +273,12 @@ const AdminRecipeManagement = () => {
             <FeedbackTable />
           </div>
         )}
-
+        {activeTab === 'orders' && (
+          <div className="space-y-6">
+            {/* You can place your CustomerOrdersTable component here */}
+            <CustomerOrdersTable />
+          </div>
+        )}
       </div>
 
       {/* Recipe Preview Modal */}
