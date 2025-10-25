@@ -3,9 +3,6 @@ import Header from "../../components/ui/Header";
 import { CheckCircle2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-
-
-
 const OrderConfirmation = () => {
   const navigate = useNavigate();
   const location = useLocation();

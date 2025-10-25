@@ -28,23 +28,80 @@ const IngredientsList = ({ ingredients, baseServings, onBuyIngredients }) => {
   //   const quantity = parseFloat(baseQuantity) * multiplier;
   //   return quantity % 1 === 0 ? quantity?.toString() : quantity?.toFixed(1);
   // };
+// Helper: convert unicode fractions to numeric values
+const FRACTION_MAP = {
+  '½': 0.5, '¼': 0.25, '¾': 0.75,
+  '⅓': 1/3, '⅔': 2/3,
+  '⅛': 1/8, '⅜': 3/8, '⅝': 5/8, '⅞': 7/8
+};
+
+const parseFraction = (str) => {
+  if (!str) return NaN;
+  str = str.trim();
+
+  // Handle unicode fractions (like "½")
+  for (const [char, val] of Object.entries(FRACTION_MAP)) {
+    if (str.includes(char)) {
+      const num = parseFloat(str.replace(char, '')) || 0;
+      return num + val;
+    }
+  }
+
+  // Handle normal fractions (like "1/2" or "1 1/2")
+  if (str.match(/^\d+\s+\d+\/\d+$/)) {
+    const [whole, frac] = str.split(' ');
+    const [n, d] = frac.split('/');
+    return parseInt(whole) + parseInt(n) / parseInt(d);
+  }
+  if (str.match(/^\d+\/\d+$/)) {
+    const [n, d] = str.split('/');
+    return parseInt(n) / parseInt(d);
+  }
+
+  // Handle plain number
+  const num = parseFloat(str);
+  return isNaN(num) ? NaN : num;
+};
+
+// Helper: format number into nice fraction (¼, ½, ¾, etc.)
+const formatFraction = (num) => {
+  if (isNaN(num)) return "";
+
+  const fractionSymbols = {
+    0.125: '⅛', 0.25: '¼', 0.333: '⅓', 0.5: '½',
+    0.666: '⅔', 0.75: '¾', 0.875: '⅞'
+  };
+
+  const whole = Math.floor(num);
+  const fraction = +(num - whole).toFixed(3);
+
+  const match = Object.entries(fractionSymbols).find(([k]) => Math.abs(fraction - k) < 0.02);
+
+  if (whole === 0 && match) return match[1];
+  if (whole > 0 && match) return `${whole}${match[1]}`;
+  return (num % 1 === 0) ? `${whole}` : num.toFixed(1);
+};
+
+// 🌟 Main function
 const calculateQuantity = (baseQuantity, unit) => {
   if (!baseQuantity) return "";
 
-  // Extract numeric and unit parts from something like "1 cup" or "½ tsp"
-  const match = baseQuantity.match(/^([\d.,¼½¾⅓⅔⅛⅜⅝⅞\s/]+)\s*(.*)$/);
+  const match = baseQuantity.match(/^([\d\s\/.,¼½¾⅓⅔⅛⅜⅝⅞]+)\s*(.*)$/);
   let qtyPart = match ? match[1].trim() : baseQuantity;
   let unitPart = match ? match[2].trim() : "";
 
-  const qty = parseFloat(qtyPart.replace(/[^\d.]/g, "")); // get numeric part
-  if (isNaN(qty)) return `${baseQuantity}`; // fallback for text like "to taste"
+  const qty = parseFraction(qtyPart);
+  if (isNaN(qty)) {
+    // Fallback for "to taste", "for garnish", etc.
+    return baseQuantity;
+  }
 
-  const multiplier = servings / baseServings;
-  const quantity = qty * multiplier;
-  const displayQty = quantity % 1 === 0 ? quantity : quantity.toFixed(1);
+  const scaled = qty * (servings / baseServings);
+  const display = formatFraction(scaled);
 
-  return `${displayQty} ${unitPart || unit || ""}`.trim();
+  return `${display} ${unitPart || unit || ""}`.trim();
 };
+
 
 
   return (

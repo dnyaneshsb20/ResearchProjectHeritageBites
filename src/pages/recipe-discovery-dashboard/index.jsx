@@ -106,8 +106,8 @@ const RecipeDiscoveryDashboard = () => {
     const dietaryOptions = [...new Set(data.map(d => d.dietary_type).filter(Boolean))]
       .map(v => ({ id: `dietary_${v.toLowerCase().replace(' ', '-')}`, label: v, icon: 'Leaf' }));
 
-    const festivalOptions = [...new Set(data.map(d => d.festival_tag).filter(Boolean))]
-      .map(v => ({ id: `festival_${v.toLowerCase()}`, label: v, icon: 'Calendar' }));
+    //const festivalOptions = [...new Set(data.map(d => d.festival_tag).filter(Boolean))]
+      //.map(v => ({ id: `festival_${v.toLowerCase()}`, label: v, icon: 'Calendar' }));
 
     const difficultyOptions = [...new Set(data.map(d => d.difficulty_level).filter(Boolean))]
       .map(v => ({ id: `difficulty_${v.toLowerCase()}`, label: v, icon: 'BarChart3' }));
@@ -121,7 +121,7 @@ const RecipeDiscoveryDashboard = () => {
     setFilterCategories([
       // { id: 'meal', label: 'Meal Type', options: mealOptions },
       { id: 'dietary', label: 'Dietary', options: dietaryOptions },
-      { id: 'festival', label: 'Festival', options: festivalOptions },
+      //{ id: 'festival', label: 'Festival', options: festivalOptions },
       { id: 'difficulty', label: 'Difficulty', options: difficultyOptions },
       { id: 'time', label: 'Time', options: timeOptions }
     ]);
