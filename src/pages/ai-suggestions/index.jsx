@@ -20,6 +20,7 @@ import { motion, useAnimation } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { Link } from "react-router-dom";
 
 const AISuggestions = () => {
   const controls = useAnimation();
@@ -53,54 +54,58 @@ const AISuggestions = () => {
   );
 
   // === AI Handler ===
-const handleAskAI = async (e) => {
-  e.preventDefault();
-  const text = query.trim();
-  if (!text) return;
+  const handleAskAI = async (e) => {
+    e.preventDefault();
+    const text = query.trim();
+    if (!text) return;
 
-  if (isChatEmpty) setWelcomeSentence("");
-  setQuery("");
-  setIsLoading(true);
+    // if (isChatEmpty) setWelcomeSentence("");
+    setQuery("");
+    setIsLoading(true);
 
-  controls.start({
-    x: [0, 40, -40, 0],
-    y: [0, -40, 40, 0],
-    rotate: [0, 15, 15, 0],
-    opacity: [1, 0, 0, 1],
-    transition: { duration: 0.8, ease: "easeInOut" },
-  });
+    // controls.start({
+    //   x: [0, 40, -40, 0],
+    //   y: [0, -40, 40, 0],
+    //   rotate: [0, 15, 15, 0],
+    //   opacity: [1, 0, 0, 1],
+    //   transition: { duration: 0.8, ease: "easeInOut" },
+    // });
+    controls.start({
+      y: [0, -4, 0],
+      transition: { duration: 0.3, ease: "easeOut" },
+    });
 
-  setMessages((prev) => [...prev, { role: "user", text }]);
+    setMessages((prev) => [...prev, { role: "user", text }]);
 
-  const greetings = ["hi", "hello", "hey", "hii"];
-  if (greetings.includes(text.toLowerCase())) {
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: "ai",
-        text: `👋 Hello there! I'm **${aiName}**, your culinary assistant.  
-Tell me what ingredients you have, and I'll suggest some dishes 🍛.`,
-      },
-    ]);
-    setIsLoading(false);
-    return;
-  }
+    const greetings = ["hi", "hello", "hey", "hii"];
+    if (greetings.includes(text.toLowerCase())) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "ai",
+          text: `Hello there! I'm **${aiName}**, your culinary assistant.  
+Tell me what ingredients you have, and I'll suggest some dishes.`,
+        },
+      ]);
+      setIsLoading(false);
+      return;
+    }
 
-  try {
-    // === User selects a recipe number ===
-    if (awaitingSelection && /^\d+$/.test(text)) {
-      const index = parseInt(text, 10) - 1;
-      if (index < 0 || index >= lastRecipes.length) {
-        setMessages((prev) => [
-          ...prev,
-          { 
-            role: "ai", 
-            text: `⚠️ Please select a number between 1 and ${lastRecipes.length}.` 
-          },
-        ]);
-      } else {
-        const recipeName = lastRecipes[index];
-        const systemPrompt = `You are BiteBot, an Indian recipe assistant. Provide a detailed recipe in this EXACT structure:
+    try {
+      // === User selects a recipe number ===
+      if (awaitingSelection && /^\d+$/.test(text)) {
+        const index = parseInt(text, 10) - 1;
+        if (index < 0 || index >= lastRecipes.length) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "ai",
+              text: `⚠️ Please select a number between 1 and ${lastRecipes.length}.`
+            },
+          ]);
+        } else {
+          const recipeName = lastRecipes[index];
+          const systemPrompt = `You are BiteBot, an Indian recipe assistant. Provide a detailed recipe in this EXACT structure:
 
 # Recipe Name
 
@@ -120,46 +125,46 @@ Tell me what ingredients you have, and I'll suggest some dishes 🍛.`,
 
 Use proper Markdown formatting with headers, bullet points, and numbered lists.`;
 
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: `Give me the complete recipe for: ${recipeName}. Format it exactly as requested.` },
-            ],
-            max_tokens: 1200,
-            temperature: 0.7,
-          }),
-        });
+          const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+            },
+            body: JSON.stringify({
+              model: "gpt-4o-mini",
+              messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: `Give me the complete recipe for: ${recipeName}. Format it exactly as requested.` },
+              ],
+              max_tokens: 1200,
+              temperature: 0.7,
+            }),
+          });
 
-        const data = await response.json();
-        let reply = data.choices?.[0]?.message?.content || "⚠️ Could not generate recipe details.";
+          const data = await response.json();
+          let reply = data.choices?.[0]?.message?.content || "⚠️ Could not generate recipe details.";
 
-        // Ensure proper formatting
-        if (!reply.includes("#") && !reply.includes("##")) {
-          reply = `# ${recipeName}\n\n${reply}`;
-        }
-
-        setMessages((prev) => [
-          ...prev, 
-          { 
-            role: "ai", 
-            text: `${reply}\n\n---\n*Want more recipes? Just tell me your ingredients!*` 
+          // Ensure proper formatting
+          if (!reply.includes("#") && !reply.includes("##")) {
+            reply = `# ${recipeName}\n\n${reply}`;
           }
-        ]);
-        setAwaitingSelection(false);
-        setMode("detail");
-      }
-    }
 
-    // === User provides ingredients (new request) ===
-    else {
-      const systemPrompt = `You are BiteBot, a friendly Indian recipe assistant.
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "ai",
+              text: `${reply}\n\n---\n*Want more recipes? Just tell me your ingredients!*`
+            }
+          ]);
+          setAwaitingSelection(false);
+          setMode("detail");
+        }
+      }
+
+      // === User provides ingredients (new request) ===
+      else {
+        const systemPrompt = `You are BiteBot, a friendly Indian recipe assistant.
 IMPORTANT: When user provides ingredients, respond with ONLY this exact format:
 
 Here are some dishes you can make with your ingredients:
@@ -180,75 +185,75 @@ Rules:
 - No emojis in the list
 - Make sure recipes are relevant to Indian cuisine`;
 
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `Ingredients: ${text}` },
-          ],
-          max_tokens: 400,
-          temperature: 0.7,
-        }),
-      });
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: `Ingredients: ${text}` },
+            ],
+            max_tokens: 400,
+            temperature: 0.7,
+          }),
+        });
 
-      const data = await response.json();
-      let reply = data.choices?.[0]?.message?.content || "⚠️ Could not generate recipes.";
+        const data = await response.json();
+        let reply = data.choices?.[0]?.message?.content || "⚠️ Could not generate recipes.";
 
-      // Clean up and validate the response
-      let cleanedReply = reply.trim();
-      
-      // Ensure it starts with the proper header
-      if (!cleanedReply.includes("Here are some dishes")) {
-        cleanedReply = "Here are some dishes you can make with your ingredients:\n\n" + cleanedReply;
+        // Clean up and validate the response
+        let cleanedReply = reply.trim();
+
+        // Ensure it starts with the proper header
+        if (!cleanedReply.includes("Here are some dishes")) {
+          cleanedReply = "Here are some dishes you can make with your ingredients:\n\n" + cleanedReply;
+        }
+
+        // Ensure it ends with selection instruction
+        if (!cleanedReply.includes("Type the number")) {
+          cleanedReply += "\n\nType the number of the recipe you'd like to see (e.g., '1', '2', etc.)";
+        }
+
+        // Extract recipe names for selection
+        const recipes = cleanedReply
+          .split('\n')
+          .filter(line => /^\d+\.\s+.+/.test(line))
+          .map(line => line.replace(/^\d+\.\s*/, '').trim())
+          .filter(name => name.length > 0);
+
+        if (recipes.length > 0) {
+          setLastRecipes(recipes);
+          setMode("list");
+          setAwaitingSelection(true);
+          setMessages((prev) => [...prev, { role: "ai", text: cleanedReply }]);
+        } else {
+          // Fallback if no recipes were parsed
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "ai",
+              text: "I couldn't generate a proper recipe list. Please try again with different ingredients."
+            }
+          ]);
+          setAwaitingSelection(false);
+        }
       }
 
-      // Ensure it ends with selection instruction
-      if (!cleanedReply.includes("Type the number")) {
-        cleanedReply += "\n\nType the number of the recipe you'd like to see (e.g., '1', '2', etc.)";
-      }
-
-      // Extract recipe names for selection
-      const recipes = cleanedReply
-        .split('\n')
-        .filter(line => /^\d+\.\s+.+/.test(line))
-        .map(line => line.replace(/^\d+\.\s*/, '').trim())
-        .filter(name => name.length > 0);
-
-      if (recipes.length > 0) {
-        setLastRecipes(recipes);
-        setMode("list");
-        setAwaitingSelection(true);
-        setMessages((prev) => [...prev, { role: "ai", text: cleanedReply }]);
-      } else {
-        // Fallback if no recipes were parsed
-        setMessages((prev) => [
-          ...prev,
-          { 
-            role: "ai", 
-            text: "I couldn't generate a proper recipe list. Please try again with different ingredients." 
-          }
-        ]);
-        setAwaitingSelection(false);
-      }
+    } catch (error) {
+      console.error(error);
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", text: "⚠️ Something went wrong. Please try again later." },
+      ]);
+      setAwaitingSelection(false);
+    } finally {
+      setIsLoading(false);
     }
-
-  } catch (error) {
-    console.error(error);
-    setMessages((prev) => [
-      ...prev,
-      { role: "ai", text: "⚠️ Something went wrong. Please try again later." },
-    ]);
-    setAwaitingSelection(false);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   // Scroll to latest message
   useEffect(() => {
@@ -297,16 +302,16 @@ Rules:
         ${isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-full w-64"}`}
       >
         <div className="flex items-center gap-3 p-4 border-b border-none">
-          <div className="flex items-center justify-center w-11 h-11 bg-primary rounded-lg">
+          <Link to="/" className="flex items-center justify-center w-11 h-11 bg-primary rounded-lg">
             <span className="text-white text-xl font-bold">HB</span>
-          </div>
+          </Link>
           <div className="flex flex-col">
             <span className="text-xl font-heading font-semibold text-white">HeritageBites</span>
             <h1 className="text-sm font-semibold text-white">{aiName} Assistant</h1>
           </div>
         </div>
         <div className="flex flex-col flex-1 overflow-y-auto p-3 space-y-2 text-white">
-          <button 
+          <button
             onClick={() => {
               setMessages([]);
               setMode("idle");
@@ -326,16 +331,27 @@ Rules:
         </div>
       </aside>
 
-      <div className={`flex flex-col flex-1 ${isChatEmpty ? "justify-center items-center" : ""}`}>
-        <header className="p-4 pl-16 border-b bg-popover/90 flex items-center gap-3">
-          <div className="w-8 h-8 flex items-center justify-center bg-yellow-500 rounded-full">
-            <Icon name="Sparkles" size={20} className="text-white" />
+      <div className={`flex flex-col flex-1 z-10 ${isChatEmpty ? "justify-center items-center" : ""}`}>
+        <header className="absolute top-6 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center text-center">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 flex items-center justify-center bg-yellow-500 rounded-full">
+              <Icon name="Sparkles" size={22} className="text-white" />
+            </div>
+            <h1 className="text-2xl font-semibold text-white drop-shadow-lg">{aiName} Assistant</h1>
           </div>
-          <h1 className="text-lg font-semibold text-white">{aiName} Assistant</h1>
         </header>
 
+
+        {isChatEmpty && (
+          <div className="flex flex-col justify-center items-center mt-10">
+            <h1 className="text-3xl font-semibold text-white mb-4">
+              {welcomeSentence || "What can I help with?"}
+            </h1>
+          </div>
+        )}
+
         {!isChatEmpty && (
-          <main className="flex-1 overflow-y-auto px-4 py-6 relative z-10">
+          <main className="h-[900px] mt-20 overflow-y-auto px-4 py-6 relative z-10">
             <div className="max-w-4xl mx-auto space-y-4">
               {messages.map((m, i) => (
                 <div
@@ -347,23 +363,23 @@ Rules:
                       <div className="w-8 h-8 flex items-center justify-center bg-yellow-500 rounded-full">
                         <Icon name="Sparkles" size={20} className="text-white" />
                       </div>
-                      <div className="px-4 py-2 rounded-2xl text-base shadow max-w-2xl border border-[#F9BC06] bg-[#FFF7E6] text-black">
-  <ReactMarkdown 
-    remarkPlugins={[remarkGfm]} 
-    rehypePlugins={[rehypeRaw]}
-    components={{
-      h1: ({node, ...props}) => <h1 className="text-2xl font-bold mt-4 mb-2 text-orange-600" {...props} />,
-      h2: ({node, ...props}) => <h2 className="text-xl font-semibold mt-3 mb-2 text-orange-500" {...props} />,
-      h3: ({node, ...props}) => <h3 className="text-lg font-medium mt-2 mb-1 text-orange-400" {...props} />,
-      ul: ({node, ...props}) => <ul className="list-disc list-inside my-2" {...props} />,
-      ol: ({node, ...props}) => <ol className="list-decimal list-inside my-2" {...props} />,
-      li: ({node, ...props}) => <li className="my-1" {...props} />,
-      p: ({node, ...props}) => <p className="my-2" {...props} />,
-      strong: ({node, ...props}) => <strong className="font-bold" {...props} />
-    }}
-  >
-    {m.text}
-  </ReactMarkdown>
+                      <div className="px-4 py-2 rounded-2xl text-base shadow max-w-2xl bg-[#FFF7E6] text-black">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeRaw]}
+                          components={{
+                            h1: ({ node, ...props }) => <h1 className="text-2xl font-bold mt-4 mb-2 text-orange-600" {...props} />,
+                            h2: ({ node, ...props }) => <h2 className="text-xl font-semibold mt-3 mb-2 text-orange-500" {...props} />,
+                            h3: ({ node, ...props }) => <h3 className="text-lg font-medium mt-2 mb-1 text-orange-400" {...props} />,
+                            ul: ({ node, ...props }) => <ul className="list-disc list-inside my-2" {...props} />,
+                            ol: ({ node, ...props }) => <ol className="list-decimal list-inside my-2" {...props} />,
+                            li: ({ node, ...props }) => <li className="my-1" {...props} />,
+                            p: ({ node, ...props }) => <p className="my-2" {...props} />,
+                            strong: ({ node, ...props }) => <strong className="font-bold" {...props} />
+                          }}
+                        >
+                          {m.text}
+                        </ReactMarkdown>
                       </div>
                     </>
                   ) : (
@@ -372,22 +388,22 @@ Rules:
                         className="px-4 py-2 rounded-2xl text-base shadow max-w-3xl text-white"
                         style={{ background: "linear-gradient(to right, #f87d46, #fa874f)" }}
                       >
-  <ReactMarkdown 
-    remarkPlugins={[remarkGfm]} 
-    rehypePlugins={[rehypeRaw]}
-    components={{
-      h1: ({node, ...props}) => <h1 className="text-2xl font-bold mt-4 mb-2 text-orange-600" {...props} />,
-      h2: ({node, ...props}) => <h2 className="text-xl font-semibold mt-3 mb-2 text-orange-500" {...props} />,
-      h3: ({node, ...props}) => <h3 className="text-lg font-medium mt-2 mb-1 text-orange-400" {...props} />,
-      ul: ({node, ...props}) => <ul className="list-disc list-inside my-2" {...props} />,
-      ol: ({node, ...props}) => <ol className="list-decimal list-inside my-2" {...props} />,
-      li: ({node, ...props}) => <li className="my-1" {...props} />,
-      p: ({node, ...props}) => <p className="my-2" {...props} />,
-      strong: ({node, ...props}) => <strong className="font-bold" {...props} />
-    }}
-  >
-    {m.text}
-  </ReactMarkdown>
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeRaw]}
+                          components={{
+                            h1: ({ node, ...props }) => <h1 className="text-2xl font-bold mt-4 mb-2 text-orange-600" {...props} />,
+                            h2: ({ node, ...props }) => <h2 className="text-xl font-semibold mt-3 mb-2 text-orange-500" {...props} />,
+                            h3: ({ node, ...props }) => <h3 className="text-lg font-medium mt-2 mb-1 text-orange-400" {...props} />,
+                            ul: ({ node, ...props }) => <ul className="list-disc list-inside my-2" {...props} />,
+                            ol: ({ node, ...props }) => <ol className="list-decimal list-inside my-2" {...props} />,
+                            li: ({ node, ...props }) => <li className="my-1" {...props} />,
+                            p: ({ node, ...props }) => <p className="my-2" {...props} />,
+                            strong: ({ node, ...props }) => <strong className="font-bold" {...props} />
+                          }}
+                        >
+                          {m.text}
+                        </ReactMarkdown>
                       </div>
                       <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-[#f87d46] to-[#fa874f] rounded-full">
                         <FiUser className="text-white text-xl" />
@@ -423,10 +439,10 @@ Rules:
           </main>
         )}
 
-        <form onSubmit={handleAskAI} className={`p-4 border-t bg-popover/90 ${isChatEmpty ? "flex flex-col justify-center items-center" : ""}`}>
-          {isChatEmpty && (
+        <form onSubmit={handleAskAI} className={`p-4  ${isChatEmpty ? "flex flex-col justify-center items-center" : ""}`}>
+          {/* {isChatEmpty && (
             <h1 className="text-3xl font-semibold text-white mb-4">{welcomeSentence || "What can I help with?"}</h1>
-          )}
+          )} */}
 
           <div className={`flex gap-2 items-center ${isChatEmpty ? "max-w-3xl w-full" : "max-w-4xl mx-auto"}`}>
             <div ref={attachRef} className="relative flex-1">
