@@ -22,7 +22,7 @@ const ForgotPassword = ({ onClose, openResetPassword }) => {
 
     try {
       // Call server to generate and send OTP
-      const response = await fetch("http://localhost:5000/sendOtp", {
+      const response = await fetch("https://otp-reset-server.onrender.com/sendOtp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -60,7 +60,7 @@ const ForgotPassword = ({ onClose, openResetPassword }) => {
 
     try {
       // Call server-side OTP verification
-      const response = await fetch("http://localhost:5001/verifyOtp", {
+      const response = await fetch("https://otp-reset-server.onrender.com/verifyOtp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),
