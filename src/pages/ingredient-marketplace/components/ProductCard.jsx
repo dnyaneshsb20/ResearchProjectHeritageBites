@@ -11,8 +11,9 @@ const ProductCard = ({ product, onAddToCart, onToggleWishlist, onProductClick })
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
 
+  const isInCart = cartItems.some((item) => item.id === product.id);
 
   const handleWishlistToggle = (e) => {
     e?.stopPropagation();
@@ -21,6 +22,7 @@ const ProductCard = ({ product, onAddToCart, onToggleWishlist, onProductClick })
   };
 
   const handleAddToCart = async (e) => {
+      if (!isInCart) {
     e?.stopPropagation();
 
     if (!user) {
@@ -32,6 +34,7 @@ const ProductCard = ({ product, onAddToCart, onToggleWishlist, onProductClick })
 
     // Add to cart context to open modal
     addToCart(product);
+    setTimeout(() => setIsAddingToCart(false), 500);
 
     // Optional: if you still have parent handler
     if (onAddToCart) {
@@ -39,7 +42,8 @@ const ProductCard = ({ product, onAddToCart, onToggleWishlist, onProductClick })
     }
 
     setIsAddingToCart(false);
-  };
+  }
+};
 
 
   const formatPrice = (price) => {
@@ -202,14 +206,24 @@ const ProductCard = ({ product, onAddToCart, onToggleWishlist, onProductClick })
         {/* Add to Cart Button */}
         <Button
           onClick={handleAddToCart}
-          disabled={product?.stock === 0 || isAddingToCart}
+          disabled={product?.stock === 0 || isAddingToCart || isInCart}
           loading={isAddingToCart}
-          iconName="ShoppingCart"
+          iconName={isInCart ? "CheckCircle" : "ShoppingCart"}
           iconPosition="left"
-          className="w-full"
+          className={`w-full ${isInCart
+              ? 'bg-green-400 cursor-not-allowed hover:bg-gray-400'
+              : 'bg-orange-400 hover:bg-orange-600'
+            }`}
         >
-          {product?.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+          {product?.stock === 0
+            ? 'Out of Stock'
+            : isInCart
+              ? 'Added to Cart'
+              : 'Add to Cart'}
         </Button>
+
+
+
       </div>
     </div>
   );

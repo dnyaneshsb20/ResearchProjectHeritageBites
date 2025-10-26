@@ -20,7 +20,7 @@ export const CartProvider = ({ children }) => {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
-    setIsCartOpen(true);
+    //setIsCartOpen(true);
   };
 
   // ✅ Remove product completely

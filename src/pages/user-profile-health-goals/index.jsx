@@ -53,25 +53,25 @@ const UserProfileHealthGoals = () => {
 
   const [profileCompleteness, setProfileCompleteness] = useState(0);
 
-  const calculateProfileCompletion = (userData, profileData) => {
-    let completed = 0;
-    let total = 10; // total points, you can adjust
+const calculateProfileCompletion = (userData, profileData) => {
+  // Each Boolean check corresponds to one field
+  const checks = [
+    !!userData?.name,
+    !!userData?.email,
+    !!profileData?.age_group,
+    !!profileData?.gender,
+    !!profileData?.height_cm,
+    !!profileData?.weight_kg,
+    !!profileData?.activity_level,
+    !!userData?.location,          // Optional: include location
+  ];
 
-    // Base info
-    if (userData?.name) completed += 1;
-    if (userData?.email) completed += 1;
+  const completed = checks.filter(Boolean).length;
+  const total = checks.length;
 
-    // Profile info
-    if (profileData?.age_group) completed += 1;
-    if (profileData?.gender) completed += 1;
-    if (profileData?.height_cm) completed += 1;
-    if (profileData?.weight_kg) completed += 1;
-    if (profileData?.activity_level) completed += 1;
-    if (profileData?.preferences && Object.keys(profileData.preferences).length > 0) completed += 1;
-    if (profileData?.health_goals && profileData.health_goals.length > 0) completed += 1;
+  return Math.round((completed / total) * 100);
+};
 
-    return Math.round((completed / total) * 100);
-  };
 
   const updateProfileCompletion = async () => {
     try {
