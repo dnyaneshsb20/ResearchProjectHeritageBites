@@ -110,8 +110,7 @@ const FeaturesSection = () => {
                 </span>
               </div>
               <Link to="/ingredient-marketplace">
-                <Button variant="spice" size="lg" className="bg-saffron hover:bg-deep-red text-black hover:text-white rounded-full shadow-md px-6 py-3 transition-all duration-300"
-  >
+                <Button variant="spice" size="lg" className="bg-saffron hover:bg-deep-red text-black hover:text-white rounded-full shadow-md px-6 py-3 transition-all duration-300">
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Explore Marketplace
                 </Button>
