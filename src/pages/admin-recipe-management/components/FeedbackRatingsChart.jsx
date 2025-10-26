@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../../supabaseClient';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Cell, LabelList } from 'recharts';
 import toast from 'react-hot-toast';
 
 const FeedbackRatingsChart = () => {
@@ -67,7 +67,21 @@ const FeedbackRatingsChart = () => {
           <BarChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             {/* Remove XAxis labels */}
-            <XAxis dataKey="name" tick={false} />
+            <XAxis
+              dataKey="name"
+              tick={{ fontSize: 12, fill: '#374151' }}
+              tickFormatter={(value) => {
+                // Short labels mapping
+                const map = {
+                  'E MARKET_RATING': 'E-Market',
+                  'RECIPE RATING': 'Recipe',
+                  'CHATBOT RATING': 'Chatbot',
+                  'CONTRIBUTION RATING': 'Contrib',
+                  'OVERALL RATING': 'Overall'
+                };
+                return map[value] || value;
+              }}
+            />
             <YAxis domain={[0, 5]} tick={{ fontSize: 12, fill: '#374151' }} />
             <Tooltip
               contentStyle={{ backgroundColor: '#f9fafb', borderRadius: 8, border: '1px solid #d1d5db' }}
@@ -77,13 +91,17 @@ const FeedbackRatingsChart = () => {
               dataKey="Average"
               radius={[6, 6, 0, 0]}
               barSize={40}
-              fill="#4ade80"
-            // Assign colors per bar
             >
               {chartData.map((entry, index) => {
-                const colors = ['#ef4444', '#3b82f6', '#22c55e', '#f97316', '#eab308']; // red, blue, green, orange, yellow
+                const colors = ['#ef4444', '#3b82f6', '#22c55e', '#f97316', '#eab308'];
                 return <Cell key={`cell-${index}`} fill={colors[index]} />;
               })}
+              <LabelList
+                dataKey="Average"
+                position="top"
+                formatter={(value) => value.toFixed(2)}
+                style={{ fontSize: 12, fontWeight: 500 }}
+              />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
