@@ -16,35 +16,68 @@ const CustomerOrdersTable = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        // Fetch orders
         const { data: ordersData, error: ordersError } = await supabase
           .from("orders")
           .select("*")
           .order("created_at", { ascending: false });
         if (ordersError) throw ordersError;
 
+        // Fetch users
         const { data: usersData, error: usersError } = await supabase
           .from("users")
           .select("user_id, name, email");
         if (usersError) throw usersError;
 
+        // Fetch order items with product info
+        const { data: orderItemsData, error: orderItemsError } = await supabase
+          .from("order_items")
+          .select(`
+            order_id,
+            quantity,
+            price,
+            product_id,
+            products (
+              name,
+              farmer_id
+            )
+          `);
+        if (orderItemsError) throw orderItemsError;
+
+        // Fetch farmers with user info
         const { data: farmersData, error: farmersError } = await supabase
           .from("farmers")
           .select(`
             farmer_id,
             user_id,
-            users ( name )
+            users(name)
           `);
         if (farmersError) throw farmersError;
 
-        const ordersWithNames = ordersData.map((order) => {
-          const user = usersData.find((u) => u.user_id === order.user_id);
-          const farmerId = order.items?.farmer_id;
-          const farmer = farmersData.find((f) => f.user_id === farmerId);
+        // Map orders with user and farmer info
+        const ordersWithNames = ordersData.map(order => {
+          const user = usersData.find(u => u.user_id === order.user_id);
+
+          // Get all items for this order and attach product & farmer info
+          const items = orderItemsData
+            .filter(item => item.order_id === order.order_id)
+            .map(item => {
+              const farmer = farmersData.find(f => f.farmer_id === item.products.farmer_id);
+              return {
+                ...item,
+                productName: item.products.name,
+                farmerName: farmer?.users?.name || "-"
+              };
+            });
+
+          // Get unique farmer names for this order
+          const farmerNames = [...new Set(items.map(i => i.farmerName).filter(Boolean))];
 
           return {
             ...order,
             user,
-            farmerName: farmer?.users?.name || "-",
+            items, // attach items with farmerName
+            farmerName: farmerNames.join(", ") || "-"
           };
         });
 
@@ -177,7 +210,7 @@ const CustomerOrdersTable = () => {
       {/* Modal */}
       {modalOpen && selectedOrder && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 relative max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 relative h-[85vh] overflow-y-auto mt-16">
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold"
@@ -234,10 +267,10 @@ const CustomerOrdersTable = () => {
                   <tbody>
                     {selectedOrder.items.map((item, idx) => (
                       <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                        <td className="p-2 border-b">{item.name}</td>
+                        <td className="p-2 border-b">{item.productName}</td>
                         <td className="p-2 border-b">{item.quantity}</td>
                         <td className="p-2 border-b">Rs {item.price?.toFixed(2)}</td>
-                        <td className="p-2 border-b">{item.farmer_name ?? "-"}</td>
+                        <td className="p-2 border-b">{item.farmerName}</td>
                       </tr>
                     ))}
                   </tbody>
