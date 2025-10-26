@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../../supabaseClient";
-import { MapPin, Mail, User, Phone } from "lucide-react";
-import Button from "../../../components/ui/Button"; // assuming you have this like contributors
-import Icon from "../../../components/AppIcon"; // for consistency if needed
+import { MapPin, User } from "lucide-react";
+import Button from "../../../components/ui/Button";
+import UserProfileModal from "./UserProfileModal"; // 👈 new import
 
 // Helper functions for initials and color
 const getInitials = (name) => {
@@ -25,6 +25,7 @@ const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null); // 👈 for modal control
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -48,7 +49,7 @@ const UserManagement = () => {
           )
         `)
         .eq("role", "user")
-        .order("name", { ascending: false });;
+        .order("name", { ascending: false });
 
       if (error) throw error;
 
@@ -76,9 +77,7 @@ const UserManagement = () => {
       setUsers(formattedUsers.reverse());
     } catch (err) {
       console.error("Error fetching users:", err);
-      setErrorMsg(
-        "Failed to fetch users. Please check your database and try again."
-      );
+      setErrorMsg("Failed to fetch users. Please check your database and try again.");
     } finally {
       setLoading(false);
     }
@@ -89,19 +88,11 @@ const UserManagement = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64 text-gray-500">
-        Loading users...
-      </div>
-    );
+    return <div className="flex justify-center items-center h-64 text-gray-500">Loading users...</div>;
   }
 
   if (errorMsg) {
-    return (
-      <div className="flex justify-center items-center h-64 text-red-500">
-        {errorMsg}
-      </div>
-    );
+    return <div className="flex justify-center items-center h-64 text-red-500">{errorMsg}</div>;
   }
 
   return (
@@ -127,57 +118,40 @@ const UserManagement = () => {
                     {getInitials(user.name)}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground">
-                      {user.name}
-                    </h3>
+                    <h3 className="text-lg font-semibold text-foreground">{user.name}</h3>
                     <div className="flex items-center space-x-1 text-sm text-muted-foreground">
                       <MapPin className="w-3 h-3 text-muted-foreground" />
                       <span>{user.location}</span>
                     </div>
                   </div>
                 </div>
-                {/* Optional status badge */}
               </div>
 
               {/* Stats */}
               <div className="space-y-3 mb-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Email</span>
-                  <span className="text-sm font-medium text-foreground">
-                    {user.email}
-                  </span>
+                  <span className="text-sm font-medium text-foreground">{user.email}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Mobile</span>
-                  <span className="text-sm font-medium text-success">
-                    {user.mobile}
-                  </span>
+                  <span className="text-sm font-medium text-success">{user.mobile}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Gender</span>
-                  <span className="text-sm font-medium text-foreground">
-                    {user.gender}
-                  </span>
+                  <span className="text-sm font-medium text-foreground">{user.gender}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Age Group</span>
-                  <span className="text-sm font-medium text-foreground">
-                    {user.ageGroup}
-                  </span>
+                  <span className="text-sm font-medium text-foreground">{user.ageGroup}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    Activity Level
-                  </span>
-                  <span className="text-sm font-medium text-foreground">
-                    {user.activityLevel}
-                  </span>
+                  <span className="text-sm text-muted-foreground">Activity Level</span>
+                  <span className="text-sm font-medium text-foreground">{user.activityLevel}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Joined</span>
-                  <span className="text-sm text-muted-foreground">
-                    {user.createdAt}
-                  </span>
+                  <span className="text-sm text-muted-foreground">{user.createdAt}</span>
                 </div>
               </div>
 
@@ -187,7 +161,7 @@ const UserManagement = () => {
                   variant="ghost2"
                   size="sm"
                   className="flex-1"
-                  onClick={() => alert(`View profile of ${user.name}`)}
+                  onClick={() => setSelectedUser(user)} // 👈 open modal
                 >
                   <User className="w-4 h-4" />
                   <span className="ml-1">View Profile</span>
@@ -198,30 +172,12 @@ const UserManagement = () => {
         </div>
       )}
 
-      {/* Summary Section */}
-      <div className="mt-10 bg-white p-6 rounded-xl shadow border border-gray-100">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Summary</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-          <div>
-            <p className="text-3xl font-bold text-blue-600">{users.length}</p>
-            <p className="text-gray-500">Total Users</p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-green-600">
-              {users.filter((u) => u.activityLevel.toLowerCase() === "active")
-                .length}
-            </p>
-            <p className="text-gray-500">Active Users</p>
-          </div>
-          <div>
-            <p className="text-3xl font-bold text-yellow-600">
-              {users.filter((u) => u.activityLevel.toLowerCase() === "moderate")
-                .length}
-            </p>
-            <p className="text-gray-500">Moderate Activity Users</p>
-          </div>
-        </div>
-      </div>
+      {selectedUser && (
+        <UserProfileModal
+          user={selectedUser}
+          onClose={() => setSelectedUser(null)}
+        />
+      )}
     </div>
   );
 };
