@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../components/ui/Header';
 import Icon from '../../components/AppIcon';
 
@@ -32,6 +32,12 @@ const AdminRecipeManagement = () => {
     fromDate: '',
     toDate: ''
   });
+  // Add these state variables
+  const [pendingSubmissionsCount, setPendingSubmissionsCount] = useState(0);
+  const [totalContributorsCount, setTotalContributorsCount] = useState(0);
+  const [totalFeedbackCount, setTotalFeedbackCount] = useState(0);
+  const [totalOrdersCount, setTotalOrdersCount] = useState(0);
+  const [totalFarmersCount, setTotalFarmersCount] = useState(0);
 
   // Mock states for filter dropdown
   const [states] = useState([
@@ -197,6 +203,48 @@ const AdminRecipeManagement = () => {
     if (hour < 18) return "Good Afternoon";
     return "Good Evening";
   };
+  useEffect(() => {
+    const fetchDashboardCounts = async () => {
+      try {
+        // Pending submissions
+        const { count: pendingCount } = await supabase
+          .from('rec_contributions')
+          .select('*', { count: 'exact' })
+          .eq('status', 'pending');
+        setPendingSubmissionsCount(pendingCount || 0);
+
+        // Total contributors (all non-admin users)
+        const { count: contributorsCount } = await supabase
+          .from('users')
+          .select('*', { count: 'exact' })
+          .in('role', ['user', 'contributor']); // include actual roles present
+        setTotalContributorsCount(contributorsCount || 0);
+
+        // Total feedback
+        const { count: feedbackCount } = await supabase
+          .from('website_feedback')
+          .select('*', { count: 'exact' });
+        setTotalFeedbackCount(feedbackCount || 0);
+
+        // Total orders
+        const { count: ordersCount } = await supabase
+          .from('orders')
+          .select('*', { count: 'exact' });
+        setTotalOrdersCount(ordersCount || 0);
+
+        // Total farmers
+        const { count: farmersCount } = await supabase
+          .from('farmers')
+          .select('*', { count: 'exact' });
+        setTotalFarmersCount(farmersCount || 0);
+      } catch (error) {
+        console.error('Error fetching dashboard counts:', error);
+        toast.error('Failed to load dashboard stats');
+      }
+    };
+
+    fetchDashboardCounts();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -204,30 +252,70 @@ const AdminRecipeManagement = () => {
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-1">{getGreeting()}! Admin</h1>
-          <p className="text-muted-foreground mt-2">
-            Review, approve, and curate community-submitted recipes while maintaining platform quality.
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+            <h1 className="text-3xl font-bold text-foreground">{getGreeting()}! Admin</h1>
+            {/* <p className="text-muted-foreground mt-2 sm:mt-0">
+              Overview of the platform stats at a glance.
+            </p> */}
+          </div>
+
+          {/* Stats cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
+            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <div className="bg-red-100 text-red-600 p-3 rounded-full mb-3">
+                <Icon name="FileText" size={20} />
+              </div>
+              <span className="text-2xl font-semibold text-gray-900">{pendingSubmissionsCount}</span>
+              <span className="text-sm text-gray-500 mt-1">Pending Submissions</span>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <div className="bg-blue-100 text-blue-600 p-3 rounded-full mb-3">
+                <Icon name="Users" size={20} />
+              </div>
+              <span className="text-2xl font-semibold text-gray-900">{totalContributorsCount}</span>
+              <span className="text-sm text-gray-500 mt-1">Contributors</span>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <div className="bg-green-100 text-green-600 p-3 rounded-full mb-3">
+                <Icon name="MessageSquare" size={20} />
+              </div>
+              <span className="text-2xl font-semibold text-gray-900">{totalFeedbackCount}</span>
+              <span className="text-sm text-gray-500 mt-1">Feedback Entries</span>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <div className="bg-yellow-100 text-yellow-600 p-3 rounded-full mb-3">
+                <Icon name="ShoppingCart" size={20} />
+              </div>
+              <span className="text-2xl font-semibold text-gray-900">{totalOrdersCount}</span>
+              <span className="text-sm text-gray-500 mt-1">Customer Orders</span>
+            </div>
+
+            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
+              <div className="bg-purple-100 text-purple-600 p-3 rounded-full mb-3">
+                <Icon name="Axe" size={20} />
+              </div>
+              <span className="text-2xl font-semibold text-gray-900">{totalFarmersCount}</span>
+              <span className="text-sm text-gray-500 mt-1">Farmers</span>
+            </div>
+          </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-border mb-8">
+        <div className="flex border-b border-border mb-8 max-w-7xl mx-auto">
           {tabs?.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center space-x-2 px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab.id
+              className={`flex-1 flex items-center justify-center space-x-2 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab.id
                 ? 'text-primary border-primary'
                 : 'text-muted-foreground border-transparent hover:text-foreground hover:border-muted'
                 }`}
             >
               <Icon name={tab.icon} size={16} />
               <span>{tab.label}</span>
-              {/* {tab.count !== null && (
-                <span className="bg-muted text-muted-foreground px-2 py-1 rounded-full text-xs">
-                  {tab.count}
-                </span>
-              )} */}
             </button>
           ))}
         </div>
