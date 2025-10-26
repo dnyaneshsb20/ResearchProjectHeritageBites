@@ -9,7 +9,8 @@ const FilterDrawer = ({
   onClose,
   filters,
   onFilterChange,
-  onClearFilters
+  onClearFilters,
+  onIngredientsUpdate
 }) => {
   const [regions, setRegions] = useState([]);
   const [certifications, setCertifications] = useState([]);
@@ -71,14 +72,54 @@ const FilterDrawer = ({
 
     fetchFilterData();
   }, []);
+const fetchFilteredIngredients = async (selectedRegions) => {
+  if (!selectedRegions?.length) {
+    onIngredientsUpdate([]); // No region selected
+    return;
+  }
+  try {
+    // 1. Get states in selected regions
+    const { data: statesData, error: statesError } = await supabase
+      .from('states')
+      .select('state_id')
+      .in('region', selectedRegions);
+    if (statesError) throw statesError;
+
+    const stateIds = statesData.map(s => s.state_id);
+
+    // 2. Get ingredient IDs for those states
+    const { data: ingredientStatesData, error: ingStateError } = await supabase
+      .from('ingredient_states')
+      .select('ingredient_id')
+      .in('state_id', stateIds);
+    if (ingStateError) throw ingStateError;
+
+    const ingredientIds = ingredientStatesData.map(i => i.ingredient_id);
+
+    // 3. Fetch ingredients
+    const { data: ingredients, error: ingredientsError } = await supabase
+      .from('ingredients')
+      .select('*')
+      .in('ingredient_id', ingredientIds);
+    if (ingredientsError) throw ingredientsError;
+
+    onIngredientsUpdate(ingredients); // send filtered ingredients to parent
+  } catch (err) {
+    console.error('Error fetching filtered ingredients:', err);
+  }
+};
 
   // ✅ Handlers
   const handleRegionChange = (regionId, checked) => {
-    const updatedRegions = checked
-      ? [...filters?.regions, regionId]
-      : filters?.regions?.filter(id => id !== regionId);
-    onFilterChange({ ...filters, regions: updatedRegions });
-  };
+  const updatedRegions = checked
+    ? [...filters?.regions, regionId]
+    : filters?.regions?.filter(id => id !== regionId);
+
+  onFilterChange({ ...filters, regions: updatedRegions });
+
+  fetchFilteredIngredients(updatedRegions); // 🔥 Fetch ingredients
+};
+
 
   const handleCertificationChange = (certId, checked) => {
     const updatedCertifications = checked
@@ -93,6 +134,7 @@ const FilterDrawer = ({
       : filters?.priceRanges?.filter(id => id !== rangeId);
     onFilterChange({ ...filters, priceRanges: updatedPriceRanges });
   };
+  
 
   if (!isOpen) return null;
 
