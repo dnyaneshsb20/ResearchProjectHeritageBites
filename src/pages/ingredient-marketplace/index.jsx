@@ -372,6 +372,11 @@ const IngredientMarketplace = () => {
                   filters={filters}
                   onFilterChange={setFilters}
                   onClearFilters={handleClearFilters}
+                   onIngredientsUpdate={(ingredients) => {
+    // Update filteredProducts based on filtered ingredients
+    const ingredientIds = ingredients.map(i => i.ingredient_id);
+    setFilteredProducts(allProducts.filter(p => ingredientIds.includes(p.ingredient_id)));
+  }}
                 />
               </div>
             </div>
@@ -532,6 +537,11 @@ const IngredientMarketplace = () => {
           filters={filters}
           onFilterChange={setFilters}
           onClearFilters={handleClearFilters}
+         onIngredientsUpdate={(ingredients) => {
+    // Update filteredProducts based on filtered ingredients
+    const ingredientIds = ingredients.map(i => i.ingredient_id);
+    setFilteredProducts(allProducts.filter(p => ingredientIds.includes(p.ingredient_id)));
+  }}
         />
 
         {/* Product Detail Modal */}
