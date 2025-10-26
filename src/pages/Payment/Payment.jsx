@@ -67,25 +67,32 @@ const Payment = () => {
         toast.loading("Processing payment...", { id: "payment" });
 
         try {
-            const orderItems = cartItems.map(item => ({
-                product_id: item.id,
-                name: item.name,
-                price: item.price,
-                quantity: item.quantity || 1
-            }));
-
+            
             const { data: createdOrder, error: orderError } = await supabase
                 .from("orders")
                 .insert([{
                     user_id: userId,
                     total_amount: totalAmount,
                     payment_method: selectedMethod,
-                    items: orderItems
+                    status: "pending"
                 }])
                 .select()
                 .single();
 
             if (orderError || !createdOrder) throw orderError || new Error("Failed to create order");
+
+            const orderItems = cartItems.map(item => ({
+                order_id: createdOrder.order_id,
+                product_id: item.id,       // match product_id in products table
+                quantity: item.quantity || 1,
+                price: item.price
+            }));
+
+            const { error: itemsError } = await supabase
+                .from("order_items")
+                .insert(orderItems);
+
+            if (itemsError) throw itemsError;
 
             setCartItems([]);
             toast.dismiss("payment");

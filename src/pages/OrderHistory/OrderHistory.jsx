@@ -26,17 +26,37 @@ const OrderHistory = () => {
 
       setUser(userData.user);
 
-      const { data, error } = await supabase
+      // 1️⃣ Fetch all orders for this user
+      const { data: ordersData, error: ordersError } = await supabase
         .from("orders")
-        .select("order_id, created_at, total_amount, status, items, payment_method")
+        .select("order_id, created_at, total_amount, status, payment_method")
         .eq("user_id", userData.user.id)
         .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching orders:", error);
-      } else {
-        setOrders(data || []);
+      if (ordersError) {
+        console.error("Error fetching orders:", ordersError);
+        setLoading(false);
+        return;
       }
+
+      // 2️⃣ Fetch item counts for each order
+      const ordersWithCounts = await Promise.all(
+        (ordersData || []).map(async (order) => {
+          const { count, error: countError } = await supabase
+            .from("order_items")
+            .select("*", { count: "exact", head: true })
+            .eq("order_id", order.order_id);
+
+          if (countError) {
+            console.error("Error fetching item count:", countError);
+            return { ...order, itemsCount: 0 };
+          }
+
+          return { ...order, itemsCount: count || 0 };
+        })
+      );
+
+      setOrders(ordersWithCounts);
       setLoading(false);
     };
 
@@ -48,19 +68,37 @@ const OrderHistory = () => {
   );
 
   const handleViewOrder = async (orderId) => {
-    const { data, error } = await supabase
-      .from("orders")
-      .select("*")
-      .eq("order_id", orderId)
-      .single();
+    try {
+      // Fetch the main order
+      const { data: orderData, error: orderError } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("order_id", orderId)
+        .single();
 
-    if (error) {
-      console.error("Error fetching order details:", error);
-      return;
+      if (orderError) throw orderError;
+
+      // Fetch related order items with product names
+      const { data: itemsData, error: itemsError } = await supabase
+        .from("order_items")
+        .select("order_item_id, quantity, price, products(name)")
+        .eq("order_id", orderId);
+
+      if (itemsError) throw itemsError;
+
+      // Map items to include item name
+      const formattedItems = (itemsData || []).map((item) => ({
+        id: item.order_item_id,
+        name: item.products?.name || "Unknown",
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      setSelectedOrder({ ...orderData, items: formattedItems });
+      setModalOpen(true);
+    } catch (err) {
+      console.error("Error fetching order details:", err);
     }
-
-    setSelectedOrder(data);
-    setModalOpen(true);
   };
 
   const closeModal = () => {
@@ -134,7 +172,7 @@ const OrderHistory = () => {
                         timeStyle: "short",
                       })}
                     </td>
-                    <td className="px-4 py-2">{order.items?.length || 0}</td>
+                    <td className="px-4 py-2">{order.itemsCount}</td>
                     <td className="px-4 py-2">
                       {new Intl.NumberFormat("en-IN", {
                         style: "currency",
@@ -143,7 +181,10 @@ const OrderHistory = () => {
                     </td>
                     <td className="px-4 py-2 capitalize">{order.status}</td>
                     <td className="px-4 py-2">
-                      <Button size="sm" onClick={() => handleViewOrder(order.order_id)}>
+                      <Button
+                        size="sm"
+                        onClick={() => handleViewOrder(order.order_id)}
+                      >
                         View
                       </Button>
                     </td>
@@ -216,16 +257,14 @@ const OrderHistory = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedOrder.items.map((item, index) => (
+                      {selectedOrder.items.map((item) => (
                         <tr
-                          key={index}
+                          key={item.id}
                           className="border-t border-border hover:bg-muted/20"
                         >
                           <td className="px-3 py-2">{item.name}</td>
                           <td className="px-3 py-2">{item.quantity}</td>
-                          <td className="px-3 py-2">
-                            ₹{Number(item.price).toFixed(2)}
-                          </td>
+                          <td className="px-3 py-2">₹{item.price.toFixed(2)}</td>
                           <td className="px-3 py-2">
                             ₹{(item.price * item.quantity).toFixed(2)}
                           </td>

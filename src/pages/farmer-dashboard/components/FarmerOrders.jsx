@@ -1,66 +1,87 @@
-// src/pages/farmer-dashboard/components/FarmerOrders.jsx
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../../supabaseClient";
-import { useAuth } from "../../../context/AuthContext";
-import { useLocation } from "react-router-dom";
 import Header from "../../../components/ui/Header";
 import Footer from "../../dashboard/components/Footer";
 
 const FarmerOrders = () => {
-  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
 
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
       try {
-        const stored = user || JSON.parse(localStorage.getItem("user") || "null");
-        const userId = stored?.id || stored?.user_id || stored?.user?.id;
+        // ✅ Get currently logged-in user from Supabase Auth
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError) throw authError;
 
-        if (!userId) return;
+        console.log("👤 Supabase Auth User:", user);
 
-        // Fetch orders where product.farmer_id = current user
-        const { data, error } = await supabase
-          .from("orders")
-          .select(`
-    order_id,
-    status,
-    created_at,
-    total_amount,
-    order_items (
-      quantity,
-      price,
-      products (
-      product_id,
-        name,
-        farmer_id
-      )
-    )
-  `)
-          .order("created_at", { ascending: false });
-
-
-      if (error) {
-          console.error("Supabase error:", error);
+        if (!user) {
+          console.warn("⚠️ No authenticated user found.");
           return;
         }
 
-         const farmerOrders = data.filter(order =>
-          order.order_items.some(item => item.products?.farmer_id === userId)
+        // ✅ Fetch farmer record to get farmer_id linked to that user_id
+        const { data: farmerData, error: farmerError } = await supabase
+          .from("farmers")
+          .select("farmer_id")
+          .eq("user_id", user.id)
+          .single();
+
+        if (farmerError) throw farmerError;
+
+        const farmerId = farmerData?.farmer_id;
+        console.log("👨‍🌾 Logged-in Farmer ID:", farmerId);
+
+        if (!farmerId) {
+          console.warn("⚠️ No farmer_id found for this user.");
+          return;
+        }
+
+        // ✅ Fetch all orders + nested order_items + products
+        const { data, error } = await supabase
+          .from("orders")
+          .select(`
+            order_id,
+            status,
+            created_at,
+            total_amount,
+            payment_method,
+            order_items (
+              quantity,
+              price,
+              product_id,
+              products (
+                name,
+                farmer_id
+              )
+            )
+          `)
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        console.log("🧾 Raw Orders from Supabase:", data);
+
+        // ✅ Filter orders containing products of this farmer
+        const farmerOrders = data.filter(order =>
+          order.order_items?.some(
+            item => item.products?.farmer_id === farmerId
+          )
         );
 
-        setOrders(farmerOrders);
+        console.log("✅ Filtered Orders for this Farmer:", farmerOrders);
+        setOrders(farmerOrders || []);
       } catch (err) {
-        console.error("Fetch error:", err);
+        console.error("❌ Error fetching farmer orders:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchOrders();
-  }, [user]);
+  }, []);
 
   return (
     <>
@@ -81,22 +102,40 @@ const FarmerOrders = () => {
                 <thead className="text-left bg-border/20">
                   <tr>
                     <th className="p-3">Order ID</th>
-                    <th className="p-3">Product</th>
+                    <th className="p-3">Products</th>
                     <th className="p-3">Quantity</th>
                     <th className="p-3">Status</th>
                     <th className="p-3">Date</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((o) => (
-                    <tr key={o.id} className="border-t hover:bg-border/10 transition-colors">
-                      <td className="p-3">{o.id}</td>
-                      <td className="p-3">{o.product?.name ?? "-"}</td>
-                      <td className="p-3">{o.quantity ?? "-"}</td>
-                      <td className="p-3">{o.status ?? "-"}</td>
-                      <td className="p-3">{o.created_at ? new Date(o.created_at).toLocaleDateString() : "-"}</td>
-                    </tr>
-                  ))}
+                  {orders.map((order) => {
+                    const farmerItems = order.order_items.filter(
+                      item => item.products?.farmer_id === order.order_items[0].products?.farmer_id
+                    );
+
+                    return (
+                      <tr key={order.order_id} className="border-t hover:bg-border/10 transition-colors">
+                        <td className="p-3">{order.order_id.slice(0, 8)}</td>
+                        <td className="p-3">
+                          {farmerItems.map(item => item.products?.name).join(", ")}
+                        </td>
+                        <td className="p-3">
+                          {farmerItems.map(item => item.quantity).join(", ")}
+                        </td>
+                        <td className="p-3">{order.status}</td>
+                        <td className="p-3">
+                          {order.created_at
+                            ? new Date(order.created_at).toLocaleString("en-IN", {
+                                timeZone: "Asia/Kolkata",
+                                dateStyle: "medium",
+                                timeStyle: "short",
+                              })
+                            : "-"}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

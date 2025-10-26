@@ -6,12 +6,15 @@ import Header from "../../components/ui/Header";
 const OrderDetails = () => {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
+  const [orderItems, setOrderItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchOrder = async () => {
+    const fetchOrderAndItems = async () => {
       setLoading(true);
+
+      // Fetch order
       const { data: orderData, error: orderError } = await supabase
         .from("orders")
         .select("*")
@@ -25,19 +28,38 @@ const OrderDetails = () => {
       }
 
       setOrder(orderData);
+
+      // Fetch order items with product info
+      const { data: itemsData, error: itemsError } = await supabase
+        .from("order_items")
+        .select(`
+          order_item_id,
+          quantity,
+          price,
+          product_id,
+          products(name)
+        `)
+        .eq("order_id", orderId);
+
+      if (itemsError) {
+        console.error(itemsError);
+      } else {
+        setOrderItems(itemsData || []);
+      }
+
       setLoading(false);
     };
 
-    fetchOrder();
+    fetchOrderAndItems();
   }, [orderId]);
+
+  const totalAmount = orderItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   if (loading) return <p className="text-center mt-8">Loading...</p>;
   if (!order) return <p className="text-center mt-8">Order not found.</p>;
-
-  const totalAmount = order.items?.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  ) || 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,15 +83,15 @@ const OrderDetails = () => {
           </div>
           <div className="flex justify-between mb-2">
             <span>Total Amount:</span>
-            <span>₹{totalAmount}</span>
+            <span>₹{totalAmount.toFixed(2)}</span>
           </div>
         </div>
 
         <div className="bg-popover rounded-lg p-4 shadow mb-6">
           <h2 className="text-lg font-semibold mb-4">Items</h2>
-          {order.items?.map((item, index) => (
-            <div key={index} className="flex justify-between mb-2">
-              <span>{item.name} × {item.quantity}</span>
+          {orderItems.map((item) => (
+            <div key={item.order_item_id} className="flex justify-between mb-2">
+              <span>{item.products?.name} × {item.quantity}</span>
               <span>₹{item.price * item.quantity}</span>
             </div>
           ))}

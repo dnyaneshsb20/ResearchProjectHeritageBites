@@ -66,11 +66,11 @@ const Checkout = () => {
               <h2 className="text-xl font-medium mb-6 text-gray-700">Order Summary</h2>
               <div className="flex justify-between mb-4 text-gray-600">
                 <span>Subtotal</span>
-                <span>₹{totalAmount}</span>
+                <span>₹{totalAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between mb-6 text-gray-800 font-semibold text-lg">
                 <span>Total</span>
-                <span>₹{totalAmount}</span>
+                <span>₹{totalAmount.toFixed(2)}</span>
               </div>
 
               <button
