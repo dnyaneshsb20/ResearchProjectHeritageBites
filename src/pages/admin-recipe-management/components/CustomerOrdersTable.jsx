@@ -54,34 +54,30 @@ const CustomerOrdersTable = ({ userId, farmerId }) => {
             users(name)
           `);
         if (farmersError) throw farmersError;
-        const ordersWithNames = ordersData
-          .map(order => {
-            const user = usersData.find(u => u.user_id === order.user_id);
+        const ordersWithNames = ordersData.map(order => {
+          const user = usersData.find(u => u.user_id === order.user_id);
 
-            // Filter items that belong to this farmer
-            const items = orderItemsData
-              .filter(item =>
-                item.order_id === order.order_id &&
-                item.products.farmer_id === farmerId
-              )
-              .map(item => ({
-                ...item,
-                productName: item.products.name,
-                farmerName: farmersData.find(f => f.farmer_id === item.products.farmer_id)?.users?.name || "-"
-              }));
+          // Filter items differently depending on farmerId
+          const items = orderItemsData
+            .filter(item => item.order_id === order.order_id)
+            .filter(item => !farmerId || item.products.farmer_id === farmerId) // <- only filter if farmerId exists
+            .map(item => ({
+              ...item,
+              productName: item.products.name,
+              farmerName: farmersData.find(f => f.farmer_id === item.products.farmer_id)?.users?.name || "-"
+            }));
 
-            if (items.length === 0) return null; // skip orders with no items for this farmer
+          if (farmerId && items.length === 0) return null; // skip orders with no items for this farmer
 
-            const farmerNames = [...new Set(items.map(i => i.farmerName).filter(Boolean))];
+          const farmerNames = [...new Set(items.map(i => i.farmerName).filter(Boolean))];
 
-            return {
-              ...order,
-              user,
-              items,
-              farmerName: farmerNames.join(", ") || "-"
-            };
-          })
-          .filter(Boolean); // remove nulls
+          return {
+            ...order,
+            user,
+            items,
+            farmerName: farmerNames.join(", ") || "-"
+          };
+        }).filter(Boolean);
 
 
         let filteredOrders = ordersWithNames;
