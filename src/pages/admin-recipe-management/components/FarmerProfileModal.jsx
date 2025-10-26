@@ -3,6 +3,7 @@ import { X, Mail, Phone, MapPin, Calendar } from "lucide-react";
 import Button from "../../../components/ui/Button";
 import { supabase } from "../../../supabaseClient";
 import { PiCertificate } from "react-icons/pi";
+import CustomerOrdersTable from "./CustomerOrdersTable";
 
 const FarmerProfileModal = ({ farmer, onClose }) => {
     const [activeTab, setActiveTab] = useState("Products");
@@ -151,7 +152,7 @@ const FarmerProfileModal = ({ farmer, onClose }) => {
 
                                 <div className="flex items-start gap-3">
                                     <span className="inline-flex items-center justify-center w-6 h-6 rounded-md text-md font-medium bg-orange-100 text-orange-600 mt-1">
-                                        <PiCertificate/>
+                                        <PiCertificate />
                                     </span>
                                     <div>
                                         <p className="text-sm text-gray-500">Certifications</p>
@@ -173,8 +174,8 @@ const FarmerProfileModal = ({ farmer, onClose }) => {
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
                                 className={`flex-1 py-3 text-center font-medium ${activeTab === tab
-                                        ? "border-b-2 border-orange-500 text-orange-600"
-                                        : "text-gray-600 hover:text-gray-800"
+                                    ? "border-b-2 border-orange-500 text-orange-600"
+                                    : "text-gray-600 hover:text-gray-800"
                                     }`}
                             >
                                 {tab}
@@ -231,57 +232,7 @@ const FarmerProfileModal = ({ farmer, onClose }) => {
 
                         {/* Orders Tab */}
                         {activeTab === "Orders" && (
-                            <>
-                                {orders.length === 0 ? (
-                                    <div className="text-gray-500 text-center">No orders yet.</div>
-                                ) : (
-                                    <div className="overflow-x-auto">
-                                        <table className="min-w-full border border-gray-200 rounded-lg">
-                                            <thead className="bg-gray-50">
-                                                <tr>
-                                                    <th className="py-2 px-3 text-left text-sm font-semibold text-gray-600 border-b">
-                                                        Order ID
-                                                    </th>
-                                                    <th className="py-2 px-3 text-left text-sm font-semibold text-gray-600 border-b">
-                                                        Amount
-                                                    </th>
-                                                    <th className="py-2 px-3 text-left text-sm font-semibold text-gray-600 border-b">
-                                                        Status
-                                                    </th>
-                                                    <th className="py-2 px-3 text-left text-sm font-semibold text-gray-600 border-b">
-                                                        Date
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {orders.map((o) => (
-                                                    <tr key={o.order_id} className="hover:bg-gray-50">
-                                                        <td className="py-2 px-3 text-sm text-gray-700">
-                                                            {o.order_id}
-                                                        </td>
-                                                        <td className="py-2 px-3 text-sm text-gray-700">
-                                                            ₹{o.total_amount}
-                                                        </td>
-                                                        <td
-                                                            className={`py-2 px-3 text-sm font-medium ${o.status === "completed"
-                                                                    ? "text-green-600"
-                                                                    : o.status === "pending"
-                                                                        ? "text-yellow-600"
-                                                                        : "text-red-600"
-                                                                }`}
-                                                        >
-                                                            {o.status}
-                                                        </td>
-                                                        <td className="py-2 px-3 text-sm text-gray-500">
-                                                            {new Date(o.created_at).toLocaleDateString()}
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                )}
-                            </>
+                            <CustomerOrdersTable farmerId={farmer.id} />
                         )}
                     </div>
                 </div>

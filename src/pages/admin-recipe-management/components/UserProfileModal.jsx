@@ -43,22 +43,21 @@ const UserProfileModal = ({ user, onClose }) => {
               style={{
                 backgroundColor:
                   typeof user?.name === "string"
-                    ? `hsl(${
-                        [...user.name].reduce(
-                          (h, c) => h + c.charCodeAt(0),
-                          0
-                        ) % 360
-                      },60%,55%)`
+                    ? `hsl(${[...user.name].reduce(
+                      (h, c) => h + c.charCodeAt(0),
+                      0
+                    ) % 360
+                    },60%,55%)`
                     : "#ffffff",
               }}
             >
               {user?.name
                 ? user.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .slice(0, 2)
-                    .join("")
-                    .toUpperCase()
+                  .split(" ")
+                  .map((n) => n[0])
+                  .slice(0, 2)
+                  .join("")
+                  .toUpperCase()
                 : "U"}
             </div>
 
@@ -162,11 +161,10 @@ const UserProfileModal = ({ user, onClose }) => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-3 text-center font-medium ${
-                  activeTab === tab
+                className={`flex-1 py-3 text-center font-medium ${activeTab === tab
                     ? "border-b-2 border-orange-500 text-orange-600"
                     : "text-gray-600 hover:text-gray-800"
-                }`}
+                  }`}
               >
                 {tab}
               </button>
@@ -206,13 +204,12 @@ const UserProfileModal = ({ user, onClose }) => {
                         <p className="text-sm text-gray-500 mt-1">
                           Status:{" "}
                           <span
-                            className={`font-medium ${
-                              c.status === "approved"
+                            className={`font-medium ${c.status === "approved"
                                 ? "text-green-600"
                                 : c.status === "pending"
-                                ? "text-yellow-600"
-                                : "text-red-600"
-                            }`}
+                                  ? "text-yellow-600"
+                                  : "text-red-600"
+                              }`}
                           >
                             {c.status}
                           </span>
@@ -228,9 +225,9 @@ const UserProfileModal = ({ user, onClose }) => {
             )}
 
             {activeTab === "Orders" && (
-              <div>
-    <CustomerOrdersTable userId={user?.id || user?.user_id} />
-  </div>
+              <div className="mt-4">
+                <CustomerOrdersTable userId={user?.id || user?.user_id} />
+              </div>
             )}
           </div>
         </div>

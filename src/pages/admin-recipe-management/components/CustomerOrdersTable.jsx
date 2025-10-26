@@ -6,7 +6,7 @@ import { MdSensorOccupied } from "react-icons/md"; // UPI
 import { FaCreditCard } from "react-icons/fa";     // Card
 import { BsCash } from "react-icons/bs";          // Cash / COD
 
-const CustomerOrdersTable = () => {
+const CustomerOrdersTable = ({ userId, farmerId }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -17,10 +17,11 @@ const CustomerOrdersTable = () => {
       setLoading(true);
       try {
         // Fetch orders
-        const { data: ordersData, error: ordersError } = await supabase
-          .from("orders")
-          .select("*")
-          .order("created_at", { ascending: false });
+        let query = supabase.from("orders").select("*").order("created_at", { ascending: false });
+        if (userId) query = query.eq("user_id", userId);  // <-- add this filter
+
+        const { data: ordersData, error: ordersError } = await query;
+
         if (ordersError) throw ordersError;
 
         // Fetch users
@@ -53,33 +54,45 @@ const CustomerOrdersTable = () => {
             users(name)
           `);
         if (farmersError) throw farmersError;
+        const ordersWithNames = ordersData
+          .map(order => {
+            const user = usersData.find(u => u.user_id === order.user_id);
 
-        // Map orders with user and farmer info
-        const ordersWithNames = ordersData.map(order => {
-          const user = usersData.find(u => u.user_id === order.user_id);
-
-          // Get all items for this order and attach product & farmer info
-          const items = orderItemsData
-            .filter(item => item.order_id === order.order_id)
-            .map(item => {
-              const farmer = farmersData.find(f => f.farmer_id === item.products.farmer_id);
-              return {
+            // Filter items that belong to this farmer
+            const items = orderItemsData
+              .filter(item =>
+                item.order_id === order.order_id &&
+                item.products.farmer_id === farmerId
+              )
+              .map(item => ({
                 ...item,
                 productName: item.products.name,
-                farmerName: farmer?.users?.name || "-"
-              };
-            });
+                farmerName: farmersData.find(f => f.farmer_id === item.products.farmer_id)?.users?.name || "-"
+              }));
 
-          // Get unique farmer names for this order
-          const farmerNames = [...new Set(items.map(i => i.farmerName).filter(Boolean))];
+            if (items.length === 0) return null; // skip orders with no items for this farmer
 
-          return {
-            ...order,
-            user,
-            items, // attach items with farmerName
-            farmerName: farmerNames.join(", ") || "-"
-          };
-        });
+            const farmerNames = [...new Set(items.map(i => i.farmerName).filter(Boolean))];
+
+            return {
+              ...order,
+              user,
+              items,
+              farmerName: farmerNames.join(", ") || "-"
+            };
+          })
+          .filter(Boolean); // remove nulls
+
+
+        let filteredOrders = ordersWithNames;
+        if (farmerId) {
+          filteredOrders = ordersWithNames.filter(order =>
+            order.items.some(item => item.products.farmer_id === farmerId)
+          );
+        }
+
+        setOrders(filteredOrders);
+
 
         setOrders(ordersWithNames);
       } catch (err) {
