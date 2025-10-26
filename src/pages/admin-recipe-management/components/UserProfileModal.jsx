@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { X, Mail, Phone, MapPin, User, Calendar } from "lucide-react";
 import Button from "components/ui/Button";
 import { supabase } from "../../../supabaseClient";
+import CustomerOrdersTable from "./CustomerOrdersTable"; // adjust path as needed
 
 const UserProfileModal = ({ user, onClose }) => {
   const [activeTab, setActiveTab] = useState("Contributions");
@@ -227,7 +228,9 @@ const UserProfileModal = ({ user, onClose }) => {
             )}
 
             {activeTab === "Orders" && (
-              <div className="text-gray-500 text-center">No orders yet.</div>
+              <div>
+    <CustomerOrdersTable userId={user?.id || user?.user_id} />
+  </div>
             )}
           </div>
         </div>
