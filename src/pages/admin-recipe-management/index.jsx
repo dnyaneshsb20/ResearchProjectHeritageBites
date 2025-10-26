@@ -17,6 +17,7 @@ import FeedbackRatingsChart from './components/FeedbackRatingsChart';
 import FeedbackSentimentChart from './components/FeedbackSentimentChart';
 import CustomerOrdersTable from './components/CustomerOrdersTable';
 import UserManagement from './components/UserManagement';
+import FarmersManagement from './components/FarmersManagement';
 
 const AdminRecipeManagement = () => {
   const [activeTab, setActiveTab] = useState('submissions');
@@ -109,7 +110,8 @@ const AdminRecipeManagement = () => {
     { id: 'contributors', label: 'Contributors', icon: 'Users', count: contributors?.length },
     { id: 'feedback', label: 'Feedback', icon: 'MessageSquare', count: null },
     { id: 'orders', label: 'Customer Orders', icon: 'ShoppingCart', count: null },
-    { id: 'users', label: 'Users', icon: 'UserCircle', count: null }
+    { id: 'users', label: 'Users', icon: 'UserCircle', count: null },
+    { id: 'farmers', label: 'Farmers', icon: 'Axe', count: null },
   ];
 
   const handleFilterChange = (key, value) => {
@@ -239,7 +241,7 @@ const AdminRecipeManagement = () => {
               onClearFilters={handleClearFilters}
               onBulkAction={handleBulkAction}
               selectedCount={selectedSubmissions?.length}
-              states={states} // ✅ now defined
+              states={states}
             />
 
             <PendingSubmissionsTable
@@ -285,6 +287,12 @@ const AdminRecipeManagement = () => {
           <div className="space-y-6">
             {/* You can place your CustomerOrdersTable component here */}
             <UserManagement />
+          </div>
+        )}
+        {activeTab === 'farmers' && (
+          <div className="space-y-6">
+            {/* You can place your CustomerOrdersTable component here */}
+            <FarmersManagement />
           </div>
         )}
       </div>
