@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 
 import Button from '../../../components/ui/Button';
@@ -107,10 +109,13 @@ const FeaturesSection = () => {
                   Cold-Pressed Oils
                 </span>
               </div>
-              <Button variant="spice" size="lg">
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Explore Marketplace
-              </Button>
+              <Link to="/ingredient-marketplace">
+                <Button variant="spice" size="lg" className="bg-saffron hover:bg-deep-red text-black hover:text-white rounded-full shadow-md px-6 py-3 transition-all duration-300"
+  >
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  Explore Marketplace
+                </Button>
+              </Link>
             </div>
           </div>
 
