@@ -39,19 +39,21 @@ const PendingSubmissionsTable = ({
     if (error) {
       console.error('Error fetching recipes:', error);
     } else {
-      const mappedData = data.map((item) => ({
-        id: item.indg_recipe_id,
-        title: item.name,
-        description: item.description,
-        image: item.image_url,
-        region: item.state_id?.state_name || 'Unknown',
-        category: item.meal_type,
-        status: item.status,
-        reviewReason: item.review_reason, // include review_reason
-        submissionDate: item.created_at,
-        contributorName: item.created_by?.name || 'Unknown',
-        contributorRating: 0
-      }));
+      const mappedData = data
+        .map((item) => ({
+          id: item.indg_recipe_id,
+          title: item.name,
+          description: item.description,
+          image: item.image_url,
+          region: item.state_id?.state_name || 'Unknown',
+          category: item.meal_type,
+          status: item.status,
+          reviewReason: item.review_reason,
+          submissionDate: item.created_at,
+          contributorName: item.created_by?.name || 'Unknown',
+          contributorRating: 0
+        }))
+        .filter((item) => item.status !== 'approved');
       setSubmissions(mappedData);
     }
   };

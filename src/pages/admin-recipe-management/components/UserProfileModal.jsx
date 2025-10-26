@@ -48,7 +48,7 @@ const UserProfileModal = ({ user, onClose }) => {
                           0
                         ) % 360
                       },60%,55%)`
-                    : "#9CA3AF",
+                    : "#ffffff",
               }}
             >
               {user?.name
@@ -83,7 +83,7 @@ const UserProfileModal = ({ user, onClose }) => {
 
         {/* Top info section */}
         <div className="p-6">
-          <div className="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-xl p-6 border border-gray-200">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
