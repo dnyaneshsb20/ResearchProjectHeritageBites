@@ -64,7 +64,6 @@ const Header = () => {
       { path: "/ingredient-marketplace", label: "Marketplace", icon: "ShoppingBag" },
       { path: "/recipe-submission-management", label: "Contribute", icon: "Plus", protected: true },
       { path: "/community", label: "Community", icon: "Users", protected: true }, 
-      { path: "/user-profile-health-goals", label: "Profile", icon: "User", protected: true },
     ];
   }, [userRole]);
 
@@ -731,8 +730,8 @@ const Header = () => {
                 }}
                 disabled={cartItemCount === 0}
                 className={`px-4 py-2 rounded transition-colors ${cartItemCount === 0
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-gradient-to-r from-[#f87d46] to-[#fa874f] text-white hover:opacity-90"
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gradient-to-r from-[#f87d46] to-[#fa874f] text-white hover:opacity-90"
                   }`}
               >
                 Checkout

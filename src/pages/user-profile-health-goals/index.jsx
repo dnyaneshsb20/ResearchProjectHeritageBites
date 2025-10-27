@@ -160,19 +160,9 @@ const handleExportProfileData = () => {
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
-    doc.text("Heritage Bites", 14, 16);
+    doc.text("User Profile Data", 14, 20);
+    doc.setFontSize(12);
 
-    // Small HB logo (optional simple text logo)
-    // doc.setFontSize(14);
-    // doc.text("🍽 HB", 170, 16);
-
-    // === TITLE ===
-    doc.setTextColor(0, 0, 0);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text("User Profile Summary", 14, 40);
-
-    // === PROFILE INFORMATION ===
     const profileInfo = {
       "Name": userData?.name || "N/A",
       "Email": userData?.email || "N/A",
@@ -197,13 +187,8 @@ const handleExportProfileData = () => {
     doc.setFontSize(12);
 
     Object.entries(profileInfo).forEach(([key, value]) => {
-      doc.setFont("helvetica", "bold");
-     doc.text(`${key}:`, 16, y);
-      doc.setFont("helvetica", "normal");
-      doc.text(`${value}`, 70, y);
-      y += 10;
-      doc.setDrawColor(240, 240, 240);
-      doc.line(15, y - 6, 190, y - 6);
+      doc.text(`${key}: ${value}`, 14, y);
+      y += 8;
     });
 
     // === FOOTER SECTION ===
@@ -212,9 +197,7 @@ const handleExportProfileData = () => {
     doc.rect(0, pageHeight - 20, 210, 20, "F");
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
-    doc.text("© Heritage Bites | Empowering Traditional Wellness", 14, pageHeight - 8);
-    doc.text(`Exported on: ${new Date().toLocaleDateString("en-GB")}`, 150, pageHeight - 8);
-
+    doc.text("Exported from HeritageBites Platform", 14, y + 10);
 
     // === SAVE ===
     doc.save("HeritageBites_Profile.pdf");
