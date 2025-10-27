@@ -23,7 +23,7 @@ import Payment from "./pages/Payment/Payment";
 import OrderConfirmation from "./pages/order-confirmation";
 import OrderDetails from "./pages/order-confirmation/OrderDetails";
 import OrderHistory from './pages/OrderHistory/OrderHistory';
-
+import CommunityRecipes from "./pages/community/index"
 // New pages
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -52,7 +52,7 @@ const Routes = () => {
         <Route path="/order-details/:orderId" element={<OrderDetails />} />
         <Route path="/feedback" element={<Feedback/>}/>
         <Route path="/order-history" element={<OrderHistory />} />
-
+        <Route path="/community" element={<CommunityRecipes/>} />
         {/* Farmer dashboard routes */}
         <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
         <Route path="/farmer-products" element={<FarmerProducts />} />

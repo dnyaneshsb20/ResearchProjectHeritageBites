@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../supabaseClient";
 import { useCart } from '../../context/CartContext';
+import { RiUserCommunityLine } from "react-icons/ri";
 
 // make sure this points to your Supabase client
 
@@ -63,6 +64,7 @@ const Header = () => {
       { path: "/ingredient-marketplace", label: "Marketplace", icon: "ShoppingBag" },
       { path: "/user-profile-health-goals", label: "Profile", icon: "User", protected: true },
       { path: "/recipe-submission-management", label: "Contribute", icon: "Plus", protected: true },
+      { path: "/community", label: "Community", icon: "Users", protected: true }, 
     ];
   }, [userRole]);
 
