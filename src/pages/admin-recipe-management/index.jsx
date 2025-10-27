@@ -214,11 +214,16 @@ const AdminRecipeManagement = () => {
         setPendingSubmissionsCount(pendingCount || 0);
 
         // Total contributors (all non-admin users)
-        const { count: contributorsCount } = await supabase
-          .from('users')
-          .select('*', { count: 'exact' })
-          .in('role', ['user', 'contributor']); // include actual roles present
-        setTotalContributorsCount(contributorsCount || 0);
+        const { data, error } = await supabase
+          .from('rec_contributions')
+          .select('created_by')
+          .not('created_by', 'is', null);
+
+        if (error) console.error(error);
+
+        const uniqueContributors = new Set(data.map(d => d.created_by));
+        setTotalContributorsCount(uniqueContributors.size);
+
 
         // Total feedback
         const { count: feedbackCount } = await supabase

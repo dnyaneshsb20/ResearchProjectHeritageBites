@@ -52,7 +52,7 @@ const RecipeHero = ({ recipe, onBookmark, onShare }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="absolute top-4 right-4 flex space-x-2">
+        {/* <div className="absolute top-4 right-4 flex space-x-2">
           <Button
             variant="ghost"
             size="icon"
@@ -72,7 +72,7 @@ const RecipeHero = ({ recipe, onBookmark, onShare }) => {
           >
             <Icon name="Share2" size={18} />
           </Button>
-        </div>
+        </div> */}
 
         {/* Recipe Title, Festival Badge, and Region */}
         <div className="absolute bottom-4 left-4 right-4">
