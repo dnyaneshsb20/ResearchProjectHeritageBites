@@ -47,7 +47,7 @@ const UserRecipeView = ({ recipeId, onBack, onEdit }) => {
       </div>
 
       {/* Main Card */}
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="bg-white mt-24 rounded-xl shadow-lg overflow-hidden">
         {/* Hero Image + Tags */}
         {recipe.image_url && (
           <div className="relative">
