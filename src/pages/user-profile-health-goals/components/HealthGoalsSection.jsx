@@ -5,6 +5,8 @@ import { Checkbox } from '../../../components/ui/Checkbox';
 
 const HealthGoalsSection = ({ isExpanded, onToggle, healthGoals, onUpdate }) => {
   const [selectedGoals, setSelectedGoals] = useState(healthGoals);
+  const [saveStatus, setSaveStatus] = useState("");
+
 
   const goalOptions = [
     {
@@ -114,7 +116,7 @@ const HealthGoalsSection = ({ isExpanded, onToggle, healthGoals, onUpdate }) => 
                   <div
                     key={goal?.id}
                     className={`relative p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer ${isSelected
-                        ? 'border-primary bg-primary/5' : 'border-border bg-background hover:border-primary/30'
+                      ? 'border-primary bg-primary/5' : 'border-border bg-background hover:border-primary/30'
                       }`}
                     onClick={() => handleGoalToggle(goal?.id)}
                   >
@@ -161,9 +163,19 @@ const HealthGoalsSection = ({ isExpanded, onToggle, healthGoals, onUpdate }) => 
             {/* Action Buttons */}
             {/* Action Buttons */}
             <div className="flex items-center justify-end mt-6 pt-4 border-t border-border">
-              <Button variant="default" size="sm">
-                Save Preferences
+              <Button
+                variant="default"
+                size="sm"
+                onClick={async () => {
+                  setSaveStatus("Saving...");
+                  await onUpdate(selectedGoals);
+                  setSaveStatus("Saved ✅");
+                  setTimeout(() => setSaveStatus(""), 2000);
+                }}
+              >
+                {saveStatus || "Save Preferences"}
               </Button>
+
             </div>
 
           </div>

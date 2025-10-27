@@ -62,8 +62,10 @@ const UserProfileHealthGoals = () => {
       const user = authData?.user;
       if (!user) return;
 
-      const { data: userData } = await supabase.from('users').select('*').eq('user_id', user.id).single();
-      const { data: profileData } = await supabase.from('user_profile').select('*').eq('user_id', user.id).single();
+      const { data: userData } = await supabase
+        .from('users').select('*').eq('user_id', user.id).single();
+      const { data: profileData } = await supabase
+        .from('user_profile').select('*').eq('user_id', user.id).single();
 
       const newCompletion = calculateProfileCompletion(userData, profileData);
       setProfileCompleteness(newCompletion);
@@ -71,6 +73,25 @@ const UserProfileHealthGoals = () => {
       console.error('Error updating completion:', err);
     }
   };
+  // 🔹 Generic function to update Supabase fields
+const updateUserProfileField = async (fieldName, value) => {
+  try {
+    const { data: authData } = await supabase.auth.getUser();
+    const user = authData?.user;
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('user_profile')
+      .update({ [fieldName]: value })
+      .eq('user_id', user.id);
+
+    if (error) throw error;
+    console.log(`${fieldName} updated successfully in Supabase`);
+  } catch (err) {
+    console.error(`Error updating ${fieldName}:`, err);
+  }
+};
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -89,9 +110,20 @@ const UserProfileHealthGoals = () => {
 
         const { data: profileData, error: profileError } = await supabase
           .from('user_profile')
-          .select('age_group, gender, height_cm, weight_kg, activity_level')
+          .select(`
+    age_group,
+    gender,
+    height_cm,
+    weight_kg,
+    activity_level,
+    mobile_number,
+    health_goals,
+    dietary_restrictions,
+    health_conditions
+  `)
           .eq('user_id', user.id)
           .single();
+
 
         if (profileError) console.error('Error fetching profile:', profileError);
 
@@ -100,12 +132,16 @@ const UserProfileHealthGoals = () => {
           email: userData?.email || '',
           location: userData?.location || '',
           joinDate: userData?.created_at || '',
+          contact: profileData?.mobile_number || '',
           ageGroup: profileData?.age_group || '',
           gender: profileData?.gender || '',
           height: profileData?.height_cm || '',
           weight: profileData?.weight_kg || '',
           activityLevel: profileData?.activity_level || '',
         });
+        setHealthGoals(profileData?.health_goals || []);
+        setDietaryRestrictions(profileData?.dietary_restrictions || []);
+        setHealthConditions(profileData?.health_conditions || []);
 
         const initialCompletion = calculateProfileCompletion(userData, profileData);
         setProfileCompleteness(initialCompletion);
@@ -131,19 +167,23 @@ const UserProfileHealthGoals = () => {
   };
 
   const handleHealthGoalsUpdate = (newGoals) => {
-    setHealthGoals(newGoals);
-    updateProfileCompletion();
-  };
+  setHealthGoals(newGoals);
+  updateUserProfileField("health_goals", newGoals);
+  updateProfileCompletion();
+};
 
-  const handleDietaryRestrictionsUpdate = (newRestrictions) => {
-    setDietaryRestrictions(newRestrictions);
-    updateProfileCompletion();
-  };
+const handleDietaryRestrictionsUpdate = (newRestrictions) => {
+  setDietaryRestrictions(newRestrictions);
+  updateUserProfileField("dietary_restrictions", newRestrictions);
+  updateProfileCompletion();
+};
 
-  const handleHealthConditionsUpdate = (newConditions) => { // ✅ renamed handler
-    setHealthConditions(newConditions);
-    updateProfileCompletion();
-  };
+const handleHealthConditionsUpdate = (newConditions) => {
+  setHealthConditions(newConditions);
+  updateUserProfileField("health_conditions", newConditions);
+  updateProfileCompletion();
+};
+
 
   const getCompletionColor = (percentage) => {
     if (percentage >= 80) return 'text-success';
@@ -151,7 +191,7 @@ const UserProfileHealthGoals = () => {
     return 'text-accent';
   };
 
-const handleExportProfileData = () => {
+  const handleExportProfileData = () => {
     const doc = new jsPDF();
 
     // === HEADER SECTION ===
@@ -160,12 +200,22 @@ const handleExportProfileData = () => {
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
-    doc.text("User Profile Data", 14, 20);
-    doc.setFontSize(12);
+    doc.text("Heritage Bites", 14, 16);
+
+    // Small HB logo (optional simple text logo)
+    // doc.setFontSize(14);
+    // doc.text("🍽 HB", 170, 16);
+
+    // === TITLE ===
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("User Profile Summary", 14, 40);
 
     const profileInfo = {
       "Name": userData?.name || "N/A",
       "Email": userData?.email || "N/A",
+      "Contact Number": userData?.contact || "N/A",
       "Location": userData?.location || "N/A",
       "Join Date": userData?.joinDate
         ? new Date(userData.joinDate).toLocaleDateString("en-GB")
@@ -190,14 +240,15 @@ const handleExportProfileData = () => {
       doc.text(`${key}: ${value}`, 14, y);
       y += 8;
     });
-
     // === FOOTER SECTION ===
     const pageHeight = doc.internal.pageSize.height;
     doc.setFillColor(255, 184, 77);
     doc.rect(0, pageHeight - 20, 210, 20, "F");
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
-    doc.text("Exported from HeritageBites Platform", 14, y + 10);
+    doc.text("© Heritage Bites | Empowering Traditional Wellness", 14, pageHeight - 8);
+    doc.text(`Exported on: ${new Date().toLocaleDateString("en-GB")}`, 150, pageHeight - 8);
+
 
     // === SAVE ===
     doc.save("HeritageBites_Profile.pdf");
@@ -248,6 +299,7 @@ const handleExportProfileData = () => {
 
         {/* Sections */}
         <div className="space-y-6">
+          {/* Profile Sections */}
           <PersonalInfoSection
             isExpanded={expandedSections?.personalInfo}
             onToggle={() => toggleSection('personalInfo')}
@@ -255,6 +307,8 @@ const handleExportProfileData = () => {
             onUpdate={handleUserDataUpdate}
             onUpdateCompletion={updateProfileCompletion}
           />
+
+
 
           <HealthGoalsSection
             isExpanded={expandedSections?.healthGoals}

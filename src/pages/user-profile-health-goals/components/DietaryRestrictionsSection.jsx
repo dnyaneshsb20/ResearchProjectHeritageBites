@@ -7,6 +7,8 @@ import { Checkbox } from '../../../components/ui/Checkbox';
 const DietaryRestrictionsSection = ({ isExpanded, onToggle, restrictions, onUpdate }) => {
   const [selectedRestrictions, setSelectedRestrictions] = useState(restrictions);
   const [customRestriction, setCustomRestriction] = useState('');
+  const [saveStatus, setSaveStatus] = useState("");
+
 
   const commonRestrictions = [
     {
@@ -138,7 +140,7 @@ const DietaryRestrictionsSection = ({ isExpanded, onToggle, restrictions, onUpda
                   <div
                     key={restriction?.id}
                     className={`p-3 rounded-lg border transition-all duration-200 cursor-pointer ${isSelected
-                        ? 'border-primary bg-primary/5' : 'border-border bg-background hover:border-primary/30'
+                      ? 'border-primary bg-primary/5' : 'border-border bg-background hover:border-primary/30'
                       }`}
                     onClick={() => handleRestrictionToggle(restriction?.id)}
                   >
@@ -240,8 +242,17 @@ const DietaryRestrictionsSection = ({ isExpanded, onToggle, restrictions, onUpda
             {/* Action Buttons */}
             {/* Action Buttons */}
             <div className="flex items-center justify-end mt-6 pt-4 border-t border-border">
-              <Button variant="default" size="sm">
-                Save Preferences
+              <Button
+                variant="default"
+                size="sm"
+                onClick={async () => {
+                  setSaveStatus("Saving...");
+                  await onUpdate(selectedRestrictions);
+                  setSaveStatus("Saved ✅");
+                  setTimeout(() => setSaveStatus(""), 2000);
+                }}
+              >
+                {saveStatus || "Save Preferences"}
               </Button>
             </div>
 

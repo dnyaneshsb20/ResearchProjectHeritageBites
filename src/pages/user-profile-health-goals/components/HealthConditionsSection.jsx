@@ -4,6 +4,8 @@ import Button from "../../../components/ui/Button";
 
 const HealthConditionsSection = ({ isExpanded, onToggle, conditions = [], onUpdate }) => {
   const [selectedConditions, setSelectedConditions] = useState(conditions || []);
+  const [saveStatus, setSaveStatus] = useState("");
+
 
   // Health condition categories
   const conditionCategories = [
@@ -105,8 +107,8 @@ const HealthConditionsSection = ({ isExpanded, onToggle, conditions = [], onUpda
                       <div
                         key={condition}
                         className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 ${isSelected
-                            ? "border-primary bg-primary/5"
-                            : "border-border bg-background hover:border-primary/30"
+                          ? "border-primary bg-primary/5"
+                          : "border-border bg-background hover:border-primary/30"
                           }`}
                         onClick={() => handleConditionToggle(condition)}
                       >
@@ -126,8 +128,17 @@ const HealthConditionsSection = ({ isExpanded, onToggle, conditions = [], onUpda
           {/* Action Buttons */}
           {/* Action Buttons */}
           <div className="flex items-center justify-end mt-8 pt-4 border-t border-border">
-            <Button variant="default" size="sm">
-              Save Preferences
+            <Button
+              variant="default"
+              size="sm"
+              onClick={async () => {
+                setSaveStatus("Saving...");
+                await onUpdate(selectedConditions);
+                setSaveStatus("Saved ✅");
+                setTimeout(() => setSaveStatus(""), 2000);
+              }}
+            >
+              {saveStatus || "Save Preferences"}
             </Button>
           </div>
 

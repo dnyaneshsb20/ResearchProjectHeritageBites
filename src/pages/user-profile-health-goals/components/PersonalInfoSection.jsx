@@ -74,8 +74,6 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
             height_cm: formData.height || null,
             weight_kg: formData.weight || null,
             activity_level: formData.activityLevel || null,
-            preferences: formData.preferences || null,
-            health_goals: formData.healthGoals || null,
             mobile_number: formData.phone || null, // ✅ mobile number
           },
           { onConflict: "user_id" }
@@ -118,7 +116,7 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
 
         const { data: profileData, error: profileError } = await supabase
           .from("user_profile")
-          .select("age_group, gender, height_cm, weight_kg, activity_level, preferences, health_goals, mobile_number")
+          .select("age_group, gender, height_cm, weight_kg, activity_level, mobile_number")
           .eq("user_id", userId)
           .single();
 
@@ -134,8 +132,6 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
           height: profileData?.height_cm ?? "",
           weight: profileData?.weight_kg ?? "",
           activityLevel: profileData?.activity_level ?? "",
-          preferences: profileData?.preferences ?? "",
-          healthGoals: profileData?.health_goals ?? "",
           phone: profileData?.mobile_number ?? "", // ✅ mobile number
         };
 
