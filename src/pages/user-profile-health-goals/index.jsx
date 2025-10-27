@@ -3,30 +3,22 @@ import Header from '../../components/ui/Header';
 import PersonalInfoSection from './components/PersonalInfoSection';
 import HealthGoalsSection from './components/HealthGoalsSection';
 import DietaryRestrictionsSection from './components/DietaryRestrictionsSection';
-import TastePreferencesSection from './components/TastePreferencesSection';
-import RegionalFavoritesSection from './components/RegionalFavoritesSection';
-import RecipeHistorySection from './components/RecipeHistorySection';
-import AchievementBadgesSection from './components/AchievementBadgesSection';
+import HealthConditionsSection from './components/HealthConditionsSection'; // ✅ renamed component
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
 import Footer from '../dashboard/components/Footer';
 import { supabase } from '../../supabaseClient';
 import jsPDF from "jspdf";
 
-
 const UserProfileHealthGoals = () => {
   const [expandedSections, setExpandedSections] = useState({
     personalInfo: true,
     healthGoals: false,
     dietaryRestrictions: false,
-    tastePreferences: false,
-    regionalFavorites: false,
-    recipeHistory: false,
-    achievements: false
+    healthConditions: false, // ✅ renamed
   });
 
-  const [userData, setUserData] = useState({
-  });
+  const [userData, setUserData] = useState({});
 
   const [healthGoals, setHealthGoals] = useState([
     'weight-loss',
@@ -39,24 +31,15 @@ const UserProfileHealthGoals = () => {
     'low-sodium'
   ]);
 
-  const [tastePreferences, setTastePreferences] = useState({
-    'heat-level': 3,
-    'sweetness': 2,
-    'sourness': 3,
-    'saltiness': 2,
-    favoriteIngredients: ['ginger', 'turmeric', 'cumin', 'coriander', 'coconut']
-  });
-
-  const [regionalFavorites, setRegionalFavorites] = useState([
-    'maharashtra',
-    'gujarat',
-    'punjab'
+  const [healthConditions, setHealthConditions] = useState([ // ✅ renamed state
+    'hypertension',
+    'thyroid',
+    'cholesterol'
   ]);
 
   const [profileCompleteness, setProfileCompleteness] = useState(0);
 
   const calculateProfileCompletion = (userData, profileData) => {
-    // Each Boolean check corresponds to one field
     const checks = [
       !!userData?.name,
       !!userData?.email,
@@ -65,15 +48,13 @@ const UserProfileHealthGoals = () => {
       !!profileData?.height_cm,
       !!profileData?.weight_kg,
       !!profileData?.activity_level,
-      !!userData?.location,          // Optional: include location
+      !!userData?.location,
     ];
 
     const completed = checks.filter(Boolean).length;
     const total = checks.length;
-
     return Math.round((completed / total) * 100);
   };
-
 
   const updateProfileCompletion = async () => {
     try {
@@ -81,19 +62,16 @@ const UserProfileHealthGoals = () => {
       const user = authData?.user;
       if (!user) return;
 
-      // Fetch latest user and profile data
       const { data: userData } = await supabase.from('users').select('*').eq('user_id', user.id).single();
       const { data: profileData } = await supabase.from('user_profile').select('*').eq('user_id', user.id).single();
 
       const newCompletion = calculateProfileCompletion(userData, profileData);
       setProfileCompleteness(newCompletion);
-
     } catch (err) {
       console.error('Error updating completion:', err);
     }
   };
 
-  // Fetch user data and calculate initial profile completeness
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -101,30 +79,22 @@ const UserProfileHealthGoals = () => {
         const user = authData?.user;
         if (!user) return;
 
-        // Fetch from users table
         const { data: userData, error: userError } = await supabase
           .from('users')
           .select('name, email, created_at, location')
           .eq('user_id', user.id)
           .single();
 
-        if (userError) {
-          console.error('Error fetching user:', userError);
-          return;
-        }
+        if (userError) return console.error('Error fetching user:', userError);
 
-        // Fetch from user_profile table
         const { data: profileData, error: profileError } = await supabase
           .from('user_profile')
           .select('age_group, gender, height_cm, weight_kg, activity_level')
           .eq('user_id', user.id)
           .single();
 
-        if (profileError) {
-          console.error('Error fetching profile:', profileError);
-        }
+        if (profileError) console.error('Error fetching profile:', profileError);
 
-        // Combine both into one object
         setUserData({
           name: userData?.name || '',
           email: userData?.email || '',
@@ -137,10 +107,8 @@ const UserProfileHealthGoals = () => {
           activityLevel: profileData?.activity_level || '',
         });
 
-        // Calculate profile completion AFTER fetching both tables
         const initialCompletion = calculateProfileCompletion(userData, profileData);
         setProfileCompleteness(initialCompletion);
-
       } catch (err) {
         console.error('Error fetching data:', err);
       }
@@ -158,8 +126,6 @@ const UserProfileHealthGoals = () => {
 
   const handleUserDataUpdate = (newData) => {
     setUserData(newData);
-
-    // instantly calculate completion without re-fetching
     const newCompletion = calculateProfileCompletion(newData, currentProfileData);
     setProfileCompleteness(newCompletion);
   };
@@ -174,13 +140,8 @@ const UserProfileHealthGoals = () => {
     updateProfileCompletion();
   };
 
-  const handleTastePreferencesUpdate = (newPreferences) => {
-    setTastePreferences(newPreferences);
-    updateProfileCompletion();
-  };
-
-  const handleRegionalFavoritesUpdate = (newFavorites) => {
-    setRegionalFavorites(newFavorites);
+  const handleHealthConditionsUpdate = (newConditions) => { // ✅ renamed handler
+    setHealthConditions(newConditions);
     updateProfileCompletion();
   };
 
@@ -189,13 +150,29 @@ const UserProfileHealthGoals = () => {
     if (percentage >= 60) return 'text-warning';
     return 'text-accent';
   };
-  const handleExportProfileData = () => {
-    const doc = new jsPDF();
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(18);
-    doc.text("User Profile Data", 14, 20);
-    doc.setFontSize(12);
 
+const handleExportProfileData = () => {
+    const doc = new jsPDF();
+
+    // === HEADER SECTION ===
+    doc.setFillColor(255, 184, 77); // warm saffron accent
+    doc.rect(0, 0, 210, 25, "F"); // top banner (A4 width)
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Heritage Bites", 14, 16);
+
+    // Small HB logo (optional simple text logo)
+    // doc.setFontSize(14);
+    // doc.text("🍽 HB", 170, 16);
+
+    // === TITLE ===
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("User Profile Summary", 14, 40);
+
+    // === PROFILE INFORMATION ===
     const profileInfo = {
       "Name": userData?.name || "N/A",
       "Email": userData?.email || "N/A",
@@ -210,23 +187,45 @@ const UserProfileHealthGoals = () => {
       "Activity Level": userData?.activityLevel || "N/A",
     };
 
-    let y = 35;
+    let y = 55;
+
+    // Draw a subtle background box for content
+    doc.setDrawColor(200, 200, 200);
+    doc.roundedRect(10, 47, 190, 125, 3, 3, "S");
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+
     Object.entries(profileInfo).forEach(([key, value]) => {
-      doc.text(`${key}: ${value}`, 14, y);
-      y += 8;
+      doc.setFont("helvetica", "bold");
+     doc.text(`${key}:`, 16, y);
+      doc.setFont("helvetica", "normal");
+      doc.text(`${value}`, 70, y);
+      y += 10;
+      doc.setDrawColor(240, 240, 240);
+      doc.line(15, y - 6, 190, y - 6);
     });
 
+    // === FOOTER SECTION ===
+    const pageHeight = doc.internal.pageSize.height;
+    doc.setFillColor(255, 184, 77);
+    doc.rect(0, pageHeight - 20, 210, 20, "F");
+    doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
-    doc.text("Exported from HeritageBites Platform", 14, y + 10);
+    doc.text("© Heritage Bites | Empowering Traditional Wellness", 14, pageHeight - 8);
+    doc.text(`Exported on: ${new Date().toLocaleDateString("en-GB")}`, 150, pageHeight - 8);
 
-    doc.save("profile_data.pdf");
+
+    // === SAVE ===
+    doc.save("HeritageBites_Profile.pdf");
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Page Header */}
+
+        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -259,14 +258,13 @@ const UserProfileHealthGoals = () => {
               />
             </div>
             <p className="text-sm text-muted-foreground">
-              Complete your profile to get better recipe recommendations tailored to your taste and health goals.
+              Complete your profile to get better recipe recommendations tailored to your health goals.
             </p>
           </div>
         </div>
 
-        {/* Profile Sections */}
+        {/* Sections */}
         <div className="space-y-6">
-          {/* Personal Information */}
           <PersonalInfoSection
             isExpanded={expandedSections?.personalInfo}
             onToggle={() => toggleSection('personalInfo')}
@@ -275,52 +273,29 @@ const UserProfileHealthGoals = () => {
             onUpdateCompletion={updateProfileCompletion}
           />
 
-          {/* Health Goals */}
-          {/*<HealthGoalsSection
+          <HealthGoalsSection
             isExpanded={expandedSections?.healthGoals}
             onToggle={() => toggleSection('healthGoals')}
             healthGoals={healthGoals}
             onUpdate={handleHealthGoalsUpdate}
-          />*/}
+          />
 
-          {/* Dietary Restrictions */}
-          {/*<DietaryRestrictionsSection
+          <DietaryRestrictionsSection
             isExpanded={expandedSections?.dietaryRestrictions}
             onToggle={() => toggleSection('dietaryRestrictions')}
             restrictions={dietaryRestrictions}
             onUpdate={handleDietaryRestrictionsUpdate}
-          />*/}
+          />
 
-          {/* Taste Preferences */}
-          {/*<TastePreferencesSection
-            isExpanded={expandedSections?.tastePreferences}
-            onToggle={() => toggleSection('tastePreferences')}
-            preferences={tastePreferences}
-            onUpdate={handleTastePreferencesUpdate}
-          />*/}
-
-          {/* Regional Favorites */}
-          {/*<RegionalFavoritesSection
-            isExpanded={expandedSections?.regionalFavorites}
-            onToggle={() => toggleSection('regionalFavorites')}
-            favorites={regionalFavorites}
-            onUpdate={handleRegionalFavoritesUpdate}
-          />*/}
-
-          {/* Recipe History */}
-          {/*<RecipeHistorySection
-            isExpanded={expandedSections?.recipeHistory}
-            onToggle={() => toggleSection('recipeHistory')}
-          />*/}
-
-          {/* Achievement Badges */}
-          {/*<AchievementBadgesSection
-            isExpanded={expandedSections?.achievements}
-            onToggle={() => toggleSection('achievements')}
-          />*/}
+          <HealthConditionsSection
+            isExpanded={expandedSections?.healthConditions}
+            onToggle={() => toggleSection('healthConditions')}
+            conditions={healthConditions}
+            onUpdate={handleHealthConditionsUpdate}
+          />
         </div>
 
-        {/* Action Buttons */}
+        {/* Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-4">
           <Button
             variant="outline"
@@ -343,7 +318,7 @@ const UserProfileHealthGoals = () => {
           </Button>
         </div>
 
-        {/* Privacy Notice */}
+        {/* Privacy */}
         <div className="mt-8 p-4 bg-muted/30 rounded-lg border border-border">
           <div className="flex items-start space-x-3">
             <Icon name="Shield" size={16} className="text-primary mt-0.5" />
@@ -354,7 +329,6 @@ const UserProfileHealthGoals = () => {
               <p className="text-sm text-muted-foreground">
                 Your personal information and preferences are securely stored and used only to enhance your
                 recipe discovery experience. We never share your data with third parties without your consent.
-                You can export or delete your data at any time.
               </p>
             </div>
           </div>

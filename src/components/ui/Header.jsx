@@ -62,9 +62,9 @@ const Header = () => {
     return [
       { path: "/recipe-discovery-dashboard", label: "Discover", icon: "Search" },
       { path: "/ingredient-marketplace", label: "Marketplace", icon: "ShoppingBag" },
-      { path: "/user-profile-health-goals", label: "Profile", icon: "User", protected: true },
       { path: "/recipe-submission-management", label: "Contribute", icon: "Plus", protected: true },
       { path: "/community", label: "Community", icon: "Users", protected: true }, 
+      { path: "/user-profile-health-goals", label: "Profile", icon: "User", protected: true },
     ];
   }, [userRole]);
 

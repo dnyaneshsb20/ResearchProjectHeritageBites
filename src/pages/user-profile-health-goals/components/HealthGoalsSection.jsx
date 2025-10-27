@@ -67,7 +67,7 @@ const HealthGoalsSection = ({ isExpanded, onToggle, healthGoals, onUpdate }) => 
     const updatedGoals = selectedGoals?.includes(goalId)
       ? selectedGoals?.filter(id => id !== goalId)
       : [...selectedGoals, goalId];
-    
+
     setSelectedGoals(updatedGoals);
     onUpdate(updatedGoals);
   };
@@ -80,7 +80,7 @@ const HealthGoalsSection = ({ isExpanded, onToggle, healthGoals, onUpdate }) => 
 
   return (
     <div className="bg-card rounded-lg border border-border shadow-warm">
-      <div 
+      <div
         className="flex items-center justify-between p-6 cursor-pointer"
         onClick={onToggle}
       >
@@ -97,10 +97,10 @@ const HealthGoalsSection = ({ isExpanded, onToggle, healthGoals, onUpdate }) => 
             </p>
           </div>
         </div>
-        <Icon 
-          name={isExpanded ? "ChevronUp" : "ChevronDown"} 
-          size={20} 
-          className="text-muted-foreground" 
+        <Icon
+          name={isExpanded ? "ChevronUp" : "ChevronDown"}
+          size={20}
+          className="text-muted-foreground"
         />
       </div>
       {isExpanded && (
@@ -113,10 +113,9 @@ const HealthGoalsSection = ({ isExpanded, onToggle, healthGoals, onUpdate }) => 
                 return (
                   <div
                     key={goal?.id}
-                    className={`relative p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer ${
-                      isSelected
-                        ? 'border-primary bg-primary/5' :'border-border bg-background hover:border-primary/30'
-                    }`}
+                    className={`relative p-4 rounded-lg border-2 transition-all duration-200 cursor-pointer ${isSelected
+                        ? 'border-primary bg-primary/5' : 'border-border bg-background hover:border-primary/30'
+                      }`}
                     onClick={() => handleGoalToggle(goal?.id)}
                   >
                     <div className="flex items-start space-x-3">
@@ -136,7 +135,7 @@ const HealthGoalsSection = ({ isExpanded, onToggle, healthGoals, onUpdate }) => 
                         <p className="text-sm text-muted-foreground mt-1">
                           {goal?.description}
                         </p>
-                        
+
                         {/* Progress Bar */}
                         {isSelected && (
                           <div className="mt-3">
@@ -159,44 +158,14 @@ const HealthGoalsSection = ({ isExpanded, onToggle, healthGoals, onUpdate }) => 
               })}
             </div>
 
-            {/* Goal Summary */}
-            {selectedGoals?.length > 0 && (
-              <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-                <h4 className="font-body font-medium text-foreground mb-2">
-                  Your Health Journey
-                </h4>
-                <p className="text-sm text-muted-foreground">
-                  Based on your selected goals, we'll recommend traditional Indian recipes that support{' '}
-                  {selectedGoals?.length === 1 ? 'your health objective' : 'these health objectives'}. 
-                  Our AI considers Ayurvedic principles and modern nutrition science to suggest the most beneficial dishes for you.
-                </p>
-                
-                <div className="flex items-center space-x-4 mt-3">
-                  <div className="flex items-center space-x-2">
-                    <Icon name="Calendar" size={16} className="text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
-                      Weekly meal plans available
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Icon name="TrendingUp" size={16} className="text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
-                      Progress tracking enabled
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Action Buttons */}
-            <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
-              <Button variant="outline" size="sm">
-                View Meal Plans
-              </Button>
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end mt-6 pt-4 border-t border-border">
               <Button variant="default" size="sm">
-                Get Recipe Recommendations
+                Save Preferences
               </Button>
             </div>
+
           </div>
         </div>
       )}

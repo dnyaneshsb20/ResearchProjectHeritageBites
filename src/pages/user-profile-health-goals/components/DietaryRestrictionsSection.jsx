@@ -78,7 +78,7 @@ const DietaryRestrictionsSection = ({ isExpanded, onToggle, restrictions, onUpda
     const updatedRestrictions = selectedRestrictions?.includes(restrictionId)
       ? selectedRestrictions?.filter(id => id !== restrictionId)
       : [...selectedRestrictions, restrictionId];
-    
+
     setSelectedRestrictions(updatedRestrictions);
     onUpdate(updatedRestrictions);
   };
@@ -104,7 +104,7 @@ const DietaryRestrictionsSection = ({ isExpanded, onToggle, restrictions, onUpda
 
   return (
     <div className="bg-card rounded-lg border border-border shadow-warm">
-      <div 
+      <div
         className="flex items-center justify-between p-6 cursor-pointer"
         onClick={onToggle}
       >
@@ -121,10 +121,10 @@ const DietaryRestrictionsSection = ({ isExpanded, onToggle, restrictions, onUpda
             </p>
           </div>
         </div>
-        <Icon 
-          name={isExpanded ? "ChevronUp" : "ChevronDown"} 
-          size={20} 
-          className="text-muted-foreground" 
+        <Icon
+          name={isExpanded ? "ChevronUp" : "ChevronDown"}
+          size={20}
+          className="text-muted-foreground"
         />
       </div>
       {isExpanded && (
@@ -137,10 +137,9 @@ const DietaryRestrictionsSection = ({ isExpanded, onToggle, restrictions, onUpda
                 return (
                   <div
                     key={restriction?.id}
-                    className={`p-3 rounded-lg border transition-all duration-200 cursor-pointer ${
-                      isSelected
-                        ? 'border-primary bg-primary/5' :'border-border bg-background hover:border-primary/30'
-                    }`}
+                    className={`p-3 rounded-lg border transition-all duration-200 cursor-pointer ${isSelected
+                        ? 'border-primary bg-primary/5' : 'border-border bg-background hover:border-primary/30'
+                      }`}
                     onClick={() => handleRestrictionToggle(restriction?.id)}
                   >
                     <div className="flex items-center space-x-3">
@@ -229,8 +228,8 @@ const DietaryRestrictionsSection = ({ isExpanded, onToggle, restrictions, onUpda
                       Recipe Filtering Active
                     </h4>
                     <p className="text-sm text-muted-foreground">
-                      We'll only show recipes that comply with your dietary restrictions. 
-                      Our database includes traditional alternatives and substitutions to ensure 
+                      We'll only show recipes that comply with your dietary restrictions.
+                      Our database includes traditional alternatives and substitutions to ensure
                       you don't miss out on authentic Indian flavors.
                     </p>
                   </div>
@@ -239,14 +238,13 @@ const DietaryRestrictionsSection = ({ isExpanded, onToggle, restrictions, onUpda
             )}
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-end space-x-3 mt-6 pt-4 border-t border-border">
-              <Button variant="outline" size="sm">
-                View Compatible Recipes
-              </Button>
+            {/* Action Buttons */}
+            <div className="flex items-center justify-end mt-6 pt-4 border-t border-border">
               <Button variant="default" size="sm">
                 Save Preferences
               </Button>
             </div>
+
           </div>
         </div>
       )}
