@@ -27,6 +27,7 @@ const SignIn = () => {
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState(""); // store email for reset
   const [resetToken, setResetToken] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,9 +153,9 @@ const SignIn = () => {
       } else {
         navigate("/recipe-discovery-dashboard");
       }
-console.log("Fetched profile:", profile);
-console.log("Profile error:", profileError);
-console.log("User ID from auth:", data.user.id);
+      console.log("Fetched profile:", profile);
+      console.log("Profile error:", profileError);
+      console.log("User ID from auth:", data.user.id);
 
     } catch (err) {
       console.error(err);
@@ -234,16 +235,28 @@ console.log("User ID from auth:", data.user.id);
           </div>
 
           {/* Password */}
+          {/* Password */}
           <div>
             <label className="text-sm font-medium block mb-1">Password</label>
-            <Input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-2 flex items-center text-muted-foreground hover:text-foreground"
+              >
+                <Icon name={showPassword ? "EyeOff" : "Eye"} size={18} />
+              </button>
+            </div>
           </div>
+
 
           {/* Confirm Password (only in SignUp) */}
           {isSignUp && (
