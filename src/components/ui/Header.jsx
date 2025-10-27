@@ -102,6 +102,10 @@ const Header = () => {
   const handleSearchCollapse = () => {
     if (!searchQuery?.trim()) setIsSearchExpanded(false);
   };
+  const handleClearCart = () => {
+    setCartItems([]); // resets all cart items
+  };
+
 
   const toggleUserMenu = () => setIsUserMenuOpen(!isUserMenuOpen);
 
@@ -690,11 +694,32 @@ const Header = () => {
 
 
             {/* Footer */}
+            {/* Footer */}
             <div className="mt-6 flex justify-between items-center">
-              <span className="font-medium">
-                Total: {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(cartItems.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0)
+              <div className="flex flex-col">
+                <span className="font-medium">
+                  Total:{" "}
+                  {new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    minimumFractionDigits: 0,
+                  }).format(
+                    cartItems.reduce(
+                      (acc, item) => acc + item.price * (item.quantity || 1),
+                      0
+                    )
+                  )}
+                </span>
+                {cartItems.length > 0 && (
+                  <button
+                    onClick={handleClearCart}
+                    className="text-xs text-destructive hover:underline mt-1 self-start"
+                  >
+                    Clear Cart
+                  </button>
                 )}
-              </span>
+              </div>
+
               <Button
                 onClick={() => {
                   if (cartItemCount > 0) {
@@ -703,16 +728,15 @@ const Header = () => {
                   }
                 }}
                 disabled={cartItemCount === 0}
-                className={`px-4 py-2 rounded transition-colors
-  ${cartItemCount === 0
+                className={`px-4 py-2 rounded transition-colors ${cartItemCount === 0
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                     : "bg-gradient-to-r from-[#f87d46] to-[#fa874f] text-white hover:opacity-90"
                   }`}
               >
                 Checkout
               </Button>
-
             </div>
+
           </div>
         </div>
       )}
