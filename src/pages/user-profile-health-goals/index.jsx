@@ -11,6 +11,8 @@ import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
 import Footer from '../dashboard/components/Footer';
 import { supabase } from '../../supabaseClient';
+import jsPDF from "jspdf";
+
 
 const UserProfileHealthGoals = () => {
   const [expandedSections, setExpandedSections] = useState({
@@ -53,24 +55,24 @@ const UserProfileHealthGoals = () => {
 
   const [profileCompleteness, setProfileCompleteness] = useState(0);
 
-const calculateProfileCompletion = (userData, profileData) => {
-  // Each Boolean check corresponds to one field
-  const checks = [
-    !!userData?.name,
-    !!userData?.email,
-    !!profileData?.age_group,
-    !!profileData?.gender,
-    !!profileData?.height_cm,
-    !!profileData?.weight_kg,
-    !!profileData?.activity_level,
-    !!userData?.location,          // Optional: include location
-  ];
+  const calculateProfileCompletion = (userData, profileData) => {
+    // Each Boolean check corresponds to one field
+    const checks = [
+      !!userData?.name,
+      !!userData?.email,
+      !!profileData?.age_group,
+      !!profileData?.gender,
+      !!profileData?.height_cm,
+      !!profileData?.weight_kg,
+      !!profileData?.activity_level,
+      !!userData?.location,          // Optional: include location
+    ];
 
-  const completed = checks.filter(Boolean).length;
-  const total = checks.length;
+    const completed = checks.filter(Boolean).length;
+    const total = checks.length;
 
-  return Math.round((completed / total) * 100);
-};
+    return Math.round((completed / total) * 100);
+  };
 
 
   const updateProfileCompletion = async () => {
@@ -155,12 +157,12 @@ const calculateProfileCompletion = (userData, profileData) => {
   };
 
   const handleUserDataUpdate = (newData) => {
-  setUserData(newData);
+    setUserData(newData);
 
-  // instantly calculate completion without re-fetching
-  const newCompletion = calculateProfileCompletion(newData, currentProfileData);
-  setProfileCompleteness(newCompletion);
-};
+    // instantly calculate completion without re-fetching
+    const newCompletion = calculateProfileCompletion(newData, currentProfileData);
+    setProfileCompleteness(newCompletion);
+  };
 
   const handleHealthGoalsUpdate = (newGoals) => {
     setHealthGoals(newGoals);
@@ -186,6 +188,38 @@ const calculateProfileCompletion = (userData, profileData) => {
     if (percentage >= 80) return 'text-success';
     if (percentage >= 60) return 'text-warning';
     return 'text-accent';
+  };
+  const handleExportProfileData = () => {
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(18);
+    doc.text("User Profile Data", 14, 20);
+    doc.setFontSize(12);
+
+    const profileInfo = {
+      "Name": userData?.name || "N/A",
+      "Email": userData?.email || "N/A",
+      "Location": userData?.location || "N/A",
+      "Join Date": userData?.joinDate
+        ? new Date(userData.joinDate).toLocaleDateString("en-GB")
+        : "N/A",
+      "Age Group": userData?.ageGroup || "N/A",
+      "Gender": userData?.gender || "N/A",
+      "Height (cm)": userData?.height || "N/A",
+      "Weight (kg)": userData?.weight || "N/A",
+      "Activity Level": userData?.activityLevel || "N/A",
+    };
+
+    let y = 35;
+    Object.entries(profileInfo).forEach(([key, value]) => {
+      doc.text(`${key}: ${value}`, 14, y);
+      y += 8;
+    });
+
+    doc.setFontSize(10);
+    doc.text("Exported from HeritageBites Platform", 14, y + 10);
+
+    doc.save("profile_data.pdf");
   };
 
   return (
@@ -294,6 +328,7 @@ const calculateProfileCompletion = (userData, profileData) => {
             iconName="Download"
             iconPosition="left"
             className="w-full sm:w-auto"
+            onClick={handleExportProfileData}
           >
             Export Profile Data
           </Button>
