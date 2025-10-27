@@ -216,7 +216,7 @@ const AnalyticsDashboard = () => {
           value={analyticsData?.activeContributors}
           change={15}
           icon="Users"
-          color="secondary"
+          color="warning"
           className="bg-white shadow-md hover:shadow-xl transition-shadow rounded-xl"
         />
       </div>
