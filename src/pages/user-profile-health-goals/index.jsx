@@ -8,6 +8,10 @@ import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
 import Footer from '../dashboard/components/Footer';
 import { supabase } from '../../supabaseClient';
+import { useNavigate } from "react-router-dom";
+import OpenAI from "openai";
+
+
 import jsPDF from "jspdf";
 
 const UserProfileHealthGoals = () => {
@@ -19,6 +23,10 @@ const UserProfileHealthGoals = () => {
   });
 
   const [userData, setUserData] = useState({});
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+
 
   const [healthGoals, setHealthGoals] = useState([
     'weight-loss',
@@ -74,23 +82,23 @@ const UserProfileHealthGoals = () => {
     }
   };
   // 🔹 Generic function to update Supabase fields
-const updateUserProfileField = async (fieldName, value) => {
-  try {
-    const { data: authData } = await supabase.auth.getUser();
-    const user = authData?.user;
-    if (!user) return;
+  const updateUserProfileField = async (fieldName, value) => {
+    try {
+      const { data: authData } = await supabase.auth.getUser();
+      const user = authData?.user;
+      if (!user) return;
 
-    const { error } = await supabase
-      .from('user_profile')
-      .update({ [fieldName]: value })
-      .eq('user_id', user.id);
+      const { error } = await supabase
+        .from('user_profile')
+        .update({ [fieldName]: value })
+        .eq('user_id', user.id);
 
-    if (error) throw error;
-    console.log(`${fieldName} updated successfully in Supabase`);
-  } catch (err) {
-    console.error(`Error updating ${fieldName}:`, err);
-  }
-};
+      if (error) throw error;
+      console.log(`${fieldName} updated successfully in Supabase`);
+    } catch (err) {
+      console.error(`Error updating ${fieldName}:`, err);
+    }
+  };
 
 
   useEffect(() => {
@@ -167,22 +175,22 @@ const updateUserProfileField = async (fieldName, value) => {
   };
 
   const handleHealthGoalsUpdate = (newGoals) => {
-  setHealthGoals(newGoals);
-  updateUserProfileField("health_goals", newGoals);
-  updateProfileCompletion();
-};
+    setHealthGoals(newGoals);
+    updateUserProfileField("health_goals", newGoals);
+    updateProfileCompletion();
+  };
 
-const handleDietaryRestrictionsUpdate = (newRestrictions) => {
-  setDietaryRestrictions(newRestrictions);
-  updateUserProfileField("dietary_restrictions", newRestrictions);
-  updateProfileCompletion();
-};
+  const handleDietaryRestrictionsUpdate = (newRestrictions) => {
+    setDietaryRestrictions(newRestrictions);
+    updateUserProfileField("dietary_restrictions", newRestrictions);
+    updateProfileCompletion();
+  };
 
-const handleHealthConditionsUpdate = (newConditions) => {
-  setHealthConditions(newConditions);
-  updateUserProfileField("health_conditions", newConditions);
-  updateProfileCompletion();
-};
+  const handleHealthConditionsUpdate = (newConditions) => {
+    setHealthConditions(newConditions);
+    updateUserProfileField("health_conditions", newConditions);
+    updateProfileCompletion();
+  };
 
 
   const getCompletionColor = (percentage) => {
@@ -253,6 +261,71 @@ const handleHealthConditionsUpdate = (newConditions) => {
     // === SAVE ===
     doc.save("HeritageBites_Profile.pdf");
   };
+const generateAIRecommendations = async () => {
+  try {
+    const openai = new OpenAI({
+      apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+      dangerouslyAllowBrowser: true, // ✅ only for local dev
+    });
+
+    const prompt = `
+    You are a culinary AI specializing in healthy Indian cuisine.
+    Suggest **4 healthy, indigenous Indian recipes** tailored to this user's profile:
+
+    - Age group: ${userData?.age_group || "N/A"}
+    - Gender: ${userData?.gender || "N/A"}
+    - Health goals: ${JSON.stringify(userData?.health_goals || [])}
+    - Dietary restrictions: ${JSON.stringify(userData?.dietary_restrictions || [])}
+    - Health conditions: ${JSON.stringify(userData?.health_conditions || [])}
+
+    Each recipe must include:
+    - title
+    - description (2–3 line summary)
+    - ingredients (list of 4–6 items)
+    - instructions (list of 3–5 short cooking steps)
+    - matchReason (1–2 lines explaining why it suits the user’s profile)
+    - nutrition (object with Calories, Protein, Fiber, Carbs values)
+
+    Output strictly valid JSON (no markdown, no extra text):
+    [
+      {
+        "title": "Recipe Name",
+        "description": "Short 2–3 line description",
+        "ingredients": ["item1", "item2", "item3"],
+        "instructions": ["step1", "step2", "step3"],
+        "matchReason": "Short reason why this fits",
+        "nutrition": {
+          "Calories": "xxx kcal",
+          "Protein": "xg",
+          "Fiber": "xg",
+          "Carbs": "xg"
+        }
+      }
+    ]
+    `;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.8,
+    });
+
+    let aiText = response.choices[0].message.content.trim();
+    aiText = aiText.replace(/```json|```/g, "").trim();
+
+    try {
+      const parsed = JSON.parse(aiText);
+      return Array.isArray(parsed) ? parsed.slice(0, 4) : [];
+    } catch (parseError) {
+      console.error("❌ JSON parse failed, raw response:", aiText);
+      return [];
+    }
+  } catch (err) {
+    console.error("⚠️ AI generation failed:", err);
+    return [];
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -350,8 +423,21 @@ const handleHealthConditionsUpdate = (newConditions) => {
             iconName="Sparkles"
             iconPosition="left"
             className="w-full sm:w-auto"
+            disabled={loading}
+            onClick={async () => {
+              setLoading(true);
+              try {
+                const recommendations = await generateAIRecommendations();
+                navigate("/user-recommendations", { state: { recommendations } });
+              } catch (err) {
+                console.error("Error generating recommendations:", err);
+                navigate("/user-recommendations");
+              } finally {
+                setLoading(false);
+              }
+            }}
           >
-            Get Personalized Recommendations
+            {loading ? "Generating..." : "Explore Personalized Recommendations"}
           </Button>
         </div>
 

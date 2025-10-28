@@ -24,6 +24,7 @@ import OrderConfirmation from "./pages/order-confirmation";
 import OrderDetails from "./pages/order-confirmation/OrderDetails";
 import OrderHistory from './pages/OrderHistory/OrderHistory';
 import CommunityRecipes from "./pages/community/index"
+import UserRecommendations from "pages/user-recommendations";
 // New pages
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -53,6 +54,8 @@ const Routes = () => {
         <Route path="/feedback" element={<Feedback/>}/>
         <Route path="/order-history" element={<OrderHistory />} />
         <Route path="/community" element={<CommunityRecipes/>} />
+        <Route path="/user-recommendations" element={<UserRecommendations />} />
+
         {/* Farmer dashboard routes */}
         <Route path="/farmer-dashboard" element={<FarmerDashboard />} />
         <Route path="/farmer-products" element={<FarmerProducts />} />
