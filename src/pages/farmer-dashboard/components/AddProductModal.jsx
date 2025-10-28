@@ -59,7 +59,7 @@ const AddProductModal = ({ isOpen, onClose, onProductAdded }) => {
 
     try {
       // ✅ Step 1: Insert new ingredient (if not already exists)
-      const { data: ingredient, error: ingredientError } = await supabase
+      let { data: ingredient, error: ingredientError } = await supabase
         .from("ingredients")
         .insert([{ name: formData.name }])
         .select("ingredient_id")
