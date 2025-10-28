@@ -70,8 +70,11 @@ const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) =
       </div>
       {/* Desktop Grid View */}
       <div className="hidden lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {(showAll ? recipes : recipes.slice(0, 4))?.map((recipe) => (
-          <RecipeCard key={recipe?.recipe_id || recipe?.indg_recipe_id} recipe={recipe} />
+        {(showAll ? recipes : recipes.slice(0, 4))?.map((recipe,index) => (
+          <RecipeCard
+            key={recipe?.recipe_id || recipe?.indg_recipe_id || `recipe-${index}`}
+            recipe={recipe}
+          />
 
         ))}
       </div>
@@ -120,7 +123,7 @@ const RecipeSection = ({ title, subtitle, recipes, icon, showViewAll = true }) =
               key={index}
               onClick={() => scrollToIndex(index)}
               className={`w-2 h-2 rounded-full transition-all duration-200 ${Math.floor(currentIndex / itemsPerView?.mobile) === index
-                  ? 'bg-primary' : 'bg-muted-foreground/30'
+                ? 'bg-primary' : 'bg-muted-foreground/30'
                 }`}
               aria-label={`Go to page ${index + 1}`}
             />

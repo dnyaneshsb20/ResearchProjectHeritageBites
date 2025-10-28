@@ -73,7 +73,7 @@ const UserRecipesList = ({ onNewRecipe, onViewRecipe, onEditRecipe }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {recipes.map((recipe) => (
             <div
-              key={recipe.recipe_id}
+              key={recipe.indg_recipe_id}
               className="bg-card rounded-xl shadow-sm overflow-hidden border relative group transition hover:shadow-md"
             >
               {/* Recipe image */}

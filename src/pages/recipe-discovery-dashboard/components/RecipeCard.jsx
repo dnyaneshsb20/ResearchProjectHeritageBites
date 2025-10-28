@@ -68,7 +68,7 @@ const RecipeCard = ({ recipe, className = '' }) => {
             <div className="absolute bottom-3 left-3 flex flex-wrap gap-1">
               {tags?.slice(0, 2)?.map((tag, index) => (
                 <span
-                  key={index}
+                  key={tag}
                   className="px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-xs font-medium rounded-full"
                 >
                   {tag}
