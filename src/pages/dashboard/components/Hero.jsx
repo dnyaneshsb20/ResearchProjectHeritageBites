@@ -1,13 +1,51 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from '../../../components/ui/Button';
 import { Search, Sparkles } from "lucide-react";
 import heroFood from "../../../assets/hero-food.jpg";
 import { MdExplore } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../../supabaseClient"; // ✅ Added
 
 const Hero = () => {
   const navigate = useNavigate();
 
+  // ✅ Add states for counts
+  const [stats, setStats] = useState({
+    recipes: 0,
+    states: 0,
+    farmers: 0,
+  });
+
+  // ✅ Fetch counts from Supabase
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const { count: recipeCount } = await supabase
+          .from("recipes")
+          .select("*", { count: "exact", head: true });
+
+        const { count: stateCount } = await supabase
+          .from("states")
+          .select("*", { count: "exact", head: true });
+
+        const { count: farmerCount } = await supabase
+          .from("farmers")
+          .select("*", { count: "exact", head: true });
+
+        setStats({
+          recipes: recipeCount || 0,
+          states: stateCount || 0,
+          farmers: farmerCount || 0,
+        });
+      } catch (err) {
+        console.error("❌ Error fetching stats:", err);
+      }
+    };
+
+    fetchCounts();
+  }, []);
+
+  // ✅ Existing animated placeholder logic
   useEffect(() => {
     const PLACEHOLDER_WORDS = [
       "Discover authentic Indian sweets from every region",
@@ -29,9 +67,8 @@ const Hero = () => {
       charIndex++;
 
       if (charIndex < word.length) {
-        setTimeout(typeWord, 100); // typing speed
+        setTimeout(typeWord, 100);
       } else {
-        // pause before next word
         setTimeout(() => {
           charIndex = 0;
           wordIndex = (wordIndex + 1) % PLACEHOLDER_WORDS.length;
@@ -75,7 +112,6 @@ const Hero = () => {
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto mb-8">
             <div className="relative w-full">
-              {/* Placeholder */}
               <span
                 id="search-placeholder"
                 className="absolute left-12 top-1/2 transform -translate-y-1/2 text-muted-foreground pointer-events-none opacity-50 z-20"
@@ -103,7 +139,6 @@ const Hero = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            {/* Suggest a Dish Button */}
             <Button
               variant="hero"
               size="lg"
@@ -116,7 +151,6 @@ const Hero = () => {
               </span>
             </Button>
 
-            {/* Explore More Button */}
             <Button
               variant="golden"
               size="lg"
@@ -128,18 +162,24 @@ const Hero = () => {
             </Button>
           </div>
 
-          {/* Quick Stats */}
+          {/* ✅ Real-time Stats (same design) */}
           <div className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-golden">500+</div>
+              <div className="text-3xl font-bold text-golden">
+                {stats.recipes || 0}+
+              </div>
               <div className="text-white/80">Indigenous Recipes</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-golden">28</div>
+              <div className="text-3xl font-bold text-golden">
+                {stats.states || 0}
+              </div>
               <div className="text-white/80">Indian States</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-golden">1000+</div>
+              <div className="text-3xl font-bold text-golden">
+                {stats.farmers || 0}+
+              </div>
               <div className="text-white/80">Local Farmers</div>
             </div>
           </div>
