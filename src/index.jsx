@@ -13,11 +13,13 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+     <AuthProvider>
       <CartProvider> {/* ✅ Wrap App with CartProvider */}
-        <AuthProvider>
+       
           <App />
-        </AuthProvider>
+       
       </CartProvider>
+       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

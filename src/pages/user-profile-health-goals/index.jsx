@@ -283,7 +283,7 @@ const generateAIRecommendations = async () => {
     - description (2–3 line summary)
     - ingredients (list of 4–6 items)
     - instructions (list of 3–5 short cooking steps)
-    - matchReason (1–2 lines explaining why it suits the user’s profile)
+    - matchReason (1–2 lines written in a friendly, second-person tone, directly addressing the user — e.g. “Because you’re focusing on heart health and prefer low-oil meals, this dish…”)
     - nutrition (object with Calories, Protein, Fiber, Carbs values)
 
     Output strictly valid JSON (no markdown, no extra text):
