@@ -152,7 +152,7 @@ const FarmerProfileSection = () => {
               Profile & Health Goals
             </h1>
             <p className="text-muted-foreground">
-              Personalize your culinary journey with traditional Indian recipes
+              Manage your farm profile and connect with food enthusiasts across India
             </p>
           </div>
         </div>
