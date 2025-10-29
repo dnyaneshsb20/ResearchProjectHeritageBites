@@ -6,6 +6,8 @@ import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import { supabase } from '../../../supabaseClient';
 import ContributorProfileModal from './ContributorProfileModal';
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
   const [contributors, setContributors] = useState([]);
@@ -175,6 +177,83 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
     return `hsl(${hue}, 70%, 60%)`; // pastel color tone
   };
 
+  const handleExportContributorsData = () => {
+    const doc = new jsPDF({ orientation: "landscape" }); // better for wide tables
+
+    // Header
+    doc.setFontSize(18);
+    doc.text("Heritage Bites — Contributors Report", 14, 15);
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleString("en-IN")}`, 14, 22);
+
+    // Table headers
+    const headers = [[
+      "Sr. No",
+      "Name of Contributor",
+      "Location",
+      "Total Submitted",
+      "Total Approved",
+      "Rating",
+      "Last Submission Date",
+      "Specialities"
+    ]];
+
+    // Table data
+    const data = contributors.map((c, index) => [
+      index + 1,
+      c.name,
+      c.location || "—",
+      c.totalSubmissions,
+      c.approvedSubmissions,
+      `${c.rating} ★`,
+      c.lastSubmission
+        ? new Date(c.lastSubmission).toLocaleDateString("en-IN")
+        : "—",
+      c.specialties?.join(", ") || "—"
+    ]);
+
+    // Table design
+    autoTable(doc, {
+      startY: 30,
+      head: headers,
+      body: data,
+      styles: {
+        fontSize: 10,
+        cellPadding: 4,
+        lineColor: [200, 200, 200],
+        lineWidth: 0.2,
+      },
+      headStyles: {
+        fillColor: [45, 106, 79], // Heritage Bites green tone
+        textColor: [255, 255, 255],
+        halign: "center",
+      },
+      bodyStyles: {
+        halign: "center",
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245],
+      },
+    });
+
+    // Footer
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(
+        `Heritage Bites Contributors Report | Page ${i} of ${pageCount}`,
+        doc.internal.pageSize.getWidth() / 2,
+        doc.internal.pageSize.getHeight() - 10,
+        { align: "center" }
+      );
+    }
+
+    doc.save("HeritageBites_Contributors_Report.pdf");
+  };
+
   return (
     <div className="space-y-6">
       {/* Header & Controls */}
@@ -184,7 +263,7 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
           <p className="text-muted-foreground">Manage and monitor recipe contributors</p>
         </div>
         <div className="flex items-center space-x-3">
-          <Button variant="outline" iconName="Download" iconPosition="left">
+          <Button variant="outline" iconName="Download" iconPosition="left" onClick={handleExportContributorsData}>
             Export Data
           </Button>
           <Button variant="default" iconName="UserPlus" iconPosition="left">
