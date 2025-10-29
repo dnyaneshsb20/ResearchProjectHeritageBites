@@ -96,13 +96,14 @@ const UserRecommendations = () => {
                                 </h3>
                                 <p className="text-sm text-muted-foreground mb-3">{rec.description}</p>
                                 <Button
-                                    variant="outline"
+                                    variant="default"
                                     size="sm"
                                     iconName="ExternalLink"
                                     onClick={() => {
                                         setSelectedRecipe(rec);
                                         setShowModal(true);
                                     }}
+                                    className="mt-auto"
                                 >
                                     View Recipe
                                 </Button>
