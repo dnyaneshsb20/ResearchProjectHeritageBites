@@ -51,40 +51,40 @@ const QuickStats = ({ recipe }) => {
             <p className="text-sm font-body text-muted-foreground mb-1">
               {stat?.label}
             </p>
-            <p className={`font-heading font-semibold ${
-              stat?.label === 'Difficulty' 
+            <p className={`font-heading font-semibold ${stat?.label === 'Difficulty'
                 ? getDifficultyColor(stat?.value)
                 : 'text-foreground'
-            }`}>
+              }`}>
               {stat?.value}
             </p>
           </div>
         ))}
       </div>
-      {/* Rating
+      {/* Rating */}
       <div className="flex items-center justify-center mt-4 pt-4 border-t border-border">
-        <div className="flex items-center space-x-2"> */}
-          {/* <div className="flex items-center space-x-1">
-            {[1, 2, 3, 4, 5]?.map((star) => (
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
+            {[1, 2, 3, 4, 5].map((star) => (
               <Icon
                 key={star}
                 name="Star"
                 size={16}
-                className={`${
-                  star <= Math.floor(recipe?.rating)
-                    ? 'text-warning fill-current' :'text-muted-foreground'
-                }`}
+                className={`${star <= Math.floor(recipe?.rating)
+                    ? 'text-warning fill-current'
+                    : 'text-muted-foreground'
+                  }`}
               />
             ))}
-          </div> */}
-          {/* <span className="font-body font-medium text-foreground">
+          </div>
+          <span className="font-body font-medium text-foreground">
             {recipe?.rating}
           </span>
           <span className="text-sm text-muted-foreground">
             ({recipe?.reviewCount} reviews)
-          </span> */}
-        {/* </div>
-      </div> */}
+          </span>
+        </div>
+      </div>
+
     </div>
   );
 };

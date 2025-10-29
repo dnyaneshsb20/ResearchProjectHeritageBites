@@ -12,9 +12,12 @@ import ReviewsSection from './components/ReviewsSection';
 import Footer from 'pages/dashboard/components/Footer';
 import { supabase } from "../../supabaseClient";
 import toast from 'react-hot-toast';
+import { useAuth } from "../../context/AuthContext";
+
 
 
 const RecipeDetailInstructions = () => {
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const recipeId = searchParams?.get('id') || '1';
   const [recipe, setRecipe] = useState(null);
@@ -62,24 +65,24 @@ const RecipeDetailInstructions = () => {
         console.error("Error fetching recipe:", error);
         setRecipe(null);
       } else {
-setRecipe({
-  ...data,
-  id: data.recipe_id,
-  region: data.states?.state_name || "Unknown Region",
-  images: data.images || [data.image_url],
-  healthBenefits: data.health_benefits,
-  regionalInfo: {
-    significance: data.regional_info?.origin_story || "N/A",
-     origin: `${data.regional_info?.district || "N/A"}, ${data.regional_info?.state || "N/A"}`,
-    popularIn: data.regional_info?.region || "N/A",
-  },
-   instructions: Array.isArray(data.instructions)
-    ? data.instructions
-    : data.instructions
-      ? JSON.parse(data.instructions)
-      : [], // default empty array
-     servings: parseInt(data.servings) || 1,
-});
+        setRecipe({
+          ...data,
+          id: data.recipe_id,
+          region: data.states?.state_name || "Unknown Region",
+          images: data.images || [data.image_url],
+          healthBenefits: data.health_benefits,
+          regionalInfo: {
+            significance: data.regional_info?.origin_story || "N/A",
+            origin: `${data.regional_info?.district || "N/A"}, ${data.regional_info?.state || "N/A"}`,
+            popularIn: data.regional_info?.region || "N/A",
+          },
+          instructions: Array.isArray(data.instructions)
+            ? data.instructions
+            : data.instructions
+              ? JSON.parse(data.instructions)
+              : [], // default empty array
+          servings: parseInt(data.servings) || 1,
+        });
 
       }
 
@@ -88,22 +91,29 @@ setRecipe({
 
     if (recipeId) fetchRecipe();
   }, [recipeId]);
-useEffect(() => {
-  const fetchReviews = async () => {
-    if (!recipeId) return;
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!recipeId) return;
 
-    const { data, error } = await supabase
-      .from("reviews")
-      .select("*")
-      .eq("recipe_id", recipeId)
-      .order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("reviews")
+        .select(`
+      review_id,
+      rating,
+      comment,
+      created_at,
+      user_id,
+      users(name)
+    `)
+        .eq("recipe_id", recipeId)
+        .order("created_at", { ascending: false });
 
-    if (error) console.error("Error fetching reviews:", error);
-    else setReviews(data);
-  };
+      if (error) console.error("Error fetching reviews:", error);
+      else setReviews(data);
+    };
 
-  fetchReviews();
-}, [recipeId]);
+    fetchReviews();
+  }, [recipeId]);
 
   const handleBookmark = (recipeId) => {
     console.log('Bookmarking recipe:', recipeId);
@@ -129,9 +139,27 @@ useEffect(() => {
     // Implement cart functionality
     toast.success(`Added ${ingredients?.length} ingredients to cart!`);
   };
+const handleSubmitReview = async ({ rating, comment }) => {
+  if (!recipeId) return toast.error("Recipe ID missing.");
 
-const handleSubmitReview = async (reviewData) => {
-  const { rating, comment, user_name } = reviewData;
+  const authId = user?.id || user?.user?.id;
+  if (!authId) {
+    toast.error("User not logged in");
+    return;
+  }
+
+  // Fetch user details from 'users' table using auth_id
+  const { data: userData, error: userError } = await supabase
+    .from("users")
+    .select("user_id, name")
+    .eq("auth_id", authId)
+    .single();
+
+  if (userError || !userData) {
+    console.error("Error fetching user:", userError);
+    toast.error("Couldn't fetch user info");
+    return;
+  }
 
   const { data, error } = await supabase
     .from("reviews")
@@ -140,19 +168,29 @@ const handleSubmitReview = async (reviewData) => {
         recipe_id: recipeId,
         rating,
         comment,
-        user_name,
+        user_id: userData.user_id,
+        user_type: "registered",
+        page_visited: "recipe",
       },
     ])
-    .select();
+    .select(`
+      review_id,
+      rating,
+      comment,
+      created_at,
+      user_id,
+      users(name)
+    `);
 
   if (error) {
-    console.error("Error submitting review:", error);
-    toast.error("Failed to submit review. Try again.");
+    console.error("❌ Review insert failed:", error);
+    toast.error("Failed to submit review");
   } else {
-    toast.success("Review submitted successfully!");
-    setReviews((prev) => [data[0], ...prev]); // instantly update list
+    toast.success("✅ Review added!");
+    setReviews((prev) => [data[0], ...prev]);
   }
 };
+
 
   if (loading) {
     return (
@@ -219,11 +257,11 @@ const handleSubmitReview = async (reviewData) => {
               videos={recipe?.videos}
             />
 
-            {/* <ReviewsSection
+            <ReviewsSection
               reviews={reviews}
               recipeId={recipe?.id}
               onSubmitReview={handleSubmitReview}
-            /> */}
+            />
 
           </div>
 
@@ -231,14 +269,14 @@ const handleSubmitReview = async (reviewData) => {
           <div className="space-y-6">
             <IngredientsList
               ingredients={recipe?.ingredients}
-               baseServings={recipe?.servings} 
+              baseServings={recipe?.servings}
               onBuyIngredients={handleBuyIngredients}
             />
 
             <NutritionPanel
               nutrition={recipe?.nutrition}
               healthBenefits={recipe?.healthBenefits}
-               dietary_type= {recipe.dietary_type}
+              dietary_type={recipe.dietary_type}
             />
 
             <CulturalStory
@@ -251,7 +289,7 @@ const handleSubmitReview = async (reviewData) => {
 
         {/* Similar Recipes */}
         <div className="mt-8">
-          
+
         </div>
       </main>
       <Footer />

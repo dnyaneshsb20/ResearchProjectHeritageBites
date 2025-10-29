@@ -85,10 +85,9 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
                 key={star}
                 name="Star"
                 size={20}
-                className={`${
-                  star <= Math.floor(averageRating)
-                    ? 'text-warning fill-current' :'text-muted-foreground'
-                }`}
+                className={`${star <= Math.floor(averageRating)
+                  ? 'text-warning fill-current' : 'text-muted-foreground'
+                  }`}
               />
             ))}
           </div>
@@ -140,10 +139,9 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
                     <Icon
                       name="Star"
                       size={24}
-                      className={`${
-                        star <= newReview?.rating
-                          ? 'text-warning fill-current' :'text-muted-foreground hover:text-warning'
-                      }`}
+                      className={`${star <= newReview?.rating
+                        ? 'text-warning fill-current' : 'text-muted-foreground hover:text-warning'
+                        }`}
                     />
                   </button>
                 ))}
@@ -200,98 +198,103 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
         </select>
       </div>
       {/* Reviews List */}
+      {/* Reviews List */}
       <div className="space-y-6">
         {sortedReviews?.map((review, index) => (
-          <div key={index} className="border-b border-border pb-6 last:border-b-0 last:pb-0">
-            <div className="flex items-start space-x-4">
-              {/* User Avatar */}
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-muted flex-shrink-0">
-                <Image
-                  src={review?.author?.avatar}
-                  alt={review?.author?.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+          <div
+            key={index}
+            className="border-b border-border pb-6 last:border-b-0 last:pb-0"
+          >
+            <div className="flex flex-col space-y-2">
+              {/* Reviewer Name and Rating */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-body font-medium text-foreground">
+                    {review?.users?.name || "Anonymous"}
+                  </h4>
 
-              {/* Review Content */}
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <h4 className="font-body font-medium text-foreground">
-                      {review?.author?.name}
-                    </h4>
-                    <div className="flex items-center space-x-2">
-                      <div className="flex items-center space-x-0.5">
-                        {[1, 2, 3, 4, 5]?.map((star) => (
-                          <Icon
-                            key={star}
-                            name="Star"
-                            size={14}
-                            className={`${
-                              star <= review?.rating
-                                ? 'text-warning fill-current' :'text-muted-foreground'
+
+                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-0.5">
+                      {[1, 2, 3, 4, 5]?.map((star) => (
+                        <Icon
+                          key={star}
+                          name="Star"
+                          size={14}
+                          className={`${star <= review?.rating
+                            ? "text-warning fill-current"
+                            : "text-muted-foreground"
                             }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(review.date)?.toLocaleDateString()}
-                      </span>
+                        />
+                      ))}
                     </div>
+
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(review?.created_at || review?.date)?.toLocaleDateString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
                   </div>
-                  
-                  {/* Helpful Button */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    iconName="ThumbsUp"
-                    iconPosition="left"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    {review?.helpfulCount || 0}
-                  </Button>
                 </div>
 
-                <p className="text-sm font-body text-foreground mb-3">
-                  {review?.comment}
-                </p>
+                {/* Helpful Button */}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  iconName="ThumbsUp"
+                  iconPosition="left"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  {review?.helpfulCount || 0}
+                </Button>
+              </div>
 
-                {/* Review Images */}
-                {review?.images && review?.images?.length > 0 && (
-                  <div className="flex space-x-2 mb-3">
-                    {review?.images?.map((image, imgIndex) => (
-                      <div key={imgIndex} className="w-16 h-16 rounded-lg overflow-hidden bg-muted">
-                        <Image
-                          src={image}
-                          alt={`Review image ${imgIndex + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
+              {/* Comment */}
+              <p className="text-sm font-body text-foreground mb-3">
+                {review?.comment}
+              </p>
 
-                {/* Recipe Modifications */}
-                {review?.modifications && (
-                  <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
-                    <div className="flex items-start space-x-2">
-                      <Icon name="Edit" size={14} className="text-primary mt-0.5" />
-                      <div>
-                        <h5 className="font-body font-medium text-foreground text-sm">
-                          Recipe Modifications:
-                        </h5>
-                        <p className="text-sm text-muted-foreground">
-                          {review?.modifications}
-                        </p>
-                      </div>
+              {/* Review Images (if any) */}
+              {review?.images && review?.images?.length > 0 && (
+                <div className="flex space-x-2 mb-3">
+                  {review?.images?.map((image, imgIndex) => (
+                    <div
+                      key={imgIndex}
+                      className="w-16 h-16 rounded-lg overflow-hidden bg-muted"
+                    >
+                      <Image
+                        src={image}
+                        alt={`Review image ${imgIndex + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Recipe Modifications */}
+              {review?.modifications && (
+                <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
+                  <div className="flex items-start space-x-2">
+                    <Icon name="Edit" size={14} className="text-primary mt-0.5" />
+                    <div>
+                      <h5 className="font-body font-medium text-foreground text-sm">
+                        Recipe Modifications:
+                      </h5>
+                      <p className="text-sm text-muted-foreground">
+                        {review?.modifications}
+                      </p>
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </div>
+
       {/* Load More Reviews */}
       {reviews?.length > 5 && (
         <div className="text-center mt-6">
