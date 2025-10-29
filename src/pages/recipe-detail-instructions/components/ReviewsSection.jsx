@@ -212,8 +212,6 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
                   <h4 className="font-body font-medium text-foreground">
                     {review?.users?.name || "Anonymous"}
                   </h4>
-
-
                   <div className="flex items-center space-x-2">
                     <div className="flex items-center space-x-0.5">
                       {[1, 2, 3, 4, 5]?.map((star) => (
