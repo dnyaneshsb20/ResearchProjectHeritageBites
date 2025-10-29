@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../../supabaseClient";
 import toast from "react-hot-toast";
-import Button from "../../../components/ui/button";
+import Button from "../../../components/ui/Button";
 import { MdSensorOccupied } from "react-icons/md"; // UPI
 import { FaCreditCard } from "react-icons/fa";     // Card
 import { BsCash } from "react-icons/bs";          // Cash / COD
