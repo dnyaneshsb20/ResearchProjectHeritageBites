@@ -2,6 +2,8 @@ import React from "react";
 import Header from "../../components/ui/Header";
 import { CheckCircle2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Footer from "pages/dashboard/components/Footer";
+import Button from "components/ui/Button";
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ const OrderConfirmation = () => {
 
         {/* Confirmation Text */}
         <h1 className="text-3xl font-bold text-foreground mb-3">
-          Order Placed Successfully 🎉
+          Order Placed Successfully !
         </h1>
         <p className="text-muted-foreground max-w-md mb-8">
           Thank you for your purchase! Your order is being processed. You’ll
@@ -53,31 +55,30 @@ const OrderConfirmation = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <button
-            onClick={() => navigate("/ingredient-marketplace")}
-            className="px-6 py-3 bg-gradient-to-r from-[#f87d46] to-[#fa874f] text-white rounded-lg shadow hover:opacity-90 transition"
-          >
-            Continue Shopping
-          </button>
-          <button
-            onClick={() => navigate("/recipe-discovery-dashboard")}
-            className="px-6 py-3 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition"
-          >
-            Explore More Recipes
-          </button>
-          <button
+          <Button
             onClick={() => navigate(`/order-details/${order.order_id}`, { state: { order } })}
-            className="px-6 py-3 bg-primary text-white rounded-lg shadow hover:opacity-90 transition"
+            className="px-6 py-3"
+            variant="ghost2"
           >
             View Order Details
-          </button>
+          </Button>
+          <Button
+            onClick={() => navigate("/ingredient-marketplace")}
+            className="px-6 py-3 "
+            variant="ghost2"
+          >
+            Continue Shopping
+          </Button>
+          <Button
+            onClick={() => navigate("/recipe-discovery-dashboard")}
+            className="px-6 py-3"
+            variant="ghost2"
+          >
+            Explore More Recipes
+          </Button>
         </div>
       </main>
-
-      {/* Footer note */}
-      <footer className="py-4 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Heritage Bites. All rights reserved.
-      </footer>
+      <Footer/>
     </div>
   );
 };

@@ -12,6 +12,7 @@ import { SiHdfcbank, SiIcicibank } from "react-icons/si";
 import { RiBankFill } from "react-icons/ri";
 import { RiVisaFill } from "react-icons/ri";
 import { FaCcMastercard } from "react-icons/fa";
+import Footer from "pages/dashboard/components/Footer";
 
 const Payment = () => {
     const { cartItems, setCartItems } = useCart();
@@ -376,6 +377,7 @@ const Payment = () => {
                     </button>
                 </div>
             </main>
+            <Footer/>
         </div>
     );
 };

@@ -3,6 +3,7 @@ import Header from '../../components/ui/Header';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import Footer from 'pages/dashboard/components/Footer';
 
 const Checkout = () => {
   const { cartItems, setCartItems } = useCart();
@@ -83,6 +84,7 @@ const Checkout = () => {
           </div>
         )}
       </main>
+      <Footer/>
     </div>
   );
 };
