@@ -63,7 +63,7 @@ const Header = () => {
       { path: "/recipe-discovery-dashboard", label: "Discover", icon: "Search" },
       { path: "/ingredient-marketplace", label: "Marketplace", icon: "ShoppingBag" },
       { path: "/recipe-submission-management", label: "Contribute", icon: "Plus", protected: true },
-      { path: "/community", label: "Community", icon: "Users" }, 
+      { path: "/community", label: "Community", icon: "Users" },
       //{ path: "/user-profile-health-goals", label: "Profile", icon: "User", protected: true },
     ];
   }, [userRole]);
@@ -519,41 +519,45 @@ const Header = () => {
                       )}
                     </div>
 
-                    <div className="py-2">
-                      <button
-                        onClick={() => handleProtectedNavigation("/user-profile-health-goals")}
-                        className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors w-full text-left"
-                      >
-                        <Icon name="User" size={16} />
-                        <span>Profile & Goals</span>
-                      </button>
+                    {userProfile?.role !== "farmer" && (
+                      <div className="py-2">
+                        <button
+                          onClick={() => handleProtectedNavigation("/user-profile-health-goals")}
+                          className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors w-full text-left"
+                        >
+                          <Icon name="User" size={16} />
+                          <span>Profile & Goals</span>
+                        </button>
 
-                      <button
-                        onClick={() => handleProtectedNavigation("/recipe-submission-management")}
-                        className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors w-full text-left"
-                      >
-                        <Icon name="BookOpen" size={16} />
-                        <span>My Recipes</span>
-                      </button>
-                      <Link
-                        to="/order-history"
-                        className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        <Icon name="Package" size={16} />
-                        <span>Order History</span>
-                      </Link>
-                      {userProfile?.role === "admin" && (
+                        <button
+                          onClick={() => handleProtectedNavigation("/recipe-submission-management")}
+                          className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors w-full text-left"
+                        >
+                          <Icon name="BookOpen" size={16} />
+                          <span>My Recipes</span>
+                        </button>
+
                         <Link
-                          to="/admin-recipe-management"
+                          to="/order-history"
                           className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
-                          <Icon name="Settings" size={16} />
-                          <span>Admin Panel</span>
+                          <Icon name="Package" size={16} />
+                          <span>Order History</span>
                         </Link>
-                      )}
-                    </div>
+
+                        {userProfile?.role === "admin" && (
+                          <Link
+                            to="/admin-recipe-management"
+                            className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors"
+                            onClick={() => setIsUserMenuOpen(false)}
+                          >
+                            <Icon name="Settings" size={16} />
+                            <span>Admin Panel</span>
+                          </Link>
+                        )}
+                      </div>
+                    )}
 
                     <div className="border-t border-border py-2">
                       <button
