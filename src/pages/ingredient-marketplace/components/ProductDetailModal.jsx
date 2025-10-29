@@ -373,7 +373,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
           <div className="mt-8">
             <div className="border-b border-border">
               <nav className="flex space-x-8">
-                {["description", "cultivation", "nutrition", "reviews"].map((tab) => (
+                {["description", "cultivation", "nutrition"].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
