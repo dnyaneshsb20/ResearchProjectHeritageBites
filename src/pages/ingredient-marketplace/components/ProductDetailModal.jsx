@@ -14,40 +14,40 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
   const [ingredientInfo, setIngredientInfo] = useState(null);
   const [loadingIngredient, setLoadingIngredient] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
-  const [reviews, setReviews] = useState([]);
-  const [loadingReviews, setLoadingReviews] = useState(false);
-  useEffect(() => {
-    const fetchReviews = async () => {
-      if (!product?.product_id) return;
+  //const [reviews, setReviews] = useState([]);
+  //const [loadingReviews, setLoadingReviews] = useState(false);
+  // useEffect(() => {
+  //   const fetchReviews = async () => {
+  //     if (!product?.product_id) return;
 
-      setLoadingReviews(true);
+  //     setLoadingReviews(true);
 
-      const { data, error } = await supabase
-        .from('reviews')
-        .select(`
-        review_id,
-        rating,
-        comment,
-        created_at,
-        user:user_id (
-          name
-        )
-      `)
-        .eq('product_id', product.product_id)
-        .order('created_at', { ascending: false });
+  //     const { data, error } = await supabase
+  //       .from('reviews')
+  //       .select(`
+  //       review_id,
+  //       rating,
+  //       comment,
+  //       created_at,
+  //       user:user_id (
+  //         name
+  //       )
+  //     `)
+  //       .eq('product_id', product.product_id)
+  //       .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching reviews:', error);
-        setReviews([]);
-      } else {
-        setReviews(data || []);
-      }
+  //     if (error) {
+  //       console.error('Error fetching reviews:', error);
+  //       setReviews([]);
+  //     } else {
+  //       setReviews(data || []);
+  //     }
 
-      setLoadingReviews(false);
-    };
+  //     setLoadingReviews(false);
+  //   };
 
-    if (isOpen) fetchReviews();
-  }, [isOpen, product?.product_id]);
+  //   if (isOpen) fetchReviews();
+  // }, [isOpen, product?.product_id]);
 
   useEffect(() => {
     if (isOpen) {
