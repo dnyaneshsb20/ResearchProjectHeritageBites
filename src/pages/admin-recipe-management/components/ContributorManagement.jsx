@@ -263,12 +263,12 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
           <p className="text-muted-foreground">Manage and monitor recipe contributors</p>
         </div>
         <div className="flex items-center space-x-3">
-          <Button variant="outline" iconName="Download" iconPosition="left" onClick={handleExportContributorsData}>
+          <Button variant="ghost2" iconName="Download" iconPosition="left" onClick={handleExportContributorsData}>
             Export Data
           </Button>
-          <Button variant="default" iconName="UserPlus" iconPosition="left">
+          {/* <Button variant="default" iconName="UserPlus" iconPosition="left">
             Invite Contributor
-          </Button>
+          </Button> */}
         </div>
       </div>
 

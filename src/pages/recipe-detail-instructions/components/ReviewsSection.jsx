@@ -3,8 +3,9 @@ import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Image from '../../../components/AppImage';
+import { useAuth } from '../../../context/AuthContext';
 
-const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
+const ReviewsSection = ({ reviews = [], recipeId, onSubmitReview }) => {
   const [newReview, setNewReview] = useState({
     rating: 0,
     comment: '',
@@ -12,49 +13,68 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
   });
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [sortBy, setSortBy] = useState('newest');
+  const [isWritingReview, setIsWritingReview] = useState(false);
+  const { user, setShowAuthPopup } = useAuth();
 
   const handleRatingClick = (rating) => {
-    setNewReview(prev => ({ ...prev, rating }));
+    setNewReview((prev) => ({ ...prev, rating }));
+  };
+
+  const handleWriteReview = () => {
+    if (!user) {
+      // Trigger login popup from header if user not logged in
+      const signInButton = document.getElementById("login-button");
+      if (signInButton) signInButton.click();
+      else setShowAuthPopup(true);
+      return;
+    }
+
+    // Toggle writing mode
+    setIsWritingReview((prev) => !prev);
   };
 
   const handleSubmitReview = (e) => {
-    e?.preventDefault();
-    if (newReview?.rating > 0 && newReview?.comment?.trim()) {
+    e.preventDefault();
+    if (newReview.rating > 0 && newReview.comment.trim()) {
       onSubmitReview({
-        ...newReview,
+        rating: newReview.rating,
+        comment: newReview.comment,
         recipeId,
-        date: new Date()?.toISOString(),
-        author: {
-          name: "You",
-          avatar: "https://randomuser.me/api/portraits/men/1.jpg"
-        }
       });
       setNewReview({ rating: 0, comment: '', images: [] });
       setShowReviewForm(false);
+      setIsWritingReview(false);
     }
   };
 
-  const sortedReviews = [...reviews]?.sort((a, b) => {
+  const sortedReviews = [...reviews].sort((a, b) => {
     switch (sortBy) {
       case 'newest':
-        return new Date(b.date) - new Date(a.date);
+        return new Date(b.created_at) - new Date(a.created_at);
       case 'oldest':
-        return new Date(a.date) - new Date(b.date);
+        return new Date(a.created_at) - new Date(b.created_at);
       case 'highest':
-        return b?.rating - a?.rating;
+        return b.rating - a.rating;
       case 'lowest':
-        return a?.rating - b?.rating;
+        return a.rating - b.rating;
       default:
         return 0;
     }
   });
 
-  const averageRating = reviews?.reduce((sum, review) => sum + review?.rating, 0) / reviews?.length;
-  const ratingDistribution = [5, 4, 3, 2, 1]?.map(rating => ({
-    rating,
-    count: reviews?.filter(review => review?.rating === rating)?.length,
-    percentage: (reviews?.filter(review => review?.rating === rating)?.length / reviews?.length) * 100
-  }));
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+      : 0;
+
+  const ratingDistribution = [5, 4, 3, 2, 1].map((rating) => {
+    const count = reviews.filter((review) => review.rating === rating).length;
+    return {
+      rating,
+      count,
+      percentage: reviews.length ? (count / reviews.length) * 100 : 0,
+    };
+  });
 
   return (
     <div className="bg-card border border-border rounded-lg p-6">
@@ -65,71 +85,73 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
         <Button
           variant="default"
           size="sm"
-          onClick={() => setShowReviewForm(!showReviewForm)}
+          onClick={handleWriteReview}
           iconName="Plus"
           iconPosition="left"
         >
-          Write Review
+          {isWritingReview ? "Cancel Review" : "Write Review"}
         </Button>
       </div>
+
       {/* Rating Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Overall Rating */}
         <div className="text-center">
           <div className="text-4xl font-heading font-bold text-foreground mb-2">
-            {averageRating?.toFixed(1)}
+            {averageRating.toFixed(1)}
           </div>
           <div className="flex items-center justify-center space-x-1 mb-2">
-            {[1, 2, 3, 4, 5]?.map((star) => (
+            {[1, 2, 3, 4, 5].map((star) => (
               <Icon
                 key={star}
                 name="Star"
                 size={20}
                 className={`${star <= Math.floor(averageRating)
-                  ? 'text-warning fill-current' : 'text-muted-foreground'
+                  ? 'text-warning fill-current'
+                  : 'text-muted-foreground'
                   }`}
               />
             ))}
           </div>
           <p className="text-sm text-muted-foreground">
-            Based on {reviews?.length} reviews
+            Based on {reviews.length} reviews
           </p>
         </div>
 
         {/* Rating Distribution */}
         <div className="space-y-2">
-          {ratingDistribution?.map((dist) => (
-            <div key={dist?.rating} className="flex items-center space-x-3">
+          {ratingDistribution.map((dist) => (
+            <div key={dist.rating} className="flex items-center space-x-3">
               <span className="text-sm font-body text-foreground w-8">
-                {dist?.rating}★
+                {dist.rating}★
               </span>
               <div className="flex-1 bg-muted rounded-full h-2">
                 <div
                   className="bg-warning h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${dist?.percentage}%` }}
+                  style={{ width: `${dist.percentage}%` }}
                 />
               </div>
               <span className="text-sm text-muted-foreground w-8">
-                {dist?.count}
+                {dist.count}
               </span>
             </div>
           ))}
         </div>
       </div>
+
       {/* Review Form */}
-      {showReviewForm && (
+      {isWritingReview && (
         <div className="bg-muted/50 rounded-lg p-4 mb-6">
           <h3 className="font-heading font-semibold text-foreground mb-4">
             Share Your Experience
           </h3>
           <form onSubmit={handleSubmitReview} className="space-y-4">
-            {/* Rating Input */}
             <div>
               <label className="block text-sm font-body font-medium text-foreground mb-2">
                 Your Rating
               </label>
               <div className="flex items-center space-x-1">
-                {[1, 2, 3, 4, 5]?.map((star) => (
+                {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     type="button"
@@ -139,8 +161,9 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
                     <Icon
                       name="Star"
                       size={24}
-                      className={`${star <= newReview?.rating
-                        ? 'text-warning fill-current' : 'text-muted-foreground hover:text-warning'
+                      className={`${star <= newReview.rating
+                        ? 'text-warning fill-current'
+                        : 'text-muted-foreground hover:text-warning'
                         }`}
                     />
                   </button>
@@ -148,32 +171,37 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
               </div>
             </div>
 
-            {/* Comment Input */}
             <div>
               <Input
                 label="Your Review"
                 type="text"
-                placeholder="Share your cooking experience, tips, or modifications..."
-                value={newReview?.comment}
-                onChange={(e) => setNewReview(prev => ({ ...prev, comment: e?.target?.value }))}
+                placeholder="Share your cooking experience..."
+                value={newReview.comment}
+                onChange={(e) =>
+                  setNewReview((prev) => ({
+                    ...prev,
+                    comment: e.target.value,
+                  }))
+                }
                 required
                 className="min-h-[100px]"
               />
             </div>
 
-            {/* Submit Buttons */}
             <div className="flex items-center space-x-3">
               <Button
                 type="submit"
                 variant="default"
-                disabled={newReview?.rating === 0 || !newReview?.comment?.trim()}
+                disabled={
+                  newReview.rating === 0 || !newReview.comment.trim()
+                }
               >
                 Submit Review
               </Button>
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => setShowReviewForm(false)}
+                onClick={() => setIsWritingReview(false)}
               >
                 Cancel
               </Button>
@@ -181,14 +209,15 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
           </form>
         </div>
       )}
+
       {/* Sort Options */}
       <div className="flex items-center justify-between mb-6">
         <h3 className="font-heading font-semibold text-foreground">
-          All Reviews ({reviews?.length})
+          All Reviews ({reviews.length})
         </h3>
         <select
           value={sortBy}
-          onChange={(e) => setSortBy(e?.target?.value)}
+          onChange={(e) => setSortBy(e.target.value)}
           className="px-3 py-1 bg-background border border-border rounded-lg text-sm font-body text-foreground"
         >
           <option value="newest">Newest First</option>
@@ -197,110 +226,62 @@ const ReviewsSection = ({ reviews, recipeId, onSubmitReview }) => {
           <option value="lowest">Lowest Rating</option>
         </select>
       </div>
-      {/* Reviews List */}
+
       {/* Reviews List */}
       <div className="space-y-6">
-        {sortedReviews?.map((review, index) => (
-          <div
-            key={index}
-            className="border-b border-border pb-6 last:border-b-0 last:pb-0"
-          >
-            <div className="flex flex-col space-y-2">
-              {/* Reviewer Name and Rating */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-body font-medium text-foreground">
-                    {review?.users?.name || "Anonymous"}
-                  </h4>
-                  <div className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-0.5">
-                      {[1, 2, 3, 4, 5]?.map((star) => (
-                        <Icon
-                          key={star}
-                          name="Star"
-                          size={14}
-                          className={`${star <= review?.rating
-                            ? "text-warning fill-current"
-                            : "text-muted-foreground"
-                            }`}
-                        />
-                      ))}
-                    </div>
+        {sortedReviews.length > 0 ? (
+          sortedReviews.map((review) => (
+            <div
+              key={review.review_id}
+              className="border-b border-border pb-6 last:border-b-0 last:pb-0"
+            >
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-body font-medium text-foreground">
+                      {review?.users?.name || 'Anonymous'}
+                    </h4>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-0.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Icon
+                            key={star}
+                            name="Star"
+                            size={14}
+                            className={`${star <= review.rating
+                              ? 'text-warning fill-current'
+                              : 'text-muted-foreground'
+                              }`}
+                          />
+                        ))}
+                      </div>
 
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(review?.created_at || review?.date)?.toLocaleDateString("en-IN", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </span>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(review.created_at).toLocaleDateString(
+                          'en-IN',
+                          {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric',
+                          }
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Helpful Button */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  iconName="ThumbsUp"
-                  iconPosition="left"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  {review?.helpfulCount || 0}
-                </Button>
+                <p className="text-sm font-body text-foreground mb-3">
+                  {review.comment}
+                </p>
               </div>
-
-              {/* Comment */}
-              <p className="text-sm font-body text-foreground mb-3">
-                {review?.comment}
-              </p>
-
-              {/* Review Images (if any) */}
-              {review?.images && review?.images?.length > 0 && (
-                <div className="flex space-x-2 mb-3">
-                  {review?.images?.map((image, imgIndex) => (
-                    <div
-                      key={imgIndex}
-                      className="w-16 h-16 rounded-lg overflow-hidden bg-muted"
-                    >
-                      <Image
-                        src={image}
-                        alt={`Review image ${imgIndex + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Recipe Modifications */}
-              {review?.modifications && (
-                <div className="bg-primary/10 border border-primary/30 rounded-lg p-3">
-                  <div className="flex items-start space-x-2">
-                    <Icon name="Edit" size={14} className="text-primary mt-0.5" />
-                    <div>
-                      <h5 className="font-body font-medium text-foreground text-sm">
-                        Recipe Modifications:
-                      </h5>
-                      <p className="text-sm text-muted-foreground">
-                        {review?.modifications}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="text-muted-foreground text-center">
+            No reviews yet.
+          </p>
+        )}
       </div>
-
-      {/* Load More Reviews */}
-      {reviews?.length > 5 && (
-        <div className="text-center mt-6">
-          <Button variant="outline" iconName="ChevronDown" iconPosition="right">
-            Load More Reviews
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
