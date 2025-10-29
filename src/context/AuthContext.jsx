@@ -8,7 +8,9 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [role, setRole] = useState("guest");
-  const [loading, setLoading] = useState(true); // prevents flicker before session restores
+  const [loading, setLoading] = useState(true);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+
 
   // ✅ Restore session on app load
   useEffect(() => {
@@ -72,6 +74,8 @@ export const AuthProvider = ({ children }) => {
         setRole,
         login,
         logout,
+        showAuthPopup,
+        setShowAuthPopup,
       }}
     >
       {children}
