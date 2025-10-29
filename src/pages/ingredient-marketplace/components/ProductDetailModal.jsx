@@ -468,7 +468,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
           </div>
 
           {/* Reviews Section */}
-          {activeTab === "reviews" && (
+          {/* {activeTab === "reviews" && (
             <div className="prose max-w-none text-muted-foreground">
               <h3 className="text-lg font-heading font-semibold text-foreground">Customer Reviews</h3>
 
@@ -504,7 +504,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart }) => {
                 </div>
               )}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
