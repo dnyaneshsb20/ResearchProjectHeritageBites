@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import Button from '../../../components/ui/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from "../../../context/AuthContext"; // ✅ added
+
 import Feedback from "pages/Feedback";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+
+  const navigate = useNavigate(); // ✅ added
+  const { user, setShowAuthPopup } = useAuth(); // ✅ added
+  const isAuthenticated = !!user; // ✅ added
 
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -102,9 +108,20 @@ const Footer = () => {
             © 2025 HeritageBites. Preserving India's culinary heritage.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link to="/feedback" className="text-white/60 hover:text-golden transition-colors text-sm">
+            {/* ✅ Protected Feedback Link */}
+            <Link
+              to={isAuthenticated ? "/feedback" : "#"}
+              onClick={(e) => {
+                if (!isAuthenticated) {
+                  e.preventDefault();
+                  setShowAuthPopup(true); // show sign-in popup
+                }
+              }}
+              className="text-white/60 hover:text-golden transition-colors text-sm"
+            >
               Feedback
             </Link>
+
             <Link to="/privacy-policy" className="text-white/60 hover:text-golden transition-colors text-sm">
               Privacy Policy
             </Link>
