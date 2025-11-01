@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
-
 import Button from '../../../components/ui/Button';
 import { 
   Search, 
@@ -13,10 +13,67 @@ import {
   Leaf,
   Star
 } from "lucide-react";
+
 import spicesImage from "../../../assets/spices.jpg";
 import farmerImage from "../../../assets/farmer.jpg";
 
+// <-- Import your supabase client (adjust path if needed)
+import { supabase } from '../../../supabaseClient';
+
 const FeaturesSection = () => {
+  const [farmerCount, setFarmerCount] = useState(null);
+  const [countError, setCountError] = useState(null);
+
+  // Fetch farmer count once on mount
+  useEffect(() => {
+    let mounted = true;
+
+    async function fetchFarmerCount() {
+      try {
+        // Attempt to get an exact count without downloading rows
+        // This is compatible with Supabase JS v1 style. If you use v2 and this fails,
+        // see notes below for the v2 variant.
+        const { count, error } = await supabase
+          .from('farmers')
+          .select('farmer_id', { count: 'exact', head: true });
+
+        if (error) {
+          throw error;
+        }
+
+        if (!mounted) return;
+        setFarmerCount(count ?? 0);
+      } catch (err) {
+        console.error('Error fetching farmer count:', err);
+        // fallback: try a simple select (may download rows if table small) or set error
+        try {
+          const { data, error: e2 } = await supabase
+            .from('farmers')
+            .select('farmer_id');
+          if (e2) throw e2;
+          if (!mounted) return;
+          setFarmerCount(Array.isArray(data) ? data.length : 0);
+        } catch (err2) {
+          console.error('Fallback error fetching farmer count:', err2);
+          if (mounted) setCountError(err2.message || 'Failed to fetch');
+        }
+      }
+    }
+
+    fetchFarmerCount();
+
+    return () => { mounted = false; };
+  }, []);
+
+  // Format the displayed string (eg. show "1,234+ farmers")
+  const farmerLabel = (() => {
+    if (countError) return 'Directly from farmers';
+    if (farmerCount === null) return 'Directly from … farmers';
+    // show plus sign for aesthetics
+    const display = farmerCount >= 1000 ? `${farmerCount.toLocaleString()}+` : `${farmerCount}+`;
+    return `Directly from ${display} farmers`;
+  })();
+
   const features = [
     {
       icon: <Search className="h-8 w-8 text-saffron" />,
@@ -148,7 +205,7 @@ const FeaturesSection = () => {
                   <span className="text-sm font-medium">Farm Fresh</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Directly from 1000+ farmers
+                  {farmerLabel}
                 </p>
               </Card>
             </div>
