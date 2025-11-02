@@ -164,7 +164,7 @@ const handleSubmit = async (e) => {
       <Header />
       <header className="bg-gradient-to-br from-primary via-secondary to-accent py-20 px-4 text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          Share Your Website Experience 🌐
+          Share Your Website Experience
         </h1>
         <p className="text-white/90 max-w-2xl mx-auto">
           Your feedback helps us improve every part of HeritageBites.
