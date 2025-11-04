@@ -102,9 +102,9 @@ const FarmerOrders = () => {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto bg-white border border-border rounded-xl shadow-md">
-              <table className="w-full text-sm text-left border-collapse">
-                <thead className="bg-gray-100 text-gray-700 uppercase text-xs tracking-wide">
+            <div className="overflow-x-auto rounded-2xl border border-border shadow-md bg-muted/30 backdrop-blur">
+              <table className="w-full border-collapse text-sm text-left">
+                <thead className="sticky top-0 bg-muted/50 text-foreground uppercase text-xs tracking-wider shadow-sm">
                   <tr>
                     <th className="p-4 font-semibold">Order ID</th>
                     <th className="p-4 font-semibold">Product</th>
@@ -116,27 +116,28 @@ const FarmerOrders = () => {
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody className="divide-y divide-border">
                   {orders.map((order, orderIndex) => {
                     const farmerItems = order.order_items.filter(
                       (item) => item.products?.farmer_id
                     );
 
-                    // Alternate background color for entire order block
-                    const orderBg =
-                      orderIndex % 2 === 0 ? "bg-white" : "bg-gray-50";
+                    // Alternating colors: one row bg-background, one light orange
+                    const rowBg =
+                      orderIndex % 2 !== 0 ? "bg-background" : "bg-orange-100";
 
                     return (
                       <React.Fragment key={order.order_id}>
                         {farmerItems.map((item, i) => (
-                          <tr key={i} className={`${orderBg}`}>
-                            {/* Show order ID only for first product row */}
+                          <tr key={i} className={`${rowBg}`}>
                             {i === 0 ? (
                               <td
-                                className="p-4 font-semibold text-gray-800 border-t border-border"
+                                className="p-4 font-semibold text-gray-800 border-t border-border align-top"
                                 rowSpan={farmerItems.length}
                               >
-                                #{order.order_id.slice(0, 8)}
+                                <span className="font-mono text-sm text-gray-700 bg-muted/40 px-2 py-1 rounded-md">
+                                  #{order.order_id.slice(0, 8)}
+                                </span>
                               </td>
                             ) : null}
 
@@ -157,7 +158,7 @@ const FarmerOrders = () => {
                                   rowSpan={farmerItems.length}
                                 >
                                   <span
-                                    className={`px-3 py-1 text-xs font-medium rounded-full border ${getStatusColor(
+                                    className={`px-3 py-1 text-xs font-medium rounded-full border shadow-sm ${getStatusColor(
                                       order.status
                                     )}`}
                                   >
