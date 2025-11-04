@@ -52,7 +52,7 @@ const CommunityRecipes = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* ===== Global Header ===== */}
       <Header />
 
