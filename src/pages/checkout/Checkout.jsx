@@ -4,7 +4,7 @@ import Footer from 'pages/dashboard/components/Footer';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../supabaseClient';
 
 const Checkout = () => {
   const { cartItems } = useCart();
