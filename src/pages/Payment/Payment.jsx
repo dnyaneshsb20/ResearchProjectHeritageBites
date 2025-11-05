@@ -8,11 +8,21 @@ import { FaCreditCard, FaUniversity, FaWallet, FaMobileAlt, FaCashRegister, FaWa
 import { SiPhonepe, SiPaytm } from "react-icons/si";
 import { FaGooglePay, FaCcAmazonPay } from "react-icons/fa";
 import { BsBank2 } from "react-icons/bs";
-import { SiHdfcbank, SiIcicibank } from "react-icons/si";
+import {
+  SiHdfcbank,
+  SiIcicibank,
+  SiBankofamerica,
+  SiCommerzbank,
+  SiDeutschebank,
+  SiNubank,
+  SiStarlingbank,
+  SiThurgauerkantonalbank,
+} from "react-icons/si";
 import { RiBankFill } from "react-icons/ri";
 import { RiVisaFill } from "react-icons/ri";
 import { FaCcMastercard } from "react-icons/fa";
 import Footer from "pages/dashboard/components/Footer";
+import { BsCash } from "react-icons/bs";
 
 const Payment = () => {
     const { cartItems, setCartItems } = useCart();
@@ -150,7 +160,7 @@ const Payment = () => {
     ${selectedMethod === "card" ? "border-primary bg-primary/10" : "hover:bg-gray-100"}`}
                     >
                         <div className="flex items-center gap-3">
-                            <FaCreditCard size={20} />
+                            <FaCreditCard size={20} className="text-blue-500" />
                             <span>Credit / Debit Card</span>
                         </div>
                         {selectedMethod === "card" && <span className="text-primary font-medium">Selected</span>}
@@ -249,6 +259,12 @@ const Payment = () => {
                                 {[
                                     "HDFC Bank",
                                     "ICICI Bank",
+                                    "Bank of America",
+                                    "Starling Bank",
+                                    "Deutsche Bank",
+                                    "Nu Bank",
+                                    "Commerz Bank",
+                                    "Thurgauerkantonal Bank",
                                     "State Bank of India",
                                     "Bank Of India",
                                     "Axis Bank",
@@ -260,19 +276,90 @@ const Payment = () => {
                                     "Canara Bank",
                                     "Union Bank Of India",
                                     "India Post Payments Bank",
-                                ].map(bank => {
+                                ].map((bank) => {
                                     let BankIcon;
-                                    let iconColor = "#000000"; // default neutral color
+                                    let iconColor = "#6b7280"; // default gray-500
 
-                                    if (bank === "HDFC Bank") {
-                                        BankIcon = SiHdfcbank;
-                                        iconColor = "#e10303ff";
-                                    } else if (bank === "ICICI Bank") {
-                                        BankIcon = SiIcicibank;
-                                        iconColor = "#B03428";
-                                    } else {
-                                        BankIcon = RiBankFill;
-                                        iconColor = "#6b7280"; // gray-500
+                                    // ✅ Logo mappings with exact colors
+                                    switch (bank) {
+                                        case "HDFC Bank":
+                                            BankIcon = SiHdfcbank;
+                                            iconColor = "#E31E24"; // red outer
+                                            break;
+                                        case "ICICI Bank":
+                                            BankIcon = SiIcicibank;
+                                            iconColor = "#B03428"; // reddish brown
+                                            break;
+                                        case "Bank of America":
+                                            BankIcon = SiBankofamerica;
+                                            iconColor = "#012169"; // dark blue
+                                            break;
+                                        case "Starling Bank":
+                                            BankIcon = SiStarlingbank;
+                                            iconColor = "#7431A5"; // purple
+                                            break;
+                                        case "Deutsche Bank":
+                                            BankIcon = SiDeutschebank;
+                                            iconColor = "#0018A8"; // royal blue
+                                            break;
+                                        case "Nu Bank":
+                                            BankIcon = SiNubank;
+                                            iconColor = "#8A05BE"; // purple
+                                            break;
+                                        case "Commerz Bank":
+                                            BankIcon = SiCommerzbank;
+                                            iconColor = "#FFCC00"; // yellow
+                                            break;
+                                        case "Thurgauerkantonal Bank":
+                                            BankIcon = SiThurgauerkantonalbank;
+                                            iconColor = "#00866F"; // teal green
+                                            break;
+                                        case "State Bank of India":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#1E88E5"; // SBI blue
+                                            break;
+                                        case "Bank Of India":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#F36C21"; // orange
+                                            break;
+                                        case "Axis Bank":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#A4343A"; // maroon
+                                            break;
+                                        case "Punjab National Bank":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#800000"; // dark maroon
+                                            break;
+                                        case "Bank Of Baroda":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#EB5B25"; // bright orange
+                                            break;
+                                        case "Bank Of Maharashtra":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#0072BB"; // deep blue
+                                            break;
+                                        case "Kotak Mahindra Bank":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#004C8F"; // navy blue
+                                            break;
+                                        case "Central Bank of India":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#0066B3"; // blue
+                                            break;
+                                        case "Canara Bank":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#0079C1"; // cyan blue
+                                            break;
+                                        case "Union Bank Of India":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#ED1C24"; // red
+                                            break;
+                                        case "India Post Payments Bank":
+                                            BankIcon = RiBankFill;
+                                            iconColor = "#7B1C1C"; // dark red / maroon
+                                            break;
+                                        default:
+                                            BankIcon = RiBankFill;
                                     }
 
                                     return (
@@ -353,7 +440,7 @@ const Payment = () => {
     ${selectedMethod === "digitalWallet" ? "border-primary bg-primary/10" : "hover:bg-gray-100"}`}
                     >
                         <div className="flex items-center gap-3">
-                            <FaWallet size={20} />
+                            <FaWallet size={20} className="text-amber-800" />
                             <span>Digital Wallets</span>
                         </div>
                         {selectedMethod === "digitalWallet" && <span className="text-primary font-medium">Selected</span>}
@@ -392,7 +479,7 @@ const Payment = () => {
                         ${selectedMethod === "cod" ? "border-primary bg-primary/10" : "hover:bg-gray-100"}`}
                     >
                         <div className="flex items-center gap-3">
-                            <FaCashRegister size={20} />
+                            <BsCash className="text-green-500" size={20} />
                             <span>Cash on Delivery</span>
                         </div>
                         {selectedMethod === "cod" && <span className="text-primary font-medium">Selected</span>}

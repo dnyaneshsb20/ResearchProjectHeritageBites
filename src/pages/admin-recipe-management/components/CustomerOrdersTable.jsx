@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../../supabaseClient";
 import toast from "react-hot-toast";
 import Button from "../../../components/ui/Button";
-import { MdSensorOccupied } from "react-icons/md"; // UPI
-import { FaCreditCard } from "react-icons/fa";     // Card
-import { BsCash } from "react-icons/bs";          // Cash / COD
+import { BsCash, BsBank2 } from "react-icons/bs";
+import { MdSensorOccupied } from "react-icons/md";
+import { FaCreditCard, FaWallet } from "react-icons/fa";
+
 
 const CustomerOrdersTable = ({ userId, farmerId }) => {
   const [orders, setOrders] = useState([]);
@@ -129,6 +130,7 @@ const CustomerOrdersTable = ({ userId, farmerId }) => {
             <MdSensorOccupied className="text-green-500" /> UPI
           </div>
         );
+
       case "card":
         return isModal ? (
           <div className="flex items-center gap-2">
@@ -139,6 +141,31 @@ const CustomerOrdersTable = ({ userId, farmerId }) => {
             <FaCreditCard className="text-blue-500" /> Card
           </div>
         );
+
+      case "netbanking":
+      case "net banking":
+        return isModal ? (
+          <div className="flex items-center gap-2">
+            <BsBank2 className="text-indigo-600" size={20} /> Net Banking
+          </div>
+        ) : (
+          <div className="flex items-center gap-1">
+            <BsBank2 className="text-indigo-600" size={20} /> Net Banking
+          </div>
+        );
+
+      case "digitalwallet":
+      case "digital wallet":
+        return isModal ? (
+          <div className="flex items-center gap-2">
+            <FaWallet className="text-amber-800" size={20} /> Digital Wallet Payment
+          </div>
+        ) : (
+          <div className="flex items-center gap-1">
+            <FaWallet className="text-amber-800" size={20} /> Wallet Payment
+          </div>
+        );
+
       case "cod":
       case "cash":
         return isModal ? (
@@ -147,9 +174,10 @@ const CustomerOrdersTable = ({ userId, farmerId }) => {
           </div>
         ) : (
           <div className="flex items-center gap-1">
-            <BsCash className="text-yellow-500" /> Cash
+            <BsCash className="text-green-500" /> Cash
           </div>
         );
+
       default:
         return method;
     }
