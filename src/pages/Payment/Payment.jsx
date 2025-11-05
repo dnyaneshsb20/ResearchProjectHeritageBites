@@ -22,6 +22,7 @@ const Payment = () => {
     const [upiId, setUpiId] = useState("");
 
     const [userId, setUserId] = useState(null);
+    const [isProcessing, setIsProcessing] = useState(false); // ✅ Added state to prevent double insert
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -49,26 +50,51 @@ const Payment = () => {
     );
 
     const handlePayment = async () => {
-        if (!selectedMethod) return toast.error("Please select a payment method");
+        if (isProcessing) return; // ✅ Prevent duplicate triggers
+        setIsProcessing(true);
+
+        if (!selectedMethod) {
+            toast.error("Please select a payment method");
+            setIsProcessing(false);
+            return;
+        }
 
         if (selectedMethod === "upi") {
-            if (!upiOption) return toast.error("Please select a UPI option");
-            if (upiOption === "id" && !upiId.trim()) return toast.error("Please enter your UPI ID");
+            if (!upiOption) {
+                toast.error("Please select a UPI option");
+                setIsProcessing(false);
+                return;
+            }
+            if (upiOption === "id" && !upiId.trim()) {
+                toast.error("Please enter your UPI ID");
+                setIsProcessing(false);
+                return;
+            }
         } else if (selectedMethod === "card") {
-            if (!cardType) return toast.error("Please select a card type");
+            if (!cardType) {
+                toast.error("Please select a card type");
+                setIsProcessing(false);
+                return;
+            }
             const { name, number, expiry, cvv } = cardDetails;
-            if (!name || !number || !expiry || !cvv)
-                return toast.error("Please fill all card details");
+            if (!name || !number || !expiry || !cvv) {
+                toast.error("Please fill all card details");
+                setIsProcessing(false);
+                return;
+            }
         } else if (selectedMethod === "netbanking" && !netBankingBank) {
-            return toast.error("Please select your bank");
+            toast.error("Please select your bank");
+            setIsProcessing(false);
+            return;
         } else if (selectedMethod === "digitalWallet" && !digitalWallet) {
-            return toast.error("Please select your digital wallet");
+            toast.error("Please select your digital wallet");
+            setIsProcessing(false);
+            return;
         }
 
         toast.loading("Processing payment...", { id: "payment" });
 
         try {
-            
             const { data: createdOrder, error: orderError } = await supabase
                 .from("orders")
                 .insert([{
@@ -84,7 +110,7 @@ const Payment = () => {
 
             const orderItems = cartItems.map(item => ({
                 order_id: createdOrder.order_id,
-                product_id: item.id,       // match product_id in products table
+                product_id: item.id,
                 quantity: item.quantity || 1,
                 price: item.price
             }));
@@ -103,6 +129,8 @@ const Payment = () => {
             console.error("Order placement error:", err);
             toast.dismiss("payment");
             toast.error("Failed to place order. Please try again.");
+        } finally {
+            setIsProcessing(false); // ✅ Allow future payments after completion
         }
     };
 
@@ -116,7 +144,6 @@ const Payment = () => {
                 <div className="bg-white shadow rounded-lg p-6 space-y-4">
 
                     {/* Credit/Debit Card */}
-                    {/* Card Payment Option */}
                     <button
                         onClick={() => setSelectedMethod("card")}
                         className={`flex items-center justify-between w-full px-4 py-3 border rounded-lg transition 
@@ -131,7 +158,6 @@ const Payment = () => {
 
                     {selectedMethod === "card" && (
                         <div className="ml-6 mt-3 space-y-3 border-l pl-4">
-                            {/* Card Type Selection with Logos */}
                             <div className="flex gap-4 items-center">
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input
@@ -166,7 +192,6 @@ const Payment = () => {
                                 </label>
                             </div>
 
-                            {/* Card Details Form */}
                             <div className="space-y-2 mt-2">
                                 <input
                                     type="text"
@@ -364,20 +389,22 @@ const Payment = () => {
                     {/* Pay / Place Order Button */}
                     <button
                         onClick={handlePayment}
-                        disabled={!selectedMethod}
+                        disabled={!selectedMethod || isProcessing}
                         className={`mt-6 w-full text-white px-4 py-3 rounded-lg text-lg font-medium transition
                         ${selectedMethod === "cod"
                                 ? "bg-gradient-to-r from-green-500 to-green-400 hover:opacity-90"
                                 : "bg-gradient-to-r from-[#f87d46] to-[#fa874f] hover:opacity-90"
-                            } ${!selectedMethod ? "opacity-50 cursor-not-allowed" : ""}`}
+                            } ${(!selectedMethod || isProcessing) ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
-                        {selectedMethod === "cod"
-                            ? "Place Order (Cash on Delivery)"
-                            : `Pay ₹${totalAmount} & Place Order`}
+                        {isProcessing
+                            ? "Processing..."
+                            : selectedMethod === "cod"
+                                ? "Place Order (Cash on Delivery)"
+                                : `Pay ₹${totalAmount} & Place Order`}
                     </button>
                 </div>
             </main>
-            <Footer/>
+            <Footer />
         </div>
     );
 };
