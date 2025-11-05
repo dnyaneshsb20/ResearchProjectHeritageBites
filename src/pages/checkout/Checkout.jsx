@@ -38,9 +38,14 @@ const Checkout = () => {
   // ✅ Fetch list of states
   useEffect(() => {
     const fetchStates = async () => {
-      const { data, error } = await supabase.from('states').select('id, name');
+      const { data, error } = await supabase
+        .from('states')
+        .select('state_id, state_name')
+        .order('state_name', { ascending: true });
+
       if (error) console.error('Error fetching states:', error);
       else setStates(data);
+
     };
     fetchStates();
   }, []);
@@ -49,24 +54,44 @@ const Checkout = () => {
   useEffect(() => {
     const fetchSavedAddress = async () => {
       if (!user) return;
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('full_name, address_line, city, pincode, state_id')
-        .eq('id', user.id)
-        .single();
-      if (!error && data && data.address_line) {
-        setAddress({
-          name: data.full_name || '',
-          line: data.address_line || '',
-          city: data.city || '',
-          pincode: data.pincode || '',
-          state_id: data.state_id || '',
-        });
+
+      // Fetch both user profile and user info in parallel
+      const [profileRes, userRes] = await Promise.all([
+        supabase
+          .from('user_profile')
+          .select('address_line, city, pincode, state_id')
+          .eq('user_id', user.id)
+          .single(),
+        supabase
+          .from('users')
+          .select('name')
+          .eq('user_id', user.id)
+          .single(),
+      ]);
+
+      const profile = profileRes.data;
+      const userData = userRes.data;
+
+      if (profileRes.error) console.error('Profile fetch error:', profileRes.error);
+      if (userRes.error) console.error('User fetch error:', userRes.error);
+
+      // Set combined address data (including user name)
+      setAddress({
+        name: userData?.name || '',
+        line: profile?.address_line || '',
+        city: profile?.city || '',
+        pincode: profile?.pincode || '',
+        state_id: profile?.state_id || '',
+      });
+
+      if (profile?.address_line) {
         toast.success('Loaded saved address');
       }
     };
+
     fetchSavedAddress();
   }, [user]);
+
 
   const handleInputChange = (e) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
@@ -87,15 +112,15 @@ const Checkout = () => {
     // ✅ If checkbox checked, save address to profile
     if (saveAddress && user) {
       const { error: profileError } = await supabase
-        .from('profiles')
+        .from('user_profile')
         .update({
-          full_name: address.name,
           address_line: address.line,
           city: address.city,
           pincode: address.pincode,
           state_id: address.state_id,
         })
-        .eq('id', user.id);
+        .eq('user_id', user.id);
+
 
       if (profileError) console.error('Profile update error:', profileError);
       else toast.success('Address saved for future use!');
@@ -105,12 +130,13 @@ const Checkout = () => {
     const { error: orderError } = await supabase.from('orders').insert([
       {
         user_id: user?.id,
-        user_name: address.name,
-        address_line: address.line,
+        delivery_address: address.line,
         city: address.city,
-        pincode: address.pincode,
+        postal_code: address.pincode,
         state_id: address.state_id,
-        total_price: totalAmount,
+        total_amount: totalAmount,
+        payment_method: "cod", // or handle dynamically later
+        status: "pending",
         created_at: new Date(),
       },
     ]);
@@ -174,25 +200,16 @@ const Checkout = () => {
                   <select name="state_id" value={address.state_id} onChange={handleInputChange} className="border p-2 rounded w-full">
                     <option value="">Select State</option>
                     {states.map((state) => (
-                      <option key={state.id} value={state.id}>
-                        {state.name}
+                      <option key={state.state_id} value={state.state_id}>
+                        {state.state_name}
                       </option>
                     ))}
+
                   </select>
                 </div>
 
                 {/* Save Address Toggle */}
-                <div className="mt-4 flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="saveAddress"
-                    checked={saveAddress}
-                    onChange={(e) => setSaveAddress(e.target.checked)}
-                  />
-                  <label htmlFor="saveAddress" className="text-gray-600 text-sm">
-                    Save this address for future use
-                  </label>
-                </div>
+
               </div>
             </div>
 

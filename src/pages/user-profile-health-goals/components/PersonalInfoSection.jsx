@@ -11,8 +11,25 @@ import { toast } from "react-hot-toast";
 const PersonalInfoSection = ({ isExpanded, onToggle }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [formData, setFormData] = useState({});
+ const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  phone: "",
+  location: "",
+  height: "",
+  weight: "",
+  ageGroup: "",
+  gender: "",
+  activityLevel: "",
+  address: "",
+  city: "",
+  pincode: "",
+  state_id: "",
+});
+
   const [dbUser, setDbUser] = useState({});
+  // ADD near top of component
+  const [states, setStates] = useState([]);
 
   const genderOptions = [
     { value: "male", label: "Male" },
@@ -75,6 +92,10 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
             weight_kg: formData.weight || null,
             activity_level: formData.activityLevel || null,
             mobile_number: formData.phone || null, // ✅ mobile number
+            address_line: formData.address || null,
+            city: formData.city || null,
+            pincode: formData.pincode || null,
+            state_id: formData.state_id || null,
           },
           { onConflict: "user_id" }
         );
@@ -116,7 +137,7 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
 
         const { data: profileData, error: profileError } = await supabase
           .from("user_profile")
-          .select("age_group, gender, height_cm, weight_kg, activity_level, mobile_number")
+          .select("age_group, gender, height_cm, weight_kg, activity_level, mobile_number, address_line, city, pincode, state_id")
           .eq("user_id", userId)
           .single();
 
@@ -133,6 +154,10 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
           weight: profileData?.weight_kg ?? "",
           activityLevel: profileData?.activity_level ?? "",
           phone: profileData?.mobile_number ?? "", // ✅ mobile number
+          address: profileData?.address_line ?? "",
+          city: profileData?.city ?? "",
+          pincode: profileData?.pincode ?? "",
+          state_id: profileData?.state_id ?? "",
         };
 
         setDbUser(combinedData);
@@ -144,7 +169,19 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
 
     fetchUserData();
   }, []);
+  // ✅ Fetch list of states once
+  useEffect(() => {
+    const fetchStates = async () => {
+      const { data, error } = await supabase
+        .from('states')
+        .select('state_id, state_name')
+        .order('state_name', { ascending: true });
 
+      if (error) console.error('Error fetching states:', error);
+      else setStates(data);
+    };
+    fetchStates();
+  }, []);
   return (
     <div className="bg-card rounded-lg border border-border shadow-warm">
       <div className="flex items-center justify-between p-6 cursor-pointer" onClick={onToggle}>
@@ -168,7 +205,7 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
         <div className="px-6 pb-6 border-t border-border">
           <div className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input label="Full Name" type="text" value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} disabled required />
+              <Input label="Full Name" type="text" value={formData.name|| ""} onChange={(e) => handleInputChange("name", e.target.value)} disabled required />
               <Input label="Email Address" type="email" value={formData.email} onChange={(e) => handleInputChange("email", e.target.value)} disabled required />
               <Input label="Phone Number" type="tel" value={formData.phone} onChange={(e) => handleInputChange("phone", e.target.value)} disabled={!isEditing} placeholder="+91 XXXXX XXXXX" />
               <Select label="Gender" options={genderOptions} value={formData.gender} onChange={(val) => handleInputChange("gender", val)} disabled={!isEditing} />
@@ -179,6 +216,20 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
               <div className="md:col-span-2">
                 <Select label="Activity Level" options={activityLevelOptions} value={formData.activityLevel} onChange={(val) => handleInputChange("activityLevel", val)} disabled={!isEditing} />
               </div>
+              <Input label="Address Line" type="text" value={formData.address} onChange={(e) => handleInputChange("address", e.target.value)} disabled={!isEditing} />
+              <Input label="City" type="text" value={formData.city} onChange={(e) => handleInputChange("city", e.target.value)} disabled={!isEditing} />
+              <Input label="Pincode" type="text" value={formData.pincode} onChange={(e) => handleInputChange("pincode", e.target.value)} disabled={!isEditing} />
+              <Select
+                label="State"
+                options={states.map((state) => ({
+                  value: state.state_id,
+                  label: state.state_name,
+                }))}
+                value={formData.state_id}
+                onChange={(val) => handleInputChange("state_id", val)}
+                disabled={!isEditing}
+              />
+
             </div>
 
             <div className="flex items-center justify-end space-x-3 mt-6 pt-4 border-t border-border">
