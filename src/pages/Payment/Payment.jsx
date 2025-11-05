@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../components/ui/Header";
-import { useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import toast from "react-hot-toast";
 import { supabase } from "../../supabaseClient";
@@ -9,14 +9,14 @@ import { SiPhonepe, SiPaytm } from "react-icons/si";
 import { FaGooglePay, FaCcAmazonPay } from "react-icons/fa";
 import { BsBank2 } from "react-icons/bs";
 import {
-  SiHdfcbank,
-  SiIcicibank,
-  SiBankofamerica,
-  SiCommerzbank,
-  SiDeutschebank,
-  SiNubank,
-  SiStarlingbank,
-  SiThurgauerkantonalbank,
+    SiHdfcbank,
+    SiIcicibank,
+    SiBankofamerica,
+    SiCommerzbank,
+    SiDeutschebank,
+    SiNubank,
+    SiStarlingbank,
+    SiThurgauerkantonalbank,
 } from "react-icons/si";
 import { RiBankFill } from "react-icons/ri";
 import { RiVisaFill } from "react-icons/ri";
@@ -24,9 +24,14 @@ import { FaCcMastercard } from "react-icons/fa";
 import Footer from "pages/dashboard/components/Footer";
 import { BsCash } from "react-icons/bs";
 
+
+
 const Payment = () => {
     const { cartItems, setCartItems } = useCart();
     const navigate = useNavigate();
+    const location = useLocation();
+    const { address, totalAmount } = location.state || {};
+
     const [selectedMethod, setSelectedMethod] = useState(null);
     const [upiOption, setUpiOption] = useState(null);
     const [upiId, setUpiId] = useState("");
@@ -53,12 +58,6 @@ const Payment = () => {
 
     const [netBankingBank, setNetBankingBank] = useState("");
     const [digitalWallet, setDigitalWallet] = useState("");
-
-    const totalAmount = cartItems.reduce(
-        (acc, item) => acc + (item.price * (item.quantity || 1)),
-        0
-    );
-
     const handlePayment = async () => {
         if (isProcessing) return; // ✅ Prevent duplicate triggers
         setIsProcessing(true);
@@ -111,10 +110,16 @@ const Payment = () => {
                     user_id: userId,
                     total_amount: totalAmount,
                     payment_method: selectedMethod,
-                    status: "pending"
+                    status: "pending",
+                    phone_number: address?.mobile_number,
+                    delivery_address: address?.line,
+                    city: address?.city,
+                    postal_code: address?.pincode,
+                    state_id: address?.state_id || null,
                 }])
                 .select()
                 .single();
+
 
             if (orderError || !createdOrder) throw orderError || new Error("Failed to create order");
 
