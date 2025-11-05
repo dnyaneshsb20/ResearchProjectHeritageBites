@@ -96,20 +96,17 @@ const Checkout = () => {
   const handleInputChange = (e) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
   };
-
   const handlePlaceOrder = async () => {
     if (cartItems.length === 0) {
       toast.error('Your cart is empty!');
       return;
     }
 
-    // Validate address
     if (!address.name || !address.line || !address.city || !address.pincode || !address.state_id) {
       toast.error('Please fill all address fields!');
       return;
     }
 
-    // ✅ If checkbox checked, save address to profile
     if (saveAddress && user) {
       const { error: profileError } = await supabase
         .from('user_profile')
@@ -121,35 +118,14 @@ const Checkout = () => {
         })
         .eq('user_id', user.id);
 
-
       if (profileError) console.error('Profile update error:', profileError);
       else toast.success('Address saved for future use!');
     }
 
-    // ✅ Insert order
-    const { error: orderError } = await supabase.from('orders').insert([
-      {
-        user_id: user?.id,
-        delivery_address: address.line,
-        city: address.city,
-        postal_code: address.pincode,
-        state_id: address.state_id,
-        total_amount: totalAmount,
-        payment_method: "cod", // or handle dynamically later
-        status: "pending",
-        created_at: new Date(),
-      },
-    ]);
-
-    if (orderError) {
-      toast.error('Error placing order!');
-      console.error(orderError);
-      return;
-    }
-
-    toast.success('Order placed successfully!');
-    navigate('/payment');
+    // ✅ Just navigate to payment and pass data
+    navigate('/payment', { state: { address, totalAmount } });
   };
+
 
   return (
     <div className="min-h-screen bg-background">
