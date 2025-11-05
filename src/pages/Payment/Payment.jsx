@@ -259,15 +259,27 @@ const Payment = () => {
                                     "Central Bank of India",
                                     "Canara Bank",
                                     "Union Bank Of India",
-                                    "India Post Payments Bank"
+                                    "India Post Payments Bank",
                                 ].map(bank => {
                                     let BankIcon;
-                                    if (bank === "HDFC Bank") BankIcon = SiHdfcbank;
-                                    else if (bank === "ICICI Bank") BankIcon = SiIcicibank;
-                                    else BankIcon = RiBankFill;
+                                    let iconColor = "#000000"; // default neutral color
+
+                                    if (bank === "HDFC Bank") {
+                                        BankIcon = SiHdfcbank;
+                                        iconColor = "#e10303ff";
+                                    } else if (bank === "ICICI Bank") {
+                                        BankIcon = SiIcicibank;
+                                        iconColor = "#B03428";
+                                    } else {
+                                        BankIcon = RiBankFill;
+                                        iconColor = "#6b7280"; // gray-500
+                                    }
 
                                     return (
-                                        <label key={bank} className="flex items-center gap-2 cursor-pointer">
+                                        <label
+                                            key={bank}
+                                            className="flex items-center gap-2 cursor-pointer"
+                                        >
                                             <input
                                                 type="radio"
                                                 name="netBank"
@@ -276,7 +288,7 @@ const Payment = () => {
                                                 onChange={() => setNetBankingBank(bank)}
                                                 className="accent-primary"
                                             />
-                                            <BankIcon size={24} />
+                                            <BankIcon size={24} style={{ color: iconColor }} />
                                             <span>{bank}</span>
                                         </label>
                                     );
@@ -351,10 +363,10 @@ const Payment = () => {
                         <div className="ml-6 mt-3 border-l pl-4">
                             <div className="grid grid-cols-2 gap-4">
                                 {[
-                                    { name: "Paytm", icon: <SiPaytm size={24} /> },
-                                    { name: "PhonePe", icon: <SiPhonepe size={24} /> },
-                                    { name: "Google Pay", icon: <FaGooglePay size={24} /> },
-                                    { name: "Amazon Pay", icon: <FaCcAmazonPay size={24} /> },
+                                    { name: "Paytm", icon: <SiPaytm size={24} className="text-[#00baf2]" /> },
+                                    { name: "PhonePe", icon: <SiPhonepe size={24} className="text-[#5f259f]" /> },
+                                    { name: "Google Pay", icon: <FaGooglePay size={24} className="text-[#4285F4]" /> },
+                                    { name: "Amazon Pay", icon: <FaCcAmazonPay size={24} className="text-[#FF9900]" /> },
                                 ].map(wallet => (
                                     <label key={wallet.name} className="flex items-center gap-2 cursor-pointer">
                                         <input
