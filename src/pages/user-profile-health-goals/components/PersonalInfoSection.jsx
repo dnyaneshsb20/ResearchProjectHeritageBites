@@ -11,21 +11,21 @@ import { toast } from "react-hot-toast";
 const PersonalInfoSection = ({ isExpanded, onToggle }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
- const [formData, setFormData] = useState({
-  name: "",
-  email: "",
-  phone: "",
-  location: "",
-  height: "",
-  weight: "",
-  ageGroup: "",
-  gender: "",
-  activityLevel: "",
-  address: "",
-  city: "",
-  pincode: "",
-  state_id: "",
-});
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    location: "",
+    height: "",
+    weight: "",
+    ageGroup: "",
+    gender: "",
+    activityLevel: "",
+    address: "",
+    city: "",
+    pincode: "",
+    state_id: "",
+  });
 
   const [dbUser, setDbUser] = useState({});
   // ADD near top of component
@@ -182,12 +182,33 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
     };
     fetchStates();
   }, []);
+
+  const getInitials = (name) => {
+    if (!name) return "U";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+  const getColorFromName = (name) => {
+    if (!name) return "#999";
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 60%)`; // pastel color tone
+  };
+
   return (
     <div className="bg-card rounded-lg border border-border shadow-warm">
       <div className="flex items-center justify-between p-6 cursor-pointer" onClick={onToggle}>
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-            <Icon name="User" size={20} className="text-primary" />
+          <div
+            className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-semibold shadow-sm"
+            style={{ backgroundColor: getColorFromName(formData.name) }}
+          >
+            {getInitials(formData.name)}
           </div>
           <div>
             <h3 className="text-lg font-heading font-semibold text-foreground">
@@ -205,7 +226,7 @@ const PersonalInfoSection = ({ isExpanded, onToggle }) => {
         <div className="px-6 pb-6 border-t border-border">
           <div className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input label="Full Name" type="text" value={formData.name|| ""} onChange={(e) => handleInputChange("name", e.target.value)} disabled required />
+              <Input label="Full Name" type="text" value={formData.name || ""} onChange={(e) => handleInputChange("name", e.target.value)} disabled required />
               <Input label="Email Address" type="email" value={formData.email} onChange={(e) => handleInputChange("email", e.target.value)} disabled required />
               <Input label="Phone Number" type="tel" value={formData.phone} onChange={(e) => handleInputChange("phone", e.target.value)} disabled={!isEditing} placeholder="+91 XXXXX XXXXX" />
               <Select label="Gender" options={genderOptions} value={formData.gender} onChange={(val) => handleInputChange("gender", val)} disabled={!isEditing} />
