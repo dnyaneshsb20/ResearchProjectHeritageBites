@@ -138,6 +138,23 @@ const FarmerProfileSection = () => {
     setProfileCompleteness(Math.round((filled / fields.length) * 100));
   }, [formData]);
 
+  const getInitials = (name) => {
+    if (!name) return "U";
+    const parts = name.trim().split(" ");
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+  const getColorFromName = (name) => {
+    if (!name) return "#999";
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    return `hsl(${hue}, 70%, 60%)`; // pastel color tone
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -197,8 +214,14 @@ const FarmerProfileSection = () => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-200 rounded-full">
-                  <User className="w-10 h-10 text-gray-500" />
+                <div
+                  className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-semibold shadow-md"
+                  style={{
+                    backgroundColor: getColorFromName(formData.name),
+                    border: "3px solid #fff",
+                  }}
+                >
+                  {getInitials(formData.name)}
                 </div>
               )}
             </div>
