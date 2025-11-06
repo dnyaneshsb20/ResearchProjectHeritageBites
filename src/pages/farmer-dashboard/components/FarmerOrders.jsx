@@ -2,11 +2,26 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../../supabaseClient";
 import Header from "../../../components/ui/Header";
 import Footer from "../../dashboard/components/Footer";
-import { Loader2, Package, IndianRupee, CalendarDays } from "lucide-react";
+import toast from "react-hot-toast";
+import Button from "../../../components/ui/Button";
+import {
+  BsCash,
+  BsBank2
+} from "react-icons/bs";
+import {
+  MdSensorOccupied
+} from "react-icons/md";
+import {
+  FaCreditCard,
+  FaWallet
+} from "react-icons/fa";
+import { Loader2, Package } from "lucide-react";
 
 const FarmerOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -37,6 +52,7 @@ const FarmerOrders = () => {
             created_at,
             total_amount,
             payment_method,
+            user_id,
             order_items (
               quantity,
               price,
@@ -51,13 +67,39 @@ const FarmerOrders = () => {
 
         if (error) throw error;
 
-        const farmerOrders = data.filter((order) =>
-          order.order_items?.some((item) => item.products?.farmer_id === farmerId)
-        );
+        // Fetch users for customer names
+        const { data: usersData } = await supabase
+          .from("users")
+          .select("user_id, name");
+
+        // Filter farmer's orders
+        const farmerOrders = data
+          .map((order) => {
+            const farmerItems = order.order_items?.filter(
+              (item) => item.products?.farmer_id === farmerId
+            );
+
+            if (!farmerItems || farmerItems.length === 0) return null;
+
+            const customer = usersData?.find(
+              (u) => u.user_id === order.user_id
+            );
+
+            return {
+              ...order,
+              customerName: customer?.name || "-",
+              items: farmerItems.map((item) => ({
+                ...item,
+                productName: item.products?.name,
+              })),
+            };
+          })
+          .filter(Boolean);
 
         setOrders(farmerOrders || []);
       } catch (err) {
         console.error("❌ Error fetching farmer orders:", err);
+        toast.error("Failed to fetch orders.");
       } finally {
         setLoading(false);
       }
@@ -66,17 +108,44 @@ const FarmerOrders = () => {
     fetchOrders();
   }, []);
 
-  const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case "delivered":
-        return "bg-green-100 text-green-700 border-green-300";
-      case "pending":
-        return "bg-yellow-100 text-yellow-700 border-yellow-300";
-      case "cancelled":
-        return "bg-red-100 text-red-700 border-red-300";
+  const renderPayment = (method, isModal = false) => {
+    if (!method) return "-";
+    const lower = method.toLowerCase();
+
+    const common = (icon, text, color) => (
+      <div className={`flex items-center gap-1 ${isModal ? "gap-2" : ""}`}>
+        {icon}
+        <span className={color}>{text}</span>
+      </div>
+    );
+
+    switch (lower) {
+      case "upi":
+        return common(<MdSensorOccupied className="text-green-500" />, isModal ? "UPI Payment" : "UPI");
+      case "card":
+        return common(<FaCreditCard className="text-blue-500" />, isModal ? "Card Payment" : "Card");
+      case "netbanking":
+      case "net banking":
+        return common(<BsBank2 className="text-indigo-600" />, isModal ? "Net Banking" : "Net Banking");
+      case "digitalwallet":
+      case "digital wallet":
+        return common(<FaWallet className="text-amber-800" />, isModal ? "Digital Wallet Payment" : "Wallet");
+      case "cod":
+      case "cash":
+        return common(<BsCash className="text-green-500" />, isModal ? "Cash Payment" : "Cash");
       default:
-        return "bg-blue-100 text-blue-700 border-blue-300";
+        return method;
     }
+  };
+
+  const openModal = (order) => {
+    setSelectedOrder(order);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedOrder(null);
+    setModalOpen(false);
   };
 
   return (
@@ -102,104 +171,141 @@ const FarmerOrders = () => {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-2xl border border-border shadow-md bg-muted/30 backdrop-blur">
-              <table className="w-full border-collapse text-sm text-left">
-                <thead className="sticky top-0 bg-muted/50 text-foreground uppercase text-xs tracking-wider shadow-sm">
-                  <tr>
-                    <th className="p-4 font-semibold">Order ID</th>
-                    <th className="p-4 font-semibold">Product</th>
-                    <th className="p-4 font-semibold">Quantity</th>
-                    <th className="p-4 font-semibold">Price</th>
-                    <th className="p-4 font-semibold">Status</th>
-                    <th className="p-4 font-semibold">Date</th>
-                    <th className="p-4 text-right font-semibold">Total</th>
-                  </tr>
-                </thead>
+            <div className="overflow-x-auto bg-white shadow-lg rounded-lg border border-gray-200 p-4">
+              <div className="max-h-[70vh] overflow-y-auto">
+                <table className="min-w-full text-left border-collapse">
+                  <thead className="bg-gray-100 sticky top-0">
+                    <tr>
+                      <th className="p-3 border-b text-gray-700 font-medium">Order ID</th>
+                      <th className="p-3 border-b text-gray-700 font-medium">Customer</th>
+                      <th className="p-3 border-b text-gray-700 font-medium">Amount</th>
+                      <th className="p-3 border-b text-gray-700 font-medium">Payment</th>
+                      <th className="p-3 border-b text-gray-700 font-medium">Status</th>
+                      <th className="p-3 border-b text-gray-700 font-medium">Ordered On</th>
+                      <th className="p-3 border-b text-gray-700 font-medium">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map((order, idx) => (
+                      <tr
+                        key={order.order_id}
+                        className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      >
+                        <td className="p-3 border-b font-mono">
+                          #{order.order_id.slice(0, 8)}
+                        </td>
+                        <td className="p-3 border-b">{order.customerName}</td>
+                        <td className="p-3 border-b">
+                          ₹{order.total_amount?.toLocaleString("en-IN")}
+                        </td>
+                        <td className="p-3 border-b">
+                          {renderPayment(order.payment_method)}
+                        </td>
+                        <td className="p-3 border-b capitalize">{order.status}</td>
+                        <td className="p-3 border-b">
+                          {new Date(order.created_at).toLocaleString("en-IN")}
+                        </td>
+                        <td className="p-3 border-b">
+                          <Button
+                            onClick={() => openModal(order)}
+                            className="px-3 py-1"
+                            variant="default"
+                          >
+                            View Details
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
-                <tbody className="divide-y divide-border">
-                  {orders.map((order, orderIndex) => {
-                    const farmerItems = order.order_items.filter(
-                      (item) => item.products?.farmer_id
-                    );
+              {/* Modal */}
+              {modalOpen && selectedOrder && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
+                  <div className="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 relative h-[85vh] overflow-y-auto mt-16">
+                    <button
+                      onClick={closeModal}
+                      className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                    >
+                      ×
+                    </button>
+                    <h2 className="text-2xl font-bold mb-4 border-b pb-2">
+                      Order Details
+                    </h2>
 
-                    // Alternating colors: one row bg-background, one light orange
-                    const rowBg =
-                      orderIndex % 2 !== 0 ? "bg-background" : "bg-orange-100";
+                    {/* Order Info */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      <div>
+                        <p className="font-semibold">Order ID:</p>
+                        <p className="text-gray-700 font-mono">
+                          {selectedOrder.order_id}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Customer Name:</p>
+                        <p className="text-gray-700">{selectedOrder.customerName}</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Total Amount:</p>
+                        <p className="text-gray-700">
+                          ₹{selectedOrder.total_amount?.toLocaleString("en-IN")}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Payment Method:</p>
+                        <p className="text-gray-700">
+                          {renderPayment(selectedOrder.payment_method, true)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Status:</p>
+                        <p className="text-gray-700 capitalize">
+                          {selectedOrder.status}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Created At:</p>
+                        <p className="text-gray-700">
+                          {new Date(selectedOrder.created_at).toLocaleString("en-IN")}
+                        </p>
+                      </div>
+                    </div>
 
-                    return (
-                      <React.Fragment key={order.order_id}>
-                        {farmerItems.map((item, i) => (
-                          <tr key={i} className={`${rowBg}`}>
-                            {i === 0 ? (
-                              <td
-                                className="p-4 font-semibold text-gray-800 border-t border-border align-top"
-                                rowSpan={farmerItems.length}
+                    {/* Items Table */}
+                    {selectedOrder.items && selectedOrder.items.length > 0 && (
+                      <div className="overflow-x-auto max-h-[50vh] overflow-y-auto border rounded-lg">
+                        <h3 className="text-xl font-semibold mb-2 border-b pb-1">
+                          Items
+                        </h3>
+                        <table className="min-w-full border-collapse">
+                          <thead className="bg-gray-100 sticky top-0">
+                            <tr>
+                              <th className="p-2 border-b text-left">Item Name</th>
+                              <th className="p-2 border-b text-left">Quantity</th>
+                              <th className="p-2 border-b text-left">Price</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {selectedOrder.items.map((item, idx) => (
+                              <tr
+                                key={idx}
+                                className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
                               >
-                                <span className="font-mono text-sm text-gray-700 bg-muted/40 px-2 py-1 rounded-md">
-                                  #{order.order_id.slice(0, 8)}
-                                </span>
-                              </td>
-                            ) : null}
-
-                            <td className="p-4 text-gray-800 font-medium border-t border-border">
-                              {item.products?.name}
-                            </td>
-                            <td className="p-4 text-gray-600 border-t border-border">
-                              {item.quantity}
-                            </td>
-                            <td className="p-4 text-gray-600 border-t border-border">
-                              ₹{item.price?.toLocaleString("en-IN")}
-                            </td>
-
-                            {i === 0 ? (
-                              <>
-                                <td
-                                  className="p-4 align-top border-t border-border"
-                                  rowSpan={farmerItems.length}
-                                >
-                                  <span
-                                    className={`px-3 py-1 text-xs font-medium rounded-full border shadow-sm ${getStatusColor(
-                                      order.status
-                                    )}`}
-                                  >
-                                    {order.status}
-                                  </span>
+                                <td className="p-2 border-b">{item.productName}</td>
+                                <td className="p-2 border-b">{item.quantity}</td>
+                                <td className="p-2 border-b">
+                                  ₹{item.price?.toLocaleString("en-IN")}
                                 </td>
-                                <td
-                                  className="p-4 text-gray-600 align-top border-t border-border"
-                                  rowSpan={farmerItems.length}
-                                >
-                                  <div className="flex items-center gap-1">
-                                    <CalendarDays className="w-4 h-4 opacity-70" />
-                                    {new Date(order.created_at).toLocaleDateString(
-                                      "en-IN",
-                                      {
-                                        day: "numeric",
-                                        month: "short",
-                                        year: "numeric",
-                                      }
-                                    )}
-                                  </div>
-                                </td>
-                                <td
-                                  className="p-4 text-right font-semibold text-gray-800 align-top border-t border-border"
-                                  rowSpan={farmerItems.length}
-                                >
-                                  <div className="flex justify-end items-center gap-1">
-                                    <IndianRupee className="w-4 h-4 opacity-70" />
-                                    {order.total_amount?.toLocaleString("en-IN") ||
-                                      "-"}
-                                  </div>
-                                </td>
-                              </>
-                            ) : null}
-                          </tr>
-                        ))}
-                      </React.Fragment>
-                    );
-                  })}
-                </tbody>
-              </table>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
