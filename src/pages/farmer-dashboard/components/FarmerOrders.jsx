@@ -47,22 +47,25 @@ const FarmerOrders = () => {
         const { data, error } = await supabase
           .from("orders")
           .select(`
-            order_id,
-            status,
-            created_at,
-            total_amount,
-            payment_method,
-            user_id,
-            order_items (
-              quantity,
-              price,
-              product_id,
-              products (
-                name,
-                farmer_id
-              )
-            )
-          `)
+    order_id,
+    status,
+    created_at,
+    total_amount,
+    payment_method,
+    user_id,
+    delivery_address,
+    city,
+    postal_code,
+    order_items (
+      quantity,
+      price,
+      product_id,
+      products (
+        name,
+        farmer_id
+      )
+    )
+  `)
           .order("created_at", { ascending: false });
 
         if (error) throw error;
@@ -88,6 +91,9 @@ const FarmerOrders = () => {
             return {
               ...order,
               customerName: customer?.name || "-",
+              delivery_address: order.delivery_address,
+              city: order.city,
+              postal_code: order.postal_code,
               items: farmerItems.map((item) => ({
                 ...item,
                 productName: item.products?.name,
@@ -222,53 +228,70 @@ const FarmerOrders = () => {
 
               {/* Modal */}
               {modalOpen && selectedOrder && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
-                  <div className="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6 relative h-[85vh] overflow-y-auto mt-16">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start z-50 px-4 pt-20">
+                  <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 relative h-[85vh] overflow-y-auto">
+                    {/* Close Button */}
                     <button
                       onClick={closeModal}
                       className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold"
                     >
                       ×
                     </button>
-                    <h2 className="text-2xl font-bold mb-4 border-b pb-2">
+
+                    <h2 className="text-2xl font-bold mb-6 border-b pb-2">
                       Order Details
                     </h2>
 
-                    {/* Order Info */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                      <div>
-                        <p className="font-semibold">Order ID:</p>
-                        <p className="text-gray-700 font-mono">
-                          {selectedOrder.order_id}
-                        </p>
+                    {/* Two Sections */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                      {/* Order Details */}
+                      <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 className="font-semibold text-lg mb-3 border-b pb-1">Order Details</h3>
+                        <div className="space-y-2">
+                          <div>
+                            <p className="font-semibold">Order ID:</p>
+                            <p className="text-gray-700 font-mono">{selectedOrder.order_id}</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">Total Amount:</p>
+                            <p className="text-gray-700">₹{selectedOrder.total_amount?.toLocaleString("en-IN")}</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">Payment Method:</p>
+                            <p className="text-gray-700">{renderPayment(selectedOrder.payment_method, true)}</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">Status:</p>
+                            <p className="text-gray-700 capitalize">{selectedOrder.status}</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">Created At:</p>
+                            <p className="text-gray-700">{new Date(selectedOrder.created_at).toLocaleString("en-IN")}</p>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-semibold">Customer Name:</p>
-                        <p className="text-gray-700">{selectedOrder.customerName}</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold">Total Amount:</p>
-                        <p className="text-gray-700">
-                          ₹{selectedOrder.total_amount?.toLocaleString("en-IN")}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-semibold">Payment Method:</p>
-                        <p className="text-gray-700">
-                          {renderPayment(selectedOrder.payment_method, true)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-semibold">Status:</p>
-                        <p className="text-gray-700 capitalize">
-                          {selectedOrder.status}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="font-semibold">Created At:</p>
-                        <p className="text-gray-700">
-                          {new Date(selectedOrder.created_at).toLocaleString("en-IN")}
-                        </p>
+
+                      {/* Customer Details */}
+                      <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 className="font-semibold text-lg mb-3 border-b pb-1">Customer Details</h3>
+                        <div className="space-y-2">
+                          <div>
+                            <p className="font-semibold">Customer Name:</p>
+                            <p className="text-gray-700">{selectedOrder.customerName}</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">Delivery Address:</p>
+                            <p className="text-gray-700">{selectedOrder.delivery_address}</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">City:</p>
+                            <p className="text-gray-700">{selectedOrder.city}</p>
+                          </div>
+                          <div>
+                            <p className="font-semibold">Postal Code:</p>
+                            <p className="text-gray-700">{selectedOrder.postal_code}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -288,15 +311,10 @@ const FarmerOrders = () => {
                           </thead>
                           <tbody>
                             {selectedOrder.items.map((item, idx) => (
-                              <tr
-                                key={idx}
-                                className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                              >
+                              <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                                 <td className="p-2 border-b">{item.productName}</td>
                                 <td className="p-2 border-b">{item.quantity}</td>
-                                <td className="p-2 border-b">
-                                  ₹{item.price?.toLocaleString("en-IN")}
-                                </td>
+                                <td className="p-2 border-b">₹{item.price?.toLocaleString("en-IN")}</td>
                               </tr>
                             ))}
                           </tbody>
