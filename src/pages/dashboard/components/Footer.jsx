@@ -4,7 +4,6 @@ import Button from '../../../components/ui/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../../context/AuthContext"; // ✅ added
 
-import Feedback from "pages/Feedback";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -109,18 +108,6 @@ const Footer = () => {
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             {/* ✅ Protected Feedback Link */}
-            <Link
-              to={isAuthenticated ? "/feedback" : "#"}
-              onClick={(e) => {
-                if (!isAuthenticated) {
-                  e.preventDefault();
-                  setShowAuthPopup(true); // show sign-in popup
-                }
-              }}
-              className="text-white/60 hover:text-golden transition-colors text-sm"
-            >
-              Feedback
-            </Link>
 
             <Link to="/privacy-policy" className="text-white/60 hover:text-golden transition-colors text-sm">
               Privacy Policy
