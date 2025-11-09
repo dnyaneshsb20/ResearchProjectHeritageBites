@@ -108,7 +108,9 @@ const Feedback = () => {
       const sentimentResponse = await fetch("https://fastapi-sentiment-app.onrender.com/predict-sentiment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: combinedReview }),
+        body: JSON.stringify({ 
+          text: combinedReview,
+          user_type: userType }),
       });
       const sentiment = await sentimentResponse.json();
 

@@ -1,0 +1,1001 @@
+name,email,user_type,e_market_rating,e_market_review,recipe_rating,recipe_review,chatbot_rating,chatbot_review,contribution_rating,contribution_review,overall_rating,overall_review,sentiment
+Rohan Patel,user522@example.com,User,3,E-market - Okay experience overall,3,Average experience,4,Fantastic feature,2,Bad experience,3,Could use some improvements,neutral
+Arjun Das,user738@example.com,User,2,E-market - Checkout failed,3,Could use some improvements,2,Did not work properly,2,Did not work properly,3,Overall website - Average experience,neutral
+Arjun Das,user741@example.com,User,1,Checkout failed,1,Bad experience,3,It's fine,2,Checkout failed,2,Overall website - Terrible design,negative
+Arjun Das,user661@example.com,User,4,E-market - Excellent experience,5,Recipe section - Worked perfectly,5,Chatbot - Worked perfectly,4,Worked perfectly,5,Impressive design,positive
+Arjun Das,user412@example.com,User,1,Slow and buggy,1,Very confusing interface,1,Chatbot - Unresponsive chatbot,1,Contribution section - Unresponsive chatbot,1,Needs improvement,negative
+Karan Mehta,user679@example.com,User,2,E-market - Needs improvement,1,Terrible design,2,Chatbot - Checkout failed,2,Checkout failed,1,Overall website - Very confusing interface,negative
+Aisha Khan,user627@example.com,User,4,E-market - Excellent experience,4,Worked perfectly,4,Super helpful interface,5,Fast checkout and clean UI,5,Great product selection,positive
+Karan Mehta,user514@example.com,User,4,E-market - Great product selection,4,Excellent experience,5,Excellent experience,3,Contribution section - It's fine,4,Excellent experience,positive
+Pooja Joshi,user860@example.com,User,5,Loved it,4,Very smooth and easy to use,4,Very smooth and easy to use,4,Super helpful interface,5,Overall website - Loved it,positive
+Arjun Das,user137@example.com,User,5,E-market - Impressive design,5,Recipe section - Worked perfectly,4,Chatbot - Worked perfectly,4,Contribution section - Impressive design,5,Great product selection,positive
+Divya Shah,user812@example.com,User,2,E-market - Needs improvement,2,Recipe section - Very confusing interface,2,Chatbot - Unresponsive chatbot,2,Contribution section - Slow and buggy,1,Hard to use,negative
+Arjun Das,user77@example.com,User,1,Unresponsive chatbot,2,Bad experience,2,Slow and buggy,3,Contribution section - Could be better,2,Overall website - Bad experience,negative
+Ananya Singh,user637@example.com,User,5,E-market - Super helpful interface,3,Okay experience overall,5,Chatbot - Very smooth and easy to use,3,Satisfactory,4,Fantastic feature,positive
+Arjun Das,user974@example.com,User,1,E-market - Slow and buggy,3,Recipe section - Not bad,1,Chatbot - Not satisfied,3,It's fine,2,Overall website - Did not work properly,negative
+Karan Mehta,user939@example.com,User,2,E-market - Unresponsive chatbot,3,Recipe section - Average experience,3,Chatbot - Decent but nothing special,4,Contribution section - Very intuitive,3,Decent but nothing special,neutral
+Arjun Das,user900@example.com,User,2,Did not work properly,2,Checkout failed,3,Satisfactory,3,Contribution section - It's fine,3,Not bad,neutral
+Pooja Joshi,user281@example.com,User,4,Fast checkout and clean UI,3,Recipe section - It's fine,2,Hard to use,2,Very confusing interface,3,Okay experience overall,neutral
+Karan Mehta,user884@example.com,User,2,Hard to use,2,Checkout failed,3,Chatbot - Average experience,1,Slow and buggy,2,Did not work properly,negative
+Pooja Joshi,user762@example.com,User,4,Impressive design,3,Recipe section - It's fine,3,Chatbot - Not bad,5,Contribution section - Fast checkout and clean UI,4,Overall website - Loved it,positive
+Arjun Das,user320@example.com,User,2,E-market - Slow and buggy,1,Not satisfied,1,Chatbot - Hard to use,2,Contribution section - Very confusing interface,1,Bad experience,negative
+Rahul Verma,user550@example.com,User,1,Not satisfied,1,Recipe section - Checkout failed,1,Chatbot - Not satisfied,3,Satisfactory,2,Overall website - Checkout failed,negative
+Sneha Reddy,user175@example.com,User,1,Unresponsive chatbot,1,Bad experience,1,Hard to use,3,Contribution section - Okay experience overall,2,Needs improvement,negative
+Vikram Kumar,user372@example.com,User,5,E-market - Super helpful interface,5,Great product selection,5,Chatbot - Very intuitive,4,Super helpful interface,5,Overall website - Excellent experience,positive
+Rohan Patel,user528@example.com,User,3,E-market - Could be better,4,Impressive design,4,Super helpful interface,4,Super helpful interface,3,It's fine,neutral
+Sneha Reddy,user211@example.com,User,3,E-market - Satisfactory,2,Recipe section - Not satisfied,3,Chatbot - Satisfactory,3,Contribution section - Decent but nothing special,3,Overall website - It's fine,neutral
+Rohan Patel,user236@example.com,User,3,E-market - Average experience,3,Okay experience overall,3,Chatbot - Not bad,4,Contribution section - Fantastic feature,3,Could use some improvements,neutral
+Rohan Patel,user102@example.com,User,4,E-market - Very smooth and easy to use,4,Worked perfectly,4,Chatbot - Excellent experience,3,Contribution section - Average experience,3,Decent but nothing special,neutral
+Arjun Das,user987@example.com,User,3,E-market - Decent but nothing special,3,Recipe section - Decent but nothing special,4,Super helpful interface,4,Contribution section - Fast checkout and clean UI,3,Overall website - Decent but nothing special,neutral
+Rahul Verma,user903@example.com,User,5,Fast checkout and clean UI,5,Very smooth and easy to use,4,Chatbot - Excellent experience,5,Amazing recipes and service,5,Overall website - Excellent experience,positive
+Rohan Patel,user948@example.com,User,1,E-market - Not satisfied,2,Very confusing interface,1,Hard to use,1,Unresponsive chatbot,1,Not satisfied,negative
+Rohan Patel,user347@example.com,User,1,Unresponsive chatbot,1,Recipe section - Unresponsive chatbot,2,Chatbot - Bad experience,1,Very confusing interface,1,Overall website - Not satisfied,negative
+Sneha Reddy,user140@example.com,User,3,It's fine,2,Hard to use,4,Chatbot - Impressive design,4,Great product selection,3,Overall website - Okay experience overall,neutral
+Karan Mehta,user622@example.com,User,4,E-market - Super helpful interface,3,Recipe section - Could use some improvements,4,Chatbot - Impressive design,4,Contribution section - Loved it,4,Overall website - Worked perfectly,positive
+Aisha Khan,user500@example.com,User,2,E-market - Checkout failed,3,Recipe section - It's fine,3,Could use some improvements,2,Not satisfied,2,Terrible design,negative
+Arjun Das,user371@example.com,User,3,It's fine,2,Hard to use,2,Not satisfied,1,Terrible design,2,Unresponsive chatbot,negative
+Vikram Kumar,user199@example.com,User,2,Not satisfied,3,Recipe section - Okay experience overall,2,Very confusing interface,2,Contribution section - Checkout failed,3,Not bad,neutral
+Sneha Reddy,user688@example.com,User,3,E-market - Decent but nothing special,3,Could be better,1,Unresponsive chatbot,2,Checkout failed,2,Bad experience,negative
+Sneha Reddy,user585@example.com,User,2,E-market - Very confusing interface,2,Very confusing interface,1,Chatbot - Terrible design,1,Contribution section - Slow and buggy,1,Overall website - Bad experience,negative
+Arjun Das,user902@example.com,User,5,E-market - Very intuitive,4,Super helpful interface,4,Chatbot - Excellent experience,5,Contribution section - Great product selection,5,Overall website - Fantastic feature,positive
+Sneha Reddy,user60@example.com,User,1,Very confusing interface,1,Bad experience,1,Hard to use,1,Needs improvement,1,Overall website - Hard to use,negative
+Ananya Singh,user329@example.com,User,5,Amazing recipes and service,5,Recipe section - Fast checkout and clean UI,5,Fast checkout and clean UI,5,Excellent experience,5,Loved it,positive
+Aisha Khan,user97@example.com,User,3,E-market - Satisfactory,2,Recipe section - Checkout failed,2,Checkout failed,2,Very confusing interface,3,It's fine,neutral
+Rohan Patel,user313@example.com,User,2,Very confusing interface,3,Recipe section - Satisfactory,2,Chatbot - Slow and buggy,2,Contribution section - Not satisfied,3,It's fine,neutral
+Rahul Verma,user975@example.com,User,3,Decent but nothing special,3,Could be better,3,Satisfactory,1,Not satisfied,2,Overall website - Not satisfied,negative
+Aisha Khan,user300@example.com,User,3,E-market - Decent but nothing special,4,Super helpful interface,3,Chatbot - Not bad,3,Contribution section - Could be better,3,Overall website - Not bad,neutral
+Karan Mehta,user278@example.com,User,3,E-market - Could use some improvements,3,Recipe section - Not bad,4,Loved it,5,Fantastic feature,4,Very intuitive,positive
+Rahul Verma,user925@example.com,User,4,E-market - Fantastic feature,5,Very smooth and easy to use,5,Impressive design,4,Contribution section - Loved it,5,Great product selection,positive
+Karan Mehta,user602@example.com,User,3,E-market - Okay experience overall,3,Average experience,3,Chatbot - Could use some improvements,3,Could use some improvements,4,Super helpful interface,positive
+Aisha Khan,user440@example.com,User,5,Great product selection,4,Fantastic feature,4,Super helpful interface,4,Worked perfectly,5,Impressive design,positive
+Aisha Khan,user838@example.com,User,3,It's fine,3,Okay experience overall,3,Average experience,2,Hard to use,3,Overall website - Not bad,neutral
+Vikram Kumar,user571@example.com,User,3,E-market - Average experience,5,Excellent experience,5,Great product selection,3,Contribution section - Could be better,4,Overall website - Excellent experience,positive
+Rahul Verma,user880@example.com,User,1,Needs improvement,1,Recipe section - Bad experience,1,Chatbot - Terrible design,1,Contribution section - Slow and buggy,1,Bad experience,negative
+Arjun Das,user262@example.com,User,4,E-market - Amazing recipes and service,4,Loved it,5,Chatbot - Great product selection,5,Super helpful interface,5,Super helpful interface,positive
+Rohan Patel,user579@example.com,User,2,Very confusing interface,1,Terrible design,2,Bad experience,3,Contribution section - It's fine,2,Terrible design,negative
+Vikram Kumar,user24@example.com,User,3,Could use some improvements,4,Super helpful interface,4,Very intuitive,4,Contribution section - Very intuitive,4,Great product selection,positive
+Rahul Verma,user31@example.com,User,4,Worked perfectly,3,Okay experience overall,4,Fast checkout and clean UI,2,Bad experience,3,Average experience,neutral
+Rohan Patel,user618@example.com,User,2,E-market - Did not work properly,2,Not satisfied,2,Checkout failed,4,Worked perfectly,3,Overall website - Satisfactory,neutral
+Aisha Khan,user11@example.com,User,4,Fast checkout and clean UI,3,Okay experience overall,4,Worked perfectly,4,Super helpful interface,3,Overall website - Okay experience overall,neutral
+Rohan Patel,user222@example.com,User,4,E-market - Amazing recipes and service,4,Recipe section - Very intuitive,2,Chatbot - Slow and buggy,3,Contribution section - Not bad,3,Overall website - Satisfactory,neutral
+Rohan Patel,user821@example.com,User,4,Fast checkout and clean UI,3,Satisfactory,2,Slow and buggy,4,Amazing recipes and service,3,Okay experience overall,neutral
+Arjun Das,user297@example.com,User,5,E-market - Fantastic feature,5,Very intuitive,3,Chatbot - Satisfactory,5,Contribution section - Worked perfectly,4,Overall website - Super helpful interface,positive
+Rohan Patel,user55@example.com,User,1,E-market - Very confusing interface,1,Slow and buggy,2,Chatbot - Terrible design,3,Not bad,2,Overall website - Slow and buggy,negative
+Vikram Kumar,user543@example.com,User,3,E-market - Satisfactory,4,Recipe section - Fantastic feature,4,Chatbot - Impressive design,4,Amazing recipes and service,3,Overall website - Could be better,neutral
+Pooja Joshi,user210@example.com,User,4,Excellent experience,5,Recipe section - Loved it,5,Chatbot - Fast checkout and clean UI,5,Contribution section - Excellent experience,5,Excellent experience,positive
+Rahul Verma,user605@example.com,User,2,Unresponsive chatbot,2,Recipe section - Terrible design,4,Chatbot - Fantastic feature,3,It's fine,3,Could be better,neutral
+Aisha Khan,user693@example.com,User,3,E-market - Could be better,3,Recipe section - It's fine,1,Bad experience,2,Contribution section - Hard to use,2,Overall website - Unresponsive chatbot,negative
+Ananya Singh,user663@example.com,User,3,It's fine,4,Fantastic feature,2,Hard to use,2,Needs improvement,3,Overall website - Could be better,neutral
+Sneha Reddy,user867@example.com,User,3,Satisfactory,3,Could be better,1,Chatbot - Unresponsive chatbot,2,Not satisfied,2,Terrible design,negative
+Rohan Patel,user71@example.com,User,5,E-market - Loved it,5,Recipe section - Fast checkout and clean UI,5,Chatbot - Excellent experience,4,Contribution section - Amazing recipes and service,5,Fantastic feature,positive
+Arjun Das,user544@example.com,User,1,Checkout failed,2,Needs improvement,2,Chatbot - Bad experience,2,Contribution section - Hard to use,2,Unresponsive chatbot,negative
+Pooja Joshi,user108@example.com,User,1,E-market - Checkout failed,2,Did not work properly,2,Very confusing interface,1,Not satisfied,1,Terrible design,negative
+Pooja Joshi,user494@example.com,User,1,E-market - Needs improvement,1,Recipe section - Checkout failed,2,Chatbot - Slow and buggy,1,Contribution section - Unresponsive chatbot,1,Slow and buggy,negative
+Rahul Verma,user591@example.com,User,1,Slow and buggy,3,Recipe section - Could be better,3,It's fine,2,Not satisfied,2,Checkout failed,negative
+Sneha Reddy,user742@example.com,User,3,Could be better,3,Could use some improvements,4,Chatbot - Fantastic feature,4,Contribution section - Worked perfectly,4,Fast checkout and clean UI,positive
+Pooja Joshi,user293@example.com,User,5,E-market - Super helpful interface,5,Recipe section - Loved it,4,Loved it,5,Contribution section - Excellent experience,5,Fantastic feature,positive
+Ananya Singh,user290@example.com,User,1,Slow and buggy,1,Recipe section - Checkout failed,1,Needs improvement,2,Contribution section - Terrible design,1,Checkout failed,negative
+Rahul Verma,user653@example.com,User,5,E-market - Worked perfectly,4,Recipe section - Amazing recipes and service,5,Excellent experience,4,Contribution section - Super helpful interface,5,Overall website - Amazing recipes and service,positive
+Ananya Singh,user40@example.com,User,4,E-market - Amazing recipes and service,4,Very smooth and easy to use,5,Very smooth and easy to use,4,Excellent experience,4,Overall website - Impressive design,positive
+Sneha Reddy,user590@example.com,User,1,E-market - Terrible design,1,Unresponsive chatbot,1,Chatbot - Very confusing interface,1,Needs improvement,1,Not satisfied,negative
+Arjun Das,user308@example.com,User,4,E-market - Worked perfectly,4,Excellent experience,2,Terrible design,3,Contribution section - Could use some improvements,3,Overall website - Could use some improvements,neutral
+Rahul Verma,user680@example.com,User,4,E-market - Excellent experience,4,Recipe section - Loved it,2,Not satisfied,4,Contribution section - Very smooth and easy to use,3,Overall website - Could be better,neutral
+Arjun Das,user67@example.com,User,2,Slow and buggy,2,Recipe section - Very confusing interface,1,Did not work properly,2,Contribution section - Checkout failed,2,Overall website - Not satisfied,negative
+Arjun Das,user276@example.com,User,4,Excellent experience,3,It's fine,3,Chatbot - Decent but nothing special,3,Not bad,4,Fast checkout and clean UI,positive
+Ananya Singh,user68@example.com,User,2,Very confusing interface,2,Not satisfied,3,Chatbot - Could be better,3,Contribution section - It's fine,3,Overall website - Satisfactory,neutral
+Pooja Joshi,user319@example.com,User,4,E-market - Fast checkout and clean UI,4,Recipe section - Loved it,4,Very intuitive,3,Contribution section - Decent but nothing special,3,Overall website - It's fine,neutral
+Pooja Joshi,user549@example.com,User,2,E-market - Unresponsive chatbot,2,Did not work properly,1,Chatbot - Very confusing interface,1,Needs improvement,1,Very confusing interface,negative
+Sneha Reddy,user999@example.com,User,5,E-market - Very smooth and easy to use,3,Could be better,5,Chatbot - Great product selection,3,Decent but nothing special,4,Super helpful interface,positive
+Rahul Verma,user715@example.com,User,4,Impressive design,5,Great product selection,5,Chatbot - Excellent experience,4,Very intuitive,4,Loved it,positive
+Arjun Das,user754@example.com,User,3,E-market - Could use some improvements,2,Recipe section - Bad experience,3,Satisfactory,3,Contribution section - Could use some improvements,3,Not bad,neutral
+Divya Shah,user328@example.com,User,1,E-market - Did not work properly,1,Recipe section - Did not work properly,1,Chatbot - Unresponsive chatbot,1,Contribution section - Needs improvement,1,Unresponsive chatbot,negative
+Pooja Joshi,user383@example.com,User,3,E-market - Could use some improvements,2,Recipe section - Did not work properly,3,Chatbot - It's fine,3,Could be better,3,It's fine,neutral
+Vikram Kumar,user452@example.com,User,3,Okay experience overall,1,Recipe section - Did not work properly,3,Chatbot - Average experience,2,Contribution section - Unresponsive chatbot,2,Overall website - Did not work properly,negative
+Arjun Das,user523@example.com,User,5,E-market - Loved it,4,Great product selection,4,Chatbot - Worked perfectly,5,Worked perfectly,5,Very smooth and easy to use,positive
+Karan Mehta,user219@example.com,User,3,E-market - Satisfactory,3,Not bad,1,Chatbot - Very confusing interface,1,Contribution section - Bad experience,2,Needs improvement,negative
+Rahul Verma,user788@example.com,User,2,E-market - Needs improvement,3,Recipe section - Could use some improvements,3,It's fine,3,Contribution section - Decent but nothing special,3,Overall website - Decent but nothing special,neutral
+Arjun Das,user437@example.com,User,5,E-market - Amazing recipes and service,5,Recipe section - Super helpful interface,4,Amazing recipes and service,5,Amazing recipes and service,4,Very intuitive,positive
+Divya Shah,user765@example.com,User,1,Unresponsive chatbot,2,Recipe section - Did not work properly,1,Chatbot - Not satisfied,2,Bad experience,1,Not satisfied,negative
+Karan Mehta,user89@example.com,User,5,E-market - Worked perfectly,5,Fast checkout and clean UI,5,Chatbot - Very intuitive,5,Excellent experience,5,Overall website - Great product selection,positive
+Pooja Joshi,user64@example.com,User,4,Super helpful interface,3,It's fine,3,Decent but nothing special,4,Contribution section - Worked perfectly,4,Overall website - Excellent experience,positive
+Karan Mehta,user827@example.com,User,1,Slow and buggy,2,Recipe section - Did not work properly,2,Very confusing interface,2,Not satisfied,2,Overall website - Unresponsive chatbot,negative
+Karan Mehta,user717@example.com,User,1,E-market - Bad experience,1,Recipe section - Not satisfied,2,Very confusing interface,1,Checkout failed,1,Did not work properly,negative
+Aisha Khan,user352@example.com,User,5,Great product selection,5,Recipe section - Excellent experience,5,Chatbot - Fast checkout and clean UI,4,Super helpful interface,5,Loved it,positive
+Sneha Reddy,user937@example.com,User,3,E-market - Not bad,2,Recipe section - Terrible design,3,Not bad,2,Contribution section - Terrible design,3,Not bad,neutral
+Karan Mehta,user257@example.com,User,4,Super helpful interface,4,Fast checkout and clean UI,3,Chatbot - It's fine,4,Contribution section - Fast checkout and clean UI,3,Average experience,neutral
+Divya Shah,user636@example.com,User,4,E-market - Very intuitive,5,Recipe section - Worked perfectly,4,Chatbot - Excellent experience,4,Amazing recipes and service,5,Overall website - Worked perfectly,positive
+Divya Shah,user645@example.com,User,3,Not bad,3,Not bad,2,Chatbot - Bad experience,3,Contribution section - Average experience,2,Slow and buggy,negative
+Ananya Singh,user555@example.com,User,2,E-market - Bad experience,1,Recipe section - Not satisfied,2,Chatbot - Unresponsive chatbot,1,Very confusing interface,1,Overall website - Slow and buggy,negative
+Rohan Patel,user960@example.com,User,2,E-market - Unresponsive chatbot,4,Amazing recipes and service,4,Chatbot - Super helpful interface,4,Super helpful interface,3,Could be better,neutral
+Arjun Das,user169@example.com,User,3,Average experience,3,Recipe section - Okay experience overall,4,Very smooth and easy to use,3,Contribution section - Okay experience overall,3,Could use some improvements,neutral
+Pooja Joshi,user918@example.com,User,4,Loved it,5,Impressive design,4,Chatbot - Fast checkout and clean UI,4,Contribution section - Amazing recipes and service,4,Overall website - Amazing recipes and service,positive
+Ananya Singh,user529@example.com,User,5,Fast checkout and clean UI,4,Excellent experience,5,Chatbot - Amazing recipes and service,3,Contribution section - Not bad,4,Overall website - Very intuitive,positive
+Sneha Reddy,user824@example.com,User,2,E-market - Not satisfied,3,Decent but nothing special,3,Chatbot - It's fine,2,Bad experience,2,Unresponsive chatbot,negative
+Aisha Khan,user986@example.com,User,2,E-market - Terrible design,2,Not satisfied,3,Chatbot - Decent but nothing special,2,Unresponsive chatbot,3,Overall website - Okay experience overall,neutral
+Divya Shah,user817@example.com,User,1,E-market - Unresponsive chatbot,1,Slow and buggy,1,Chatbot - Checkout failed,1,Slow and buggy,1,Overall website - Hard to use,negative
+Ananya Singh,user87@example.com,User,4,E-market - Worked perfectly,4,Very intuitive,5,Super helpful interface,5,Fast checkout and clean UI,4,Fast checkout and clean UI,positive
+Pooja Joshi,user433@example.com,User,4,Very intuitive,2,Hard to use,2,Slow and buggy,4,Contribution section - Amazing recipes and service,3,It's fine,neutral
+Ananya Singh,user185@example.com,User,4,Great product selection,5,Very smooth and easy to use,5,Fast checkout and clean UI,5,Very intuitive,4,Very smooth and easy to use,positive
+Arjun Das,user979@example.com,User,1,Not satisfied,2,Recipe section - Very confusing interface,2,Unresponsive chatbot,2,Contribution section - Needs improvement,1,Unresponsive chatbot,negative
+Ananya Singh,user535@example.com,User,5,Impressive design,4,Recipe section - Very smooth and easy to use,5,Very smooth and easy to use,4,Contribution section - Very smooth and easy to use,5,Overall website - Super helpful interface,positive
+Aisha Khan,user295@example.com,User,4,Very smooth and easy to use,3,Okay experience overall,3,Okay experience overall,2,Did not work properly,3,Overall website - Average experience,neutral
+Aisha Khan,user893@example.com,User,3,Average experience,5,Recipe section - Very smooth and easy to use,3,Chatbot - Okay experience overall,3,Okay experience overall,4,Overall website - Excellent experience,positive
+Arjun Das,user426@example.com,User,3,E-market - Satisfactory,5,Impressive design,4,Chatbot - Very smooth and easy to use,3,Contribution section - Okay experience overall,4,Overall website - Excellent experience,positive
+Vikram Kumar,user714@example.com,User,3,E-market - Not bad,4,Recipe section - Great product selection,3,Chatbot - Average experience,4,Contribution section - Excellent experience,3,Overall website - Decent but nothing special,neutral
+Sneha Reddy,user261@example.com,User,5,E-market - Fantastic feature,5,Recipe section - Very smooth and easy to use,3,Chatbot - Could be better,4,Fantastic feature,4,Loved it,positive
+Arjun Das,user238@example.com,User,5,Amazing recipes and service,5,Worked perfectly,5,Chatbot - Super helpful interface,5,Contribution section - Excellent experience,5,Loved it,positive
+Pooja Joshi,user560@example.com,User,3,Could use some improvements,2,Needs improvement,2,Chatbot - Hard to use,3,Contribution section - Satisfactory,3,Overall website - Could use some improvements,neutral
+Vikram Kumar,user584@example.com,User,2,E-market - Checkout failed,2,Hard to use,1,Not satisfied,2,Unresponsive chatbot,2,Very confusing interface,negative
+Arjun Das,user446@example.com,User,5,E-market - Great product selection,5,Recipe section - Excellent experience,5,Very intuitive,3,Contribution section - Could use some improvements,4,Overall website - Excellent experience,positive
+Rohan Patel,user868@example.com,User,1,E-market - Needs improvement,2,Recipe section - Did not work properly,1,Chatbot - Needs improvement,2,Contribution section - Slow and buggy,1,Overall website - Very confusing interface,negative
+Rohan Patel,user801@example.com,User,2,E-market - Checkout failed,2,Recipe section - Unresponsive chatbot,4,Chatbot - Impressive design,4,Amazing recipes and service,3,Overall website - Average experience,neutral
+Sneha Reddy,user600@example.com,User,5,E-market - Great product selection,5,Excellent experience,4,Chatbot - Excellent experience,5,Fast checkout and clean UI,5,Overall website - Fast checkout and clean UI,positive
+Pooja Joshi,user850@example.com,User,2,Did not work properly,2,Terrible design,4,Impressive design,2,Contribution section - Bad experience,3,Overall website - Average experience,neutral
+Pooja Joshi,user266@example.com,User,1,Slow and buggy,1,Recipe section - Terrible design,1,Terrible design,1,Contribution section - Very confusing interface,1,Overall website - Hard to use,negative
+Rohan Patel,user996@example.com,User,1,E-market - Terrible design,2,Not satisfied,2,Chatbot - Not satisfied,1,Contribution section - Checkout failed,1,Did not work properly,negative
+Aisha Khan,user530@example.com,User,4,E-market - Very intuitive,5,Fast checkout and clean UI,5,Amazing recipes and service,3,Not bad,4,Overall website - Very intuitive,positive
+Karan Mehta,user56@example.com,User,3,E-market - Could be better,3,Average experience,4,Chatbot - Excellent experience,2,Contribution section - Slow and buggy,3,Overall website - Satisfactory,neutral
+Sneha Reddy,user121@example.com,User,5,Impressive design,5,Recipe section - Impressive design,5,Very intuitive,5,Very intuitive,5,Great product selection,positive
+Rahul Verma,user216@example.com,User,1,E-market - Needs improvement,1,Did not work properly,1,Slow and buggy,2,Terrible design,2,Overall website - Hard to use,negative
+Vikram Kumar,user26@example.com,User,3,Decent but nothing special,2,Recipe section - Hard to use,4,Great product selection,4,Very smooth and easy to use,3,Overall website - Not bad,neutral
+Pooja Joshi,user73@example.com,User,1,E-market - Bad experience,1,Recipe section - Not satisfied,1,Chatbot - Unresponsive chatbot,1,Checkout failed,1,Overall website - Checkout failed,negative
+Sneha Reddy,user45@example.com,User,2,Checkout failed,3,Recipe section - Could be better,2,Chatbot - Bad experience,2,Needs improvement,3,Satisfactory,neutral
+Vikram Kumar,user248@example.com,User,4,E-market - Worked perfectly,3,It's fine,4,Very smooth and easy to use,3,Contribution section - Average experience,3,Not bad,neutral
+Arjun Das,user722@example.com,User,1,Slow and buggy,2,Terrible design,1,Chatbot - Not satisfied,2,Unresponsive chatbot,1,Overall website - Needs improvement,negative
+Pooja Joshi,user282@example.com,User,3,E-market - Average experience,2,Recipe section - Unresponsive chatbot,2,Hard to use,2,Not satisfied,2,Overall website - Very confusing interface,negative
+Karan Mehta,user894@example.com,User,4,E-market - Worked perfectly,5,Very smooth and easy to use,5,Very smooth and easy to use,5,Contribution section - Excellent experience,5,Fantastic feature,positive
+Arjun Das,user915@example.com,User,2,Very confusing interface,3,Satisfactory,2,Chatbot - Needs improvement,3,Decent but nothing special,3,Overall website - Average experience,neutral
+Vikram Kumar,user811@example.com,User,1,E-market - Not satisfied,1,Recipe section - Checkout failed,3,Could use some improvements,1,Contribution section - Hard to use,2,Not satisfied,negative
+Rohan Patel,user245@example.com,User,1,E-market - Needs improvement,2,Recipe section - Did not work properly,2,Chatbot - Did not work properly,2,Unresponsive chatbot,2,Not satisfied,negative
+Sneha Reddy,user823@example.com,User,1,E-market - Bad experience,1,Recipe section - Not satisfied,1,Chatbot - Did not work properly,3,Contribution section - Not bad,2,Hard to use,negative
+Divya Shah,user322@example.com,User,1,E-market - Slow and buggy,2,Recipe section - Slow and buggy,1,Did not work properly,1,Terrible design,1,Overall website - Slow and buggy,negative
+Aisha Khan,user644@example.com,User,4,Loved it,3,It's fine,3,Satisfactory,3,Average experience,4,Overall website - Excellent experience,positive
+Rahul Verma,user159@example.com,User,3,Average experience,2,Slow and buggy,1,Chatbot - Hard to use,1,Bad experience,2,Did not work properly,negative
+Sneha Reddy,user978@example.com,User,4,E-market - Loved it,2,Terrible design,4,Chatbot - Great product selection,2,Very confusing interface,3,Overall website - Decent but nothing special,neutral
+Pooja Joshi,user430@example.com,User,2,E-market - Terrible design,2,Recipe section - Checkout failed,2,Chatbot - Unresponsive chatbot,2,Contribution section - Needs improvement,1,Slow and buggy,negative
+Karan Mehta,user942@example.com,User,5,Great product selection,4,Excellent experience,5,Very smooth and easy to use,5,Contribution section - Impressive design,5,Impressive design,positive
+Aisha Khan,user463@example.com,User,3,E-market - Could use some improvements,1,Hard to use,2,Bad experience,2,Contribution section - Hard to use,2,Not satisfied,negative
+Divya Shah,user310@example.com,User,2,Unresponsive chatbot,1,Recipe section - Very confusing interface,3,Could be better,1,Did not work properly,2,Needs improvement,negative
+Karan Mehta,user698@example.com,User,4,Impressive design,4,Loved it,4,Excellent experience,5,Amazing recipes and service,4,Excellent experience,positive
+Pooja Joshi,user61@example.com,User,1,Not satisfied,1,Recipe section - Slow and buggy,1,Chatbot - Needs improvement,1,Not satisfied,1,Needs improvement,negative
+Arjun Das,user885@example.com,User,3,It's fine,3,Average experience,5,Chatbot - Very intuitive,5,Great product selection,4,Overall website - Great product selection,positive
+Arjun Das,user596@example.com,User,4,E-market - Fantastic feature,5,Recipe section - Amazing recipes and service,5,Loved it,5,Loved it,5,Overall website - Excellent experience,positive
+Rohan Patel,user768@example.com,User,4,E-market - Great product selection,3,Recipe section - It's fine,5,Excellent experience,4,Loved it,4,Overall website - Worked perfectly,positive
+Pooja Joshi,user650@example.com,User,3,E-market - Decent but nothing special,3,Average experience,5,Loved it,5,Contribution section - Very intuitive,4,Worked perfectly,positive
+Divya Shah,user651@example.com,User,3,Could be better,5,Great product selection,5,Chatbot - Super helpful interface,4,Loved it,4,Great product selection,positive
+Vikram Kumar,user866@example.com,User,1,E-market - Terrible design,3,Recipe section - Satisfactory,2,Chatbot - Hard to use,3,Satisfactory,2,Did not work properly,negative
+Pooja Joshi,user669@example.com,User,2,Hard to use,1,Did not work properly,1,Very confusing interface,2,Contribution section - Hard to use,1,Terrible design,negative
+Vikram Kumar,user299@example.com,User,1,Not satisfied,2,Recipe section - Unresponsive chatbot,1,Very confusing interface,1,Slow and buggy,1,Overall website - Terrible design,negative
+Pooja Joshi,user690@example.com,User,2,Unresponsive chatbot,2,Recipe section - Very confusing interface,1,Terrible design,1,Contribution section - Very confusing interface,1,Overall website - Terrible design,negative
+Divya Shah,user315@example.com,User,4,Excellent experience,4,Fantastic feature,4,Super helpful interface,5,Contribution section - Fantastic feature,5,Overall website - Loved it,positive
+Pooja Joshi,user311@example.com,User,4,Super helpful interface,5,Recipe section - Fast checkout and clean UI,4,Worked perfectly,4,Contribution section - Very smooth and easy to use,5,Overall website - Great product selection,positive
+Rohan Patel,user362@example.com,User,1,E-market - Not satisfied,2,Slow and buggy,1,Needs improvement,1,Contribution section - Needs improvement,1,Needs improvement,negative
+Divya Shah,user480@example.com,User,3,E-market - Not bad,3,Recipe section - Could be better,2,Unresponsive chatbot,3,Contribution section - Okay experience overall,3,Satisfactory,neutral
+Ananya Singh,user111@example.com,User,4,Excellent experience,4,Recipe section - Great product selection,3,Chatbot - Could use some improvements,5,Great product selection,4,Great product selection,positive
+Pooja Joshi,user990@example.com,User,2,Needs improvement,2,Not satisfied,1,Not satisfied,1,Unresponsive chatbot,2,Overall website - Hard to use,negative
+Aisha Khan,user487@example.com,User,5,E-market - Worked perfectly,4,Recipe section - Great product selection,3,Chatbot - Not bad,3,Contribution section - Okay experience overall,4,Fantastic feature,positive
+Vikram Kumar,user364@example.com,User,1,E-market - Needs improvement,2,Slow and buggy,1,Slow and buggy,1,Not satisfied,1,Overall website - Unresponsive chatbot,negative
+Ananya Singh,user255@example.com,User,4,E-market - Great product selection,4,Recipe section - Loved it,4,Chatbot - Very smooth and easy to use,4,Impressive design,3,Overall website - Could use some improvements,neutral
+Arjun Das,user260@example.com,User,1,Bad experience,2,Recipe section - Hard to use,2,Chatbot - Needs improvement,2,Contribution section - Not satisfied,2,Terrible design,negative
+Rahul Verma,user803@example.com,User,1,Unresponsive chatbot,1,Recipe section - Terrible design,1,Chatbot - Checkout failed,2,Contribution section - Very confusing interface,2,Overall website - Bad experience,negative
+Pooja Joshi,user678@example.com,User,2,Slow and buggy,4,Very intuitive,3,Satisfactory,3,Satisfactory,3,Overall website - Could use some improvements,neutral
+Pooja Joshi,user495@example.com,User,3,E-market - Could use some improvements,2,Very confusing interface,4,Chatbot - Fantastic feature,2,Needs improvement,3,Decent but nothing special,neutral
+Pooja Joshi,user671@example.com,User,3,Decent but nothing special,2,Unresponsive chatbot,2,Hard to use,3,Contribution section - It's fine,3,Could use some improvements,neutral
+Aisha Khan,user378@example.com,User,2,Did not work properly,2,Recipe section - Did not work properly,3,Chatbot - Could be better,1,Contribution section - Not satisfied,2,Overall website - Hard to use,negative
+Rohan Patel,user527@example.com,User,4,E-market - Great product selection,4,Recipe section - Loved it,3,Chatbot - Satisfactory,3,Satisfactory,4,Overall website - Amazing recipes and service,positive
+Rohan Patel,user846@example.com,User,1,E-market - Did not work properly,3,Okay experience overall,3,Chatbot - Not bad,2,Very confusing interface,2,Overall website - Needs improvement,negative
+Pooja Joshi,user138@example.com,User,1,Needs improvement,2,Unresponsive chatbot,2,Chatbot - Unresponsive chatbot,3,Contribution section - Satisfactory,2,Overall website - Terrible design,negative
+Sneha Reddy,user356@example.com,User,3,Could be better,4,Very smooth and easy to use,4,Fantastic feature,3,Contribution section - Could use some improvements,3,It's fine,neutral
+Karan Mehta,user366@example.com,User,5,E-market - Impressive design,5,Fantastic feature,5,Fast checkout and clean UI,5,Loved it,5,Super helpful interface,positive
+Vikram Kumar,user943@example.com,User,3,Decent but nothing special,2,Recipe section - Needs improvement,1,Not satisfied,3,Could use some improvements,2,Very confusing interface,negative
+Rahul Verma,user750@example.com,User,5,E-market - Fast checkout and clean UI,4,Recipe section - Worked perfectly,5,Great product selection,5,Contribution section - Impressive design,5,Impressive design,positive
+Ananya Singh,user949@example.com,User,4,Worked perfectly,5,Recipe section - Very intuitive,5,Loved it,4,Fast checkout and clean UI,5,Overall website - Great product selection,positive
+Pooja Joshi,user830@example.com,User,2,Not satisfied,1,Recipe section - Not satisfied,1,Checkout failed,1,Hard to use,1,Unresponsive chatbot,negative
+Rahul Verma,user657@example.com,User,1,Very confusing interface,2,Checkout failed,2,Unresponsive chatbot,1,Unresponsive chatbot,1,Bad experience,negative
+Vikram Kumar,user200@example.com,User,5,Amazing recipes and service,5,Fantastic feature,5,Great product selection,4,Contribution section - Amazing recipes and service,5,Very smooth and easy to use,positive
+Arjun Das,user214@example.com,User,2,Very confusing interface,1,Unresponsive chatbot,1,Unresponsive chatbot,1,Contribution section - Needs improvement,2,Unresponsive chatbot,negative
+Rohan Patel,user409@example.com,User,2,E-market - Not satisfied,2,Not satisfied,1,Checkout failed,1,Bad experience,1,Overall website - Bad experience,negative
+Divya Shah,user333@example.com,User,5,E-market - Impressive design,5,Impressive design,4,Excellent experience,5,Contribution section - Impressive design,5,Impressive design,positive
+Aisha Khan,user209@example.com,User,4,Very smooth and easy to use,5,Excellent experience,5,Amazing recipes and service,5,Excellent experience,5,Loved it,positive
+Rohan Patel,user614@example.com,User,4,Super helpful interface,3,Okay experience overall,4,Great product selection,4,Contribution section - Amazing recipes and service,4,Overall website - Great product selection,positive
+Rahul Verma,user79@example.com,User,3,E-market - Could be better,2,Hard to use,3,Chatbot - Okay experience overall,3,Could be better,3,Okay experience overall,neutral
+Divya Shah,user30@example.com,User,5,E-market - Very smooth and easy to use,3,Could use some improvements,3,Chatbot - Could use some improvements,5,Worked perfectly,4,Impressive design,positive
+Karan Mehta,user536@example.com,User,5,E-market - Loved it,5,Recipe section - Fast checkout and clean UI,4,Chatbot - Super helpful interface,4,Contribution section - Worked perfectly,5,Overall website - Loved it,positive
+Divya Shah,user696@example.com,User,4,Impressive design,4,Recipe section - Very intuitive,3,Chatbot - Could use some improvements,5,Contribution section - Great product selection,4,Overall website - Very intuitive,positive
+Divya Shah,user558@example.com,User,2,E-market - Hard to use,2,Recipe section - Not satisfied,2,Chatbot - Did not work properly,4,Amazing recipes and service,3,Average experience,neutral
+Ananya Singh,user837@example.com,User,1,E-market - Hard to use,2,Slow and buggy,1,Bad experience,2,Not satisfied,1,Checkout failed,negative
+Karan Mehta,user597@example.com,User,4,E-market - Loved it,3,It's fine,5,Chatbot - Very smooth and easy to use,3,Contribution section - Not bad,4,Overall website - Impressive design,positive
+Sneha Reddy,user166@example.com,User,2,E-market - Very confusing interface,2,Recipe section - Checkout failed,1,Chatbot - Slow and buggy,2,Terrible design,1,Did not work properly,negative
+Ananya Singh,user919@example.com,User,4,E-market - Super helpful interface,2,Unresponsive chatbot,2,Chatbot - Terrible design,4,Very intuitive,3,Could use some improvements,neutral
+Vikram Kumar,user496@example.com,User,5,E-market - Very smooth and easy to use,5,Excellent experience,3,Could be better,5,Impressive design,4,Fantastic feature,positive
+Rohan Patel,user825@example.com,User,1,Slow and buggy,1,Hard to use,3,Not bad,3,Okay experience overall,2,Terrible design,negative
+Vikram Kumar,user66@example.com,User,3,Satisfactory,4,Recipe section - Amazing recipes and service,3,Chatbot - Could use some improvements,4,Worked perfectly,4,Great product selection,positive
+Sneha Reddy,user142@example.com,User,1,Did not work properly,1,Slow and buggy,1,Not satisfied,2,Contribution section - Very confusing interface,1,Overall website - Bad experience,negative
+Karan Mehta,user926@example.com,User,1,E-market - Terrible design,2,Recipe section - Hard to use,1,Unresponsive chatbot,1,Hard to use,1,Overall website - Did not work properly,negative
+Ananya Singh,user828@example.com,User,4,E-market - Very intuitive,5,Loved it,5,Super helpful interface,4,Contribution section - Worked perfectly,5,Great product selection,positive
+Aisha Khan,user656@example.com,User,1,Very confusing interface,1,Recipe section - Hard to use,2,Bad experience,2,Contribution section - Terrible design,1,Hard to use,negative
+Aisha Khan,user332@example.com,User,1,E-market - Needs improvement,1,Did not work properly,2,Chatbot - Not satisfied,1,Unresponsive chatbot,1,Did not work properly,negative
+Rahul Verma,user665@example.com,User,5,E-market - Excellent experience,5,Recipe section - Worked perfectly,5,Amazing recipes and service,5,Contribution section - Great product selection,5,Overall website - Fantastic feature,positive
+Pooja Joshi,user250@example.com,User,1,E-market - Slow and buggy,1,Recipe section - Terrible design,1,Not satisfied,2,Contribution section - Hard to use,1,Overall website - Very confusing interface,negative
+Vikram Kumar,user908@example.com,User,4,Amazing recipes and service,5,Great product selection,5,Chatbot - Very intuitive,4,Contribution section - Impressive design,5,Fast checkout and clean UI,positive
+Arjun Das,user709@example.com,User,1,E-market - Needs improvement,1,Recipe section - Needs improvement,2,Needs improvement,2,Contribution section - Did not work properly,1,Overall website - Did not work properly,negative
+Vikram Kumar,user306@example.com,User,1,Terrible design,1,Recipe section - Very confusing interface,2,Hard to use,2,Contribution section - Checkout failed,1,Hard to use,negative
+Aisha Khan,user735@example.com,User,3,Could be better,5,Worked perfectly,3,It's fine,5,Excellent experience,4,Super helpful interface,positive
+Arjun Das,user976@example.com,User,1,Very confusing interface,2,Recipe section - Unresponsive chatbot,2,Checkout failed,1,Contribution section - Not satisfied,1,Overall website - Did not work properly,negative
+Karan Mehta,user50@example.com,User,5,Great product selection,5,Great product selection,5,Chatbot - Loved it,5,Contribution section - Very smooth and easy to use,5,Great product selection,positive
+Karan Mehta,user897@example.com,User,4,E-market - Super helpful interface,5,Recipe section - Super helpful interface,5,Impressive design,5,Impressive design,5,Impressive design,positive
+Aisha Khan,user3@example.com,User,5,E-market - Loved it,4,Amazing recipes and service,4,Chatbot - Fast checkout and clean UI,5,Contribution section - Excellent experience,5,Overall website - Super helpful interface,positive
+Pooja Joshi,user545@example.com,User,2,Needs improvement,2,Recipe section - Bad experience,2,Chatbot - Very confusing interface,1,Did not work properly,1,Overall website - Unresponsive chatbot,negative
+Divya Shah,user351@example.com,User,1,E-market - Slow and buggy,2,Recipe section - Checkout failed,3,Chatbot - It's fine,3,Contribution section - Decent but nothing special,2,Overall website - Slow and buggy,negative
+Ananya Singh,user905@example.com,User,3,E-market - It's fine,5,Excellent experience,3,Average experience,4,Great product selection,4,Great product selection,positive
+Rohan Patel,user537@example.com,User,4,E-market - Amazing recipes and service,4,Recipe section - Very intuitive,4,Fast checkout and clean UI,4,Amazing recipes and service,5,Fast checkout and clean UI,positive
+Vikram Kumar,user345@example.com,User,3,E-market - Average experience,3,Recipe section - Decent but nothing special,3,Chatbot - Not bad,4,Contribution section - Impressive design,3,Decent but nothing special,neutral
+Karan Mehta,user995@example.com,User,3,Could use some improvements,2,Very confusing interface,2,Chatbot - Not satisfied,2,Slow and buggy,2,Overall website - Unresponsive chatbot,negative
+Arjun Das,user482@example.com,User,3,Satisfactory,4,Recipe section - Loved it,3,It's fine,3,Contribution section - Average experience,4,Overall website - Very intuitive,positive
+Pooja Joshi,user576@example.com,User,1,E-market - Hard to use,2,Did not work properly,1,Terrible design,1,Slow and buggy,1,Overall website - Needs improvement,negative
+Vikram Kumar,user34@example.com,User,1,E-market - Slow and buggy,1,Recipe section - Did not work properly,3,Chatbot - It's fine,2,Terrible design,2,Overall website - Unresponsive chatbot,negative
+Rahul Verma,user32@example.com,User,2,E-market - Hard to use,2,Hard to use,2,Very confusing interface,4,Impressive design,3,Overall website - Average experience,neutral
+Vikram Kumar,user232@example.com,User,3,Average experience,4,Impressive design,5,Amazing recipes and service,5,Contribution section - Super helpful interface,4,Overall website - Very smooth and easy to use,positive
+Vikram Kumar,user964@example.com,User,5,E-market - Fast checkout and clean UI,5,Impressive design,4,Chatbot - Super helpful interface,3,Contribution section - Average experience,4,Overall website - Worked perfectly,positive
+Rohan Patel,user193@example.com,User,5,E-market - Very smooth and easy to use,4,Amazing recipes and service,4,Fantastic feature,5,Contribution section - Amazing recipes and service,4,Excellent experience,positive
+Divya Shah,user334@example.com,User,4,E-market - Super helpful interface,4,Recipe section - Worked perfectly,3,Chatbot - Could be better,5,Loved it,4,Excellent experience,positive
+Pooja Joshi,user4@example.com,User,5,E-market - Super helpful interface,5,Recipe section - Great product selection,3,Chatbot - Decent but nothing special,3,Decent but nothing special,4,Overall website - Fast checkout and clean UI,positive
+Karan Mehta,user205@example.com,User,1,Not satisfied,3,Satisfactory,3,Chatbot - Satisfactory,1,Contribution section - Very confusing interface,2,Unresponsive chatbot,negative
+Aisha Khan,user515@example.com,User,1,Checkout failed,1,Recipe section - Terrible design,1,Very confusing interface,1,Slow and buggy,1,Overall website - Terrible design,negative
+Rohan Patel,user800@example.com,User,1,E-market - Unresponsive chatbot,2,Recipe section - Not satisfied,2,Checkout failed,2,Needs improvement,1,Overall website - Checkout failed,negative
+Vikram Kumar,user307@example.com,User,1,Bad experience,1,Recipe section - Did not work properly,1,Very confusing interface,1,Contribution section - Needs improvement,1,Needs improvement,negative
+Ananya Singh,user110@example.com,User,3,Satisfactory,3,It's fine,4,Worked perfectly,4,Contribution section - Fast checkout and clean UI,4,Amazing recipes and service,positive
+Sneha Reddy,user431@example.com,User,5,Very intuitive,5,Great product selection,5,Chatbot - Impressive design,5,Fast checkout and clean UI,5,Fantastic feature,positive
+Ananya Singh,user78@example.com,User,4,E-market - Impressive design,3,Recipe section - Could be better,4,Super helpful interface,4,Fast checkout and clean UI,3,Overall website - Could be better,neutral
+Arjun Das,user85@example.com,User,4,Very intuitive,5,Recipe section - Fast checkout and clean UI,4,Very intuitive,5,Contribution section - Very smooth and easy to use,5,Overall website - Impressive design,positive
+Aisha Khan,user287@example.com,User,3,E-market - Could be better,2,Bad experience,3,Chatbot - Could be better,3,Could use some improvements,3,Satisfactory,neutral
+Pooja Joshi,user83@example.com,User,4,Excellent experience,2,Did not work properly,3,Could be better,3,Average experience,3,Decent but nothing special,neutral
+Rahul Verma,user992@example.com,User,4,Loved it,2,Needs improvement,2,Needs improvement,3,Not bad,3,Okay experience overall,neutral
+Ananya Singh,user790@example.com,User,1,Slow and buggy,2,Checkout failed,1,Not satisfied,2,Slow and buggy,1,Slow and buggy,negative
+Arjun Das,user895@example.com,User,2,E-market - Very confusing interface,1,Recipe section - Unresponsive chatbot,1,Chatbot - Did not work properly,1,Checkout failed,1,Overall website - Unresponsive chatbot,negative
+Arjun Das,user399@example.com,User,4,E-market - Very smooth and easy to use,4,Recipe section - Fantastic feature,4,Excellent experience,4,Very intuitive,4,Overall website - Very intuitive,positive
+Arjun Das,user324@example.com,User,1,E-market - Unresponsive chatbot,2,Recipe section - Hard to use,2,Not satisfied,1,Terrible design,1,Overall website - Not satisfied,negative
+Karan Mehta,user520@example.com,User,4,E-market - Fast checkout and clean UI,3,Recipe section - Could be better,4,Chatbot - Super helpful interface,5,Contribution section - Very smooth and easy to use,4,Overall website - Fast checkout and clean UI,positive
+Karan Mehta,user917@example.com,User,1,Bad experience,1,Did not work properly,2,Needs improvement,1,Checkout failed,1,Overall website - Bad experience,negative
+Pooja Joshi,user923@example.com,User,2,E-market - Checkout failed,1,Not satisfied,2,Terrible design,2,Did not work properly,1,Overall website - Checkout failed,negative
+Rohan Patel,user6@example.com,User,4,Very intuitive,3,It's fine,2,Not satisfied,2,Needs improvement,3,Overall website - Not bad,neutral
+Arjun Das,user732@example.com,User,4,E-market - Loved it,5,Recipe section - Loved it,5,Chatbot - Loved it,5,Great product selection,5,Overall website - Loved it,positive
+Aisha Khan,user466@example.com,User,3,E-market - Okay experience overall,2,Terrible design,1,Terrible design,3,Contribution section - Okay experience overall,2,Overall website - Bad experience,negative
+Ananya Singh,user98@example.com,User,5,Loved it,3,Recipe section - Decent but nothing special,3,Not bad,3,It's fine,4,Overall website - Very intuitive,positive
+Karan Mehta,user267@example.com,User,5,E-market - Loved it,5,Recipe section - Loved it,4,Excellent experience,4,Worked perfectly,5,Overall website - Amazing recipes and service,positive
+Karan Mehta,user358@example.com,User,1,Hard to use,1,Recipe section - Needs improvement,2,Chatbot - Very confusing interface,1,Contribution section - Checkout failed,1,Terrible design,negative
+Ananya Singh,user869@example.com,User,3,Satisfactory,3,Okay experience overall,2,Chatbot - Terrible design,1,Terrible design,2,Bad experience,negative
+Arjun Das,user799@example.com,User,4,E-market - Worked perfectly,4,Excellent experience,5,Loved it,5,Great product selection,5,Overall website - Impressive design,positive
+Rahul Verma,user381@example.com,User,4,Super helpful interface,3,Recipe section - Satisfactory,3,It's fine,4,Very intuitive,3,Overall website - Okay experience overall,neutral
+Aisha Khan,user632@example.com,User,2,E-market - Bad experience,3,Could be better,3,Not bad,3,Satisfactory,2,Overall website - Did not work properly,negative
+Aisha Khan,user382@example.com,User,5,E-market - Amazing recipes and service,5,Fantastic feature,4,Chatbot - Impressive design,4,Amazing recipes and service,4,Very intuitive,positive
+Karan Mehta,user491@example.com,User,3,E-market - Could be better,4,Impressive design,3,Could use some improvements,5,Very intuitive,4,Overall website - Very smooth and easy to use,positive
+Sneha Reddy,user119@example.com,User,1,Bad experience,2,Recipe section - Unresponsive chatbot,2,Chatbot - Very confusing interface,1,Very confusing interface,1,Slow and buggy,negative
+Ananya Singh,user901@example.com,User,1,E-market - Slow and buggy,1,Recipe section - Needs improvement,1,Needs improvement,2,Not satisfied,1,Overall website - Hard to use,negative
+Rohan Patel,user251@example.com,User,2,E-market - Needs improvement,1,Not satisfied,2,Did not work properly,1,Contribution section - Hard to use,2,Overall website - Unresponsive chatbot,negative
+Rahul Verma,user524@example.com,User,4,Fantastic feature,3,Recipe section - Decent but nothing special,3,Decent but nothing special,3,It's fine,3,Overall website - Satisfactory,neutral
+Ananya Singh,user10@example.com,User,4,E-market - Loved it,4,Amazing recipes and service,5,Excellent experience,5,Contribution section - Super helpful interface,5,Overall website - Worked perfectly,positive
+Sneha Reddy,user197@example.com,User,1,Slow and buggy,1,Recipe section - Not satisfied,1,Hard to use,1,Very confusing interface,1,Needs improvement,negative
+Rahul Verma,user604@example.com,User,2,Not satisfied,1,Recipe section - Slow and buggy,1,Chatbot - Bad experience,2,Did not work properly,1,Unresponsive chatbot,negative
+Vikram Kumar,user82@example.com,User,1,Checkout failed,2,Bad experience,2,Bad experience,1,Checkout failed,1,Did not work properly,negative
+Pooja Joshi,user784@example.com,User,3,Could use some improvements,1,Very confusing interface,1,Slow and buggy,1,Contribution section - Slow and buggy,2,Unresponsive chatbot,negative
+Arjun Das,user588@example.com,User,3,E-market - Okay experience overall,3,Average experience,2,Chatbot - Not satisfied,3,Contribution section - It's fine,3,Overall website - Not bad,neutral
+Aisha Khan,user798@example.com,User,5,Amazing recipes and service,4,Very smooth and easy to use,3,Could use some improvements,3,Contribution section - Okay experience overall,4,Fast checkout and clean UI,positive
+Rohan Patel,user240@example.com,User,1,E-market - Not satisfied,2,Needs improvement,2,Chatbot - Slow and buggy,1,Contribution section - Checkout failed,1,Overall website - Not satisfied,negative
+Arjun Das,user291@example.com,User,5,E-market - Loved it,4,Amazing recipes and service,5,Super helpful interface,5,Contribution section - Very intuitive,5,Fast checkout and clean UI,positive
+Sneha Reddy,user212@example.com,User,4,Super helpful interface,4,Recipe section - Excellent experience,3,Chatbot - Could use some improvements,5,Fantastic feature,4,Worked perfectly,positive
+Sneha Reddy,user718@example.com,User,2,Did not work properly,1,Recipe section - Did not work properly,2,Bad experience,2,Contribution section - Slow and buggy,1,Not satisfied,negative
+Arjun Das,user360@example.com,User,2,Did not work properly,3,Decent but nothing special,2,Chatbot - Unresponsive chatbot,1,Contribution section - Not satisfied,2,Overall website - Hard to use,negative
+Divya Shah,user450@example.com,User,4,E-market - Amazing recipes and service,4,Very intuitive,3,Decent but nothing special,3,Satisfactory,4,Overall website - Great product selection,positive
+Karan Mehta,user228@example.com,User,5,E-market - Impressive design,5,Recipe section - Loved it,4,Chatbot - Amazing recipes and service,5,Impressive design,5,Loved it,positive
+Rohan Patel,user951@example.com,User,5,Fast checkout and clean UI,4,Recipe section - Very intuitive,5,Chatbot - Very smooth and easy to use,5,Very smooth and easy to use,5,Overall website - Worked perfectly,positive
+Divya Shah,user947@example.com,User,1,Slow and buggy,2,Recipe section - Unresponsive chatbot,2,Chatbot - Needs improvement,2,Unresponsive chatbot,2,Not satisfied,negative
+Ananya Singh,user797@example.com,User,1,Very confusing interface,2,Recipe section - Not satisfied,2,Slow and buggy,2,Terrible design,1,Overall website - Bad experience,negative
+Rahul Verma,user502@example.com,User,5,E-market - Fast checkout and clean UI,4,Fast checkout and clean UI,5,Chatbot - Impressive design,4,Contribution section - Loved it,5,Amazing recipes and service,positive
+Vikram Kumar,user465@example.com,User,3,Average experience,5,Amazing recipes and service,3,Satisfactory,3,Contribution section - It's fine,4,Overall website - Excellent experience,positive
+Arjun Das,user363@example.com,User,2,E-market - Needs improvement,2,Recipe section - Slow and buggy,3,Satisfactory,2,Contribution section - Slow and buggy,2,Overall website - Bad experience,negative
+Sneha Reddy,user469@example.com,User,3,E-market - Not bad,2,Recipe section - Did not work properly,2,Needs improvement,2,Needs improvement,2,Overall website - Checkout failed,negative
+Karan Mehta,user936@example.com,User,3,Could be better,1,Slow and buggy,2,Chatbot - Did not work properly,3,Contribution section - Satisfactory,2,Overall website - Unresponsive chatbot,negative
+Divya Shah,user429@example.com,User,2,E-market - Slow and buggy,4,Fast checkout and clean UI,3,Chatbot - Could use some improvements,3,Could be better,3,Satisfactory,neutral
+Rahul Verma,user8@example.com,User,1,E-market - Slow and buggy,1,Slow and buggy,1,Chatbot - Needs improvement,2,Contribution section - Slow and buggy,1,Very confusing interface,negative
+Ananya Singh,user156@example.com,User,1,E-market - Very confusing interface,1,Recipe section - Not satisfied,1,Unresponsive chatbot,1,Contribution section - Bad experience,1,Unresponsive chatbot,negative
+Rohan Patel,user542@example.com,User,5,E-market - Great product selection,5,Amazing recipes and service,5,Excellent experience,5,Contribution section - Worked perfectly,4,Overall website - Super helpful interface,positive
+Vikram Kumar,user441@example.com,User,5,E-market - Fantastic feature,5,Recipe section - Loved it,5,Amazing recipes and service,5,Contribution section - Great product selection,5,Loved it,positive
+Divya Shah,user483@example.com,User,3,E-market - Not bad,3,Not bad,2,Very confusing interface,2,Contribution section - Bad experience,3,Overall website - Okay experience overall,neutral
+Vikram Kumar,user423@example.com,User,2,Terrible design,3,Okay experience overall,4,Chatbot - Fast checkout and clean UI,4,Contribution section - Loved it,3,Okay experience overall,neutral
+Divya Shah,user779@example.com,User,2,Checkout failed,3,Recipe section - Average experience,4,Chatbot - Loved it,2,Terrible design,3,Could be better,neutral
+Divya Shah,user950@example.com,User,4,Impressive design,2,Recipe section - Slow and buggy,3,Decent but nothing special,3,Could use some improvements,3,Could use some improvements,neutral
+Rohan Patel,user335@example.com,User,3,E-market - Satisfactory,4,Fantastic feature,5,Chatbot - Very intuitive,4,Great product selection,4,Overall website - Impressive design,positive
+Divya Shah,user577@example.com,User,3,E-market - Could use some improvements,5,Worked perfectly,4,Excellent experience,4,Very intuitive,4,Overall website - Super helpful interface,positive
+Vikram Kumar,user935@example.com,User,5,Very smooth and easy to use,4,Very smooth and easy to use,5,Impressive design,5,Contribution section - Fast checkout and clean UI,5,Very smooth and easy to use,positive
+Sneha Reddy,user568@example.com,User,3,E-market - Okay experience overall,4,Recipe section - Fantastic feature,2,Chatbot - Slow and buggy,2,Terrible design,3,Could be better,neutral
+Divya Shah,user595@example.com,User,5,E-market - Very smooth and easy to use,4,Great product selection,3,Decent but nothing special,5,Contribution section - Loved it,4,Overall website - Super helpful interface,positive
+Arjun Das,user531@example.com,User,1,Very confusing interface,1,Hard to use,1,Slow and buggy,1,Slow and buggy,2,Overall website - Terrible design,negative
+Vikram Kumar,user582@example.com,User,3,E-market - Decent but nothing special,2,Recipe section - Did not work properly,3,Chatbot - Not bad,3,Average experience,2,Terrible design,negative
+Pooja Joshi,user708@example.com,User,4,Excellent experience,4,Great product selection,3,Chatbot - It's fine,4,Impressive design,3,Satisfactory,neutral
+Arjun Das,user449@example.com,User,2,Unresponsive chatbot,2,Very confusing interface,1,Hard to use,1,Hard to use,1,Overall website - Unresponsive chatbot,negative
+Sneha Reddy,user454@example.com,User,4,Great product selection,4,Very smooth and easy to use,4,Very intuitive,4,Loved it,4,Overall website - Excellent experience,positive
+Pooja Joshi,user229@example.com,User,5,E-market - Excellent experience,5,Amazing recipes and service,5,Fantastic feature,5,Fast checkout and clean UI,5,Loved it,positive
+Sneha Reddy,user353@example.com,User,1,E-market - Bad experience,1,Terrible design,1,Chatbot - Terrible design,1,Contribution section - Did not work properly,1,Slow and buggy,negative
+Pooja Joshi,user729@example.com,User,5,Very smooth and easy to use,4,Recipe section - Excellent experience,4,Fast checkout and clean UI,4,Great product selection,5,Very intuitive,positive
+Karan Mehta,user213@example.com,User,5,E-market - Amazing recipes and service,5,Recipe section - Very smooth and easy to use,4,Chatbot - Loved it,5,Contribution section - Worked perfectly,5,Excellent experience,positive
+Arjun Das,user80@example.com,User,2,E-market - Needs improvement,2,Bad experience,4,Chatbot - Loved it,2,Contribution section - Unresponsive chatbot,3,Overall website - Average experience,neutral
+Rohan Patel,user149@example.com,User,3,E-market - It's fine,2,Recipe section - Bad experience,4,Fast checkout and clean UI,3,Decent but nothing special,3,Could use some improvements,neutral
+Rohan Patel,user303@example.com,User,1,E-market - Slow and buggy,1,Hard to use,2,Chatbot - Hard to use,1,Slow and buggy,1,Bad experience,negative
+Vikram Kumar,user629@example.com,User,5,Fast checkout and clean UI,4,Recipe section - Super helpful interface,4,Amazing recipes and service,5,Contribution section - Excellent experience,5,Loved it,positive
+Arjun Das,user778@example.com,User,1,Checkout failed,2,Terrible design,3,It's fine,3,Satisfactory,2,Hard to use,negative
+Karan Mehta,user507@example.com,User,5,E-market - Great product selection,4,Recipe section - Very intuitive,5,Chatbot - Excellent experience,4,Contribution section - Impressive design,5,Overall website - Excellent experience,positive
+Vikram Kumar,user343@example.com,User,1,E-market - Slow and buggy,2,Recipe section - Not satisfied,1,Slow and buggy,1,Contribution section - Terrible design,1,Overall website - Unresponsive chatbot,negative
+Aisha Khan,user486@example.com,User,1,Terrible design,1,Recipe section - Not satisfied,1,Hard to use,1,Contribution section - Hard to use,1,Hard to use,negative
+Arjun Das,user712@example.com,User,3,Satisfactory,2,Recipe section - Needs improvement,1,Terrible design,3,Average experience,2,Overall website - Needs improvement,negative
+Sneha Reddy,user134@example.com,User,2,Slow and buggy,3,Recipe section - Satisfactory,1,Checkout failed,2,Bad experience,2,Slow and buggy,negative
+Arjun Das,user704@example.com,User,5,Super helpful interface,4,Recipe section - Super helpful interface,4,Very smooth and easy to use,5,Contribution section - Very intuitive,5,Excellent experience,positive
+Pooja Joshi,user312@example.com,User,1,Very confusing interface,1,Slow and buggy,1,Slow and buggy,1,Contribution section - Unresponsive chatbot,1,Overall website - Very confusing interface,negative
+Karan Mehta,user723@example.com,User,4,E-market - Fast checkout and clean UI,3,Could be better,4,Very intuitive,3,Contribution section - Not bad,3,Okay experience overall,neutral
+Sneha Reddy,user630@example.com,User,4,Amazing recipes and service,4,Great product selection,4,Amazing recipes and service,3,Contribution section - Could be better,3,Overall website - Decent but nothing special,neutral
+Ananya Singh,user1@example.com,User,3,Okay experience overall,3,Recipe section - It's fine,2,Checkout failed,2,Hard to use,3,Overall website - It's fine,neutral
+Rahul Verma,user317@example.com,User,4,Excellent experience,5,Excellent experience,3,It's fine,3,Decent but nothing special,4,Impressive design,positive
+Rohan Patel,user707@example.com,User,5,Super helpful interface,3,Okay experience overall,3,It's fine,4,Contribution section - Amazing recipes and service,4,Overall website - Very smooth and easy to use,positive
+Arjun Das,user548@example.com,User,4,E-market - Fantastic feature,3,Recipe section - It's fine,2,Chatbot - Terrible design,4,Contribution section - Great product selection,3,Overall website - Okay experience overall,neutral
+Rahul Verma,user873@example.com,User,5,E-market - Excellent experience,4,Very smooth and easy to use,5,Chatbot - Worked perfectly,5,Very intuitive,5,Overall website - Super helpful interface,positive
+Pooja Joshi,user533@example.com,User,4,E-market - Worked perfectly,3,Okay experience overall,3,Could use some improvements,2,Checkout failed,3,Overall website - Not bad,neutral
+Vikram Kumar,user478@example.com,User,5,Amazing recipes and service,5,Recipe section - Impressive design,4,Fast checkout and clean UI,5,Contribution section - Loved it,5,Worked perfectly,positive
+Rahul Verma,user405@example.com,User,1,E-market - Slow and buggy,2,Very confusing interface,2,Chatbot - Needs improvement,1,Contribution section - Very confusing interface,1,Overall website - Did not work properly,negative
+Vikram Kumar,user173@example.com,User,2,Very confusing interface,1,Needs improvement,1,Chatbot - Not satisfied,1,Hard to use,1,Overall website - Did not work properly,negative
+Ananya Singh,user126@example.com,User,4,Impressive design,2,Recipe section - Terrible design,3,It's fine,4,Contribution section - Great product selection,3,Overall website - Satisfactory,neutral
+Aisha Khan,user395@example.com,User,5,Impressive design,5,Fast checkout and clean UI,5,Chatbot - Very smooth and easy to use,5,Contribution section - Fantastic feature,5,Fantastic feature,positive
+Vikram Kumar,user421@example.com,User,4,Fantastic feature,3,Satisfactory,4,Chatbot - Worked perfectly,4,Worked perfectly,3,Overall website - Could be better,neutral
+Karan Mehta,user553@example.com,User,1,Hard to use,3,It's fine,2,Chatbot - Unresponsive chatbot,2,Hard to use,2,Overall website - Needs improvement,negative
+Rahul Verma,user904@example.com,User,1,E-market - Bad experience,2,Recipe section - Very confusing interface,2,Bad experience,1,Contribution section - Slow and buggy,2,Overall website - Checkout failed,negative
+Rahul Verma,user91@example.com,User,4,Impressive design,5,Loved it,5,Chatbot - Great product selection,5,Worked perfectly,5,Overall website - Fast checkout and clean UI,positive
+Aisha Khan,user940@example.com,User,2,E-market - Did not work properly,4,Amazing recipes and service,2,Chatbot - Checkout failed,4,Contribution section - Loved it,3,Could use some improvements,neutral
+Ananya Singh,user182@example.com,User,5,Very intuitive,5,Recipe section - Loved it,5,Worked perfectly,4,Fantastic feature,5,Very smooth and easy to use,positive
+Rohan Patel,user275@example.com,User,3,E-market - Could use some improvements,4,Amazing recipes and service,3,Not bad,2,Terrible design,3,It's fine,neutral
+Vikram Kumar,user896@example.com,User,4,Super helpful interface,4,Super helpful interface,5,Excellent experience,4,Fast checkout and clean UI,4,Impressive design,positive
+Aisha Khan,user70@example.com,User,5,Fantastic feature,5,Recipe section - Amazing recipes and service,5,Super helpful interface,5,Contribution section - Amazing recipes and service,5,Overall website - Super helpful interface,positive
+Vikram Kumar,user292@example.com,User,3,Decent but nothing special,4,Amazing recipes and service,3,Chatbot - Could be better,2,Contribution section - Not satisfied,3,Overall website - Could use some improvements,neutral
+Rohan Patel,user132@example.com,User,5,Super helpful interface,4,Recipe section - Amazing recipes and service,4,Great product selection,5,Very intuitive,5,Worked perfectly,positive
+Arjun Das,user301@example.com,User,1,E-market - Did not work properly,2,Recipe section - Unresponsive chatbot,1,Chatbot - Needs improvement,2,Contribution section - Checkout failed,1,Very confusing interface,negative
+Aisha Khan,user425@example.com,User,3,E-market - It's fine,3,Average experience,5,Chatbot - Great product selection,4,Contribution section - Excellent experience,4,Super helpful interface,positive
+Rahul Verma,user327@example.com,User,3,E-market - Not bad,4,Recipe section - Fast checkout and clean UI,4,Excellent experience,4,Great product selection,3,Could be better,neutral
+Ananya Singh,user145@example.com,User,4,Worked perfectly,4,Very smooth and easy to use,5,Amazing recipes and service,5,Fast checkout and clean UI,4,Overall website - Very intuitive,positive
+Sneha Reddy,user424@example.com,User,3,Average experience,4,Recipe section - Amazing recipes and service,5,Great product selection,3,It's fine,4,Fast checkout and clean UI,positive
+Vikram Kumar,user581@example.com,User,1,E-market - Checkout failed,1,Bad experience,2,Hard to use,1,Not satisfied,1,Unresponsive chatbot,negative
+Aisha Khan,user136@example.com,User,3,E-market - Could use some improvements,4,Very intuitive,4,Chatbot - Very smooth and easy to use,3,Contribution section - Could be better,3,Satisfactory,neutral
+Karan Mehta,user451@example.com,User,3,Could be better,4,Recipe section - Fast checkout and clean UI,5,Chatbot - Very intuitive,3,Could use some improvements,4,Overall website - Fantastic feature,positive
+Pooja Joshi,user165@example.com,User,2,Unresponsive chatbot,1,Recipe section - Bad experience,1,Slow and buggy,1,Needs improvement,1,Needs improvement,negative
+Pooja Joshi,user29@example.com,User,4,E-market - Impressive design,5,Recipe section - Super helpful interface,5,Loved it,4,Contribution section - Very intuitive,5,Overall website - Worked perfectly,positive
+Rahul Verma,user774@example.com,User,3,Okay experience overall,4,Recipe section - Excellent experience,3,Could use some improvements,4,Contribution section - Fast checkout and clean UI,4,Impressive design,positive
+Sneha Reddy,user194@example.com,User,2,Unresponsive chatbot,2,Recipe section - Not satisfied,1,Chatbot - Slow and buggy,2,Slow and buggy,1,Unresponsive chatbot,negative
+Sneha Reddy,user389@example.com,User,4,Fantastic feature,3,Recipe section - It's fine,4,Chatbot - Impressive design,3,Contribution section - Decent but nothing special,3,Overall website - Average experience,neutral
+Pooja Joshi,user853@example.com,User,3,It's fine,2,Did not work properly,3,Chatbot - Not bad,3,Contribution section - Decent but nothing special,3,Could be better,neutral
+Karan Mehta,user170@example.com,User,3,E-market - Decent but nothing special,3,Not bad,3,It's fine,3,Could use some improvements,3,Overall website - It's fine,neutral
+Vikram Kumar,user706@example.com,User,1,E-market - Checkout failed,1,Recipe section - Very confusing interface,1,Checkout failed,1,Contribution section - Needs improvement,1,Not satisfied,negative
+Sneha Reddy,user141@example.com,User,1,E-market - Very confusing interface,2,Recipe section - Very confusing interface,2,Hard to use,1,Very confusing interface,1,Overall website - Checkout failed,negative
+Ananya Singh,user174@example.com,User,2,E-market - Checkout failed,2,Recipe section - Checkout failed,1,Chatbot - Hard to use,1,Contribution section - Slow and buggy,1,Unresponsive chatbot,negative
+Vikram Kumar,user7@example.com,User,1,E-market - Slow and buggy,1,Needs improvement,2,Chatbot - Slow and buggy,1,Unresponsive chatbot,1,Overall website - Bad experience,negative
+Divya Shah,user746@example.com,User,5,Impressive design,4,Recipe section - Worked perfectly,5,Fantastic feature,3,Satisfactory,4,Super helpful interface,positive
+Aisha Khan,user479@example.com,User,5,E-market - Loved it,5,Super helpful interface,5,Loved it,5,Contribution section - Very smooth and easy to use,5,Overall website - Fantastic feature,positive
+Sneha Reddy,user74@example.com,User,4,E-market - Excellent experience,5,Great product selection,5,Great product selection,5,Contribution section - Worked perfectly,5,Overall website - Fantastic feature,positive
+Pooja Joshi,user911@example.com,User,5,E-market - Very intuitive,5,Worked perfectly,4,Chatbot - Very intuitive,3,Decent but nothing special,4,Overall website - Loved it,positive
+Karan Mehta,user814@example.com,User,5,Excellent experience,4,Recipe section - Excellent experience,5,Fast checkout and clean UI,5,Loved it,5,Very smooth and easy to use,positive
+Aisha Khan,user239@example.com,User,3,E-market - Satisfactory,4,Recipe section - Fantastic feature,4,Loved it,3,Okay experience overall,4,Overall website - Great product selection,positive
+Rohan Patel,user146@example.com,User,2,E-market - Slow and buggy,4,Super helpful interface,3,Not bad,2,Hard to use,3,Overall website - Could use some improvements,neutral
+Arjun Das,user793@example.com,User,3,Okay experience overall,3,Recipe section - Decent but nothing special,2,Chatbot - Very confusing interface,3,Contribution section - Average experience,3,Overall website - It's fine,neutral
+Rohan Patel,user235@example.com,User,2,Not satisfied,1,Slow and buggy,3,Chatbot - Decent but nothing special,3,Decent but nothing special,2,Overall website - Checkout failed,negative
+Sneha Reddy,user221@example.com,User,5,E-market - Fast checkout and clean UI,5,Fast checkout and clean UI,4,Super helpful interface,4,Contribution section - Very smooth and easy to use,5,Overall website - Great product selection,positive
+Ananya Singh,user924@example.com,User,1,E-market - Hard to use,2,Not satisfied,1,Slow and buggy,1,Contribution section - Terrible design,1,Overall website - Terrible design,negative
+Divya Shah,user501@example.com,User,2,E-market - Bad experience,3,Recipe section - Decent but nothing special,3,Chatbot - Average experience,3,Could be better,2,Very confusing interface,negative
+Divya Shah,user133@example.com,User,2,E-market - Did not work properly,4,Recipe section - Loved it,3,Satisfactory,3,Decent but nothing special,3,Average experience,neutral
+Rahul Verma,user991@example.com,User,3,E-market - It's fine,2,Recipe section - Terrible design,3,Chatbot - Satisfactory,1,Not satisfied,2,Overall website - Very confusing interface,negative
+Ananya Singh,user775@example.com,User,1,Needs improvement,3,Not bad,1,Chatbot - Slow and buggy,2,Contribution section - Checkout failed,2,Overall website - Slow and buggy,negative
+Ananya Singh,user186@example.com,User,4,Excellent experience,2,Terrible design,4,Worked perfectly,4,Contribution section - Great product selection,3,Overall website - Decent but nothing special,neutral
+Karan Mehta,user42@example.com,User,1,Slow and buggy,2,Did not work properly,2,Chatbot - Very confusing interface,1,Did not work properly,1,Very confusing interface,negative
+Vikram Kumar,user697@example.com,User,3,Could be better,1,Unresponsive chatbot,1,Terrible design,3,Could use some improvements,2,Overall website - Did not work properly,negative
+Pooja Joshi,user109@example.com,User,2,E-market - Hard to use,2,Checkout failed,2,Did not work properly,1,Hard to use,2,Unresponsive chatbot,negative
+Pooja Joshi,user589@example.com,User,4,Worked perfectly,2,Recipe section - Terrible design,2,Chatbot - Checkout failed,2,Very confusing interface,3,Overall website - Not bad,neutral
+Sneha Reddy,user57@example.com,User,4,E-market - Impressive design,2,Needs improvement,3,Chatbot - Could be better,2,Not satisfied,3,Overall website - Decent but nothing special,neutral
+Pooja Joshi,user406@example.com,User,2,Unresponsive chatbot,3,Satisfactory,2,Chatbot - Terrible design,4,Contribution section - Fast checkout and clean UI,3,Satisfactory,neutral
+Ananya Singh,user443@example.com,User,1,E-market - Terrible design,2,Hard to use,1,Chatbot - Bad experience,1,Contribution section - Checkout failed,1,Overall website - Slow and buggy,negative
+Rohan Patel,user758@example.com,User,3,Okay experience overall,2,Very confusing interface,2,Chatbot - Not satisfied,3,Could use some improvements,3,Overall website - Okay experience overall,neutral
+Rohan Patel,user998@example.com,User,1,Needs improvement,1,Did not work properly,2,Chatbot - Bad experience,1,Contribution section - Hard to use,1,Checkout failed,negative
+Sneha Reddy,user25@example.com,User,1,Checkout failed,1,Not satisfied,1,Did not work properly,2,Did not work properly,1,Overall website - Checkout failed,negative
+Divya Shah,user468@example.com,User,1,Needs improvement,2,Recipe section - Checkout failed,1,Slow and buggy,1,Contribution section - Needs improvement,1,Needs improvement,negative
+Rohan Patel,user540@example.com,User,5,E-market - Loved it,5,Great product selection,5,Chatbot - Great product selection,5,Contribution section - Loved it,5,Overall website - Worked perfectly,positive
+Karan Mehta,user532@example.com,User,4,Worked perfectly,5,Recipe section - Excellent experience,5,Very intuitive,5,Contribution section - Great product selection,5,Overall website - Worked perfectly,positive
+Pooja Joshi,user619@example.com,User,3,E-market - Could be better,3,Recipe section - It's fine,3,It's fine,4,Contribution section - Great product selection,4,Overall website - Excellent experience,positive
+Divya Shah,user695@example.com,User,3,Average experience,3,Recipe section - Not bad,2,Chatbot - Did not work properly,2,Contribution section - Hard to use,3,Could use some improvements,neutral
+Vikram Kumar,user927@example.com,User,1,Slow and buggy,1,Checkout failed,1,Chatbot - Hard to use,2,Contribution section - Needs improvement,1,Overall website - Very confusing interface,negative
+Rahul Verma,user339@example.com,User,3,Average experience,4,Recipe section - Great product selection,3,Chatbot - It's fine,4,Contribution section - Fantastic feature,4,Overall website - Fantastic feature,positive
+Rahul Verma,user52@example.com,User,3,It's fine,1,Slow and buggy,3,Chatbot - It's fine,2,Contribution section - Slow and buggy,2,Overall website - Slow and buggy,negative
+Divya Shah,user508@example.com,User,5,Loved it,5,Worked perfectly,4,Fast checkout and clean UI,4,Contribution section - Loved it,4,Overall website - Amazing recipes and service,positive
+Divya Shah,user517@example.com,User,4,E-market - Amazing recipes and service,4,Recipe section - Great product selection,4,Fantastic feature,3,Contribution section - Decent but nothing special,4,Amazing recipes and service,positive
+Aisha Khan,user921@example.com,User,5,E-market - Amazing recipes and service,5,Very intuitive,5,Great product selection,5,Loved it,5,Loved it,positive
+Sneha Reddy,user782@example.com,User,4,E-market - Fast checkout and clean UI,3,Could be better,5,Great product selection,5,Impressive design,4,Overall website - Very intuitive,positive
+Sneha Reddy,user265@example.com,User,3,E-market - Not bad,3,Recipe section - Okay experience overall,4,Fantastic feature,3,Not bad,4,Overall website - Loved it,positive
+Pooja Joshi,user818@example.com,User,1,E-market - Did not work properly,1,Recipe section - Terrible design,1,Chatbot - Not satisfied,1,Contribution section - Checkout failed,1,Needs improvement,negative
+Pooja Joshi,user711@example.com,User,4,E-market - Impressive design,5,Recipe section - Amazing recipes and service,4,Chatbot - Impressive design,4,Super helpful interface,5,Excellent experience,positive
+Karan Mehta,user683@example.com,User,1,Checkout failed,2,Slow and buggy,1,Not satisfied,1,Unresponsive chatbot,1,Overall website - Unresponsive chatbot,negative
+Sneha Reddy,user833@example.com,User,4,Loved it,4,Fast checkout and clean UI,4,Fantastic feature,3,Contribution section - It's fine,3,Could be better,neutral
+Pooja Joshi,user519@example.com,User,3,It's fine,2,Recipe section - Did not work properly,4,Chatbot - Fantastic feature,2,Contribution section - Slow and buggy,3,Average experience,neutral
+Rahul Verma,user448@example.com,User,5,E-market - Impressive design,4,Great product selection,5,Excellent experience,4,Contribution section - Fantastic feature,4,Amazing recipes and service,positive
+Divya Shah,user19@example.com,User,2,Did not work properly,3,Could use some improvements,2,Chatbot - Checkout failed,2,Contribution section - Very confusing interface,2,Overall website - Needs improvement,negative
+Aisha Khan,user716@example.com,User,2,Needs improvement,2,Did not work properly,2,Needs improvement,2,Contribution section - Hard to use,2,Overall website - Very confusing interface,negative
+Arjun Das,user484@example.com,User,1,E-market - Very confusing interface,3,Recipe section - Could use some improvements,3,Chatbot - Decent but nothing special,2,Contribution section - Hard to use,2,Needs improvement,negative
+Ananya Singh,user569@example.com,User,5,Loved it,5,Recipe section - Fast checkout and clean UI,5,Chatbot - Worked perfectly,4,Very intuitive,5,Overall website - Loved it,positive
+Aisha Khan,user434@example.com,User,2,E-market - Did not work properly,4,Recipe section - Very intuitive,4,Chatbot - Very intuitive,4,Contribution section - Very intuitive,3,Overall website - Okay experience overall,neutral
+Karan Mehta,user368@example.com,User,2,Unresponsive chatbot,2,Recipe section - Slow and buggy,3,Could use some improvements,2,Contribution section - Checkout failed,3,Overall website - Average experience,neutral
+Divya Shah,user84@example.com,User,4,Very intuitive,5,Impressive design,5,Chatbot - Fantastic feature,3,Okay experience overall,4,Great product selection,positive
+Aisha Khan,user62@example.com,User,1,E-market - Unresponsive chatbot,2,Unresponsive chatbot,2,Chatbot - Terrible design,1,Contribution section - Unresponsive chatbot,1,Overall website - Hard to use,negative
+Sneha Reddy,user639@example.com,User,1,E-market - Terrible design,1,Recipe section - Checkout failed,2,Chatbot - Terrible design,1,Needs improvement,1,Overall website - Checkout failed,negative
+Vikram Kumar,user273@example.com,User,2,E-market - Checkout failed,4,Loved it,2,Hard to use,2,Bad experience,3,Satisfactory,neutral
+Aisha Khan,user286@example.com,User,4,Amazing recipes and service,5,Loved it,5,Chatbot - Excellent experience,5,Contribution section - Super helpful interface,5,Overall website - Excellent experience,positive
+Rohan Patel,user361@example.com,User,1,E-market - Not satisfied,1,Checkout failed,2,Chatbot - Not satisfied,1,Contribution section - Bad experience,2,Overall website - Did not work properly,negative
+Rahul Verma,user355@example.com,User,4,Fast checkout and clean UI,5,Amazing recipes and service,5,Impressive design,5,Contribution section - Worked perfectly,5,Overall website - Great product selection,positive
+Sneha Reddy,user457@example.com,User,4,E-market - Fantastic feature,5,Recipe section - Fast checkout and clean UI,4,Chatbot - Excellent experience,5,Contribution section - Super helpful interface,5,Overall website - Very intuitive,positive
+Sneha Reddy,user279@example.com,User,2,E-market - Not satisfied,3,Recipe section - Average experience,3,Chatbot - It's fine,4,Very intuitive,3,Satisfactory,neutral
+Ananya Singh,user13@example.com,User,1,E-market - Bad experience,2,Slow and buggy,2,Chatbot - Not satisfied,1,Contribution section - Very confusing interface,1,Overall website - Very confusing interface,negative
+Vikram Kumar,user183@example.com,User,1,Checkout failed,3,Okay experience overall,1,Chatbot - Bad experience,3,Satisfactory,2,Overall website - Checkout failed,negative
+Divya Shah,user369@example.com,User,3,E-market - Decent but nothing special,3,Recipe section - Could be better,2,Checkout failed,2,Contribution section - Needs improvement,2,Bad experience,negative
+Rohan Patel,user882@example.com,User,1,Needs improvement,2,Recipe section - Terrible design,1,Terrible design,1,Contribution section - Terrible design,1,Bad experience,negative
+Ananya Singh,user616@example.com,User,4,E-market - Loved it,4,Recipe section - Fast checkout and clean UI,3,Could be better,4,Contribution section - Great product selection,3,Overall website - Decent but nothing special,neutral
+Arjun Das,user224@example.com,User,3,Could be better,3,Recipe section - Average experience,2,Needs improvement,2,Contribution section - Terrible design,2,Overall website - Not satisfied,negative
+Divya Shah,user573@example.com,User,1,E-market - Unresponsive chatbot,2,Recipe section - Hard to use,2,Checkout failed,1,Did not work properly,1,Overall website - Bad experience,negative
+Arjun Das,user971@example.com,User,3,E-market - Average experience,4,Super helpful interface,2,Chatbot - Slow and buggy,2,Unresponsive chatbot,3,Overall website - Could be better,neutral
+Arjun Das,user654@example.com,User,4,Loved it,3,Recipe section - Okay experience overall,3,Chatbot - Could use some improvements,2,Contribution section - Checkout failed,3,Overall website - It's fine,neutral
+Karan Mehta,user546@example.com,User,4,E-market - Super helpful interface,3,Okay experience overall,3,Chatbot - It's fine,4,Fantastic feature,4,Overall website - Great product selection,positive
+Rohan Patel,user583@example.com,User,1,E-market - Unresponsive chatbot,1,Checkout failed,1,Chatbot - Not satisfied,1,Slow and buggy,1,Overall website - Terrible design,negative
+Karan Mehta,user634@example.com,User,3,E-market - Not bad,2,Recipe section - Checkout failed,2,Hard to use,3,Contribution section - It's fine,3,Average experience,neutral
+Divya Shah,user177@example.com,User,1,Bad experience,1,Hard to use,3,Average experience,3,Contribution section - Could use some improvements,2,Overall website - Hard to use,negative
+Aisha Khan,user666@example.com,User,4,E-market - Super helpful interface,4,Recipe section - Worked perfectly,5,Chatbot - Worked perfectly,5,Contribution section - Amazing recipes and service,5,Overall website - Amazing recipes and service,positive
+Vikram Kumar,user674@example.com,User,3,E-market - Could use some improvements,5,Very intuitive,5,Worked perfectly,5,Excellent experience,4,Overall website - Great product selection,positive
+Vikram Kumar,user586@example.com,User,3,Decent but nothing special,2,Recipe section - Bad experience,3,Chatbot - It's fine,4,Worked perfectly,3,Not bad,neutral
+Karan Mehta,user874@example.com,User,2,E-market - Checkout failed,1,Checkout failed,2,Chatbot - Terrible design,1,Needs improvement,1,Hard to use,negative
+Aisha Khan,user394@example.com,User,5,E-market - Fantastic feature,5,Recipe section - Fast checkout and clean UI,5,Chatbot - Loved it,5,Contribution section - Very smooth and easy to use,5,Overall website - Super helpful interface,positive
+Divya Shah,user164@example.com,User,2,E-market - Did not work properly,1,Terrible design,1,Chatbot - Checkout failed,3,Contribution section - Okay experience overall,2,Not satisfied,negative
+Aisha Khan,user249@example.com,User,3,E-market - Could be better,4,Recipe section - Very smooth and easy to use,4,Chatbot - Great product selection,4,Contribution section - Fantastic feature,3,Overall website - Average experience,neutral
+Rahul Verma,user635@example.com,User,3,E-market - Could use some improvements,3,It's fine,4,Chatbot - Loved it,4,Contribution section - Very intuitive,3,Overall website - Could use some improvements,neutral
+Divya Shah,user886@example.com,User,1,Checkout failed,3,Recipe section - Satisfactory,2,Slow and buggy,3,It's fine,2,Did not work properly,negative
+Sneha Reddy,user670@example.com,User,2,Did not work properly,3,Not bad,2,Hard to use,4,Very smooth and easy to use,3,Overall website - Satisfactory,neutral
+Rahul Verma,user376@example.com,User,1,Terrible design,3,Recipe section - Average experience,2,Chatbot - Very confusing interface,1,Slow and buggy,2,Slow and buggy,negative
+Sneha Reddy,user413@example.com,User,4,E-market - Very intuitive,2,Needs improvement,3,Chatbot - Satisfactory,3,Could use some improvements,3,Could be better,neutral
+Rohan Patel,user75@example.com,User,3,E-market - Average experience,1,Recipe section - Not satisfied,3,Not bad,3,Contribution section - Okay experience overall,2,Overall website - Unresponsive chatbot,negative
+Rahul Verma,user114@example.com,User,4,E-market - Fast checkout and clean UI,3,Decent but nothing special,4,Fast checkout and clean UI,4,Impressive design,3,Overall website - It's fine,neutral
+Divya Shah,user599@example.com,User,4,E-market - Great product selection,5,Fast checkout and clean UI,5,Loved it,4,Impressive design,5,Overall website - Very intuitive,positive
+Ananya Singh,user962@example.com,User,1,Terrible design,3,Recipe section - Okay experience overall,3,Not bad,1,Contribution section - Bad experience,2,Overall website - Slow and buggy,negative
+Vikram Kumar,user391@example.com,User,4,E-market - Worked perfectly,5,Fantastic feature,4,Chatbot - Fantastic feature,5,Contribution section - Excellent experience,5,Overall website - Great product selection,positive
+Karan Mehta,user105@example.com,User,3,E-market - Could be better,2,Recipe section - Needs improvement,3,Chatbot - Average experience,3,Satisfactory,3,Overall website - It's fine,neutral
+Rohan Patel,user115@example.com,User,4,E-market - Super helpful interface,4,Fast checkout and clean UI,4,Fast checkout and clean UI,5,Excellent experience,5,Overall website - Worked perfectly,positive
+Rohan Patel,user418@example.com,User,3,E-market - Satisfactory,2,Terrible design,1,Chatbot - Not satisfied,1,Hard to use,2,Hard to use,negative
+Vikram Kumar,user526@example.com,User,1,E-market - Very confusing interface,1,Needs improvement,1,Bad experience,2,Did not work properly,1,Bad experience,negative
+Karan Mehta,user458@example.com,User,5,Worked perfectly,5,Fantastic feature,5,Chatbot - Fast checkout and clean UI,5,Contribution section - Excellent experience,5,Amazing recipes and service,positive
+Arjun Das,user410@example.com,User,5,E-market - Great product selection,4,Recipe section - Super helpful interface,5,Very smooth and easy to use,5,Fantastic feature,4,Super helpful interface,positive
+Divya Shah,user93@example.com,User,2,E-market - Terrible design,2,Recipe section - Not satisfied,2,Chatbot - Did not work properly,3,It's fine,2,Overall website - Not satisfied,negative
+Vikram Kumar,user931@example.com,User,2,E-market - Terrible design,2,Checkout failed,2,Hard to use,2,Unresponsive chatbot,2,Overall website - Hard to use,negative
+Rohan Patel,user90@example.com,User,1,Very confusing interface,3,Recipe section - Okay experience overall,3,Chatbot - Satisfactory,1,Not satisfied,2,Slow and buggy,negative
+Pooja Joshi,user337@example.com,User,4,E-market - Worked perfectly,4,Excellent experience,4,Chatbot - Impressive design,3,Decent but nothing special,4,Very intuitive,positive
+Pooja Joshi,user989@example.com,User,1,E-market - Bad experience,1,Hard to use,1,Chatbot - Not satisfied,1,Very confusing interface,2,Unresponsive chatbot,negative
+Sneha Reddy,user922@example.com,User,1,E-market - Terrible design,1,Recipe section - Hard to use,1,Chatbot - Checkout failed,2,Not satisfied,1,Overall website - Terrible design,negative
+Karan Mehta,user934@example.com,User,4,Great product selection,4,Very smooth and easy to use,2,Chatbot - Needs improvement,2,Terrible design,3,It's fine,neutral
+Vikram Kumar,user606@example.com,User,4,E-market - Excellent experience,2,Recipe section - Not satisfied,3,Satisfactory,4,Contribution section - Very smooth and easy to use,3,Could use some improvements,neutral
+Karan Mehta,user594@example.com,User,1,E-market - Slow and buggy,1,Unresponsive chatbot,1,Chatbot - Unresponsive chatbot,1,Not satisfied,1,Overall website - Unresponsive chatbot,negative
+Sneha Reddy,user612@example.com,User,4,Very smooth and easy to use,3,Recipe section - It's fine,5,Chatbot - Amazing recipes and service,5,Contribution section - Super helpful interface,4,Very intuitive,positive
+Rahul Verma,user95@example.com,User,3,E-market - Not bad,2,Recipe section - Very confusing interface,4,Chatbot - Loved it,3,Contribution section - Decent but nothing special,3,Could use some improvements,neutral
+Karan Mehta,user12@example.com,User,4,Amazing recipes and service,2,Unresponsive chatbot,4,Chatbot - Great product selection,3,Could use some improvements,3,Overall website - Could use some improvements,neutral
+Arjun Das,user397@example.com,User,5,Fantastic feature,5,Amazing recipes and service,5,Chatbot - Fantastic feature,5,Impressive design,5,Overall website - Worked perfectly,positive
+Arjun Das,user534@example.com,User,1,Hard to use,1,Recipe section - Slow and buggy,2,Chatbot - Needs improvement,2,Contribution section - Bad experience,1,Slow and buggy,negative
+Sneha Reddy,user44@example.com,User,4,Fantastic feature,3,Not bad,2,Bad experience,2,Hard to use,3,Overall website - Decent but nothing special,neutral
+Sneha Reddy,user43@example.com,User,4,E-market - Very intuitive,5,Amazing recipes and service,5,Very smooth and easy to use,5,Contribution section - Worked perfectly,5,Fantastic feature,positive
+Karan Mehta,user330@example.com,User,4,Fantastic feature,4,Loved it,5,Chatbot - Impressive design,5,Very intuitive,5,Overall website - Great product selection,positive
+Rahul Verma,user168@example.com,User,2,Not satisfied,2,Recipe section - Hard to use,2,Chatbot - Needs improvement,4,Excellent experience,3,Overall website - Satisfactory,neutral
+Rohan Patel,user498@example.com,User,1,E-market - Needs improvement,1,Terrible design,2,Chatbot - Needs improvement,1,Contribution section - Did not work properly,1,Overall website - Needs improvement,negative
+Sneha Reddy,user877@example.com,User,2,Did not work properly,1,Hard to use,3,Chatbot - Satisfactory,3,Contribution section - Could use some improvements,2,Overall website - Did not work properly,negative
+Ananya Singh,user598@example.com,User,3,E-market - Satisfactory,3,Satisfactory,5,Very intuitive,4,Very intuitive,4,Great product selection,positive
+Sneha Reddy,user757@example.com,User,1,Needs improvement,1,Hard to use,2,Terrible design,1,Slow and buggy,2,Overall website - Very confusing interface,negative
+Divya Shah,user101@example.com,User,1,E-market - Hard to use,1,Checkout failed,1,Slow and buggy,1,Contribution section - Not satisfied,1,Needs improvement,negative
+Rahul Verma,user427@example.com,User,2,E-market - Bad experience,1,Recipe section - Needs improvement,2,Chatbot - Needs improvement,2,Contribution section - Checkout failed,2,Terrible design,negative
+Arjun Das,user179@example.com,User,5,E-market - Very smooth and easy to use,4,Recipe section - Very intuitive,3,Could be better,5,Contribution section - Impressive design,4,Excellent experience,positive
+Vikram Kumar,user445@example.com,User,2,Checkout failed,2,Checkout failed,2,Chatbot - Slow and buggy,3,Satisfactory,2,Terrible design,negative
+Vikram Kumar,user417@example.com,User,3,Satisfactory,3,Recipe section - Could use some improvements,1,Unresponsive chatbot,2,Bad experience,2,Terrible design,negative
+Pooja Joshi,user871@example.com,User,1,E-market - Hard to use,1,Recipe section - Unresponsive chatbot,1,Chatbot - Terrible design,2,Contribution section - Needs improvement,1,Bad experience,negative
+Arjun Das,user883@example.com,User,2,Not satisfied,2,Terrible design,2,Needs improvement,3,Contribution section - Could use some improvements,2,Overall website - Terrible design,negative
+Aisha Khan,user681@example.com,User,2,E-market - Unresponsive chatbot,1,Recipe section - Unresponsive chatbot,1,Needs improvement,1,Slow and buggy,2,Needs improvement,negative
+Rohan Patel,user178@example.com,User,5,Loved it,3,Satisfactory,3,Satisfactory,5,Worked perfectly,4,Very smooth and easy to use,positive
+Rohan Patel,user396@example.com,User,5,Great product selection,4,Recipe section - Amazing recipes and service,4,Excellent experience,4,Contribution section - Very intuitive,5,Overall website - Very smooth and easy to use,positive
+Ananya Singh,user912@example.com,User,3,Okay experience overall,4,Worked perfectly,4,Chatbot - Excellent experience,3,Could be better,4,Overall website - Great product selection,positive
+Arjun Das,user794@example.com,User,5,E-market - Worked perfectly,5,Excellent experience,4,Chatbot - Worked perfectly,4,Fast checkout and clean UI,5,Great product selection,positive
+Vikram Kumar,user961@example.com,User,5,Amazing recipes and service,5,Recipe section - Loved it,5,Chatbot - Amazing recipes and service,5,Contribution section - Amazing recipes and service,5,Fantastic feature,positive
+Divya Shah,user685@example.com,User,5,E-market - Loved it,4,Impressive design,5,Worked perfectly,4,Fantastic feature,5,Overall website - Amazing recipes and service,positive
+Sneha Reddy,user384@example.com,User,4,Amazing recipes and service,5,Recipe section - Worked perfectly,5,Chatbot - Amazing recipes and service,5,Amazing recipes and service,5,Excellent experience,positive
+Karan Mehta,user957@example.com,User,5,Very smooth and easy to use,5,Recipe section - Worked perfectly,4,Chatbot - Great product selection,5,Great product selection,5,Overall website - Worked perfectly,positive
+Vikram Kumar,user752@example.com,User,4,Loved it,5,Recipe section - Great product selection,4,Great product selection,4,Contribution section - Very intuitive,5,Loved it,positive
+Aisha Khan,user258@example.com,User,3,Okay experience overall,4,Worked perfectly,4,Very smooth and easy to use,4,Worked perfectly,4,Overall website - Worked perfectly,positive
+Aisha Khan,user539@example.com,User,2,Slow and buggy,4,Loved it,2,Chatbot - Checkout failed,2,Contribution section - Did not work properly,3,Average experience,neutral
+Rohan Patel,user336@example.com,User,5,E-market - Amazing recipes and service,3,Satisfactory,5,Chatbot - Super helpful interface,5,Contribution section - Very intuitive,4,Excellent experience,positive
+Arjun Das,user16@example.com,User,2,Very confusing interface,4,Great product selection,4,Chatbot - Great product selection,4,Contribution section - Great product selection,3,Okay experience overall,neutral
+Ananya Singh,user325@example.com,User,3,Satisfactory,4,Recipe section - Very intuitive,4,Impressive design,3,Contribution section - It's fine,3,Overall website - Could be better,neutral
+Karan Mehta,user759@example.com,User,3,E-market - Could be better,1,Bad experience,2,Chatbot - Slow and buggy,2,Bad experience,2,Needs improvement,negative
+Arjun Das,user223@example.com,User,1,Unresponsive chatbot,1,Very confusing interface,2,Did not work properly,2,Unresponsive chatbot,1,Slow and buggy,negative
+Rahul Verma,user180@example.com,User,5,Very intuitive,4,Amazing recipes and service,4,Chatbot - Very intuitive,4,Super helpful interface,5,Overall website - Very intuitive,positive
+Vikram Kumar,user984@example.com,User,5,Very intuitive,4,Super helpful interface,5,Chatbot - Very intuitive,4,Very smooth and easy to use,5,Very intuitive,positive
+Divya Shah,user23@example.com,User,2,E-market - Did not work properly,2,Terrible design,3,Chatbot - It's fine,3,Satisfactory,3,Overall website - Could use some improvements,neutral
+Arjun Das,user357@example.com,User,3,E-market - Decent but nothing special,3,Not bad,1,Needs improvement,1,Slow and buggy,2,Slow and buggy,negative
+Pooja Joshi,user667@example.com,User,2,E-market - Very confusing interface,2,Needs improvement,1,Did not work properly,2,Hard to use,1,Terrible design,negative
+Arjun Das,user862@example.com,User,5,Amazing recipes and service,5,Recipe section - Very intuitive,5,Loved it,4,Contribution section - Great product selection,5,Excellent experience,positive
+Aisha Khan,user341@example.com,User,4,Super helpful interface,4,Amazing recipes and service,5,Loved it,5,Fast checkout and clean UI,4,Overall website - Great product selection,positive
+Karan Mehta,user432@example.com,User,4,E-market - Impressive design,5,Fast checkout and clean UI,4,Worked perfectly,5,Contribution section - Loved it,5,Super helpful interface,positive
+Aisha Khan,user552@example.com,User,2,Checkout failed,2,Recipe section - Slow and buggy,1,Did not work properly,2,Contribution section - Bad experience,2,Overall website - Terrible design,negative
+Rahul Verma,user834@example.com,User,3,Okay experience overall,3,Recipe section - Not bad,4,Very intuitive,3,Average experience,3,Overall website - Satisfactory,neutral
+Karan Mehta,user204@example.com,User,1,Terrible design,2,Recipe section - Checkout failed,3,Okay experience overall,2,Hard to use,2,Needs improvement,negative
+Sneha Reddy,user631@example.com,User,2,E-market - Slow and buggy,2,Did not work properly,3,Chatbot - It's fine,3,Not bad,2,Unresponsive chatbot,negative
+Pooja Joshi,user94@example.com,User,1,Terrible design,1,Checkout failed,2,Chatbot - Checkout failed,2,Not satisfied,1,Overall website - Did not work properly,negative
+Rohan Patel,user559@example.com,User,5,Very intuitive,5,Impressive design,5,Chatbot - Very smooth and easy to use,5,Contribution section - Excellent experience,4,Fantastic feature,positive
+Rohan Patel,user69@example.com,User,3,Satisfactory,2,Recipe section - Checkout failed,2,Checkout failed,3,Contribution section - Could be better,3,Could use some improvements,neutral
+Vikram Kumar,user623@example.com,User,4,E-market - Fast checkout and clean UI,2,Unresponsive chatbot,4,Impressive design,3,Contribution section - Average experience,3,Overall website - It's fine,neutral
+Ananya Singh,user285@example.com,User,2,Slow and buggy,4,Recipe section - Very intuitive,2,Chatbot - Hard to use,2,Checkout failed,3,It's fine,neutral
+Pooja Joshi,user845@example.com,User,5,E-market - Great product selection,5,Very intuitive,4,Chatbot - Amazing recipes and service,4,Contribution section - Impressive design,5,Overall website - Worked perfectly,positive
+Ananya Singh,user435@example.com,User,3,Could be better,2,Recipe section - Hard to use,4,Chatbot - Worked perfectly,4,Contribution section - Amazing recipes and service,3,Overall website - It's fine,neutral
+Vikram Kumar,user154@example.com,User,1,Checkout failed,3,Could use some improvements,1,Bad experience,2,Contribution section - Unresponsive chatbot,2,Overall website - Hard to use,negative
+Vikram Kumar,user76@example.com,User,1,E-market - Hard to use,2,Recipe section - Terrible design,2,Hard to use,3,It's fine,2,Bad experience,negative
+Arjun Das,user731@example.com,User,1,E-market - Very confusing interface,2,Bad experience,2,Chatbot - Not satisfied,2,Not satisfied,1,Overall website - Hard to use,negative
+Ananya Singh,user447@example.com,User,4,E-market - Amazing recipes and service,3,Recipe section - Satisfactory,3,Chatbot - Could be better,2,Very confusing interface,3,Overall website - Decent but nothing special,neutral
+Ananya Singh,user189@example.com,User,4,E-market - Loved it,5,Recipe section - Amazing recipes and service,4,Fast checkout and clean UI,5,Very smooth and easy to use,5,Fast checkout and clean UI,positive
+Rohan Patel,user272@example.com,User,5,E-market - Great product selection,5,Recipe section - Excellent experience,4,Super helpful interface,5,Very intuitive,5,Impressive design,positive
+Karan Mehta,user237@example.com,User,3,Could be better,1,Recipe section - Slow and buggy,1,Chatbot - Bad experience,2,Very confusing interface,2,Unresponsive chatbot,negative
+Vikram Kumar,user488@example.com,User,5,E-market - Worked perfectly,4,Fantastic feature,4,Super helpful interface,5,Contribution section - Great product selection,4,Overall website - Fantastic feature,positive
+Divya Shah,user118@example.com,User,4,E-market - Impressive design,3,Okay experience overall,3,Chatbot - Could be better,4,Very smooth and easy to use,4,Super helpful interface,positive
+Karan Mehta,user944@example.com,User,1,E-market - Checkout failed,2,Recipe section - Unresponsive chatbot,1,Chatbot - Slow and buggy,1,Needs improvement,1,Overall website - Terrible design,negative
+Divya Shah,user513@example.com,User,4,Fast checkout and clean UI,3,Decent but nothing special,5,Worked perfectly,3,Contribution section - Not bad,4,Overall website - Fantastic feature,positive
+Sneha Reddy,user826@example.com,User,5,E-market - Super helpful interface,5,Recipe section - Worked perfectly,5,Chatbot - Fast checkout and clean UI,4,Very smooth and easy to use,5,Overall website - Great product selection,positive
+Rohan Patel,user592@example.com,User,1,Needs improvement,3,Okay experience overall,3,Chatbot - Average experience,3,Average experience,2,Needs improvement,negative
+Karan Mehta,user127@example.com,User,3,E-market - Could use some improvements,3,It's fine,3,Chatbot - Decent but nothing special,1,Unresponsive chatbot,2,Checkout failed,negative
+Aisha Khan,user117@example.com,User,1,Hard to use,3,Recipe section - Could be better,3,Chatbot - It's fine,3,Contribution section - Average experience,2,Overall website - Slow and buggy,negative
+Karan Mehta,user474@example.com,User,5,Fast checkout and clean UI,5,Recipe section - Super helpful interface,4,Chatbot - Super helpful interface,4,Contribution section - Fast checkout and clean UI,4,Overall website - Super helpful interface,positive
+Divya Shah,user694@example.com,User,1,Terrible design,1,Terrible design,1,Chatbot - Unresponsive chatbot,2,Slow and buggy,1,Unresponsive chatbot,negative
+Rahul Verma,user58@example.com,User,1,E-market - Needs improvement,1,Bad experience,2,Chatbot - Checkout failed,1,Contribution section - Needs improvement,2,Unresponsive chatbot,negative
+Aisha Khan,user864@example.com,User,5,E-market - Great product selection,5,Recipe section - Fantastic feature,5,Amazing recipes and service,5,Contribution section - Impressive design,5,Impressive design,positive
+Rohan Patel,user913@example.com,User,4,Great product selection,5,Recipe section - Loved it,5,Very smooth and easy to use,5,Very smooth and easy to use,5,Worked perfectly,positive
+Vikram Kumar,user370@example.com,User,1,Terrible design,3,Recipe section - Could use some improvements,3,Decent but nothing special,2,Needs improvement,2,Did not work properly,negative
+Rohan Patel,user269@example.com,User,2,Hard to use,1,Very confusing interface,2,Chatbot - Terrible design,3,Average experience,2,Overall website - Needs improvement,negative
+Vikram Kumar,user47@example.com,User,2,Unresponsive chatbot,2,Terrible design,2,Chatbot - Very confusing interface,3,Decent but nothing special,3,Okay experience overall,neutral
+Rohan Patel,user350@example.com,User,1,E-market - Did not work properly,1,Terrible design,1,Chatbot - Hard to use,1,Checkout failed,1,Checkout failed,negative
+Aisha Khan,user196@example.com,User,3,E-market - Okay experience overall,1,Hard to use,2,Chatbot - Checkout failed,3,Satisfactory,2,Overall website - Terrible design,negative
+Divya Shah,user1000@example.com,User,1,Needs improvement,2,Recipe section - Very confusing interface,2,Chatbot - Bad experience,2,Contribution section - Needs improvement,1,Overall website - Very confusing interface,negative
+Aisha Khan,user835@example.com,User,2,E-market - Terrible design,1,Recipe section - Unresponsive chatbot,2,Chatbot - Bad experience,2,Contribution section - Unresponsive chatbot,1,Overall website - Bad experience,negative
+Vikram Kumar,user737@example.com,User,3,E-market - Could be better,3,Okay experience overall,5,Impressive design,4,Fast checkout and clean UI,4,Overall website - Fantastic feature,positive
+Sneha Reddy,user264@example.com,User,5,E-market - Worked perfectly,5,Fast checkout and clean UI,5,Great product selection,4,Impressive design,5,Overall website - Very smooth and easy to use,positive
+Pooja Joshi,user444@example.com,User,4,E-market - Fast checkout and clean UI,4,Recipe section - Very smooth and easy to use,4,Super helpful interface,5,Contribution section - Amazing recipes and service,5,Very smooth and easy to use,positive
+Divya Shah,user676@example.com,User,2,E-market - Terrible design,3,Recipe section - Not bad,2,Chatbot - Checkout failed,1,Contribution section - Not satisfied,2,Overall website - Unresponsive chatbot,negative
+Ananya Singh,user305@example.com,User,1,E-market - Did not work properly,1,Terrible design,1,Very confusing interface,2,Contribution section - Did not work properly,1,Needs improvement,negative
+Arjun Das,user342@example.com,User,3,Okay experience overall,3,Recipe section - Not bad,4,Chatbot - Impressive design,3,It's fine,3,Overall website - Decent but nothing special,neutral
+Vikram Kumar,user967@example.com,User,3,E-market - It's fine,2,Recipe section - Bad experience,3,Average experience,4,Fantastic feature,3,Okay experience overall,neutral
+Ananya Singh,user150@example.com,User,4,Very smooth and easy to use,5,Recipe section - Super helpful interface,5,Very smooth and easy to use,5,Contribution section - Super helpful interface,5,Worked perfectly,positive
+Rohan Patel,user125@example.com,User,4,E-market - Excellent experience,5,Recipe section - Fast checkout and clean UI,5,Fantastic feature,5,Worked perfectly,5,Overall website - Fantastic feature,positive
+Aisha Khan,user787@example.com,User,5,E-market - Very smooth and easy to use,5,Impressive design,3,Chatbot - Not bad,3,Contribution section - Okay experience overall,4,Overall website - Excellent experience,positive
+Karan Mehta,user51@example.com,User,2,Needs improvement,3,Recipe section - Could be better,3,Chatbot - Not bad,3,Contribution section - Could be better,3,Not bad,neutral
+Rahul Verma,user354@example.com,User,4,E-market - Fantastic feature,4,Recipe section - Impressive design,4,Super helpful interface,4,Contribution section - Fantastic feature,5,Overall website - Impressive design,positive
+Ananya Singh,user928@example.com,User,1,Terrible design,1,Recipe section - Unresponsive chatbot,1,Chatbot - Unresponsive chatbot,2,Contribution section - Did not work properly,1,Overall website - Terrible design,negative
+Arjun Das,user143@example.com,User,2,Checkout failed,4,Recipe section - Fast checkout and clean UI,3,Decent but nothing special,3,Contribution section - Could be better,3,Overall website - Could use some improvements,neutral
+Aisha Khan,user471@example.com,User,3,Decent but nothing special,3,Recipe section - It's fine,1,Slow and buggy,3,Satisfactory,2,Unresponsive chatbot,negative
+Rohan Patel,user400@example.com,User,1,Bad experience,2,Recipe section - Hard to use,3,Chatbot - Average experience,2,Slow and buggy,2,Overall website - Slow and buggy,negative
+Ananya Singh,user626@example.com,User,4,E-market - Fast checkout and clean UI,4,Recipe section - Loved it,4,Great product selection,4,Contribution section - Great product selection,4,Fast checkout and clean UI,positive
+Rahul Verma,user321@example.com,User,5,Very intuitive,4,Recipe section - Fantastic feature,5,Fast checkout and clean UI,3,Contribution section - Okay experience overall,4,Overall website - Fantastic feature,positive
+Divya Shah,user20@example.com,User,1,E-market - Did not work properly,3,Recipe section - Average experience,1,Chatbot - Slow and buggy,1,Contribution section - Unresponsive chatbot,2,Unresponsive chatbot,negative
+Rohan Patel,user810@example.com,User,3,Decent but nothing special,1,Recipe section - Unresponsive chatbot,3,Chatbot - It's fine,2,Contribution section - Bad experience,2,Slow and buggy,negative
+Arjun Das,user791@example.com,User,1,E-market - Hard to use,1,Terrible design,2,Chatbot - Very confusing interface,1,Contribution section - Very confusing interface,1,Overall website - Needs improvement,negative
+Aisha Khan,user809@example.com,User,5,E-market - Very smooth and easy to use,4,Recipe section - Loved it,3,Chatbot - Okay experience overall,3,Satisfactory,4,Overall website - Fantastic feature,positive
+Sneha Reddy,user408@example.com,User,4,E-market - Fantastic feature,3,Satisfactory,5,Very smooth and easy to use,4,Great product selection,4,Super helpful interface,positive
+Arjun Das,user538@example.com,User,5,E-market - Amazing recipes and service,3,Recipe section - Could be better,5,Worked perfectly,5,Contribution section - Fast checkout and clean UI,4,Overall website - Fantastic feature,positive
+Ananya Singh,user621@example.com,User,5,E-market - Fantastic feature,5,Recipe section - Excellent experience,4,Chatbot - Very smooth and easy to use,5,Amazing recipes and service,5,Amazing recipes and service,positive
+Arjun Das,user39@example.com,User,1,Unresponsive chatbot,3,Average experience,1,Chatbot - Not satisfied,1,Contribution section - Slow and buggy,2,Overall website - Not satisfied,negative
+Sneha Reddy,user176@example.com,User,2,Terrible design,2,Terrible design,3,Chatbot - Decent but nothing special,3,Decent but nothing special,2,Overall website - Terrible design,negative
+Arjun Das,user246@example.com,User,5,Super helpful interface,4,Very intuitive,5,Chatbot - Excellent experience,5,Super helpful interface,5,Overall website - Very smooth and easy to use,positive
+Sneha Reddy,user829@example.com,User,2,E-market - Very confusing interface,2,Recipe section - Slow and buggy,2,Needs improvement,1,Hard to use,1,Overall website - Bad experience,negative
+Rohan Patel,user668@example.com,User,4,Fast checkout and clean UI,3,Recipe section - Decent but nothing special,5,Excellent experience,5,Impressive design,4,Overall website - Worked perfectly,positive
+Divya Shah,user755@example.com,User,3,Decent but nothing special,5,Recipe section - Great product selection,3,Chatbot - It's fine,4,Fantastic feature,4,Fast checkout and clean UI,positive
+Vikram Kumar,user859@example.com,User,1,Needs improvement,1,Slow and buggy,2,Chatbot - Checkout failed,1,Contribution section - Very confusing interface,2,Terrible design,negative
+Karan Mehta,user155@example.com,User,1,Unresponsive chatbot,3,Recipe section - Could use some improvements,3,Satisfactory,1,Contribution section - Bad experience,2,Unresponsive chatbot,negative
+Arjun Das,user288@example.com,User,1,E-market - Terrible design,2,Did not work properly,2,Not satisfied,1,Bad experience,1,Overall website - Checkout failed,negative
+Arjun Das,user603@example.com,User,4,Fantastic feature,3,Recipe section - Could use some improvements,3,Chatbot - Average experience,5,Contribution section - Fantastic feature,4,Fast checkout and clean UI,positive
+Arjun Das,user570@example.com,User,4,E-market - Fast checkout and clean UI,5,Very smooth and easy to use,5,Super helpful interface,4,Fast checkout and clean UI,4,Fast checkout and clean UI,positive
+Arjun Das,user744@example.com,User,2,E-market - Checkout failed,2,Did not work properly,2,Hard to use,3,Okay experience overall,2,Overall website - Very confusing interface,negative
+Rohan Patel,user18@example.com,User,2,E-market - Not satisfied,1,Recipe section - Unresponsive chatbot,2,Bad experience,2,Terrible design,1,Hard to use,negative
+Karan Mehta,user128@example.com,User,1,E-market - Bad experience,1,Slow and buggy,1,Slow and buggy,1,Terrible design,1,Overall website - Slow and buggy,negative
+Karan Mehta,user323@example.com,User,1,E-market - Checkout failed,2,Slow and buggy,1,Did not work properly,1,Contribution section - Slow and buggy,1,Very confusing interface,negative
+Arjun Das,user256@example.com,User,5,E-market - Very smooth and easy to use,4,Super helpful interface,4,Impressive design,4,Contribution section - Great product selection,5,Excellent experience,positive
+Rahul Verma,user658@example.com,User,4,Amazing recipes and service,5,Recipe section - Impressive design,5,Excellent experience,4,Contribution section - Excellent experience,5,Great product selection,positive
+Divya Shah,user965@example.com,User,4,Fast checkout and clean UI,5,Recipe section - Amazing recipes and service,4,Fast checkout and clean UI,4,Great product selection,4,Overall website - Excellent experience,positive
+Divya Shah,user191@example.com,User,5,E-market - Excellent experience,5,Recipe section - Excellent experience,4,Chatbot - Super helpful interface,4,Contribution section - Very smooth and easy to use,5,Overall website - Impressive design,positive
+Divya Shah,user116@example.com,User,4,Amazing recipes and service,3,Could use some improvements,4,Chatbot - Fantastic feature,4,Amazing recipes and service,3,Not bad,neutral
+Sneha Reddy,user617@example.com,User,2,E-market - Checkout failed,1,Recipe section - Unresponsive chatbot,1,Unresponsive chatbot,1,Contribution section - Not satisfied,2,Slow and buggy,negative
+Karan Mehta,user607@example.com,User,5,E-market - Very intuitive,5,Worked perfectly,5,Very smooth and easy to use,5,Fantastic feature,5,Overall website - Great product selection,positive
+Vikram Kumar,user181@example.com,User,3,Could use some improvements,3,Okay experience overall,4,Very intuitive,4,Contribution section - Very intuitive,3,Okay experience overall,neutral
+Rahul Verma,user302@example.com,User,5,E-market - Fantastic feature,3,Could use some improvements,5,Super helpful interface,5,Fast checkout and clean UI,4,Great product selection,positive
+Vikram Kumar,user760@example.com,User,2,E-market - Not satisfied,4,Recipe section - Worked perfectly,3,Satisfactory,3,Decent but nothing special,3,It's fine,neutral
+Pooja Joshi,user713@example.com,User,2,Terrible design,2,Recipe section - Unresponsive chatbot,1,Chatbot - Unresponsive chatbot,1,Terrible design,1,Overall website - Did not work properly,negative
+Sneha Reddy,user724@example.com,User,3,Could use some improvements,2,Needs improvement,1,Did not work properly,1,Contribution section - Hard to use,2,Overall website - Checkout failed,negative
+Sneha Reddy,user686@example.com,User,5,Fast checkout and clean UI,4,Worked perfectly,4,Chatbot - Very smooth and easy to use,5,Contribution section - Worked perfectly,4,Overall website - Super helpful interface,positive
+Sneha Reddy,user980@example.com,User,2,Hard to use,1,Recipe section - Slow and buggy,2,Slow and buggy,1,Contribution section - Unresponsive chatbot,1,Unresponsive chatbot,negative
+Arjun Das,user518@example.com,User,3,E-market - Not bad,3,Could use some improvements,4,Amazing recipes and service,3,Contribution section - Could be better,3,Not bad,neutral
+Arjun Das,user985@example.com,User,5,E-market - Worked perfectly,3,Recipe section - Could use some improvements,3,Chatbot - It's fine,3,Could use some improvements,4,Very intuitive,positive
+Pooja Joshi,user46@example.com,User,1,Not satisfied,2,Unresponsive chatbot,1,Chatbot - Did not work properly,1,Hard to use,1,Overall website - Unresponsive chatbot,negative
+Aisha Khan,user910@example.com,User,4,E-market - Very intuitive,5,Recipe section - Very smooth and easy to use,5,Very intuitive,4,Amazing recipes and service,5,Overall website - Fantastic feature,positive
+Divya Shah,user158@example.com,User,2,E-market - Not satisfied,1,Slow and buggy,2,Terrible design,3,Contribution section - It's fine,2,Very confusing interface,negative
+Aisha Khan,user852@example.com,User,4,E-market - Very smooth and easy to use,5,Recipe section - Worked perfectly,5,Fast checkout and clean UI,4,Super helpful interface,5,Overall website - Very intuitive,positive
+Karan Mehta,user172@example.com,User,3,Could use some improvements,2,Needs improvement,1,Checkout failed,3,Contribution section - It's fine,2,Overall website - Unresponsive chatbot,negative
+Ananya Singh,user17@example.com,User,1,E-market - Bad experience,1,Very confusing interface,1,Slow and buggy,1,Terrible design,1,Slow and buggy,negative
+Karan Mehta,user512@example.com,User,1,E-market - Terrible design,1,Bad experience,3,Not bad,2,Not satisfied,2,Overall website - Did not work properly,negative
+Arjun Das,user49@example.com,User,5,Fantastic feature,5,Great product selection,3,Chatbot - Not bad,3,Contribution section - It's fine,4,Overall website - Loved it,positive
+Ananya Singh,user972@example.com,User,3,Okay experience overall,3,Recipe section - Not bad,2,Bad experience,3,It's fine,3,Overall website - Could be better,neutral
+Divya Shah,user941@example.com,User,5,E-market - Excellent experience,3,Satisfactory,5,Loved it,4,Contribution section - Loved it,4,Very smooth and easy to use,positive
+Ananya Singh,user516@example.com,User,2,E-market - Terrible design,1,Recipe section - Hard to use,1,Chatbot - Checkout failed,1,Unresponsive chatbot,1,Overall website - Checkout failed,negative
+Vikram Kumar,user953@example.com,User,2,E-market - Unresponsive chatbot,1,Recipe section - Needs improvement,2,Chatbot - Not satisfied,1,Unresponsive chatbot,1,Hard to use,negative
+Divya Shah,user481@example.com,User,2,Terrible design,1,Hard to use,1,Chatbot - Needs improvement,1,Checkout failed,2,Overall website - Did not work properly,negative
+Vikram Kumar,user284@example.com,User,5,E-market - Very intuitive,5,Recipe section - Fantastic feature,5,Great product selection,5,Fantastic feature,5,Loved it,positive
+Ananya Singh,user719@example.com,User,4,Very smooth and easy to use,4,Recipe section - Very intuitive,4,Very smooth and easy to use,3,Contribution section - Could be better,4,Overall website - Impressive design,positive
+Pooja Joshi,user878@example.com,User,2,Terrible design,2,Recipe section - Bad experience,3,Satisfactory,4,Contribution section - Fast checkout and clean UI,3,Not bad,neutral
+Vikram Kumar,user226@example.com,User,2,E-market - Needs improvement,2,Checkout failed,1,Chatbot - Did not work properly,1,Terrible design,2,Overall website - Unresponsive chatbot,negative
+Aisha Khan,user27@example.com,User,1,E-market - Needs improvement,1,Unresponsive chatbot,2,Did not work properly,2,Unresponsive chatbot,1,Terrible design,negative
+Arjun Das,user955@example.com,User,5,Excellent experience,4,Recipe section - Excellent experience,5,Chatbot - Super helpful interface,3,Decent but nothing special,4,Fast checkout and clean UI,positive
+Karan Mehta,user438@example.com,User,5,Amazing recipes and service,5,Recipe section - Very smooth and easy to use,4,Loved it,4,Great product selection,5,Overall website - Excellent experience,positive
+Vikram Kumar,user952@example.com,User,4,E-market - Loved it,5,Recipe section - Super helpful interface,4,Chatbot - Loved it,5,Contribution section - Fast checkout and clean UI,4,Fast checkout and clean UI,positive
+Rohan Patel,user365@example.com,User,1,Unresponsive chatbot,1,Hard to use,1,Chatbot - Slow and buggy,2,Did not work properly,1,Overall website - Needs improvement,negative
+Rahul Verma,user230@example.com,User,4,E-market - Excellent experience,5,Recipe section - Fantastic feature,5,Excellent experience,5,Worked perfectly,5,Loved it,positive
+Ananya Singh,user38@example.com,User,2,E-market - Terrible design,2,Recipe section - Slow and buggy,1,Terrible design,3,Could use some improvements,2,Bad experience,negative
+Karan Mehta,user966@example.com,User,1,Did not work properly,1,Recipe section - Unresponsive chatbot,1,Unresponsive chatbot,2,Terrible design,1,Overall website - Unresponsive chatbot,negative
+Ananya Singh,user375@example.com,User,3,Not bad,3,Okay experience overall,2,Terrible design,4,Contribution section - Excellent experience,3,Overall website - It's fine,neutral
+Aisha Khan,user470@example.com,User,4,E-market - Fast checkout and clean UI,4,Fantastic feature,4,Very intuitive,3,It's fine,4,Impressive design,positive
+Pooja Joshi,user968@example.com,User,5,E-market - Fantastic feature,4,Super helpful interface,4,Chatbot - Fast checkout and clean UI,3,Contribution section - Could use some improvements,4,Very smooth and easy to use,positive
+Sneha Reddy,user851@example.com,User,1,Slow and buggy,1,Slow and buggy,1,Needs improvement,1,Unresponsive chatbot,1,Did not work properly,negative
+Ananya Singh,user705@example.com,User,5,Fast checkout and clean UI,5,Worked perfectly,5,Amazing recipes and service,4,Impressive design,5,Very intuitive,positive
+Karan Mehta,user842@example.com,User,4,E-market - Excellent experience,3,Recipe section - Could be better,2,Checkout failed,2,Slow and buggy,3,Overall website - Okay experience overall,neutral
+Aisha Khan,user195@example.com,User,4,Fast checkout and clean UI,4,Recipe section - Impressive design,5,Chatbot - Super helpful interface,4,Contribution section - Impressive design,4,Overall website - Amazing recipes and service,positive
+Arjun Das,user855@example.com,User,2,E-market - Checkout failed,2,Checkout failed,3,It's fine,3,Contribution section - It's fine,2,Needs improvement,negative
+Karan Mehta,user865@example.com,User,4,E-market - Great product selection,4,Recipe section - Very smooth and easy to use,5,Chatbot - Fast checkout and clean UI,4,Contribution section - Fast checkout and clean UI,5,Very intuitive,positive
+Karan Mehta,user504@example.com,User,2,E-market - Bad experience,2,Recipe section - Did not work properly,3,Chatbot - It's fine,1,Contribution section - Hard to use,2,Did not work properly,negative
+Ananya Singh,user970@example.com,User,4,Fast checkout and clean UI,2,Recipe section - Did not work properly,4,Loved it,3,Contribution section - Average experience,3,Not bad,neutral
+Ananya Singh,user831@example.com,User,2,Slow and buggy,2,Slow and buggy,1,Chatbot - Very confusing interface,3,Contribution section - Not bad,2,Overall website - Unresponsive chatbot,negative
+Divya Shah,user580@example.com,User,1,Unresponsive chatbot,2,Recipe section - Hard to use,3,Chatbot - Could use some improvements,1,Very confusing interface,2,Overall website - Hard to use,negative
+Aisha Khan,user969@example.com,User,2,Very confusing interface,1,Recipe section - Hard to use,2,Not satisfied,1,Not satisfied,1,Checkout failed,negative
+Karan Mehta,user163@example.com,User,4,E-market - Super helpful interface,4,Excellent experience,4,Chatbot - Impressive design,3,Could use some improvements,4,Overall website - Loved it,positive
+Arjun Das,user909@example.com,User,4,E-market - Amazing recipes and service,5,Recipe section - Very smooth and easy to use,5,Excellent experience,3,It's fine,4,Overall website - Impressive design,positive
+Aisha Khan,user153@example.com,User,1,Hard to use,1,Very confusing interface,2,Chatbot - Very confusing interface,2,Did not work properly,2,Terrible design,negative
+Aisha Khan,user802@example.com,User,4,Loved it,4,Recipe section - Fantastic feature,5,Chatbot - Impressive design,4,Contribution section - Fantastic feature,5,Overall website - Worked perfectly,positive
+Rahul Verma,user994@example.com,User,4,E-market - Fast checkout and clean UI,5,Great product selection,5,Amazing recipes and service,5,Loved it,4,Amazing recipes and service,positive
+Rohan Patel,user756@example.com,User,1,Needs improvement,1,Very confusing interface,2,Did not work properly,1,Contribution section - Did not work properly,1,Needs improvement,negative
+Rohan Patel,user112@example.com,User,3,E-market - Not bad,2,Bad experience,1,Very confusing interface,3,Satisfactory,2,Overall website - Needs improvement,negative
+Vikram Kumar,user227@example.com,User,5,E-market - Great product selection,5,Fast checkout and clean UI,4,Very intuitive,4,Contribution section - Worked perfectly,5,Overall website - Great product selection,positive
+Rahul Verma,user689@example.com,User,2,E-market - Hard to use,1,Slow and buggy,2,Chatbot - Terrible design,1,Contribution section - Did not work properly,1,Very confusing interface,negative
+Arjun Das,user104@example.com,User,5,E-market - Impressive design,4,Fantastic feature,4,Chatbot - Fast checkout and clean UI,5,Contribution section - Fast checkout and clean UI,4,Overall website - Fast checkout and clean UI,positive
+Aisha Khan,user422@example.com,User,4,E-market - Worked perfectly,3,Recipe section - Could be better,4,Chatbot - Great product selection,3,Decent but nothing special,4,Excellent experience,positive
+Ananya Singh,user420@example.com,User,4,E-market - Impressive design,4,Very smooth and easy to use,4,Worked perfectly,5,Great product selection,5,Overall website - Super helpful interface,positive
+Vikram Kumar,user751@example.com,User,5,Worked perfectly,5,Great product selection,5,Chatbot - Super helpful interface,5,Contribution section - Worked perfectly,5,Overall website - Great product selection,positive
+Rahul Verma,user587@example.com,User,4,E-market - Loved it,4,Recipe section - Great product selection,5,Excellent experience,5,Contribution section - Excellent experience,4,Overall website - Impressive design,positive
+Arjun Das,user781@example.com,User,4,Loved it,3,Satisfactory,4,Chatbot - Fantastic feature,4,Worked perfectly,3,Overall website - Average experience,neutral
+Sneha Reddy,user673@example.com,User,4,E-market - Fantastic feature,4,Recipe section - Super helpful interface,4,Loved it,5,Very intuitive,5,Overall website - Amazing recipes and service,positive
+Rahul Verma,user120@example.com,User,1,Unresponsive chatbot,3,Could be better,3,Chatbot - It's fine,3,Contribution section - It's fine,2,Needs improvement,negative
+Rahul Verma,user54@example.com,User,5,Loved it,3,Decent but nothing special,3,Okay experience overall,4,Contribution section - Great product selection,4,Overall website - Amazing recipes and service,positive
+Pooja Joshi,user152@example.com,User,3,Okay experience overall,4,Fast checkout and clean UI,4,Super helpful interface,3,Contribution section - It's fine,4,Overall website - Excellent experience,positive
+Karan Mehta,user404@example.com,User,1,Hard to use,2,Recipe section - Did not work properly,3,Chatbot - Could use some improvements,2,Needs improvement,2,Overall website - Did not work properly,negative
+Rohan Patel,user946@example.com,User,3,E-market - Okay experience overall,3,Average experience,4,Chatbot - Very intuitive,2,Contribution section - Needs improvement,3,It's fine,neutral
+Sneha Reddy,user208@example.com,User,1,E-market - Unresponsive chatbot,1,Recipe section - Not satisfied,1,Chatbot - Slow and buggy,1,Contribution section - Unresponsive chatbot,1,Overall website - Did not work properly,negative
+Karan Mehta,user659@example.com,User,4,E-market - Fast checkout and clean UI,4,Recipe section - Excellent experience,5,Impressive design,5,Contribution section - Amazing recipes and service,5,Overall website - Very smooth and easy to use,positive
+Arjun Das,user844@example.com,User,4,Excellent experience,5,Amazing recipes and service,5,Excellent experience,5,Contribution section - Fantastic feature,4,Overall website - Very smooth and easy to use,positive
+Arjun Das,user763@example.com,User,1,Hard to use,1,Recipe section - Very confusing interface,2,Chatbot - Very confusing interface,1,Contribution section - Not satisfied,1,Overall website - Bad experience,negative
+Vikram Kumar,user9@example.com,User,5,Impressive design,4,Fantastic feature,5,Amazing recipes and service,5,Contribution section - Worked perfectly,5,Worked perfectly,positive
+Rahul Verma,user808@example.com,User,1,E-market - Needs improvement,2,Slow and buggy,2,Chatbot - Very confusing interface,1,Did not work properly,1,Overall website - Slow and buggy,negative
+Rohan Patel,user37@example.com,User,4,E-market - Worked perfectly,4,Recipe section - Fast checkout and clean UI,4,Chatbot - Very intuitive,5,Excellent experience,4,Overall website - Fantastic feature,positive
+Karan Mehta,user453@example.com,User,1,Very confusing interface,2,Recipe section - Checkout failed,1,Chatbot - Did not work properly,1,Contribution section - Did not work properly,1,Overall website - Very confusing interface,negative
+Ananya Singh,user652@example.com,User,4,Very intuitive,5,Recipe section - Impressive design,5,Chatbot - Very intuitive,5,Contribution section - Super helpful interface,5,Amazing recipes and service,positive
+Divya Shah,user254@example.com,User,3,E-market - Average experience,4,Recipe section - Amazing recipes and service,5,Amazing recipes and service,5,Excellent experience,4,Very intuitive,positive
+Divya Shah,user304@example.com,User,5,Worked perfectly,5,Fast checkout and clean UI,4,Excellent experience,5,Contribution section - Excellent experience,5,Loved it,positive
+Karan Mehta,user747@example.com,User,3,Not bad,4,Recipe section - Very intuitive,4,Excellent experience,2,Contribution section - Did not work properly,3,It's fine,neutral
+Karan Mehta,user572@example.com,User,4,E-market - Fast checkout and clean UI,5,Excellent experience,5,Chatbot - Loved it,5,Contribution section - Super helpful interface,5,Very smooth and easy to use,positive
+Karan Mehta,user624@example.com,User,3,E-market - Okay experience overall,4,Recipe section - Loved it,3,Chatbot - Could be better,4,Contribution section - Amazing recipes and service,4,Overall website - Fast checkout and clean UI,positive
+Pooja Joshi,user733@example.com,User,4,E-market - Loved it,5,Great product selection,4,Super helpful interface,3,Contribution section - Could use some improvements,4,Overall website - Super helpful interface,positive
+Rohan Patel,user892@example.com,User,4,E-market - Excellent experience,5,Very intuitive,4,Fantastic feature,3,Contribution section - Average experience,4,Impressive design,positive
+Pooja Joshi,user263@example.com,User,2,E-market - Checkout failed,2,Recipe section - Not satisfied,1,Chatbot - Needs improvement,1,Contribution section - Not satisfied,1,Unresponsive chatbot,negative
+Aisha Khan,user611@example.com,User,4,Very smooth and easy to use,3,Recipe section - Average experience,3,Chatbot - Okay experience overall,3,Contribution section - Could be better,4,Overall website - Loved it,positive
+Karan Mehta,user298@example.com,User,4,Loved it,5,Recipe section - Amazing recipes and service,5,Amazing recipes and service,4,Amazing recipes and service,5,Very smooth and easy to use,positive
+Divya Shah,user415@example.com,User,2,Hard to use,1,Bad experience,1,Bad experience,1,Slow and buggy,1,Unresponsive chatbot,negative
+Vikram Kumar,user151@example.com,User,4,E-market - Fast checkout and clean UI,5,Fantastic feature,5,Chatbot - Very intuitive,5,Amazing recipes and service,5,Overall website - Very smooth and easy to use,positive
+Vikram Kumar,user789@example.com,User,5,Very smooth and easy to use,4,Recipe section - Excellent experience,4,Chatbot - Fast checkout and clean UI,5,Contribution section - Great product selection,5,Fast checkout and clean UI,positive
+Aisha Khan,user641@example.com,User,1,E-market - Did not work properly,2,Recipe section - Bad experience,2,Checkout failed,3,Contribution section - It's fine,2,Terrible design,negative
+Vikram Kumar,user890@example.com,User,3,E-market - Not bad,1,Recipe section - Unresponsive chatbot,3,Okay experience overall,2,Contribution section - Needs improvement,2,Overall website - Bad experience,negative
+Vikram Kumar,user551@example.com,User,4,Impressive design,4,Super helpful interface,4,Great product selection,3,Average experience,3,Overall website - Satisfactory,neutral
+Vikram Kumar,user887@example.com,User,4,E-market - Excellent experience,2,Recipe section - Bad experience,2,Did not work properly,3,Satisfactory,3,Satisfactory,neutral
+Sneha Reddy,user489@example.com,User,5,Impressive design,4,Fast checkout and clean UI,4,Chatbot - Fantastic feature,5,Contribution section - Amazing recipes and service,5,Overall website - Impressive design,positive
+Sneha Reddy,user148@example.com,User,4,Super helpful interface,2,Unresponsive chatbot,4,Very smooth and easy to use,4,Contribution section - Worked perfectly,3,Overall website - Average experience,neutral
+Sneha Reddy,user147@example.com,User,1,Very confusing interface,1,Did not work properly,2,Terrible design,1,Contribution section - Checkout failed,1,Overall website - Very confusing interface,negative
+Rohan Patel,user721@example.com,User,3,E-market - It's fine,5,Recipe section - Fantastic feature,3,Chatbot - Decent but nothing special,5,Contribution section - Very smooth and easy to use,4,Overall website - Very intuitive,positive
+Divya Shah,user932@example.com,User,3,Okay experience overall,3,Recipe section - Satisfactory,3,Chatbot - Not bad,2,Contribution section - Bad experience,2,Checkout failed,negative
+Arjun Das,user740@example.com,User,1,Needs improvement,1,Needs improvement,1,Slow and buggy,1,Did not work properly,1,Terrible design,negative
+Arjun Das,user660@example.com,User,1,Hard to use,2,Recipe section - Not satisfied,2,Chatbot - Unresponsive chatbot,1,Unresponsive chatbot,2,Unresponsive chatbot,negative
+Rohan Patel,user349@example.com,User,3,E-market - Decent but nothing special,3,Recipe section - Okay experience overall,2,Checkout failed,3,Satisfactory,2,Overall website - Did not work properly,negative
+Aisha Khan,user464@example.com,User,1,Unresponsive chatbot,2,Recipe section - Hard to use,3,Okay experience overall,2,Contribution section - Hard to use,2,Terrible design,negative
+Karan Mehta,user326@example.com,User,1,Hard to use,3,Not bad,3,Not bad,1,Not satisfied,2,Overall website - Unresponsive chatbot,negative
+Vikram Kumar,user187@example.com,User,4,Amazing recipes and service,4,Impressive design,3,Chatbot - Okay experience overall,3,Contribution section - Not bad,3,Okay experience overall,neutral
+Vikram Kumar,user124@example.com,User,1,Hard to use,1,Did not work properly,1,Slow and buggy,2,Terrible design,1,Overall website - Very confusing interface,negative
+Rahul Verma,user854@example.com,User,5,E-market - Impressive design,4,Recipe section - Impressive design,4,Fast checkout and clean UI,5,Contribution section - Amazing recipes and service,5,Excellent experience,positive
+Rohan Patel,user609@example.com,User,3,E-market - Could be better,3,Recipe section - Could use some improvements,3,Okay experience overall,3,It's fine,2,Very confusing interface,negative
+Aisha Khan,user144@example.com,User,2,E-market - Did not work properly,2,Bad experience,4,Amazing recipes and service,3,Contribution section - It's fine,3,Overall website - Decent but nothing special,neutral
+Karan Mehta,user959@example.com,User,1,E-market - Terrible design,1,Recipe section - Did not work properly,1,Checkout failed,2,Contribution section - Checkout failed,1,Overall website - Very confusing interface,negative
+Rohan Patel,user198@example.com,User,1,E-market - Hard to use,2,Recipe section - Very confusing interface,1,Chatbot - Terrible design,2,Not satisfied,1,Terrible design,negative
+Karan Mehta,user610@example.com,User,2,Did not work properly,1,Hard to use,1,Very confusing interface,3,Contribution section - Average experience,2,Overall website - Did not work properly,negative
+Vikram Kumar,user280@example.com,User,1,E-market - Terrible design,1,Recipe section - Bad experience,1,Did not work properly,1,Contribution section - Checkout failed,2,Overall website - Not satisfied,negative
+Karan Mehta,user294@example.com,User,1,E-market - Did not work properly,1,Recipe section - Bad experience,2,Needs improvement,1,Contribution section - Slow and buggy,1,Hard to use,negative
+Divya Shah,user401@example.com,User,4,E-market - Worked perfectly,4,Recipe section - Great product selection,4,Worked perfectly,4,Loved it,3,Overall website - Okay experience overall,neutral
+Arjun Das,user123@example.com,User,4,Amazing recipes and service,4,Recipe section - Very intuitive,4,Impressive design,3,Contribution section - Could be better,3,Not bad,neutral
+Ananya Singh,user184@example.com,User,5,E-market - Very intuitive,3,Not bad,3,Chatbot - Satisfactory,4,Impressive design,4,Worked perfectly,positive
+Karan Mehta,user203@example.com,User,4,Loved it,3,Recipe section - Not bad,3,Chatbot - It's fine,4,Worked perfectly,3,Not bad,neutral
+Divya Shah,user439@example.com,User,2,Did not work properly,1,Very confusing interface,1,Chatbot - Bad experience,1,Very confusing interface,2,Overall website - Not satisfied,negative
+Rahul Verma,user247@example.com,User,1,Very confusing interface,1,Recipe section - Unresponsive chatbot,2,Needs improvement,1,Contribution section - Needs improvement,1,Slow and buggy,negative
+Arjun Das,user416@example.com,User,1,Did not work properly,1,Recipe section - Bad experience,1,Needs improvement,2,Very confusing interface,1,Overall website - Unresponsive chatbot,negative
+Ananya Singh,user933@example.com,User,3,Okay experience overall,2,Checkout failed,2,Chatbot - Terrible design,2,Bad experience,2,Slow and buggy,negative
+Divya Shah,user766@example.com,User,3,Could be better,3,Recipe section - Average experience,4,Very intuitive,4,Contribution section - Great product selection,4,Super helpful interface,positive
+Rahul Verma,user907@example.com,User,4,Fantastic feature,4,Recipe section - Worked perfectly,4,Excellent experience,3,Contribution section - It's fine,4,Overall website - Amazing recipes and service,positive
+Divya Shah,user836@example.com,User,4,Great product selection,3,Recipe section - Okay experience overall,4,Chatbot - Very intuitive,2,Terrible design,3,Overall website - Decent but nothing special,neutral
+Rahul Verma,user888@example.com,User,5,E-market - Excellent experience,4,Fantastic feature,4,Fast checkout and clean UI,5,Contribution section - Great product selection,4,Worked perfectly,positive
+Karan Mehta,user130@example.com,User,5,E-market - Amazing recipes and service,5,Impressive design,4,Chatbot - Super helpful interface,5,Contribution section - Worked perfectly,5,Very intuitive,positive
+Ananya Singh,user638@example.com,User,5,Fantastic feature,3,Satisfactory,4,Super helpful interface,3,Not bad,4,Super helpful interface,positive
+Arjun Das,user403@example.com,User,3,Not bad,2,Very confusing interface,2,Unresponsive chatbot,2,Contribution section - Slow and buggy,2,Overall website - Needs improvement,negative
+Sneha Reddy,user785@example.com,User,2,Not satisfied,4,Worked perfectly,2,Checkout failed,2,Contribution section - Did not work properly,3,Decent but nothing special,neutral
+Vikram Kumar,user771@example.com,User,3,E-market - Could be better,3,Recipe section - Average experience,3,Okay experience overall,1,Not satisfied,2,Overall website - Not satisfied,negative
+Divya Shah,user736@example.com,User,2,Bad experience,1,Recipe section - Slow and buggy,3,Chatbot - Satisfactory,3,Could be better,2,Did not work properly,negative
+Ananya Singh,user914@example.com,User,5,E-market - Excellent experience,4,Worked perfectly,5,Chatbot - Fantastic feature,5,Contribution section - Fast checkout and clean UI,5,Fantastic feature,positive
+Vikram Kumar,user220@example.com,User,5,Fast checkout and clean UI,4,Recipe section - Very smooth and easy to use,5,Very intuitive,5,Fantastic feature,5,Overall website - Excellent experience,positive
+Sneha Reddy,user642@example.com,User,2,Not satisfied,1,Terrible design,2,Chatbot - Bad experience,2,Contribution section - Checkout failed,2,Overall website - Needs improvement,negative
+Arjun Das,user916@example.com,User,5,Fantastic feature,5,Recipe section - Loved it,5,Chatbot - Very smooth and easy to use,5,Very intuitive,5,Overall website - Very smooth and easy to use,positive
+Divya Shah,user753@example.com,User,2,E-market - Needs improvement,1,Checkout failed,2,Chatbot - Very confusing interface,3,It's fine,2,Overall website - Checkout failed,negative
+Pooja Joshi,user807@example.com,User,1,E-market - Bad experience,3,Could be better,2,Chatbot - Needs improvement,2,Contribution section - Not satisfied,2,Not satisfied,negative
+Karan Mehta,user920@example.com,User,2,Slow and buggy,2,Hard to use,2,Slow and buggy,2,Contribution section - Bad experience,3,Overall website - Average experience,neutral
+Aisha Khan,user625@example.com,User,4,E-market - Fast checkout and clean UI,4,Recipe section - Worked perfectly,3,Could use some improvements,4,Contribution section - Super helpful interface,3,Overall website - Average experience,neutral
+Rahul Verma,user875@example.com,User,5,Loved it,5,Great product selection,5,Impressive design,5,Contribution section - Great product selection,5,Worked perfectly,positive
+Rohan Patel,user761@example.com,User,3,It's fine,3,Average experience,2,Chatbot - Checkout failed,4,Impressive design,3,Okay experience overall,neutral
+Pooja Joshi,user387@example.com,User,2,Hard to use,2,Bad experience,4,Chatbot - Loved it,3,Contribution section - Average experience,3,Overall website - Decent but nothing special,neutral
+Arjun Das,user973@example.com,User,2,Slow and buggy,2,Recipe section - Hard to use,2,Chatbot - Very confusing interface,2,Did not work properly,2,Unresponsive chatbot,negative
+Rahul Verma,user510@example.com,User,3,E-market - Could use some improvements,1,Did not work properly,3,Could use some improvements,2,Hard to use,2,Overall website - Did not work properly,negative
+Rahul Verma,user268@example.com,User,5,E-market - Loved it,4,Recipe section - Loved it,5,Chatbot - Fast checkout and clean UI,5,Contribution section - Super helpful interface,5,Overall website - Excellent experience,positive
+Vikram Kumar,user820@example.com,User,2,E-market - Needs improvement,4,Recipe section - Super helpful interface,3,Chatbot - Not bad,4,Amazing recipes and service,3,Overall website - Decent but nothing special,neutral
+Rohan Patel,user442@example.com,User,2,Slow and buggy,1,Bad experience,2,Did not work properly,1,Checkout failed,1,Very confusing interface,negative
+Karan Mehta,user497@example.com,User,5,Loved it,4,Recipe section - Very smooth and easy to use,5,Fantastic feature,5,Fast checkout and clean UI,5,Fantastic feature,positive
+Ananya Singh,user113@example.com,User,4,Super helpful interface,3,Recipe section - It's fine,3,Could be better,3,Contribution section - Not bad,3,Not bad,neutral
+Rohan Patel,user692@example.com,User,4,E-market - Excellent experience,4,Recipe section - Loved it,2,Chatbot - Very confusing interface,3,Could use some improvements,3,It's fine,neutral
+Aisha Khan,user233@example.com,User,4,Great product selection,5,Great product selection,3,Decent but nothing special,5,Very intuitive,4,Super helpful interface,positive
+Rohan Patel,user870@example.com,User,4,Very smooth and easy to use,5,Recipe section - Loved it,5,Super helpful interface,5,Excellent experience,4,Impressive design,positive
+Rahul Verma,user608@example.com,User,1,E-market - Not satisfied,3,Recipe section - Could use some improvements,3,It's fine,2,Unresponsive chatbot,2,Overall website - Terrible design,negative
+Rahul Verma,user672@example.com,User,5,E-market - Impressive design,5,Loved it,5,Chatbot - Fantastic feature,4,Contribution section - Excellent experience,5,Overall website - Fantastic feature,positive
+Sneha Reddy,user374@example.com,User,1,E-market - Unresponsive chatbot,2,Recipe section - Needs improvement,3,Not bad,2,Contribution section - Very confusing interface,2,Slow and buggy,negative
+Rahul Verma,user982@example.com,User,4,E-market - Very intuitive,5,Fantastic feature,4,Chatbot - Amazing recipes and service,3,Could be better,4,Super helpful interface,positive
+Aisha Khan,user843@example.com,User,1,E-market - Unresponsive chatbot,1,Recipe section - Not satisfied,2,Unresponsive chatbot,3,Decent but nothing special,2,Bad experience,negative
+Rahul Verma,user234@example.com,User,2,Terrible design,2,Not satisfied,1,Checkout failed,1,Contribution section - Hard to use,2,Unresponsive chatbot,negative
+Divya Shah,user786@example.com,User,5,Fast checkout and clean UI,5,Impressive design,5,Chatbot - Super helpful interface,5,Super helpful interface,5,Overall website - Very smooth and easy to use,positive
+Sneha Reddy,user677@example.com,User,4,E-market - Very intuitive,5,Great product selection,5,Chatbot - Fast checkout and clean UI,4,Contribution section - Very intuitive,5,Very smooth and easy to use,positive
+Rohan Patel,user318@example.com,User,5,Super helpful interface,4,Loved it,5,Chatbot - Fantastic feature,5,Very smooth and easy to use,5,Excellent experience,positive
+Aisha Khan,user649@example.com,User,4,Very intuitive,5,Recipe section - Amazing recipes and service,5,Fast checkout and clean UI,5,Fast checkout and clean UI,5,Great product selection,positive
+Aisha Khan,user411@example.com,User,4,Very smooth and easy to use,3,Recipe section - Could be better,4,Chatbot - Great product selection,4,Amazing recipes and service,3,Overall website - Okay experience overall,neutral
+Karan Mehta,user899@example.com,User,2,E-market - Needs improvement,3,Could use some improvements,2,Terrible design,4,Contribution section - Worked perfectly,3,Overall website - Decent but nothing special,neutral
+Ananya Singh,user710@example.com,User,4,Very intuitive,5,Recipe section - Amazing recipes and service,5,Amazing recipes and service,5,Fast checkout and clean UI,5,Overall website - Fast checkout and clean UI,positive
+Sneha Reddy,user359@example.com,User,1,Hard to use,2,Checkout failed,3,Chatbot - Average experience,2,Contribution section - Needs improvement,2,Overall website - Hard to use,negative
+Rohan Patel,user259@example.com,User,2,Unresponsive chatbot,2,Bad experience,4,Excellent experience,2,Contribution section - Needs improvement,3,Overall website - Could be better,neutral
+Aisha Khan,user745@example.com,User,5,E-market - Amazing recipes and service,4,Recipe section - Fast checkout and clean UI,5,Chatbot - Very smooth and easy to use,4,Contribution section - Super helpful interface,5,Overall website - Worked perfectly,positive
+Aisha Khan,user628@example.com,User,5,Super helpful interface,5,Fast checkout and clean UI,5,Chatbot - Fantastic feature,3,Contribution section - It's fine,4,Fast checkout and clean UI,positive
+Karan Mehta,user633@example.com,User,1,Bad experience,1,Very confusing interface,1,Needs improvement,1,Contribution section - Checkout failed,1,Terrible design,negative
+Arjun Das,user283@example.com,User,4,E-market - Super helpful interface,4,Recipe section - Excellent experience,3,Chatbot - Could use some improvements,2,Checkout failed,3,Overall website - Not bad,neutral
+Pooja Joshi,user377@example.com,User,4,E-market - Fantastic feature,2,Very confusing interface,2,Very confusing interface,2,Contribution section - Hard to use,3,Overall website - Not bad,neutral
+Karan Mehta,user385@example.com,User,5,E-market - Very intuitive,3,Decent but nothing special,5,Chatbot - Fast checkout and clean UI,5,Impressive design,4,Overall website - Great product selection,positive
+Pooja Joshi,user225@example.com,User,3,E-market - Average experience,4,Fantastic feature,4,Chatbot - Amazing recipes and service,4,Contribution section - Impressive design,4,Overall website - Super helpful interface,positive
+Divya Shah,user954@example.com,User,5,E-market - Super helpful interface,4,Impressive design,5,Amazing recipes and service,5,Very smooth and easy to use,5,Great product selection,positive
+Vikram Kumar,user815@example.com,User,4,E-market - Amazing recipes and service,4,Impressive design,4,Fast checkout and clean UI,4,Contribution section - Very intuitive,5,Worked perfectly,positive
+Rohan Patel,user473@example.com,User,5,Very intuitive,3,Decent but nothing special,3,Chatbot - Not bad,5,Contribution section - Amazing recipes and service,4,Overall website - Excellent experience,positive
+Arjun Das,user348@example.com,User,1,Unresponsive chatbot,1,Did not work properly,1,Chatbot - Unresponsive chatbot,1,Slow and buggy,1,Unresponsive chatbot,negative
+Arjun Das,user506@example.com,User,5,Amazing recipes and service,5,Excellent experience,5,Chatbot - Great product selection,4,Excellent experience,5,Overall website - Loved it,positive
+Divya Shah,user640@example.com,User,3,E-market - It's fine,2,Terrible design,2,Chatbot - Did not work properly,4,Fast checkout and clean UI,3,Could use some improvements,neutral
+Pooja Joshi,user988@example.com,User,1,E-market - Slow and buggy,2,Recipe section - Not satisfied,1,Very confusing interface,1,Terrible design,1,Bad experience,negative
+Arjun Das,user929@example.com,User,2,E-market - Checkout failed,4,Recipe section - Great product selection,3,Could use some improvements,4,Loved it,3,Overall website - It's fine,neutral
+Pooja Joshi,user906@example.com,User,5,Impressive design,3,Could use some improvements,3,Chatbot - Could use some improvements,3,It's fine,4,Fantastic feature,positive
+Ananya Singh,user620@example.com,User,4,Super helpful interface,4,Loved it,5,Chatbot - Loved it,4,Contribution section - Very smooth and easy to use,4,Overall website - Very smooth and easy to use,positive
+Vikram Kumar,user856@example.com,User,2,Very confusing interface,2,Recipe section - Hard to use,2,Hard to use,2,Contribution section - Unresponsive chatbot,3,Not bad,neutral
+Pooja Joshi,user804@example.com,User,1,Needs improvement,1,Not satisfied,1,Chatbot - Unresponsive chatbot,3,Could use some improvements,2,Checkout failed,negative
+Rohan Patel,user646@example.com,User,1,Needs improvement,2,Recipe section - Terrible design,2,Bad experience,1,Needs improvement,1,Needs improvement,negative
+Sneha Reddy,user847@example.com,User,5,Amazing recipes and service,3,Recipe section - Could be better,3,Chatbot - Satisfactory,5,Contribution section - Loved it,4,Overall website - Very smooth and easy to use,positive
+Ananya Singh,user557@example.com,User,1,E-market - Terrible design,1,Unresponsive chatbot,2,Chatbot - Slow and buggy,2,Checkout failed,1,Hard to use,negative
+Rahul Verma,user958@example.com,User,1,Very confusing interface,2,Not satisfied,1,Chatbot - Terrible design,1,Bad experience,1,Overall website - Needs improvement,negative
+Divya Shah,user578@example.com,User,3,Okay experience overall,2,Recipe section - Slow and buggy,2,Unresponsive chatbot,4,Contribution section - Excellent experience,3,Could use some improvements,neutral
+Ananya Singh,user796@example.com,User,3,E-market - Could use some improvements,3,Okay experience overall,1,Slow and buggy,2,Bad experience,2,Overall website - Hard to use,negative
+Sneha Reddy,user86@example.com,User,2,Bad experience,2,Terrible design,4,Chatbot - Fast checkout and clean UI,4,Contribution section - Great product selection,3,Could use some improvements,neutral
+Sneha Reddy,user243@example.com,User,2,E-market - Very confusing interface,1,Recipe section - Terrible design,1,Bad experience,1,Not satisfied,2,Bad experience,negative
+Rahul Verma,user699@example.com,User,2,Very confusing interface,2,Hard to use,2,Checkout failed,1,Contribution section - Did not work properly,1,Hard to use,negative
+Aisha Khan,user160@example.com,User,2,E-market - Slow and buggy,2,Recipe section - Needs improvement,3,Decent but nothing special,3,Contribution section - Could be better,3,Could use some improvements,neutral
+Vikram Kumar,user525@example.com,User,1,E-market - Terrible design,2,Recipe section - Checkout failed,2,Chatbot - Not satisfied,2,Terrible design,1,Hard to use,negative
+Divya Shah,user36@example.com,User,5,Fast checkout and clean UI,4,Great product selection,5,Chatbot - Worked perfectly,5,Very intuitive,5,Fantastic feature,positive
+Ananya Singh,user541@example.com,User,2,Unresponsive chatbot,4,Recipe section - Amazing recipes and service,3,Could use some improvements,3,Contribution section - It's fine,3,Satisfactory,neutral
+Aisha Khan,user171@example.com,User,1,Bad experience,2,Recipe section - Terrible design,1,Chatbot - Did not work properly,1,Contribution section - Needs improvement,1,Unresponsive chatbot,negative
+Divya Shah,user655@example.com,User,3,E-market - Not bad,3,Could be better,3,Satisfactory,2,Contribution section - Slow and buggy,3,Decent but nothing special,neutral
+Vikram Kumar,user891@example.com,User,1,E-market - Slow and buggy,2,Hard to use,1,Chatbot - Bad experience,2,Contribution section - Hard to use,1,Checkout failed,negative
+Ananya Singh,user858@example.com,User,5,E-market - Worked perfectly,4,Very intuitive,5,Impressive design,5,Contribution section - Very intuitive,5,Excellent experience,positive
+Karan Mehta,user848@example.com,User,1,E-market - Unresponsive chatbot,1,Needs improvement,1,Chatbot - Hard to use,1,Unresponsive chatbot,1,Hard to use,negative
+Pooja Joshi,user945@example.com,User,5,E-market - Impressive design,3,Recipe section - Not bad,4,Chatbot - Very smooth and easy to use,3,Contribution section - It's fine,4,Fast checkout and clean UI,positive
+Pooja Joshi,user734@example.com,User,4,Amazing recipes and service,4,Loved it,4,Chatbot - Great product selection,2,Contribution section - Slow and buggy,3,Overall website - Okay experience overall,neutral
+Divya Shah,user96@example.com,User,4,E-market - Excellent experience,4,Recipe section - Amazing recipes and service,5,Chatbot - Great product selection,4,Contribution section - Very smooth and easy to use,4,Fast checkout and clean UI,positive
+Karan Mehta,user564@example.com,User,4,E-market - Very intuitive,3,Not bad,3,Okay experience overall,3,It's fine,4,Excellent experience,positive
+Rohan Patel,user241@example.com,User,1,E-market - Slow and buggy,2,Recipe section - Not satisfied,1,Chatbot - Unresponsive chatbot,1,Contribution section - Did not work properly,1,Overall website - Hard to use,negative
+Divya Shah,user743@example.com,User,5,E-market - Great product selection,5,Recipe section - Very intuitive,4,Very intuitive,5,Great product selection,5,Overall website - Worked perfectly,positive
+Sneha Reddy,user575@example.com,User,4,E-market - Super helpful interface,5,Recipe section - Very smooth and easy to use,4,Chatbot - Fantastic feature,5,Fantastic feature,4,Amazing recipes and service,positive
+Rohan Patel,user691@example.com,User,3,E-market - It's fine,3,It's fine,5,Chatbot - Loved it,3,It's fine,4,Amazing recipes and service,positive
+Rahul Verma,user461@example.com,User,3,E-market - Satisfactory,4,Super helpful interface,4,Excellent experience,2,Contribution section - Did not work properly,3,Overall website - It's fine,neutral
+Sneha Reddy,user554@example.com,User,1,E-market - Did not work properly,2,Recipe section - Checkout failed,1,Chatbot - Unresponsive chatbot,2,Contribution section - Bad experience,1,Overall website - Did not work properly,negative
+Aisha Khan,user889@example.com,User,5,Impressive design,5,Recipe section - Great product selection,4,Chatbot - Fantastic feature,5,Fast checkout and clean UI,5,Overall website - Impressive design,positive
+Ananya Singh,user207@example.com,User,3,Satisfactory,1,Needs improvement,2,Chatbot - Very confusing interface,2,Hard to use,2,Not satisfied,negative
+Rohan Patel,user393@example.com,User,3,Average experience,3,Recipe section - Satisfactory,4,Chatbot - Excellent experience,4,Contribution section - Loved it,3,Overall website - Okay experience overall,neutral
+Rohan Patel,user795@example.com,User,5,Very smooth and easy to use,4,Fast checkout and clean UI,4,Impressive design,5,Amazing recipes and service,5,Very intuitive,positive
+Ananya Singh,user398@example.com,User,4,E-market - Great product selection,4,Very intuitive,2,Slow and buggy,2,Bad experience,3,Overall website - Average experience,neutral
+Vikram Kumar,user767@example.com,User,2,Checkout failed,4,Recipe section - Impressive design,2,Chatbot - Checkout failed,2,Bad experience,3,Overall website - Satisfactory,neutral
+Sneha Reddy,user849@example.com,User,5,E-market - Very intuitive,3,Recipe section - Average experience,3,Chatbot - Decent but nothing special,3,Contribution section - Could use some improvements,4,Overall website - Amazing recipes and service,positive
+Divya Shah,user218@example.com,User,5,Fantastic feature,3,Recipe section - Decent but nothing special,5,Chatbot - Fast checkout and clean UI,4,Very smooth and easy to use,4,Overall website - Excellent experience,positive
+Divya Shah,user5@example.com,User,3,Not bad,3,Recipe section - It's fine,1,Terrible design,2,Contribution section - Terrible design,2,Checkout failed,negative
+Rohan Patel,user769@example.com,User,2,E-market - Very confusing interface,2,Recipe section - Checkout failed,2,Checkout failed,2,Contribution section - Terrible design,3,Overall website - Decent but nothing special,neutral
+Rohan Patel,user643@example.com,User,1,E-market - Unresponsive chatbot,2,Recipe section - Checkout failed,1,Needs improvement,3,Contribution section - Okay experience overall,2,Unresponsive chatbot,negative
+Rohan Patel,user930@example.com,User,4,E-market - Fast checkout and clean UI,3,Average experience,3,Could use some improvements,4,Contribution section - Amazing recipes and service,3,Overall website - Not bad,neutral
+Ananya Singh,user613@example.com,User,5,E-market - Fast checkout and clean UI,5,Recipe section - Amazing recipes and service,3,Okay experience overall,5,Very intuitive,4,Loved it,positive
+Arjun Das,user739@example.com,User,2,E-market - Very confusing interface,1,Needs improvement,1,Chatbot - Did not work properly,1,Contribution section - Checkout failed,1,Overall website - Needs improvement,negative
+Rahul Verma,user547@example.com,User,1,E-market - Bad experience,1,Recipe section - Needs improvement,1,Terrible design,1,Bad experience,1,Not satisfied,negative
+Rahul Verma,user726@example.com,User,2,Unresponsive chatbot,2,Recipe section - Needs improvement,3,Satisfactory,3,Contribution section - Decent but nothing special,2,Hard to use,negative
+Ananya Singh,user684@example.com,User,3,E-market - Could use some improvements,4,Great product selection,4,Chatbot - Super helpful interface,4,Contribution section - Fantastic feature,4,Fantastic feature,positive
+Aisha Khan,user99@example.com,User,4,E-market - Super helpful interface,4,Recipe section - Great product selection,3,Could use some improvements,2,Contribution section - Not satisfied,3,Overall website - Okay experience overall,neutral
+Vikram Kumar,user805@example.com,User,3,Could be better,3,Could be better,2,Hard to use,2,Contribution section - Needs improvement,3,Could be better,neutral
+Ananya Singh,user728@example.com,User,4,E-market - Excellent experience,3,Recipe section - Okay experience overall,3,Satisfactory,4,Super helpful interface,3,Overall website - Satisfactory,neutral
+Karan Mehta,user574@example.com,User,2,Slow and buggy,1,Recipe section - Very confusing interface,2,Very confusing interface,1,Bad experience,1,Needs improvement,negative
+Arjun Das,user407@example.com,User,5,Impressive design,4,Great product selection,4,Very intuitive,5,Excellent experience,5,Loved it,positive
+Karan Mehta,user503@example.com,User,1,E-market - Not satisfied,2,Recipe section - Bad experience,1,Chatbot - Bad experience,2,Needs improvement,1,Needs improvement,negative
+Rahul Verma,user48@example.com,User,4,E-market - Loved it,5,Worked perfectly,4,Great product selection,5,Impressive design,5,Very smooth and easy to use,positive
+Ananya Singh,user33@example.com,User,3,E-market - Average experience,2,Recipe section - Did not work properly,4,Chatbot - Great product selection,2,Contribution section - Bad experience,3,Overall website - Okay experience overall,neutral
+Rohan Patel,user780@example.com,User,4,Very smooth and easy to use,2,Recipe section - Very confusing interface,4,Chatbot - Impressive design,3,Average experience,3,Overall website - Average experience,neutral
+Rohan Patel,user840@example.com,User,2,Hard to use,2,Did not work properly,1,Chatbot - Needs improvement,2,Contribution section - Very confusing interface,1,Terrible design,negative
+Rohan Patel,user201@example.com,User,2,Very confusing interface,1,Unresponsive chatbot,1,Slow and buggy,1,Contribution section - Needs improvement,1,Terrible design,negative
+Pooja Joshi,user135@example.com,User,1,E-market - Bad experience,3,Recipe section - It's fine,3,Chatbot - It's fine,1,Needs improvement,2,Overall website - Not satisfied,negative
+Ananya Singh,user28@example.com,User,2,E-market - Bad experience,2,Recipe section - Slow and buggy,1,Did not work properly,2,Contribution section - Very confusing interface,1,Slow and buggy,negative
+Ananya Singh,user881@example.com,User,4,E-market - Loved it,5,Very intuitive,4,Super helpful interface,3,Decent but nothing special,4,Fantastic feature,positive
+Arjun Das,user231@example.com,User,5,E-market - Amazing recipes and service,5,Recipe section - Fantastic feature,5,Amazing recipes and service,4,Great product selection,5,Amazing recipes and service,positive
+Sneha Reddy,user490@example.com,User,3,E-market - Decent but nothing special,2,Checkout failed,3,It's fine,3,Contribution section - Decent but nothing special,3,Overall website - Could be better,neutral
+Rahul Verma,user773@example.com,User,1,E-market - Not satisfied,2,Recipe section - Very confusing interface,1,Chatbot - Did not work properly,1,Terrible design,1,Did not work properly,negative
+Aisha Khan,user379@example.com,User,1,Terrible design,1,Slow and buggy,1,Slow and buggy,1,Contribution section - Terrible design,1,Overall website - Did not work properly,negative
+Arjun Das,user289@example.com,User,3,E-market - Not bad,3,Recipe section - Okay experience overall,1,Slow and buggy,2,Slow and buggy,2,Terrible design,negative
+Sneha Reddy,user419@example.com,User,3,E-market - Could use some improvements,4,Recipe section - Very smooth and easy to use,3,Not bad,3,Not bad,4,Overall website - Impressive design,positive
+Arjun Das,user675@example.com,User,1,E-market - Bad experience,2,Recipe section - Not satisfied,2,Hard to use,1,Contribution section - Hard to use,1,Did not work properly,negative
+Rohan Patel,user392@example.com,User,4,E-market - Loved it,4,Recipe section - Fast checkout and clean UI,2,Chatbot - Not satisfied,3,Satisfactory,3,Overall website - Could use some improvements,neutral
+Sneha Reddy,user593@example.com,User,1,Bad experience,1,Recipe section - Needs improvement,1,Chatbot - Terrible design,1,Contribution section - Did not work properly,1,Terrible design,negative
+Rahul Verma,user499@example.com,User,1,Terrible design,1,Checkout failed,2,Checkout failed,1,Contribution section - Unresponsive chatbot,1,Bad experience,negative
+Rohan Patel,user139@example.com,User,3,Average experience,3,Recipe section - Could be better,4,Very intuitive,4,Contribution section - Amazing recipes and service,4,Very smooth and easy to use,positive
+Pooja Joshi,user63@example.com,User,2,E-market - Hard to use,1,Not satisfied,1,Did not work properly,2,Contribution section - Unresponsive chatbot,1,Bad experience,negative
+Divya Shah,user472@example.com,User,1,Did not work properly,1,Checkout failed,1,Chatbot - Terrible design,2,Contribution section - Slow and buggy,1,Bad experience,negative
+Arjun Das,user648@example.com,User,5,E-market - Amazing recipes and service,5,Recipe section - Fast checkout and clean UI,5,Very smooth and easy to use,4,Very smooth and easy to use,5,Very smooth and easy to use,positive
+Ananya Singh,user129@example.com,User,5,E-market - Excellent experience,5,Worked perfectly,4,Chatbot - Very smooth and easy to use,5,Excellent experience,5,Amazing recipes and service,positive
+Sneha Reddy,user977@example.com,User,3,Decent but nothing special,2,Bad experience,3,Chatbot - Could use some improvements,2,Hard to use,3,It's fine,neutral
+Rohan Patel,user521@example.com,User,5,Fantastic feature,5,Recipe section - Very smooth and easy to use,4,Impressive design,5,Contribution section - Very smooth and easy to use,5,Amazing recipes and service,positive
+Vikram Kumar,user839@example.com,User,4,Loved it,5,Excellent experience,5,Amazing recipes and service,5,Amazing recipes and service,5,Loved it,positive
+Aisha Khan,user963@example.com,User,2,E-market - Checkout failed,1,Unresponsive chatbot,1,Chatbot - Hard to use,1,Contribution section - Bad experience,1,Overall website - Needs improvement,negative
+Aisha Khan,user65@example.com,User,2,E-market - Very confusing interface,3,Recipe section - Could be better,4,Very smooth and easy to use,2,Did not work properly,3,Not bad,neutral
+Sneha Reddy,user813@example.com,User,1,E-market - Slow and buggy,3,Okay experience overall,1,Chatbot - Bad experience,1,Needs improvement,2,Overall website - Checkout failed,negative
+Karan Mehta,user15@example.com,User,3,Average experience,1,Recipe section - Slow and buggy,3,Could use some improvements,2,Contribution section - Checkout failed,2,Overall website - Checkout failed,negative
+Ananya Singh,user157@example.com,User,2,E-market - Unresponsive chatbot,3,Recipe section - It's fine,3,Chatbot - Could be better,2,Checkout failed,3,Overall website - Satisfactory,neutral
+Karan Mehta,user41@example.com,User,2,E-market - Unresponsive chatbot,3,Recipe section - Could use some improvements,2,Did not work properly,3,Contribution section - Could be better,2,Overall website - Bad experience,negative
+Arjun Das,user493@example.com,User,1,E-market - Very confusing interface,3,Average experience,3,Chatbot - Not bad,2,Slow and buggy,2,Overall website - Hard to use,negative
+Aisha Khan,user380@example.com,User,1,E-market - Needs improvement,3,Recipe section - It's fine,3,Chatbot - Decent but nothing special,2,Contribution section - Terrible design,2,Overall website - Very confusing interface,negative
+Divya Shah,user188@example.com,User,2,E-market - Unresponsive chatbot,1,Recipe section - Unresponsive chatbot,3,Chatbot - Satisfactory,2,Contribution section - Very confusing interface,2,Overall website - Hard to use,negative
+Arjun Das,user764@example.com,User,3,E-market - Satisfactory,3,Recipe section - It's fine,1,Chatbot - Unresponsive chatbot,3,Average experience,2,Needs improvement,negative
+Arjun Das,user217@example.com,User,2,E-market - Not satisfied,4,Very intuitive,3,Chatbot - Average experience,2,Contribution section - Slow and buggy,3,Okay experience overall,neutral
+Rohan Patel,user792@example.com,User,5,Fast checkout and clean UI,4,Recipe section - Impressive design,3,Average experience,3,Contribution section - Satisfactory,4,Fantastic feature,positive
+Vikram Kumar,user53@example.com,User,5,Fast checkout and clean UI,5,Recipe section - Excellent experience,5,Fast checkout and clean UI,5,Fast checkout and clean UI,5,Overall website - Super helpful interface,positive
+Sneha Reddy,user879@example.com,User,1,E-market - Terrible design,1,Not satisfied,1,Very confusing interface,1,Contribution section - Terrible design,1,Overall website - Checkout failed,negative
+Rahul Verma,user338@example.com,User,3,Decent but nothing special,3,Recipe section - Not bad,3,Chatbot - Okay experience overall,3,Decent but nothing special,3,Overall website - It's fine,neutral
+Vikram Kumar,user749@example.com,User,2,Not satisfied,4,Recipe section - Very intuitive,2,Chatbot - Unresponsive chatbot,4,Fantastic feature,3,Overall website - Okay experience overall,neutral
+Rohan Patel,user720@example.com,User,3,Okay experience overall,4,Impressive design,3,Chatbot - Okay experience overall,3,Could be better,4,Fantastic feature,positive
+Vikram Kumar,user725@example.com,User,5,Worked perfectly,5,Great product selection,4,Worked perfectly,5,Very intuitive,5,Excellent experience,positive
+Vikram Kumar,user296@example.com,User,5,E-market - Loved it,5,Recipe section - Loved it,4,Chatbot - Super helpful interface,5,Excellent experience,5,Great product selection,positive
+Sneha Reddy,user702@example.com,User,4,E-market - Amazing recipes and service,3,Recipe section - Decent but nothing special,3,Chatbot - It's fine,4,Contribution section - Fantastic feature,3,Could use some improvements,neutral
+Ananya Singh,user252@example.com,User,5,Fantastic feature,5,Fast checkout and clean UI,5,Super helpful interface,5,Contribution section - Great product selection,5,Overall website - Fantastic feature,positive
+Sneha Reddy,user727@example.com,User,5,E-market - Impressive design,5,Great product selection,5,Fast checkout and clean UI,5,Contribution section - Very intuitive,5,Overall website - Great product selection,positive
+Ananya Singh,user462@example.com,User,3,E-market - Could use some improvements,2,Recipe section - Terrible design,3,Chatbot - Could be better,4,Amazing recipes and service,3,Average experience,neutral
+Rohan Patel,user456@example.com,User,2,E-market - Unresponsive chatbot,2,Recipe section - Terrible design,1,Slow and buggy,2,Contribution section - Unresponsive chatbot,2,Checkout failed,negative
+Ananya Singh,user997@example.com,User,5,E-market - Great product selection,5,Great product selection,5,Super helpful interface,4,Contribution section - Fast checkout and clean UI,5,Overall website - Very smooth and easy to use,positive
+Ananya Singh,user816@example.com,User,1,Hard to use,3,Recipe section - Not bad,1,Chatbot - Not satisfied,3,Could use some improvements,2,Overall website - Slow and buggy,negative
+Vikram Kumar,user863@example.com,User,2,E-market - Terrible design,2,Slow and buggy,1,Bad experience,1,Contribution section - Hard to use,1,Needs improvement,negative
+Karan Mehta,user270@example.com,User,1,E-market - Checkout failed,1,Unresponsive chatbot,1,Chatbot - Slow and buggy,1,Contribution section - Slow and buggy,1,Overall website - Not satisfied,negative
+Rohan Patel,user202@example.com,User,4,E-market - Impressive design,4,Recipe section - Super helpful interface,4,Excellent experience,4,Very smooth and easy to use,4,Great product selection,positive
+Pooja Joshi,user162@example.com,User,4,E-market - Loved it,4,Excellent experience,2,Slow and buggy,3,Okay experience overall,3,Could be better,neutral
+Aisha Khan,user556@example.com,User,2,Not satisfied,2,Recipe section - Hard to use,2,Chatbot - Did not work properly,1,Contribution section - Checkout failed,1,Unresponsive chatbot,negative
+Ananya Singh,user730@example.com,User,1,E-market - Unresponsive chatbot,1,Recipe section - Bad experience,1,Chatbot - Terrible design,2,Contribution section - Needs improvement,1,Overall website - Unresponsive chatbot,negative
+Divya Shah,user402@example.com,User,5,Fantastic feature,4,Excellent experience,4,Super helpful interface,5,Contribution section - Worked perfectly,5,Overall website - Very intuitive,positive
+Sneha Reddy,user703@example.com,User,5,Impressive design,5,Worked perfectly,5,Chatbot - Great product selection,5,Contribution section - Excellent experience,5,Overall website - Very intuitive,positive
+Divya Shah,user477@example.com,User,4,E-market - Amazing recipes and service,4,Recipe section - Fast checkout and clean UI,4,Impressive design,4,Contribution section - Loved it,3,Overall website - Could use some improvements,neutral
+Divya Shah,user822@example.com,User,1,E-market - Slow and buggy,1,Recipe section - Hard to use,1,Chatbot - Not satisfied,2,Unresponsive chatbot,1,Overall website - Very confusing interface,negative
+Karan Mehta,user772@example.com,User,1,E-market - Hard to use,2,Hard to use,1,Checkout failed,1,Checkout failed,1,Overall website - Checkout failed,negative
+Ananya Singh,user106@example.com,User,5,Fantastic feature,5,Recipe section - Excellent experience,5,Chatbot - Amazing recipes and service,5,Super helpful interface,5,Overall website - Amazing recipes and service,positive
+Sneha Reddy,user566@example.com,User,1,Checkout failed,1,Hard to use,2,Chatbot - Slow and buggy,1,Contribution section - Needs improvement,1,Not satisfied,negative
+Arjun Das,user390@example.com,User,2,Bad experience,2,Recipe section - Slow and buggy,1,Slow and buggy,1,Terrible design,1,Very confusing interface,negative
+Vikram Kumar,user2@example.com,User,3,Could be better,2,Very confusing interface,2,Needs improvement,1,Bad experience,2,Overall website - Checkout failed,negative
+Sneha Reddy,user938@example.com,User,1,Checkout failed,1,Recipe section - Checkout failed,1,Terrible design,2,Contribution section - Bad experience,1,Terrible design,negative
+Divya Shah,user983@example.com,User,3,It's fine,4,Recipe section - Great product selection,4,Super helpful interface,2,Hard to use,3,Average experience,neutral
+Arjun Das,user562@example.com,User,3,Average experience,2,Unresponsive chatbot,3,Chatbot - Could be better,3,Contribution section - Could use some improvements,3,Overall website - Decent but nothing special,neutral
+Vikram Kumar,user81@example.com,User,2,Checkout failed,2,Recipe section - Checkout failed,1,Very confusing interface,1,Contribution section - Hard to use,1,Overall website - Needs improvement,negative
+Arjun Das,user206@example.com,User,3,Decent but nothing special,3,Recipe section - It's fine,2,Chatbot - Terrible design,1,Very confusing interface,2,Bad experience,negative
+Karan Mehta,user35@example.com,User,5,E-market - Impressive design,5,Recipe section - Impressive design,4,Chatbot - Fantastic feature,4,Contribution section - Excellent experience,5,Overall website - Loved it,positive
+Sneha Reddy,user776@example.com,User,5,E-market - Loved it,5,Fantastic feature,5,Worked perfectly,5,Contribution section - Super helpful interface,5,Overall website - Worked perfectly,positive
+Pooja Joshi,user509@example.com,User,4,Super helpful interface,4,Recipe section - Very smooth and easy to use,5,Chatbot - Very smooth and easy to use,5,Amazing recipes and service,5,Very smooth and easy to use,positive
+Ananya Singh,user428@example.com,User,5,E-market - Great product selection,4,Recipe section - Fantastic feature,5,Super helpful interface,4,Contribution section - Very smooth and easy to use,5,Overall website - Super helpful interface,positive
+Arjun Das,user455@example.com,User,3,E-market - Okay experience overall,3,Recipe section - Not bad,2,Very confusing interface,4,Contribution section - Worked perfectly,3,Overall website - Satisfactory,neutral
+Divya Shah,user367@example.com,User,1,Bad experience,2,Recipe section - Unresponsive chatbot,1,Did not work properly,2,Checkout failed,2,Overall website - Slow and buggy,negative
+Rahul Verma,user92@example.com,User,3,E-market - It's fine,5,Recipe section - Fast checkout and clean UI,3,Could use some improvements,3,Contribution section - Could be better,4,Great product selection,positive
+Rohan Patel,user340@example.com,User,2,Not satisfied,3,Not bad,4,Amazing recipes and service,3,Contribution section - Okay experience overall,3,Satisfactory,neutral
+Divya Shah,user898@example.com,User,3,It's fine,2,Very confusing interface,4,Chatbot - Amazing recipes and service,3,Contribution section - Could use some improvements,3,Overall website - It's fine,neutral
+Divya Shah,user565@example.com,User,1,E-market - Hard to use,3,Could be better,1,Bad experience,3,Contribution section - Decent but nothing special,2,Hard to use,negative
+Arjun Das,user346@example.com,User,4,E-market - Fantastic feature,3,Not bad,2,Checkout failed,4,Very smooth and easy to use,3,Overall website - It's fine,neutral
+Divya Shah,user777@example.com,User,5,E-market - Amazing recipes and service,5,Amazing recipes and service,4,Excellent experience,4,Super helpful interface,5,Overall website - Fantastic feature,positive
+Rohan Patel,user242@example.com,User,5,E-market - Very smooth and easy to use,5,Recipe section - Excellent experience,5,Chatbot - Very smooth and easy to use,4,Excellent experience,5,Overall website - Amazing recipes and service,positive
+Ananya Singh,user14@example.com,User,2,E-market - Terrible design,2,Unresponsive chatbot,2,Needs improvement,1,Contribution section - Bad experience,1,Overall website - Not satisfied,negative
+Ananya Singh,user316@example.com,User,1,E-market - Very confusing interface,2,Recipe section - Hard to use,2,Chatbot - Terrible design,2,Contribution section - Did not work properly,2,Hard to use,negative
+Rahul Verma,user601@example.com,User,2,E-market - Hard to use,1,Recipe section - Very confusing interface,2,Chatbot - Very confusing interface,1,Contribution section - Needs improvement,1,Overall website - Did not work properly,negative
+Rohan Patel,user388@example.com,User,2,Not satisfied,3,Could use some improvements,3,Average experience,1,Contribution section - Very confusing interface,2,Overall website - Unresponsive chatbot,negative
+Rohan Patel,user274@example.com,User,1,Slow and buggy,1,Checkout failed,2,Very confusing interface,2,Contribution section - Hard to use,2,Checkout failed,negative
+Arjun Das,user167@example.com,User,5,E-market - Fast checkout and clean UI,5,Recipe section - Amazing recipes and service,5,Very smooth and easy to use,4,Fast checkout and clean UI,5,Very smooth and easy to use,positive
+Ananya Singh,user841@example.com,User,1,E-market - Did not work properly,2,Recipe section - Bad experience,2,Chatbot - Did not work properly,3,Contribution section - Decent but nothing special,2,Overall website - Very confusing interface,negative
+Rahul Verma,user993@example.com,User,5,E-market - Fantastic feature,4,Recipe section - Fast checkout and clean UI,4,Excellent experience,3,Contribution section - Average experience,4,Overall website - Loved it,positive
+Vikram Kumar,user647@example.com,User,5,Fantastic feature,4,Super helpful interface,3,Could use some improvements,5,Contribution section - Super helpful interface,4,Overall website - Amazing recipes and service,positive
+Pooja Joshi,user819@example.com,User,5,E-market - Excellent experience,5,Very smooth and easy to use,4,Chatbot - Fast checkout and clean UI,5,Fantastic feature,5,Overall website - Super helpful interface,positive
+Aisha Khan,user485@example.com,User,5,Fast checkout and clean UI,4,Recipe section - Very intuitive,5,Worked perfectly,5,Impressive design,5,Excellent experience,positive
+Rohan Patel,user981@example.com,User,1,E-market - Slow and buggy,2,Recipe section - Checkout failed,2,Chatbot - Not satisfied,2,Unresponsive chatbot,2,Needs improvement,negative
+Arjun Das,user505@example.com,User,4,E-market - Very smooth and easy to use,3,Okay experience overall,2,Chatbot - Needs improvement,2,Did not work properly,3,Overall website - Satisfactory,neutral
+Pooja Joshi,user832@example.com,User,1,Slow and buggy,2,Recipe section - Very confusing interface,1,Not satisfied,1,Hard to use,1,Overall website - Did not work properly,negative
+Vikram Kumar,user244@example.com,User,3,E-market - Could use some improvements,5,Recipe section - Amazing recipes and service,3,Chatbot - Average experience,3,Contribution section - Could be better,4,Very intuitive,positive
+Divya Shah,user567@example.com,User,1,E-market - Bad experience,1,Unresponsive chatbot,2,Chatbot - Unresponsive chatbot,1,Contribution section - Bad experience,1,Checkout failed,negative
+Aisha Khan,user876@example.com,User,2,E-market - Needs improvement,3,Could be better,3,Chatbot - Satisfactory,3,Not bad,3,Decent but nothing special,neutral
+Rahul Verma,user563@example.com,User,1,Did not work properly,1,Checkout failed,2,Chatbot - Terrible design,3,Satisfactory,2,Overall website - Needs improvement,negative
+Sneha Reddy,user687@example.com,User,5,Excellent experience,4,Recipe section - Very smooth and easy to use,3,It's fine,3,Decent but nothing special,4,Overall website - Worked perfectly,positive
+Karan Mehta,user190@example.com,User,5,Worked perfectly,5,Recipe section - Very smooth and easy to use,5,Chatbot - Loved it,5,Impressive design,5,Impressive design,positive
+Vikram Kumar,user783@example.com,User,1,E-market - Very confusing interface,1,Bad experience,1,Chatbot - Hard to use,1,Checkout failed,1,Overall website - Very confusing interface,negative
+Divya Shah,user700@example.com,User,1,Bad experience,1,Not satisfied,1,Chatbot - Terrible design,2,Contribution section - Bad experience,1,Did not work properly,negative
+Sneha Reddy,user476@example.com,User,5,Worked perfectly,4,Recipe section - Fast checkout and clean UI,3,Average experience,3,Contribution section - Okay experience overall,4,Overall website - Amazing recipes and service,positive
+Pooja Joshi,user682@example.com,User,5,E-market - Fast checkout and clean UI,4,Super helpful interface,5,Chatbot - Loved it,4,Contribution section - Loved it,5,Excellent experience,positive
+Pooja Joshi,user511@example.com,User,2,E-market - Not satisfied,2,Recipe section - Not satisfied,2,Very confusing interface,1,Slow and buggy,1,Slow and buggy,negative
+Sneha Reddy,user59@example.com,User,3,E-market - Okay experience overall,2,Recipe section - Slow and buggy,2,Chatbot - Did not work properly,3,Contribution section - Average experience,3,Could use some improvements,neutral
+Sneha Reddy,user475@example.com,User,4,Excellent experience,2,Very confusing interface,4,Chatbot - Fantastic feature,3,Contribution section - Could use some improvements,3,Overall website - Not bad,neutral
+Karan Mehta,user561@example.com,User,5,Excellent experience,4,Recipe section - Impressive design,4,Impressive design,5,Contribution section - Worked perfectly,4,Worked perfectly,positive
+Arjun Das,user857@example.com,User,2,Did not work properly,3,Recipe section - Decent but nothing special,2,Hard to use,3,Contribution section - Decent but nothing special,3,Overall website - It's fine,neutral
+Rohan Patel,user748@example.com,User,5,Amazing recipes and service,4,Amazing recipes and service,5,Chatbot - Great product selection,4,Fast checkout and clean UI,5,Worked perfectly,positive
+Rahul Verma,user253@example.com,User,1,Checkout failed,1,Recipe section - Did not work properly,1,Bad experience,1,Contribution section - Hard to use,1,Overall website - Checkout failed,negative
+Rohan Patel,user22@example.com,User,2,E-market - Terrible design,2,Recipe section - Needs improvement,3,Chatbot - Average experience,4,Fast checkout and clean UI,3,It's fine,neutral
+Divya Shah,user314@example.com,User,3,E-market - Okay experience overall,4,Worked perfectly,3,Chatbot - It's fine,3,Could use some improvements,3,Overall website - Satisfactory,neutral
+Aisha Khan,user460@example.com,User,4,Impressive design,3,Satisfactory,2,Very confusing interface,4,Contribution section - Fantastic feature,3,It's fine,neutral
+Arjun Das,user161@example.com,User,3,Could use some improvements,3,Satisfactory,3,Chatbot - Could use some improvements,4,Impressive design,3,Overall website - Satisfactory,neutral
+Divya Shah,user277@example.com,User,4,Excellent experience,5,Recipe section - Very intuitive,4,Very smooth and easy to use,5,Excellent experience,4,Overall website - Fantastic feature,positive
+Vikram Kumar,user956@example.com,User,5,E-market - Great product selection,5,Recipe section - Worked perfectly,4,Very intuitive,5,Contribution section - Excellent experience,5,Overall website - Amazing recipes and service,positive
+Ananya Singh,user192@example.com,User,1,E-market - Hard to use,1,Recipe section - Bad experience,2,Did not work properly,2,Hard to use,1,Hard to use,negative
+Aisha Khan,user386@example.com,User,4,E-market - Very smooth and easy to use,2,Recipe section - Very confusing interface,3,Could use some improvements,3,Contribution section - Could be better,3,Overall website - Could be better,neutral
+Karan Mehta,user806@example.com,User,1,E-market - Did not work properly,1,Recipe section - Checkout failed,1,Hard to use,1,Contribution section - Not satisfied,1,Overall website - Not satisfied,negative
+Arjun Das,user414@example.com,User,3,E-market - Decent but nothing special,2,Not satisfied,4,Chatbot - Super helpful interface,2,Contribution section - Checkout failed,3,Satisfactory,neutral
+Vikram Kumar,user492@example.com,User,2,Slow and buggy,4,Recipe section - Very intuitive,3,Could be better,3,Contribution section - Not bad,3,Overall website - Satisfactory,neutral
+Rahul Verma,user344@example.com,User,3,E-market - Could be better,2,Very confusing interface,3,Chatbot - It's fine,4,Contribution section - Very smooth and easy to use,3,Overall website - Could be better,neutral
+Rohan Patel,user770@example.com,User,1,E-market - Terrible design,1,Recipe section - Hard to use,1,Did not work properly,1,Contribution section - Checkout failed,1,Terrible design,negative
+Pooja Joshi,user309@example.com,User,5,Super helpful interface,5,Very intuitive,4,Chatbot - Super helpful interface,5,Worked perfectly,5,Overall website - Super helpful interface,positive
+Ananya Singh,user662@example.com,User,2,E-market - Checkout failed,3,Recipe section - It's fine,3,Decent but nothing special,2,Slow and buggy,3,Satisfactory,neutral
+Pooja Joshi,user131@example.com,User,3,Average experience,1,Recipe section - Slow and buggy,1,Needs improvement,3,Satisfactory,2,Slow and buggy,negative
+Ananya Singh,user664@example.com,User,1,E-market - Checkout failed,1,Recipe section - Needs improvement,2,Bad experience,2,Contribution section - Not satisfied,1,Overall website - Slow and buggy,negative
+Ananya Singh,user872@example.com,User,2,E-market - Hard to use,4,Recipe section - Worked perfectly,4,Loved it,4,Contribution section - Very intuitive,3,Overall website - Okay experience overall,neutral
+Rahul Verma,user100@example.com,User,5,Fantastic feature,5,Recipe section - Worked perfectly,4,Fantastic feature,5,Amazing recipes and service,5,Overall website - Very intuitive,positive
+Rahul Verma,user373@example.com,User,4,E-market - Impressive design,3,Not bad,4,Chatbot - Impressive design,5,Great product selection,4,Overall website - Fantastic feature,positive
+Vikram Kumar,user88@example.com,User,2,E-market - Needs improvement,1,Recipe section - Bad experience,2,Chatbot - Needs improvement,2,Contribution section - Did not work properly,1,Checkout failed,negative
+Aisha Khan,user459@example.com,User,2,Hard to use,2,Unresponsive chatbot,4,Chatbot - Worked perfectly,3,Contribution section - Satisfactory,3,Overall website - Could be better,neutral
+Rahul Verma,user331@example.com,User,1,Did not work properly,2,Needs improvement,2,Unresponsive chatbot,3,Okay experience overall,2,Did not work properly,negative
+Vikram Kumar,user215@example.com,User,4,E-market - Great product selection,5,Amazing recipes and service,5,Chatbot - Amazing recipes and service,4,Contribution section - Excellent experience,5,Overall website - Excellent experience,positive
+Arjun Das,user467@example.com,User,1,E-market - Hard to use,2,Unresponsive chatbot,2,Bad experience,2,Needs improvement,2,Not satisfied,negative
+Rahul Verma,user122@example.com,User,5,E-market - Very intuitive,5,Very smooth and easy to use,5,Chatbot - Very smooth and easy to use,5,Super helpful interface,5,Overall website - Fast checkout and clean UI,positive
+Arjun Das,user615@example.com,User,5,E-market - Fast checkout and clean UI,5,Recipe section - Great product selection,4,Chatbot - Fantastic feature,4,Contribution section - Fantastic feature,5,Overall website - Excellent experience,positive
+Rahul Verma,user21@example.com,User,2,Not satisfied,2,Checkout failed,3,Satisfactory,3,Contribution section - Okay experience overall,2,Overall website - Slow and buggy,negative
+Sneha Reddy,user701@example.com,User,4,E-market - Very smooth and easy to use,3,Recipe section - Average experience,4,Chatbot - Excellent experience,3,Contribution section - Could be better,4,Excellent experience,positive
+Rohan Patel,user72@example.com,User,3,E-market - Satisfactory,3,Recipe section - Average experience,5,Chatbot - Amazing recipes and service,5,Contribution section - Very smooth and easy to use,4,Amazing recipes and service,positive
+Arjun Das,user107@example.com,User,3,Satisfactory,3,Recipe section - Not bad,3,Chatbot - Satisfactory,3,Contribution section - It's fine,3,Average experience,neutral
+Ananya Singh,user271@example.com,User,2,E-market - Checkout failed,1,Recipe section - Did not work properly,2,Bad experience,2,Contribution section - Hard to use,1,Overall website - Checkout failed,negative
+Rahul Verma,user861@example.com,User,5,Fast checkout and clean UI,4,Recipe section - Loved it,4,Chatbot - Fast checkout and clean UI,4,Fast checkout and clean UI,5,Overall website - Worked perfectly,positive
+Karan Mehta,user436@example.com,User,1,Bad experience,2,Bad experience,1,Chatbot - Not satisfied,2,Terrible design,2,Overall website - Terrible design,negative
+Ananya Singh,user103@example.com,User,2,Slow and buggy,2,Recipe section - Checkout failed,2,Needs improvement,4,Contribution section - Impressive design,3,Overall website - Okay experience overall,neutral
