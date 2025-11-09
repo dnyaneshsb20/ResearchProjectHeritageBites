@@ -210,7 +210,7 @@ const Feedback = () => {
   ];
 
   const nextSection = () => {
-    if (currentSection < sections.length) {
+    if (currentSection < sections.length - 1) {
       setCurrentSection(prev => prev + 1);
     }
   };
@@ -342,7 +342,7 @@ const Feedback = () => {
             )}
 
             {/* Rating Sections */}
-            {currentSection > 0 && currentSection <= sections.length && (
+          {currentSection >= 0 && currentSection < sections.length && currentSection !== 0 && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -354,10 +354,10 @@ const Feedback = () => {
                     <SectionIcon className="w-8 h-8 text-white" />
                   </div>
                   <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
-                    {sections[currentSection - 1].label}
+                    {sections[currentSection].label}
                   </h2>
                   <p className="text-gray-600 text-lg">
-                    {sections[currentSection - 1].description}
+                    {sections[currentSection].description}
                   </p>
                 </div>
 
@@ -372,14 +372,14 @@ const Feedback = () => {
                         <motion.button
                           key={star}
                           type="button"
-                          onClick={() => handleRating(`${sections[currentSection - 1].key}Rating`, star)}
+                          onClick={() => handleRating(`${sections[currentSection].key}Rating`, star)}
                           whileHover={{ scale: 1.2 }}
                           whileTap={{ scale: 0.9 }}
                           className="transform transition-all duration-200"
                         >
                           <Star
                             className={`w-12 h-12 lg:w-14 lg:h-14 transition-all duration-300 ${
-                              star <= formData[`${sections[currentSection - 1].key}Rating`]
+                              star <= formData[`${sections[currentSection].key}Rating`]
                                 ? "fill-yellow-400 text-yellow-400 drop-shadow-lg"
                                 : "fill-gray-200 text-gray-300 hover:fill-yellow-200 hover:text-yellow-300"
                             }`}
@@ -399,9 +399,9 @@ const Feedback = () => {
                       Additional Comments
                     </label>
                     <textarea
-                      placeholder={`Tell us more about your experience with ${sections[currentSection - 1].label.toLowerCase()}...`}
-                      value={formData[`${sections[currentSection - 1].key}Review`]}
-                      onChange={(e) => handleChange(`${sections[currentSection - 1].key}Review`, e.target.value)}
+                      placeholder={`Tell us more about your experience with ${sections[currentSection].label.toLowerCase()}...`}
+                      value={formData[`${sections[currentSection].key}Review`]}
+                      onChange={(e) => handleChange(`${sections[currentSection].key}Review`, e.target.value)}
                       rows={4}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 resize-none transition-all duration-300 placeholder-gray-400"
                     />
@@ -418,7 +418,7 @@ const Feedback = () => {
                      Back
                     </Button>
 
-                  {currentSection < sections.length ? (
+                  {currentSection < sections.length - 1  ? (
                     <Button
                       type="button"
                       onClick={nextSection}
