@@ -81,6 +81,7 @@ const Feedback = () => {
     }
     return true;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -90,69 +91,62 @@ const Feedback = () => {
     try {
       if (!userProfile) {
         toast.error("You must be logged in to submit feedback.");
-        return;
-      }
-
-      const combinedReview = `
-      E-Market: ${formData.eMarketReview || ""}.
-      Recipe: ${formData.recipeReview || ""}.
-      Chatbot: ${formData.chatbotReview || ""}.
-      Contribution: ${formData.contributionReview || ""}.
-      Overall: ${formData.overallReview || ""}.
-    `.trim();
-      if (!combinedReview) {
-        toast.error("Please write at least one review before submitting.");
         setIsSubmitting(false);
         return;
       }
 
-      let sentiment;
-      try {
-        const sentimentResponse = await fetch(
-          "https://fastapi-sentiment-app.onrender.com/predict-sentiment",
+      // Combine all review texts
+      const combinedReview = `
+        E-Market: ${formData.eMarketReview || ""}.
+        Recipe: ${formData.recipeReview || ""}.
+        Chatbot: ${formData.chatbotReview || ""}.
+        Contribution: ${formData.contributionReview || ""}.
+        Overall: ${formData.overallReview || ""}.
+      `;
+const userType = userProfile.role
+        ? userProfile.role.charAt(0).toUpperCase() + userProfile.role.slice(1).toLowerCase()
+        : "User";
+
+      // Call ML API
+      const sentimentResponse = await fetch("https://fastapi-sentiment-app.onrender.com/predict-sentiment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: combinedReview, user_type: userType}),
+      });
+      const sentiment = await sentimentResponse.json();
+
+      // Format user type correctly
+      
+      // Insert into Supabase with user_id and numeric fields
+      const { error } = await supabase
+        .from("website_feedback")
+        .insert([
           {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: combinedReview }),
-          }
-        );
-        if (!sentimentResponse.ok) throw new Error(`ML API error: ${sentimentResponse.status}`);
-        sentiment = await sentimentResponse.json();
-      } catch (err) {
-        console.error("Error calling ML API:", err);
-        toast.error("ML analysis failed. Submitting feedback anyway.");
-        sentiment = { sentiment_label: "neutral", sentiment_score: 0 };
-      }
-
-      const allowedTypes = ["User", "Admin", "Farmer"];
-      const userType = allowedTypes.includes(userProfile.role) ? userProfile.role : "User";
-
-      const { error } = await supabase.from("website_feedback").insert([
-        {
-          user_id: userProfile.user_id,
-          name: userProfile.name,
-          email: userProfile.email,
-          user_type: userType,
-          e_market_rating: Number(formData.eMarketRating),
-          e_market_review: formData.eMarketReview,
-          recipe_rating: Number(formData.recipeRating),
-          recipe_review: formData.recipeReview,
-          chatbot_rating: Number(formData.chatbotRating),
-          chatbot_review: formData.chatbotReview,
-          contribution_rating: Number(formData.contributionRating),
-          contribution_review: formData.contributionReview,
-          overall_rating: Number(formData.overallRating),
-          overall_review: formData.overallReview,
-          sentiment_label: sentiment.sentiment_label,
-          sentiment_score: parseFloat(sentiment.sentiment_score),
-          page_visited: window.location.href,
-        },
-      ]);
+            user_id: userProfile.user_id,
+            name: userProfile.name,
+            email: userProfile.email,
+            user_type: userType,
+            e_market_rating: Number(formData.eMarketRating),
+            e_market_review: formData.eMarketReview,
+            recipe_rating: Number(formData.recipeRating),
+            recipe_review: formData.recipeReview,
+            chatbot_rating: Number(formData.chatbotRating),
+            chatbot_review: formData.chatbotReview,
+            contribution_rating: Number(formData.contributionRating),
+            contribution_review: formData.contributionReview,
+            overall_rating: Number(formData.overallRating),
+            overall_review: formData.overallReview,
+            sentiment_label: sentiment.sentiment_label,
+            sentiment_score: parseFloat(sentiment.sentiment_score),
+            page_visited: window.location.href,
+          },
+        ]);
 
       if (error) throw error;
 
       toast.success("Feedback submitted successfully! 🎉");
 
+      // Reset form
       setFormData({
         name: "",
         email: "",
@@ -169,49 +163,49 @@ const Feedback = () => {
       });
       setCurrentSection(0);
     } catch (err) {
-      console.error("Submission error:", err);
+      console.error(err);
       toast.error("Failed to submit feedback. Please try again.");
     } finally {
-      setIsSubmitting(false); // release button
+      setIsSubmitting(false);
     }
   };
 
   const sections = [
-    {
-      key: "user",
-      label: "User Details",
+    { 
+      key: "user", 
+      label: "User Details", 
       icon: User,
-      description: "How was your shopping experience?"
+      description: "How was your shopping experience?" 
     },
-    {
-      key: "eMarket",
-      label: "E-Market",
+    { 
+      key: "eMarket", 
+      label: "E-Market", 
       icon: ShoppingCart,
-      description: "How was your shopping experience?"
+      description: "How was your shopping experience?" 
     },
-    {
-      key: "recipe",
-      label: "Recipe Section",
+    { 
+      key: "recipe", 
+      label: "Recipe Section", 
       icon: ChefHat,
-      description: "Share your thoughts on our recipes"
+      description: "Share your thoughts on our recipes" 
     },
-    {
-      key: "chatbot",
-      label: "Chatbot",
+    { 
+      key: "chatbot", 
+      label: "Chatbot", 
       icon: Bot,
-      description: "How helpful was our AI assistant?"
+      description: "How helpful was our AI assistant?" 
     },
-    {
-      key: "contribution",
-      label: "Contribution Section",
+    { 
+      key: "contribution", 
+      label: "Contribution Section", 
       icon: Users,
-      description: "Your experience contributing content"
+      description: "Your experience contributing content" 
     },
-    {
-      key: "overall",
-      label: "Overall Website",
+    { 
+      key: "overall", 
+      label: "Overall Website", 
       icon: Globe,
-      description: "Your overall impression of HeritageBites"
+      description: "Your overall impression of HeritageBites" 
     },
   ];
 
@@ -232,7 +226,7 @@ const Feedback = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
-
+      
       {/* Hero Section */}
       <header className="relative bg-gradient-to-br from-primary via-secondary to-accent py-16 lg:py-24 px-4 text-center overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
@@ -265,10 +259,11 @@ const Feedback = () => {
                   <button
                     key={section.key}
                     onClick={() => setCurrentSection(index)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${index === currentSection
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
+                      index === currentSection
                         ? 'bg-primary text-white'
                         : 'text-black hover:text-gray-700'
-                      } ${isMobile ? 'text-sm' : ''}`}
+                    } ${isMobile ? 'text-sm' : ''}`}
                   >
                     <section.icon className="w-4 h-4" />
                     {!isMobile && (
@@ -347,7 +342,7 @@ const Feedback = () => {
             )}
 
             {/* Rating Sections */}
-            {currentSection >= 0 && currentSection < sections.length && currentSection !== 0 && (
+          {currentSection >= 0 && currentSection < sections.length && currentSection !== 0 && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -383,10 +378,11 @@ const Feedback = () => {
                           className="transform transition-all duration-200"
                         >
                           <Star
-                            className={`w-12 h-12 lg:w-14 lg:h-14 transition-all duration-300 ${star <= formData[`${sections[currentSection].key}Rating`]
+                            className={`w-12 h-12 lg:w-14 lg:h-14 transition-all duration-300 ${
+                              star <= formData[`${sections[currentSection].key}Rating`]
                                 ? "fill-yellow-400 text-yellow-400 drop-shadow-lg"
                                 : "fill-gray-200 text-gray-300 hover:fill-yellow-200 hover:text-yellow-300"
-                              }`}
+                            }`}
                           />
                         </motion.button>
                       ))}
@@ -415,12 +411,12 @@ const Feedback = () => {
                 {/* Navigation Buttons */}
                 <div className="flex justify-between items-center mt-12 max-w-2xl mx-auto">
                   <Button
-                    type="button"
-                    onClick={prevSection}
-                    className="bg-primary hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                  >
-                    Back
-                  </Button>
+                      type="button"
+                      onClick={prevSection}
+                      className="bg-primary hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    >
+                     Back
+                    </Button>
 
                   {currentSection < sections.length - 1 ? (
                     <Button
