@@ -108,7 +108,7 @@ const userType = userProfile.role
         : "User";
 
       // Call ML API
-      const sentimentResponse = await fetch("http://localhost:4028/predict-sentiment", {
+      const sentimentResponse = await fetch("https://fastapi-sentiment-app.onrender.com/predict-sentiment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: combinedReview, user_type: userType}),
