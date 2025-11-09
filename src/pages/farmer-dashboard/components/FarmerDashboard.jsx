@@ -65,7 +65,14 @@ const FarmerDashboard = () => {
   }, [user, navigate]);
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex items-center gap-3 text-muted-foreground">
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+          Loading...
+        </div>
+      </div>
+    );
   }
 
   // Check profile completeness
@@ -80,105 +87,156 @@ const FarmerDashboard = () => {
     <>
       <Header />
 
-      <div className="min-h-screen p-6 bg-background">
-        <div className="max-w-6xl mx-auto">
-          {/* Dashboard Header */}
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          {/* Professional Header */}
           <div className="mb-6">
-            <h2 className="text-2xl font-semibold">Farmer Dashboard</h2>
+            <h1 className="text-2xl font-semibold text-foreground mb-1">Farmer Dashboard</h1>
+            <p className="text-sm text-muted-foreground">
+              Welcome back, {farmer?.name || 'Farmer'}
+            </p>
           </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            {/* Products */}
-            <div className="bg-card border border-border rounded-lg p-6 flex flex-col items-center justify-center text-center shadow-warm">
-              <Icon name="Package" size={28} className="text-accent mb-2" />
-              <h3 className="text-sm text-muted-foreground">Products</h3>
-              <p className="text-2xl font-bold">{products.length}</p>
-            </div>
-
-            {/* Orders */}
-            <div className="bg-card border border-border rounded-lg p-6 flex flex-col items-center justify-center text-center shadow-warm">
-              <Icon name="ShoppingBag" size={28} className="text-success mb-2" />
-              <h3 className="text-sm text-muted-foreground">Orders</h3>
-              <p className="text-2xl font-bold">{orders.length}</p>
-            </div>
-
-            {/* Profile Completion */}
-            <div className="bg-card border border-border rounded-lg p-6 flex flex-col items-center justify-center text-center shadow-warm">
-              <Icon
-                name={isProfileComplete ? "CheckCircle" : "AlertCircle"}
-                size={28}
-                className={isProfileComplete ? "text-success mb-2" : "text-warning mb-2"}
-              />
-              <h3 className="text-sm text-muted-foreground">Profile Complete</h3>
-              <p className="text-2xl font-bold">{isProfileComplete ? "Yes" : "No"}</p>
-            </div>
-          </div>
-
-          {/* Products Section */}
-          <div className="bg-popover rounded-lg border border-border p-6 shadow-warm">
-            <h3 className="text-lg font-medium mb-4">Your Products</h3>
-
-            {products.length === 0 ? (
-              <div className="text-sm text-muted-foreground">No products yet.</div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className="bg-card border border-border rounded-lg overflow-hidden shadow-warm hover:shadow-warm-md transition-all duration-200 cursor-pointer group"
-                  >
-                    {/* Product Image */}
-                    <div className="relative aspect-square overflow-hidden flex items-center justify-center bg-muted">
-                      {product.image_url ? (
-                        <Image
-                          src={product.image_url}
-                          alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                        />
-                      ) : (
-                        <Icon name="Image" size={48} className="text-muted-foreground opacity-70" />
-                      )}
-
-                      {product.discount && (
-                        <span className="absolute top-2 left-2 px-2 py-1 bg-accent text-accent-foreground text-xs font-medium rounded">
-                          {product.discount}% OFF
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Product Info */}
-                    <div className="p-4">
-                      <h3 className="font-semibold text-foreground mb-1 line-clamp-2">{product.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        {product.category || "Uncategorized"}
-                      </p>
-
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-lg font-bold text-foreground">₹{product.price}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {product.stock > 0
-                            ? `${product.stock} in stock`
-                            : "Out of Stock"}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>
-                          Added:{" "}
-                          {product.created_at
-                            ? new Date(product.created_at).toLocaleDateString()
-                            : "-"}
-                        </span>
-                        {product.isOrganic && (
-                          <span className="text-success font-medium">Organic</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+          {/* Compact Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div className="bg-white border border-border rounded-lg p-4 hover:shadow-sm transition-shadow">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-50 rounded-lg">
+                  <Icon name="Package" size={25} className="text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-md font-medium text-black">Products</p>
+                  <p className="text-md font-semibold text-foreground">{products.length}</p>
+                </div>
               </div>
-            )}
+            </div>
+
+            <div className="bg-white border border-border rounded-lg p-4 hover:shadow-sm transition-shadow">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-50 rounded-lg">
+                  <Icon name="ShoppingBag" size={25} className="text-green-600" />
+                </div>
+                <div>
+                  <p className="text-md font-medium text-black">Orders</p>
+                  <p className="text-md font-semibold text-foreground">{orders.length}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border border-border rounded-lg p-4 hover:shadow-sm transition-shadow">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg ${
+                  isProfileComplete ? 'bg-green-50' : 'bg-amber-50'
+                }`}>
+                  <Icon
+                    name={isProfileComplete ? "CheckCircle" : "AlertCircle"}
+                    size={25}
+                    className={isProfileComplete ? "text-green-600" : "text-amber-600"}
+                  />
+                </div>
+                <div>
+                  <p className="text-md font-medium text-black">Profile</p>
+                  <p className="text-md font-semibold text-foreground">
+                    {isProfileComplete ? "Complete" : "Incomplete"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Professional Products Section */}
+          <div className="bg-white border border-border rounded-lg">
+            <div className="px-5 py-4 border-b border-border">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-foreground">Products</h2>
+                <span className="text-sm text-muted-foreground">
+                  {products.length} items
+                </span>
+              </div>
+            </div>
+
+            <div className="p-5">
+              {products.length === 0 ? (
+                <div className="text-center py-8">
+                  <Icon name="Package" size={32} className="text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground mb-4">No products listed</p>
+                  <button 
+                    onClick={() => navigate('/farmer/products/new')}
+                    className="bg-primary text-primary-foreground px-4 py-2 rounded text-sm font-medium hover:bg-primary/90"
+                  >
+                    Add Product
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {products.map((product) => (
+                    <div
+                      key={product.id}
+                      className="group border border-border rounded-lg hover:border-primary/40 transition-all duration-200 bg-background hover:shadow-sm"
+                    >
+                      {/* Product Image */}
+                      <div className="relative h-28 bg-muted rounded-t-lg overflow-hidden">
+                        {product.image_url ? (
+                          <Image
+                            src={product.image_url}
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Icon name="Image" size={20} className="text-muted-foreground" />
+                          </div>
+                        )}
+
+                        {/* Top Badges */}
+                        <div className="absolute top-2 left-2 right-2 flex justify-between items-start">
+                          {product.discount && (
+                            <span className="bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded font-medium">
+                              {product.discount}% OFF
+                            </span>
+                          )}
+                          {product.isOrganic && (
+                            <span className="bg-green-500 text-white text-xs px-1.5 py-0.5 rounded font-medium">
+                              Organic
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Stock Status */}
+                        <div className="absolute bottom-2 right-2">
+                          <div className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                            product.stock > 10 
+                              ? 'bg-green-100 text-green-700' 
+                              : product.stock > 0 
+                              ? 'bg-amber-100 text-amber-700'
+                              : 'bg-red-100 text-red-700'
+                          }`}>
+                            {product.stock} left
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Product Info */}
+                      <div className="p-3">
+                        <h3 className="font-medium text-foreground text-sm line-clamp-2 mb-1 leading-tight">
+                          {product.name}
+                        </h3>
+                        
+                        <p className="text-xs text-muted-foreground mb-2 line-clamp-1">
+                          {product.category || "General"}
+                        </p>
+
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold text-foreground text-sm">
+                            ₹{product.price}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
