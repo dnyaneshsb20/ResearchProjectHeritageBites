@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Send, ThumbsUp, ThumbsDown, MessageCircle, ShoppingCart, ChefHat, Bot, Users, Globe, User } from "lucide-react";
+import { Star, Send, ThumbsUp, ThumbsDown, MessageCircle, ShoppingCart, 
+  ChefHat, Bot, Users, Globe, User2 } from "lucide-react";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import toast from "react-hot-toast";
@@ -176,7 +177,7 @@ const Feedback = () => {
     { 
       key: "user", 
       label: "User Details", 
-      icon: User,
+      icon: User2,
       description: "How was your shopping experience?" 
     },
     { 
