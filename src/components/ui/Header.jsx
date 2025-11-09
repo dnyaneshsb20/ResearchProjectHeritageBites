@@ -11,7 +11,7 @@ import { RiUserCommunityLine } from "react-icons/ri";
 
 // make sure this points to your Supabase client
 
-const Header = () => {
+const Header = ({ onIngredientClick }) => {
   const navigate = useNavigate();
   const { user, logout, setUser, setRole, showAuthPopup, setShowAuthPopup } = useAuth();
 
@@ -430,9 +430,13 @@ const Header = () => {
                           if (sug.type === 'product') {
                             navigate(`/product/${sug.id}`);
                           } else if (sug.type === 'ingredient') {
-                            navigate(`/ingredient-marketplace?q=${encodeURIComponent(sug.name)}`);
+                            if (onIngredientClick) {
+                              onIngredientClick(sug);
+                            } else {
+                              navigate(`/product-detail-modal?id=${sug.id}`);
+                            }
                           } else if (sug.type === 'recipe') {
-                            navigate(`/recipe/${sug.id}`);
+                            navigate(`/recipe-detail-instructions?id=${sug.id}`);
                           }
 
                           setIsSuggestionsOpen(false);

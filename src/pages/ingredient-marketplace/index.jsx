@@ -353,7 +353,21 @@ const IngredientMarketplace = () => {
         <meta name="description" content="Discover authentic indigenous ingredients directly from verified farmers. Shop organic spices, grains, oils, and traditional ingredients for your Indian recipes." />
       </Helmet>
       <div className="min-h-screen bg-background">
-        <Header />
+        <Header
+          onIngredientClick={(ingredient) => {
+            // Match the ingredient with a product entry (if available)
+            const matchedProduct = allProducts.find(
+              (p) =>
+                p.name.toLowerCase() === ingredient.name.toLowerCase() ||
+                p.ingredient_id === ingredient.ingredient_id
+            );
+
+            if (matchedProduct) {
+              setSelectedProduct(matchedProduct);
+              setIsProductModalOpen(true); // ✅ Open the ProductDetailModal popup
+            }
+          }}
+        />
 
         {/* Category Navigation */}
         <CategoryTabs
@@ -372,11 +386,11 @@ const IngredientMarketplace = () => {
                   filters={filters}
                   onFilterChange={setFilters}
                   onClearFilters={handleClearFilters}
-                   onIngredientsUpdate={(ingredients) => {
-    // Update filteredProducts based on filtered ingredients
-    const ingredientIds = ingredients.map(i => i.ingredient_id);
-    setFilteredProducts(allProducts.filter(p => ingredientIds.includes(p.ingredient_id)));
-  }}
+                  onIngredientsUpdate={(ingredients) => {
+                    // Update filteredProducts based on filtered ingredients
+                    const ingredientIds = ingredients.map(i => i.ingredient_id);
+                    setFilteredProducts(allProducts.filter(p => ingredientIds.includes(p.ingredient_id)));
+                  }}
                 />
               </div>
             </div>
@@ -537,11 +551,11 @@ const IngredientMarketplace = () => {
           filters={filters}
           onFilterChange={setFilters}
           onClearFilters={handleClearFilters}
-         onIngredientsUpdate={(ingredients) => {
-    // Update filteredProducts based on filtered ingredients
-    const ingredientIds = ingredients.map(i => i.ingredient_id);
-    setFilteredProducts(allProducts.filter(p => ingredientIds.includes(p.ingredient_id)));
-  }}
+          onIngredientsUpdate={(ingredients) => {
+            // Update filteredProducts based on filtered ingredients
+            const ingredientIds = ingredients.map(i => i.ingredient_id);
+            setFilteredProducts(allProducts.filter(p => ingredientIds.includes(p.ingredient_id)));
+          }}
         />
 
         {/* Product Detail Modal */}
