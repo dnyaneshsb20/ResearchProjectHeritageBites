@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { X, Mail, Phone, MapPin, User, Calendar } from "lucide-react";
+import { X, Mail, Phone, MapPin, User, Calendar, ChefHat, Package } from "lucide-react";
 import Button from "components/ui/Button";
 import { supabase } from "../../../supabaseClient";
-import CustomerOrdersTable from "./CustomerOrdersTable"; // adjust path as needed
+import CustomerOrdersTable from "./CustomerOrdersTable";
 
 const UserProfileModal = ({ user, onClose }) => {
   const [activeTab, setActiveTab] = useState("Contributions");
@@ -32,14 +32,24 @@ const UserProfileModal = ({ user, onClose }) => {
     fetchContributions();
   }, [user]);
 
+  const getStatusColor = (status) => {
+    const colors = {
+      approved: "bg-green-100 text-green-800 border-green-200",
+      pending: "bg-amber-100 text-amber-800 border-amber-200",
+      rejected: "bg-red-100 text-red-800 border-red-200",
+      "changes requested": "bg-blue-100 text-blue-800 border-blue-200"
+    };
+    return colors[status] || "bg-gray-100 text-gray-800 border-gray-200";
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white mt-16 max-h-[85vh] w-full max-w-6xl rounded-lg shadow-lg overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 pt-24">
+      <div className="bg-card border border-border rounded-xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex justify-between mt-5 ml-3 items-center p-4 border-b">
+        <div className="flex items-center justify-between p-6 border-b border-border bg-card/50">
           <div className="flex items-center gap-4">
             <div
-              className="w-14 h-14 rounded-full flex items-center justify-center text-white text-lg font-semibold"
+              className="w-16 h-16 rounded-full flex items-center justify-center text-primary-foreground text-xl font-semibold border-4 border-primary/20"
               style={{
                 backgroundColor:
                   typeof user?.name === "string"
@@ -47,8 +57,8 @@ const UserProfileModal = ({ user, onClose }) => {
                       (h, c) => h + c.charCodeAt(0),
                       0
                     ) % 360
-                    },60%,55%)`
-                    : "#ffffff",
+                    },70%,50%)`
+                    : "#6b7280",
               }}
             >
               {user?.name
@@ -62,90 +72,118 @@ const UserProfileModal = ({ user, onClose }) => {
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-gray-800">
+              <h2 className="text-2xl font-bold text-foreground">
                 {user?.name || "Unknown User"}
               </h2>
-              <p className="text-sm text-muted-foreground">
-                {user?.role || "User"}
+              <p className="text-muted-foreground flex items-center gap-1">
+                <span className="capitalize">{user?.role || "User"}</span>
+                {user?.createdAt && (
+                  <>
+                    <span>•</span>
+                    <span>Joined {user.createdAt}</span>
+                  </>
+                )}
               </p>
             </div>
           </div>
 
           <Button
             onClick={onClose}
-            className="text-gray-500 p-2 rounded transition -mt-10"
-            aria-label="Close profile"
-            variant="outline"
+            className="hover:bg-accent"
+            variant="ghost"
+            size="icon"
           >
             <X className="w-5 h-5" />
           </Button>
         </div>
 
-        {/* Top info section */}
+        {/* User Info Grid */}
         <div className="p-6">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Contact Information */}
+            <div className="bg-background rounded-lg border border-border p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                <User className="w-5 h-5 text-primary" />
+                Contact Information
+              </h3>
               <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-blue-600 mt-1" />
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Mail className="w-4 h-4 text-primary" />
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <p className="text-gray-800 font-medium break-words">
-                      {user?.email || "N/A"}
+                    <p className="text-sm text-muted-foreground">Email</p>
+                    <p className="text-foreground font-medium break-all">
+                      {user?.email || "Not provided"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-green-600 mt-1" />
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Phone className="w-4 h-4 text-primary" />
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-500">Mobile</p>
-                    <p className="text-gray-800 font-medium">
-                      {user?.mobile || "N/A"}
+                    <p className="text-sm text-muted-foreground">Mobile</p>
+                    <p className="text-foreground font-medium">
+                      {user?.mobile || "Not provided"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-red-600 mt-1" />
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <MapPin className="w-4 h-4 text-primary" />
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-500">Location</p>
-                    <p className="text-gray-800 font-medium">
-                      {user?.location || "N/A"}
+                    <p className="text-sm text-muted-foreground">Location</p>
+                    <p className="text-foreground font-medium">
+                      {user?.location || "Not provided"}
                     </p>
                   </div>
                 </div>
               </div>
+            </div>
 
+            {/* Additional Details */}
+            <div className="bg-background rounded-lg border border-border p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-primary" />
+                User Details
+              </h3>
               <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <User className="w-5 h-5 text-purple-600 mt-1" />
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <span className="text-sm font-medium text-primary">AG</span>
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-500">Age Group</p>
-                    <p className="text-gray-800 font-medium">
-                      {user?.ageGroup || "N/A"}
+                    <p className="text-sm text-muted-foreground">Age Group</p>
+                    <p className="text-foreground font-medium">
+                      {user?.ageGroup || "Not specified"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-sm text-sm font-medium bg-orange-100 text-orange-600 mt-1">
-                    ⚡
-                  </span>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <span className="text-sm font-medium text-primary">AL</span>
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-500">Activity Level</p>
-                    <p className="text-gray-800 font-medium">
-                      {user?.activityLevel || "N/A"}
+                    <p className="text-sm text-muted-foreground">Activity Level</p>
+                    <p className="text-foreground font-medium">
+                      {user?.activityLevel || "Not specified"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <Calendar className="w-5 h-5 text-indigo-600 mt-1" />
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Calendar className="w-4 h-4 text-primary" />
+                  </div>
                   <div>
-                    <p className="text-sm text-gray-500">Joined</p>
-                    <p className="text-gray-800 font-medium">
-                      {user?.createdAt || "N/A"}
+                    <p className="text-sm text-muted-foreground">Member Since</p>
+                    <p className="text-foreground font-medium">
+                      {user?.createdAt || "Unknown"}
                     </p>
                   </div>
                 </div>
@@ -154,78 +192,90 @@ const UserProfileModal = ({ user, onClose }) => {
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="border-t">
+        {/* Tabs Navigation */}
+        <div className="border-t border-border">
           <div className="flex">
-            {["Contributions", "Orders"].map((tab) => (
+            {[
+              { id: "Contributions", icon: ChefHat },
+              { id: "Orders", icon: Package }
+            ].map((tab) => (
               <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-3 text-center font-medium ${activeTab === tab
-                    ? "border-b-2 border-orange-500 text-orange-600"
-                    : "text-gray-600 hover:text-gray-800"
-                  }`}
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 flex items-center justify-center gap-2 py-4 text-sm font-medium transition-colors border-b-2 ${
+                  activeTab === tab.id
+                    ? "border-primary text-primary bg-primary/5"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:bg-primary hover:text-white"
+                }`}
               >
-                {tab}
+                <tab.icon className="w-4 h-4" />
+                {tab.id}
               </button>
             ))}
           </div>
 
-          <div className="p-6 min-h-[160px]">
+          {/* Tab Content */}
+          <div className="p-6 bg-background min-h-[200px]">
             {activeTab === "Contributions" && (
-              <>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-4">
+                  Recipe Contributions
+                </h3>
                 {loading ? (
-                  <div className="text-gray-500 text-center">
+                  <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-2"></div>
                     Loading contributions...
                   </div>
                 ) : contributions.length === 0 ? (
-                  <div className="text-gray-500 text-center">
-                    No contributions yet.
+                  <div className="text-center py-8 text-muted-foreground">
+                    <ChefHat className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                    <p>No recipe contributions yet.</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {contributions.map((c) => (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {contributions.map((contribution) => (
                       <div
-                        key={c.indg_recipe_id}
-                        className="p-4 border rounded-lg shadow-sm hover:shadow-md transition bg-white"
+                        key={contribution.indg_recipe_id}
+                        className="bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow group"
                       >
-                        {c.image_url ? (
-                          <img
-                            src={c.image_url}
-                            alt={c.name}
-                            className="w-full h-40 object-cover rounded-md mb-3"
-                          />
-                        ) : (
-                          <div className="w-full h-40 bg-gray-100 rounded-md mb-3 flex items-center justify-center text-gray-400">
-                            No Image
+                        <div className="flex">
+                          {contribution.image_url ? (
+                            <img
+                              src={contribution.image_url}
+                              alt={contribution.name}
+                              className="w-24 h-24 object-cover flex-shrink-0"
+                            />
+                          ) : (
+                            <div className="w-24 h-24 bg-muted flex items-center justify-center flex-shrink-0">
+                              <ChefHat className="w-8 h-8 text-muted-foreground" />
+                            </div>
+                          )}
+                          <div className="p-4 flex-1">
+                            <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                              {contribution.name}
+                            </h4>
+                            <div className="flex items-center justify-between mt-2">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(contribution.status)}`}>
+                                {contribution.status}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                {new Date(contribution.created_at).toLocaleDateString()}
+                              </span>
+                            </div>
                           </div>
-                        )}
-                        <h4 className="text-lg font-semibold">{c.name}</h4>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Status:{" "}
-                          <span
-                            className={`font-medium ${c.status === "approved"
-                                ? "text-green-600"
-                                : c.status === "pending"
-                                  ? "text-yellow-600"
-                                  : "text-red-600"
-                              }`}
-                          >
-                            {c.status}
-                          </span>
-                        </p>
-                        <p className="text-xs text-gray-400 mt-1">
-                          {new Date(c.created_at).toLocaleDateString()}
-                        </p>
+                        </div>
                       </div>
                     ))}
                   </div>
                 )}
-              </>
+              </div>
             )}
 
             {activeTab === "Orders" && (
-              <div className="mt-4">
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-4">
+                  Order History
+                </h3>
                 <CustomerOrdersTable userId={user?.id || user?.user_id} />
               </div>
             )}
