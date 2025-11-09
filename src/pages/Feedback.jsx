@@ -81,94 +81,95 @@ const Feedback = () => {
     }
     return true;
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  setIsSubmitting(true);
 
-    setIsSubmitting(true);
-
-    try {
-      if (!userProfile) {
-        toast.error("You must be logged in to submit feedback.");
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Combine all review texts
-      const combinedReview = `
-        E-Market: ${formData.eMarketReview || ""}.
-        Recipe: ${formData.recipeReview || ""}.
-        Chatbot: ${formData.chatbotReview || ""}.
-        Contribution: ${formData.contributionReview || ""}.
-        Overall: ${formData.overallReview || ""}.
-      `;
-
-      // Call ML API
-      const sentimentResponse = await fetch("https://fastapi-sentiment-app.onrender.com/predict-sentiment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: combinedReview }),
-      });
-      const sentiment = await sentimentResponse.json();
-
-      // Format user type correctly
-      const userType = userProfile.role
-        ? userProfile.role.charAt(0).toUpperCase() + userProfile.role.slice(1).toLowerCase()
-        : "User";
-
-      // Insert into Supabase with user_id and numeric fields
-      const { error } = await supabase
-        .from("website_feedback")
-        .insert([
-          {
-            user_id: userProfile.user_id,
-            name: userProfile.name,
-            email: userProfile.email,
-            user_type: userType,
-            e_market_rating: Number(formData.eMarketRating),
-            e_market_review: formData.eMarketReview,
-            recipe_rating: Number(formData.recipeRating),
-            recipe_review: formData.recipeReview,
-            chatbot_rating: Number(formData.chatbotRating),
-            chatbot_review: formData.chatbotReview,
-            contribution_rating: Number(formData.contributionRating),
-            contribution_review: formData.contributionReview,
-            overall_rating: Number(formData.overallRating),
-            overall_review: formData.overallReview,
-            sentiment_label: sentiment.sentiment_label,
-            sentiment_score: parseFloat(sentiment.sentiment_score),
-            page_visited: window.location.href,
-          },
-        ]);
-
-      if (error) throw error;
-
-      toast.success("Feedback submitted successfully! 🎉");
-
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        eMarketRating: 0,
-        eMarketReview: "",
-        recipeRating: 0,
-        recipeReview: "",
-        chatbotRating: 0,
-        chatbotReview: "",
-        contributionRating: 0,
-        contributionReview: "",
-        overallRating: 0,
-        overallReview: "",
-      });
-      setCurrentSection(0);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to submit feedback. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+  try {
+    if (!userProfile) {
+      toast.error("You must be logged in to submit feedback.");
+      return;
     }
-  };
+
+    const combinedReview = `
+      E-Market: ${formData.eMarketReview || ""}.
+      Recipe: ${formData.recipeReview || ""}.
+      Chatbot: ${formData.chatbotReview || ""}.
+      Contribution: ${formData.contributionReview || ""}.
+      Overall: ${formData.overallReview || ""}.
+    `;
+
+    let sentiment;
+    try {
+      const sentimentResponse = await fetch(
+        "https://fastapi-sentiment-app.onrender.com/predict-sentiment",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: combinedReview }),
+        }
+      );
+      if (!sentimentResponse.ok) throw new Error(`ML API error: ${sentimentResponse.status}`);
+      sentiment = await sentimentResponse.json();
+    } catch (err) {
+      console.error("Error calling ML API:", err);
+      toast.error("ML analysis failed. Submitting feedback anyway.");
+      sentiment = { sentiment_label: "neutral", sentiment_score: 0 };
+    }
+
+    const allowedTypes = ["User", "Admin", "Farmer"];
+    const userType = allowedTypes.includes(userProfile.role) ? userProfile.role : "User";
+
+    const { error } = await supabase.from("website_feedback").insert([
+      {
+        user_id: userProfile.user_id,
+        name: userProfile.name,
+        email: userProfile.email,
+        user_type: userType,
+        e_market_rating: Number(formData.eMarketRating),
+        e_market_review: formData.eMarketReview,
+        recipe_rating: Number(formData.recipeRating),
+        recipe_review: formData.recipeReview,
+        chatbot_rating: Number(formData.chatbotRating),
+        chatbot_review: formData.chatbotReview,
+        contribution_rating: Number(formData.contributionRating),
+        contribution_review: formData.contributionReview,
+        overall_rating: Number(formData.overallRating),
+        overall_review: formData.overallReview,
+        sentiment_label: sentiment.sentiment_label,
+        sentiment_score: parseFloat(sentiment.sentiment_score),
+        page_visited: window.location.href,
+      },
+    ]);
+
+    if (error) throw error;
+
+    toast.success("Feedback submitted successfully! 🎉");
+
+    setFormData({
+      name: "",
+      email: "",
+      eMarketRating: 0,
+      eMarketReview: "",
+      recipeRating: 0,
+      recipeReview: "",
+      chatbotRating: 0,
+      chatbotReview: "",
+      contributionRating: 0,
+      contributionReview: "",
+      overallRating: 0,
+      overallReview: "",
+    });
+    setCurrentSection(0);
+  } catch (err) {
+    console.error("Submission error:", err);
+    toast.error("Failed to submit feedback. Please try again.");
+  } finally {
+    setIsSubmitting(false); // release button
+  }
+};
 
   const sections = [
     { 
