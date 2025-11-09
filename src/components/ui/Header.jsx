@@ -502,12 +502,14 @@ const Header = ({ onIngredientClick }) => {
                   className="rounded-full text-md"
                   style={{
                     backgroundColor: getColorFromName(userProfile?.name),
-                  }}>
+                  }}
+                >
                   {getInitials(userProfile?.name)}
                 </Button>
 
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-popover border border-border rounded-lg shadow-warm-lg z-50">
+                    {/* User Info Section */}
                     <div className="p-3 border-b border-border">
                       <p className="font-body font-medium text-foreground">
                         {userProfile?.name}
@@ -517,15 +519,20 @@ const Header = ({ onIngredientClick }) => {
                       </p>
                       {userProfile?.role && (
                         <p className="text-xs text-accent font-medium mt-1">
-                          {userProfile?.role === "admin" ? "Administrator" : userProfile?.role}
+                          {userProfile?.role === "admin"
+                            ? "Administrator"
+                            : userProfile?.role}
                         </p>
                       )}
                     </div>
 
+                    {/* User Menu Options */}
                     {userProfile?.role !== "farmer" && (
                       <div className="py-2">
                         <button
-                          onClick={() => handleProtectedNavigation("/user-profile-health-goals")}
+                          onClick={() =>
+                            handleProtectedNavigation("/user-profile-health-goals")
+                          }
                           className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors w-full text-left"
                         >
                           <Icon name="User" size={16} />
@@ -533,7 +540,9 @@ const Header = ({ onIngredientClick }) => {
                         </button>
 
                         <button
-                          onClick={() => handleProtectedNavigation("/recipe-submission-management")}
+                          onClick={() =>
+                            handleProtectedNavigation("/recipe-submission-management")
+                          }
                           className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors w-full text-left"
                         >
                           <Icon name="BookOpen" size={16} />
@@ -562,7 +571,35 @@ const Header = ({ onIngredientClick }) => {
                       </div>
                     )}
 
+                    {/* Feedback Option — shown conditionally by role */}
                     <div className="border-t border-border py-2">
+                      {userProfile?.role === "user" && (
+                        <button
+                          onClick={() => {
+                            setIsUserMenuOpen(false);
+                            navigate("/feedback");
+                          }}
+                          className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors w-full text-left"
+                        >
+                          <Icon name="MessageCircle" size={16} />
+                          <span>Feedback</span>
+                        </button>
+                      )}
+
+                      {userProfile?.role === "farmer" && (
+                        <button
+                          onClick={() => {
+                            setIsUserMenuOpen(false);
+                            navigate("/farmer-feedback");
+                          }}
+                          className="flex items-center space-x-3 px-3 py-2 text-sm font-body hover:bg-muted transition-colors w-full text-left"
+                        >
+                          <Icon name="MessageSquare" size={16} />
+                          <span>Farmer Feedback</span>
+                        </button>
+                      )}
+
+                      {/* Sign Out */}
                       <button
                         className="flex items-center space-x-3 px-3 py-2 text-sm font-body text-destructive hover:bg-muted transition-colors w-full text-left"
                         onClick={() => {

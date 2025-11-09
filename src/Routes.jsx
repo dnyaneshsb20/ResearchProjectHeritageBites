@@ -30,6 +30,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Support from "./pages/Support";
 import Feedback from "./pages/Feedback";
+import FarmerFeedback from "pages/FarmerFeedback";
 
 const Routes = () => {
   return (
@@ -61,6 +62,7 @@ const Routes = () => {
         <Route path="/farmer-products" element={<FarmerProducts />} />
         <Route path="/farmer-orders" element={<FarmerOrders />} />
         <Route path="/farmer-profile" element={<FarmerProfileSection />} />
+        <Route path="/farmer-feedback" element={<FarmerFeedback/>}/>
 
         {/* Legal & support pages */}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
