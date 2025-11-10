@@ -255,139 +255,207 @@ const AdminRecipeManagement = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
-        {/* Page Header */}
+        {/* Professional Header Section */}
         <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-            <h1 className="text-3xl font-bold text-foreground">{getGreeting()}! Admin</h1>
-            {/* <p className="text-muted-foreground mt-2 sm:mt-0">
-              Overview of the platform stats at a glance.
-            </p> */}
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+            <div className="flex items-center gap-4 mb-4 lg:mb-0">
+              <div className="p-3 bg-primary/10 rounded-2xl">
+                <Icon name="Settings" size={24} className="text-primary" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">{getGreeting()}! Admin</h1>
+                <p className="text-muted-foreground mt-1">
+                  Platform management and analytics dashboard
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* Stats cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
-            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
-              <div className="bg-red-100 text-red-600 p-3 rounded-full mb-3">
-                <Icon name="FileText" size={20} />
+          {/* Professional Stats Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {[
+              {
+                label: 'Submissions',
+                count: pendingSubmissionsCount,
+                icon: 'FileText',
+                color: 'red',
+                status: 'Pending'
+              },
+              {
+                label: 'Contributors',
+                count: totalContributorsCount,
+                icon: 'Users',
+                color: 'blue',
+                status: 'Active'
+              },
+              {
+                label: 'Feedback',
+                count: totalFeedbackCount,
+                icon: 'MessageSquare',
+                color: 'green',
+                status: 'Reviews'
+              },
+              {
+                label: 'Orders',
+                count: totalOrdersCount,
+                icon: 'ShoppingCart',
+                color: 'amber',
+                status: 'Total'
+              },
+              {
+                label: 'Farmers',
+                count: totalFarmersCount,
+                icon: 'Axe',
+                color: 'purple',
+                status: 'Registered'
+              }
+            ].map((stat, index) => (
+              <div
+                key={stat.label}
+                className="bg-white backdrop-blur-sm border border-border rounded-xl p-5 hover:bg-card hover:shadow-lg transition-all duration-300 group"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`p-2 bg-${stat.color}-500/10 rounded-lg border border-${stat.color}-500/20`}>
+                    <Icon name={stat.icon} size={18} className={`text-${stat.color}-600`} />
+                  </div>
+                  <span className="text-xs text-muted-foreground font-medium bg-muted/50 px-2 py-1 rounded-full">
+                    {stat.status}
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-foreground mb-1">{stat.count}</p>
+                <p className="text-sm text-muted-foreground font-medium">{stat.label}</p>
               </div>
-              <span className="text-2xl font-semibold text-gray-900">{pendingSubmissionsCount}</span>
-              <span className="text-sm text-gray-500 mt-1">Pending Submissions</span>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
-              <div className="bg-blue-100 text-blue-600 p-3 rounded-full mb-3">
-                <Icon name="Users" size={20} />
-              </div>
-              <span className="text-2xl font-semibold text-gray-900">{totalContributorsCount}</span>
-              <span className="text-sm text-gray-500 mt-1">Contributors</span>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
-              <div className="bg-green-100 text-green-600 p-3 rounded-full mb-3">
-                <Icon name="MessageSquare" size={20} />
-              </div>
-              <span className="text-2xl font-semibold text-gray-900">{totalFeedbackCount}</span>
-              <span className="text-sm text-gray-500 mt-1">Feedback Entries</span>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
-              <div className="bg-yellow-100 text-yellow-600 p-3 rounded-full mb-3">
-                <Icon name="ShoppingCart" size={20} />
-              </div>
-              <span className="text-2xl font-semibold text-gray-900">{totalOrdersCount}</span>
-              <span className="text-sm text-gray-500 mt-1">Customer Orders</span>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl shadow-md flex flex-col items-center hover:shadow-lg transition-shadow">
-              <div className="bg-purple-100 text-purple-600 p-3 rounded-full mb-3">
-                <Icon name="Axe" size={20} />
-              </div>
-              <span className="text-2xl font-semibold text-gray-900">{totalFarmersCount}</span>
-              <span className="text-sm text-gray-500 mt-1">Farmers</span>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex border-b border-border mb-8 max-w-7xl mx-auto">
-          {tabs?.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center space-x-2 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab.id
-                ? 'text-primary border-primary'
-                : 'text-muted-foreground border-transparent hover:text-foreground hover:border-muted'
-                }`}
-            >
-              <Icon name={tab.icon} size={16} />
-              <span>{tab.label}</span>
-            </button>
-          ))}
+        {/* Enhanced Tab Navigation */}
+        <div className="bg-card border border-border rounded-xl p-1 mb-8">
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex">
+            {tabs?.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 flex items-center justify-center gap-3 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-200 ${activeTab === tab.id
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground hover:text-black'
+                  }`}
+              >
+                <Icon name={tab.icon} size={16} />
+                <span>{tab.label}</span>
+                {tab.count !== null && (
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${activeTab === tab.id
+                      ? 'bg-primary-foreground/20 text-primary-foreground'
+                      : 'bg-muted text-muted-foreground'
+                    }`}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="lg:hidden">
+            <div className="flex overflow-x-auto scrollbar-hide gap-1">
+              {tabs?.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-shrink-0 flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap ${activeTab === tab.id
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                    }`}
+                >
+                  <Icon name={tab.icon} size={14} />
+                  <span>{tab.label}</span>
+                  {tab.count !== null && (
+                    <span className={`px-1.5 py-0.5 rounded-full text-xs ${activeTab === tab.id
+                        ? 'bg-primary-foreground/20 text-primary-foreground'
+                        : 'bg-muted text-muted-foreground'
+                      }`}>
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Tab Content */}
-        {activeTab === 'submissions' && (
-          <div className="space-y-6">
-            <FilterControls
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              onClearFilters={handleClearFilters}
-              onBulkAction={handleBulkAction}
-              selectedCount={selectedSubmissions?.length}
-              states={states}
-            />
+        <div className="bg-card border border-border rounded-xl overflow-hidden">
+          {/* Tab Header */}
+          <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-card to-card/50">
+            <h2 className="text-xl font-semibold text-foreground">
+              {tabs.find(tab => tab.id === activeTab)?.label || 'Dashboard'}
+            </h2>
+          </div>
 
-            <PendingSubmissionsTable
-              submissions={filteredSubmissions}
-              selectedSubmissions={selectedSubmissions}
-              onSelectionChange={setSelectedSubmissions}
-              onPreviewRecipe={handlePreviewRecipe}
-              onApprove={handleApprove}
-              onReject={handleReject}
-              onRequestModification={handleRequestModification}
-            />
-          </div>
-        )}
+          {/* Tab Content Area */}
+          <div className="p-6">
+            {activeTab === 'submissions' && (
+              <div className="space-y-6">
+                <FilterControls
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                  onClearFilters={handleClearFilters}
+                  onBulkAction={handleBulkAction}
+                  selectedCount={selectedSubmissions?.length}
+                  states={states}
+                />
 
-        {activeTab === 'analytics' && <AnalyticsDashboard analyticsData={{}} />}
+                <PendingSubmissionsTable
+                  submissions={filteredSubmissions}
+                  selectedSubmissions={selectedSubmissions}
+                  onSelectionChange={setSelectedSubmissions}
+                  onPreviewRecipe={handlePreviewRecipe}
+                  onApprove={handleApprove}
+                  onReject={handleReject}
+                  onRequestModification={handleRequestModification}
+                />
+              </div>
+            )}
 
-        {activeTab === 'contributors' && (
-          <ContributorManagement
-            contributors={contributors}
-            onUpdateContributor={handleUpdateContributor}
-            onViewContributor={handleViewContributor}
-          />
-        )}
-        {activeTab === 'feedback' && (
-          <div className="space-y-6">
-            {/* Charts side by side */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FeedbackRatingsChart />
-              <FeedbackSentimentChart />
-            </div>
+            {activeTab === 'analytics' && <AnalyticsDashboard analyticsData={{}} />}
 
-            {/* Detailed feedback table */}
-            <FeedbackTable />
+            {activeTab === 'contributors' && (
+              <ContributorManagement
+                contributors={contributors}
+                onUpdateContributor={handleUpdateContributor}
+                onViewContributor={handleViewContributor}
+              />
+            )}
+            {activeTab === 'feedback' && (
+              <div className="space-y-6">
+                {/* Charts side by side */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FeedbackRatingsChart />
+                  <FeedbackSentimentChart />
+                </div>
+
+                {/* Detailed feedback table */}
+                <FeedbackTable />
+              </div>
+            )}
+            {activeTab === 'orders' && (
+              <div className="space-y-6">
+                <CustomerOrdersTable />
+              </div>
+            )}
+            {activeTab === 'users' && (
+              <div className="space-y-6">
+                <UserManagement />
+              </div>
+            )}
+            {activeTab === 'farmers' && (
+              <div className="space-y-6">
+                <FarmersManagement />
+              </div>
+            )}
           </div>
-        )}
-        {activeTab === 'orders' && (
-          <div className="space-y-6">
-            {/* You can place your CustomerOrdersTable component here */}
-            <CustomerOrdersTable />
-          </div>
-        )}
-        {activeTab === 'users' && (
-          <div className="space-y-6">
-            {/* You can place your CustomerOrdersTable component here */}
-            <UserManagement />
-          </div>
-        )}
-        {activeTab === 'farmers' && (
-          <div className="space-y-6">
-            {/* You can place your CustomerOrdersTable component here */}
-            <FarmersManagement />
-          </div>
-        )}
+        </div>
       </div>
 
       {/* Recipe Preview Modal */}
