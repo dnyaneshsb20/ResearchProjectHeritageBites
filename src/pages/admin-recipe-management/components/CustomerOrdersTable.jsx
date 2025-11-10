@@ -178,13 +178,13 @@ const CustomerOrdersTable = ({ userId, farmerId }) => {
       case "cod":
       case "cash":
         return isModal ? (
-          <div className="flex items-center gap-2 text-yellow-700">
-            <BsCash className="text-yellow-600" size={16} />
+          <div className="flex items-center gap-2 text-green-500">
+            <BsCash className="text-green-500" size={16} />
             <span className="font-medium">Cash on Delivery</span>
           </div>
         ) : (
           <div className="flex items-center gap-1">
-            <BsCash className="text-yellow-600" size={14} />
+            <BsCash className="text-green-600" size={16} />
             <span>Cash</span>
           </div>
         );
