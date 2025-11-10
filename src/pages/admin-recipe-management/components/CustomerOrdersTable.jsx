@@ -288,7 +288,7 @@ const CustomerOrdersTable = ({ userId, farmerId }) => {
             {/* Two Sections Side by Side */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               {/* Order Details Section */}
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-xl">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                     <FaReceipt className="text-blue-600" size={18} />
@@ -340,7 +340,7 @@ const CustomerOrdersTable = ({ userId, farmerId }) => {
               </div>
 
               {/* Customer Details Section */}
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-xl">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                     <FaUser className="text-green-600" size={18} />
@@ -390,8 +390,8 @@ const CustomerOrdersTable = ({ userId, farmerId }) => {
 
             {/* Items Table Section */}
             {selectedOrder.items && selectedOrder.items.length > 0 && (
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-xl">
+                <div className="bg-white px-6 py-4 border-b border-gray-200">
                   <h3 className="text-lg font-semibold text-gray-900">
                     Order Items ({selectedOrder.items.length})
                   </h3>
@@ -399,7 +399,7 @@ const CustomerOrdersTable = ({ userId, farmerId }) => {
 
                 <div className="overflow-x-auto">
                   <table className="w-full bg-white">
-                    <thead className="bg-gray-100 border-b border-gray-200">
+                    <thead className="bg-white border-b border-gray-200">
                       <tr>
                         <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                           Item Name
