@@ -158,33 +158,39 @@ const AnalyticsDashboard = () => {
 
   const StatCard = ({ title, value, change, icon, color = 'primary' }) => {
     const isPositive = change > 0;
+    const colorClasses = {
+      primary: 'from-blue-500 to-blue-600',
+      destructive: 'from-red-500 to-red-600',
+      success: 'from-green-500 to-green-600',
+      warning: 'from-amber-500 to-amber-600'
+    };
+
     return (
-      <div className="bg-card rounded-lg border border-border p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="text-2xl font-bold text-foreground">{value}</p>
-            <div className="flex items-center mt-1">
-              <Icon
-                name={isPositive ? "TrendingUp" : "TrendingDown"}
-                size={14}
-                className={isPositive ? "text-success" : "text-destructive"}
-              />
-              <span className={`text-xs ml-1 ${isPositive ? "text-success" : "text-destructive"}`}>
-                {Math.abs(change)}% from last month
-              </span>
-            </div>
+      <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group hover:scale-[1.02]">
+        <div className="flex items-center justify-between mb-4">
+          <div className={`p-3 bg-gradient-to-br ${colorClasses[color]} rounded-2xl shadow-lg`}>
+            <Icon name={icon} size={20} className="text-white" />
           </div>
-          <div className={`w-12 h-12 rounded-lg bg-${color} bg-opacity-10 flex items-center justify-center`}>
-            <Icon name={icon} size={24} className={`text-${color}`} />
+          <div className="flex flex-col items-end">
+            {change && (
+              <>
+                <div className={`w-3 h-3 rounded-full ${isPositive ? 'bg-green-500' : 'bg-red-500'} mb-1 shadow-sm`}></div>
+                <span className={`text-xs font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                  {Math.abs(change)}% {isPositive ? '↑' : '↓'}
+                </span>
+              </>
+            )}
           </div>
         </div>
+        <p className="text-3xl font-bold text-foreground mb-2">{value}</p>
+        <p className="text-sm text-muted-foreground font-medium">{title}</p>
+        <div className={`w-0 group-hover:w-full h-0.5 bg-gradient-to-r ${colorClasses[color]} transition-all duration-500 mt-3 rounded-full`}></div>
       </div>
     );
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-card">
       {/* Key Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
@@ -193,7 +199,6 @@ const AnalyticsDashboard = () => {
           change={12}
           icon="FileText"
           color="primary"
-          className="bg-white shadow-md hover:shadow-xl transition-shadow rounded-xl"
         />
         <StatCard
           title="Pending Reviews"
@@ -201,15 +206,13 @@ const AnalyticsDashboard = () => {
           change={-8}
           icon="Clock"
           color="destructive"
-          className="bg-white shadow-md hover:shadow-xl transition-shadow rounded-xl"
         />
         <StatCard
           title="Approved This Month"
           value={analyticsData?.approvedThisMonth}
           change={25}
-          icon="Check"
+          icon="CheckCircle"
           color="success"
-          className="bg-white shadow-md hover:shadow-xl transition-shadow rounded-xl"
         />
         <StatCard
           title="Active Contributors"
@@ -217,56 +220,81 @@ const AnalyticsDashboard = () => {
           change={15}
           icon="Users"
           color="warning"
-          className="bg-white shadow-md hover:shadow-xl transition-shadow rounded-xl"
         />
       </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Submission Trends */}
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
-          {/* Header */}
+        <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-foreground">Submission Trends</h3>
-            <Icon name="TrendingUp" size={20} className="text-muted-foreground" />
+            <div>
+              <h3 className="text-xl font-bold text-foreground">Submission Trends</h3>
+              <p className="text-sm text-muted-foreground mt-1">Last 6 months performance</p>
+            </div>
+            <div className="p-3 bg-blue-500/10 rounded-xl">
+              <Icon name="TrendingUp" size={20} className="text-blue-600" />
+            </div>
           </div>
 
-          {/* Chart */}
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={analyticsData?.submissionTrends}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                <XAxis dataKey="month" stroke="var(--color-muted-foreground)" fontSize={12} />
-                <YAxis stroke="var(--color-muted-foreground)" fontSize={12} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" opacity={0.3} />
+                <XAxis
+                  dataKey="month"
+                  stroke="#64748b"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#64748b"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'var(--color-card)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: '8px',
-                    padding: '8px',
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '12px',
+                    padding: '12px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
                   }}
+                  labelStyle={{ fontWeight: 600, color: 'hsl(var(--foreground))' }}
                 />
                 <Line
                   type="monotone"
                   dataKey="submissions"
-                  stroke="var(--color-primary)"
-                  strokeWidth={2}
-                  dot={{ fill: 'var(--color-primary)', strokeWidth: 2, r: 4 }}
+                  stroke="url(#colorGradient)"
+                  strokeWidth={3}
+                  dot={{ fill: '#f59e0b', strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, fill: '#f59e0b' }}
                 />
+                <defs>
+                  <linearGradient id="colorGradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#f59e0b" />
+                    <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.7} />
+                  </linearGradient>
+                </defs>
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Approval Status Distribution */}
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
-          {/* Header */}
+        <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-foreground">Review Status</h3>
-            <Icon name="PieChart" size={20} className="text-muted-foreground" />
+            <div>
+              <h3 className="text-xl font-bold text-foreground">Review Status</h3>
+              <p className="text-sm text-muted-foreground mt-1">Current distribution</p>
+            </div>
+            <div className="p-3 bg-green-500/10 rounded-xl">
+              <Icon name="PieChart" size={20} className="text-green-600" />
+            </div>
           </div>
 
-          {/* Pie Chart */}
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -275,25 +303,30 @@ const AnalyticsDashboard = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100)?.toFixed(0)}%`}
-                  outerRadius={90} // slightly bigger radius for better readability
+                  label={({ name, percent }) => `${(percent * 100)?.toFixed(0)}%`}
+                  outerRadius={90}
+                  innerRadius={50}
                   dataKey="value"
                 >
-                  {analyticsData?.statusDistribution?.map((entry) => {
-                    let fillColor = '#8884d8'; // default
-                    if (entry.name === 'approved') fillColor = '#22C55E'; // green / secondary
-                    else if (entry.name === 'pending') fillColor = '#EF4444'; // red
-                    else if (entry.name === 'changes requested') fillColor = '#F97316'; // orange / primary
-                    return <Cell key={entry.name} fill={fillColor} />;
+                  {analyticsData?.statusDistribution?.map((entry, index) => {
+                    const colors = {
+                      'approved': '#22c55e',
+                      'pending': '#EF4444',
+                      'changes requested': '#F59E0B',
+                      'rejected': '#6B7280'
+                    };
+                    return <Cell key={entry.name} fill={colors[entry.name] || '#8884d8'} />;
                   })}
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'var(--color-card)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: '8px',
-                    padding: '8px',
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '12px',
+                    padding: '12px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
                   }}
+                  formatter={(value, name) => [value, name]}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -304,68 +337,129 @@ const AnalyticsDashboard = () => {
       {/* Regional Distribution and Top Contributors */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Regional Distribution */}
-        <div className="bg-card rounded-lg border border-border p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Regional Distribution</h3>
-            <Icon name="Map" size={20} className="text-muted-foreground" />
+        <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-xl font-bold text-foreground">Regional Distribution</h3>
+              <p className="text-sm text-muted-foreground mt-1">Contributions by region</p>
+            </div>
+            <div className="p-3 bg-purple-500/10 rounded-xl">
+              <Icon name="Map" size={20} className="text-purple-600" />
+            </div>
           </div>
-          <div className="h-64">
+          <div className="h-[470px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={analyticsData?.regionalDistribution}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                <XAxis dataKey="region" stroke="var(--color-muted-foreground)" fontSize={12} />
-                <YAxis stroke="var(--color-muted-foreground)" fontSize={12} />
+              <BarChart data={analyticsData?.regionalDistribution} barSize={75}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" opacity={0.3} />
+                <XAxis
+                  dataKey="region"
+                  stroke="#64748b"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  interval={0}
+                  height={60}
+                  tick={({ x, y, payload }) => (
+                    <text
+                      x={x}
+                      y={y + 15} // adjust vertical spacing
+                      textAnchor="middle" // centers under bar
+                      fill="#64748b"
+                      fontSize={12}
+                      fontWeight="500"
+                    >
+                      {payload.value}
+                    </text>
+                  )}
+                />
+                <YAxis
+                  stroke="#64748b"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'var(--color-card)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: '8px'
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '12px',
+                    padding: '12px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
                   }}
                 />
-                <Bar dataKey="count" fill="var(--color-secondary)" radius={[4, 4, 0, 0]} />
+                <Bar
+                  dataKey="count"
+                  radius={[6, 6, 0, 0]}
+                >
+                  {analyticsData?.regionalDistribution?.map((entry, index) => {
+                    const colors = ['#ef4444', '#3b82f6', '#22c55e', '#f97316', '#eab308'];
+                    return (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={colors[index % colors.length]}
+                        style={{
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.opacity = '0.8';
+                          e.target.style.transform = 'scale(1.02)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.opacity = '1';
+                          e.target.style.transform = 'scale(1)';
+                        }}
+                      />
+                    );
+                  })}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Top Contributors */}
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
-          {/* Header */}
+        <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-foreground">Top Contributors</h3>
-            <Icon name="Award" size={20} className="text-muted-foreground" />
+            <div>
+              <h3 className="text-xl font-bold text-foreground">Top Contributors</h3>
+              <p className="text-sm text-muted-foreground mt-1">Most active community members</p>
+            </div>
+            <div className="p-3 bg-amber-500/10 rounded-xl">
+              <Icon name="Award" size={20} className="text-amber-600" />
+            </div>
           </div>
 
-          {/* Contributors List */}
           <div className="space-y-4">
             {analyticsData?.topContributors
-              ?.sort((a, b) => b.rating - a.rating) // Sort by rating descending
+              ?.sort((a, b) => b.rating - a.rating)
               .map((contributor, index) => {
-                // Assign background colors for ranking numbers
-                let bgColor = 'bg-muted text-muted-foreground';
-                if (index === 0) bgColor = 'bg-yellow-400 text-white'; // Gold
-                else if (index === 1) bgColor = 'bg-gray-400 text-white'; // Silver
-                else if (index === 2) bgColor = 'bg-[#8B4513] text-white'; // Bronze
+                const rankColors = [
+                  'bg-gradient-to-r from-yellow-400 to-yellow-500 text-white shadow-lg',
+                  'bg-gradient-to-r from-gray-400 to-gray-500 text-white shadow-md',
+                  'bg-gradient-to-r from-amber-700 to-amber-800 text-white shadow-sm',
+                  'bg-muted/50 text-muted-foreground',
+                  'bg-muted/30 text-muted-foreground'
+                ];
 
                 return (
-                  <div key={contributor?.id} className="flex items-center space-x-4 p-3 bg-muted/20 rounded-lg hover:bg-muted/40 transition-colors">
-                    {/* Ranking Number */}
-                    <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-medium ${bgColor}`}>
+                  <div key={contributor?.id} className="flex items-center gap-4 p-4 bg-background/50 rounded-xl hover:bg-background/80 transition-all duration-200 group border border-border/30">
+                    <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${rankColors[index]}`}>
                       {index + 1}
                     </div>
 
-                    {/* Contributor Info */}
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold text-foreground">{contributor?.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {contributor?.submissions} submissions • {contributor?.rating}/5 rating
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                        {contributor?.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {contributor?.submissions} submissions
                       </p>
                     </div>
 
-                    {/* Rating */}
-                    <div className="flex items-center space-x-1">
-                      <Icon name="Star" size={14} className="text-warning" />
-                      <span className="text-sm font-medium text-foreground">{contributor?.rating}</span>
+                    <div className="flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-full">
+                      <Icon name="Star" size={14} className="text-amber-500" />
+                      <span className="text-sm font-semibold text-foreground">{contributor?.rating}</span>
                     </div>
                   </div>
                 );
@@ -375,60 +469,66 @@ const AnalyticsDashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-card rounded-xl border border-border p-6">
-        {/* Header */}
+      <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-foreground">Recent Activity</h3>
+          <div>
+            <h3 className="text-xl font-bold text-foreground">Recent Activity</h3>
+            <p className="text-sm text-muted-foreground mt-1">Latest platform updates</p>
+          </div>
 
-          {/* Button + Icon */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Dialog.Root>
-              <Dialog.Trigger className="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-primary/80">
-                View All Activities
+              <Dialog.Trigger className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-sm">
+                View All
               </Dialog.Trigger>
 
-              <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-              <Dialog.Content className="fixed top-1/2 left-1/2 max-h-[85vh] w-[90vw] max-w-3xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto bg-card p-6 rounded-lg shadow-lg mt-8">
+              <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+              <Dialog.Content className="fixed top-1/2 left-1/2 max-h-[85vh] w-[90vw] max-w-3xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto bg-card border border-border rounded-2xl shadow-2xl p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h4 className="text-xl font-bold text-foreground">All Activities</h4>
+                  <Dialog.Close className="p-2 hover:bg-accent rounded-lg transition-colors">
+                    <Icon name="X" size={20} className="text-muted-foreground" />
+                  </Dialog.Close>
+                </div>
 
-                {/* Close Button X */}
-                <Dialog.Close className="absolute top-3 right-3 text-muted-foreground hover:text-foreground">
-                  <Icon name="X" size={18} />
-                </Dialog.Close>
-
-                <h4 className="text-lg font-semibold mb-4">All Activities</h4>
                 <div className="space-y-3">
                   {analyticsData?.recentActivity?.map((activity, index) => {
-                    let bgColor = '';
-                    let iconName = '';
-                    switch (activity?.type) {
-                      case 'approved':
-                        bgColor = 'bg-success text-success-foreground';
-                        iconName = 'Check';
-                        break;
-                      case 'rejected':
-                        bgColor = 'bg-destructive text-destructive-foreground';
-                        iconName = 'X';
-                        break;
-                      case 'pending':
-                        bgColor = 'bg-warning text-warning-foreground';
-                        iconName = 'Clock';
-                        break;
-                      default:
-                        bgColor = 'bg-primary text-primary-foreground';
-                        iconName = 'Edit';
-                    }
+                    const activityConfig = {
+                      'approved': {
+                        bg: 'bg-green-500/20 border-green-500/30',
+                        icon: 'CheckCircle',
+                        iconColor: 'text-green-600'
+                      },
+                      'rejected': {
+                        bg: 'bg-red-500/20 border-red-500/30',
+                        icon: 'XCircle',
+                        iconColor: 'text-red-600'
+                      },
+                      'pending': {
+                        bg: 'bg-amber-500/20 border-amber-500/30',
+                        icon: 'Clock',
+                        iconColor: 'text-amber-600'
+                      },
+                      'changes requested': {
+                        bg: 'bg-blue-500/20 border-blue-500/30',
+                        icon: 'Edit',
+                        iconColor: 'text-blue-600'
+                      }
+                    };
+
+                    const config = activityConfig[activity?.type] || activityConfig.pending;
 
                     return (
                       <div
                         key={index}
-                        className="flex items-start gap-4 p-4 bg-muted/20 rounded-lg hover:shadow-sm transition-shadow"
+                        className={`flex items-start gap-4 p-4 rounded-xl border ${config.bg} hover:shadow-sm transition-all duration-200`}
                       >
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${bgColor} flex-shrink-0`}>
-                          <Icon name={iconName} size={18} />
+                        <div className={`p-2 rounded-lg ${config.bg}`}>
+                          <Icon name={config.icon} size={18} className={config.iconColor} />
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm text-foreground font-medium">{activity?.description}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">{activity?.timestamp}</p>
+                          <p className="text-sm font-medium text-foreground">{activity?.description}</p>
+                          <p className="text-xs text-muted-foreground mt-1">{activity?.timestamp}</p>
                         </div>
                       </div>
                     );
@@ -437,44 +537,50 @@ const AnalyticsDashboard = () => {
               </Dialog.Content>
             </Dialog.Root>
 
-            <Icon name="Activity" size={22} className="text-muted-foreground" />
+            <div className="p-3 bg-primary/10 rounded-xl">
+              <Icon name="Activity" size={20} className="text-primary" />
+            </div>
           </div>
         </div>
 
-        {/* Latest 6 Activities */}
         <div className="space-y-3 max-h-80 overflow-y-auto">
           {analyticsData?.recentActivity?.slice(0, 6).map((activity, index) => {
-            let bgColor = '';
-            let iconName = '';
-            switch (activity?.type) {
-              case 'approved':
-                bgColor = 'bg-success text-success-foreground';
-                iconName = 'Check';
-                break;
-              case 'rejected':
-                bgColor = 'bg-destructive text-destructive-foreground';
-                iconName = 'X';
-                break;
-              case 'pending':
-                bgColor = 'bg-warning text-warning-foreground';
-                iconName = 'Clock';
-                break;
-              default:
-                bgColor = 'bg-primary text-primary-foreground';
-                iconName = 'Edit';
-            }
+            const activityConfig = {
+              'approved': {
+                bg: 'bg-green-500/20 border-green-500/30',
+                icon: 'CheckCircle',
+                iconColor: 'text-green-600'
+              },
+              'rejected': {
+                bg: 'bg-red-500/20 border-red-500/30',
+                icon: 'XCircle',
+                iconColor: 'text-red-600'
+              },
+              'pending': {
+                bg: 'bg-amber-500/20 border-amber-500/30',
+                icon: 'Clock',
+                iconColor: 'text-amber-600'
+              },
+              'changes requested': {
+                bg: 'bg-blue-500/20 border-blue-500/30',
+                icon: 'Edit',
+                iconColor: 'text-blue-600'
+              }
+            };
+
+            const config = activityConfig[activity?.type] || activityConfig.pending;
 
             return (
               <div
                 key={index}
-                className="flex items-start gap-4 p-4 bg-muted/20 rounded-lg hover:shadow-sm transition-shadow"
+                className={`flex items-start gap-4 p-4 rounded-xl border ${config.bg} hover:shadow-sm transition-all duration-200`}
               >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${bgColor} flex-shrink-0`}>
-                  <Icon name={iconName} size={18} />
+                <div className={`p-2 rounded-lg ${config.bg}`}>
+                  <Icon name={config.icon} size={18} className={config.iconColor} />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm text-foreground font-medium">{activity?.description}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{activity?.timestamp}</p>
+                  <p className="text-sm font-medium text-foreground">{activity?.description}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{activity?.timestamp}</p>
                 </div>
               </div>
             );
