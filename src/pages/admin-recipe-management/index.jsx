@@ -254,7 +254,7 @@ const AdminRecipeManagement = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
+      <div className="max-w-8xl mx-auto px-4 lg:px-28 py-8">
         {/* Professional Header Section */}
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
