@@ -91,24 +91,37 @@ const FarmerFeedback = () => {
         return;
       }
 
-      const combinedReview = `
-        Farmer Dashboard: ${formData.farmerDashboardReview || ""}.
-        Farmer Products: ${formData.farmerProductsReview || ""}.
-        Farmer Orders: ${formData.farmerOrdersReview || ""}.
-        Farmer Profile: ${formData.farmerProfileReview || ""}.
-        Overall: ${formData.overallReview || ""}.
-      `;
-
-      const sentimentResponse = await fetch("https://fastapi-sentiment-app.onrender.com/predict-sentiment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: combinedReview }),
-      });
-      const sentiment = await sentimentResponse.json();
-
+      // --- Prepare payload just like user ---
       const userType = userProfile.role
         ? userProfile.role.charAt(0).toUpperCase() + userProfile.role.slice(1).toLowerCase()
         : "Farmer";
+
+      const payload = {
+        user_type: userType,
+        text: "", // optional; backend will combine individual reviews
+        farmer_dashboard_review: formData.farmerDashboardReview,
+        farmer_products_review: formData.farmerProductsReview,
+        farmer_orders_review: formData.farmerOrdersReview,
+        farmer_profile_review: formData.farmerProfileReview,
+        overall_review: formData.overallReview,
+        farmer_dashboard_rating: Number(formData.farmerDashboardRating),
+        farmer_products_rating: Number(formData.farmerProductsRating),
+        farmer_orders_rating: Number(formData.farmerOrdersRating),
+        farmer_profile_rating: Number(formData.farmerProfileRating),
+        overall_rating: Number(formData.overallRating),
+      };
+
+      // --- Call ML API ---
+      const sentimentResponse = await fetch(
+        "https://fastapi-sentiment-app.onrender.com/predict-sentiment",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const sentiment = await sentimentResponse.json();
 
       const { error } = await supabase
         .from("website_feedback")
@@ -212,9 +225,8 @@ const FarmerFeedback = () => {
                   <button
                     key={section.key}
                     onClick={() => setCurrentSection(index)}
-                    className={`flex items-center gap-2 px-5 py-2 rounded-lg transition-all ${
-                      index === currentSection ? "bg-primary text-white" : "text-black hover:text-gray-700"
-                    } ${isMobile ? "text-sm" : ""}`}
+                    className={`flex items-center gap-2 px-5 py-2 rounded-lg transition-all ${index === currentSection ? "bg-primary text-white" : "text-black hover:text-gray-700"
+                      } ${isMobile ? "text-sm" : ""}`}
                   >
                     <section.icon className="w-4 h-4" />
                     {!isMobile && <span className="font-medium">{section.label}</span>}
@@ -324,11 +336,10 @@ const FarmerFeedback = () => {
                             className="transform transition-all duration-200"
                           >
                             <Star
-                              className={`w-12 h-12 lg:w-14 lg:h-14 transition-all duration-300 ${
-                                star <= formData[`${sections[currentSection].key}Rating`]
+                              className={`w-12 h-12 lg:w-14 lg:h-14 transition-all duration-300 ${star <= formData[`${sections[currentSection].key}Rating`]
                                   ? "fill-yellow-400 text-yellow-400 drop-shadow-lg"
                                   : "fill-gray-200 text-gray-300 hover:fill-yellow-200 hover:text-yellow-300"
-                              }`}
+                                }`}
                             />
                           </motion.button>
                         ))}
