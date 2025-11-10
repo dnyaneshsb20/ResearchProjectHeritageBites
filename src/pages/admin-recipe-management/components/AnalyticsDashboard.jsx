@@ -166,7 +166,7 @@ const AnalyticsDashboard = () => {
     };
 
     return (
-      <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group hover:scale-[1.02]">
+      <div className="bg-background border border-border/50 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group hover:scale-[1.02]">
         <div className="flex items-center justify-between mb-4">
           <div className={`p-3 bg-gradient-to-br ${colorClasses[color]} rounded-2xl shadow-lg`}>
             <Icon name={icon} size={20} className="text-white" />
@@ -226,7 +226,7 @@ const AnalyticsDashboard = () => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Submission Trends */}
-        <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
+        <div className="bg-background border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-xl font-bold text-foreground">Submission Trends</h3>
@@ -284,7 +284,7 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Approval Status Distribution */}
-        <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
+        <div className="bg-background border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-xl font-bold text-foreground">Review Status</h3>
@@ -337,7 +337,7 @@ const AnalyticsDashboard = () => {
       {/* Regional Distribution and Top Contributors */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Regional Distribution */}
-        <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
+        <div className="bg-background border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-xl font-bold text-foreground">Regional Distribution</h3>
@@ -419,7 +419,7 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Top Contributors */}
-        <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
+        <div className="bg-background border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-xl font-bold text-foreground">Top Contributors</h3>
@@ -469,7 +469,7 @@ const AnalyticsDashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-gradient-to-br from-card to-card/80 border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
+      <div className="bg-background border border-border/50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-xl font-bold text-foreground">Recent Activity</h3>
@@ -483,11 +483,11 @@ const AnalyticsDashboard = () => {
               </Dialog.Trigger>
 
               <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-              <Dialog.Content className="fixed top-1/2 left-1/2 max-h-[85vh] w-[90vw] max-w-3xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto bg-card border border-border rounded-2xl shadow-2xl p-6">
+              <Dialog.Content className="fixed top-24 left-1/2 -translate-x-1/2 max-h-[85vh] w-[90vw] max-w-3xl overflow-y-auto bg-card border border-border rounded-2xl shadow-2xl p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h4 className="text-xl font-bold text-foreground">All Activities</h4>
-                  <Dialog.Close className="p-2 hover:bg-accent rounded-lg transition-colors">
-                    <Icon name="X" size={20} className="text-muted-foreground" />
+                  <Dialog.Close className="p-2 hover:bg-primary hover:text-white rounded-lg transition-colors">
+                    <Icon name="X" size={20} />
                   </Dialog.Close>
                 </div>
 
