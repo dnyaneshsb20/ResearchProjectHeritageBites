@@ -172,16 +172,6 @@ const FarmersManagement = () => {
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                             </div>
-                            
-                            <select
-                                className="px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:border-primary focus:ring-1 focus:ring-primary"
-                                value={filterCertified}
-                                onChange={(e) => setFilterCertified(e.target.value)}
-                            >
-                                <option value="all">All Farmers</option>
-                                <option value="certified">Certified Only</option>
-                                <option value="uncertified">Uncertified</option>
-                            </select>
                         </div>
                     </div>
 

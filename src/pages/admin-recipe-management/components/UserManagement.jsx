@@ -52,6 +52,7 @@ const UserManagement = () => {
             mobile_number
           )
         `)
+        .eq("role", "user") 
         .order("created_at", { ascending: false });
 
       if (error) throw error;
