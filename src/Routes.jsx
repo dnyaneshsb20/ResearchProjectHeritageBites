@@ -68,6 +68,8 @@ const Routes = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/user-profile-health-goals" element={<UserProfileHealthGoals />} />
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />

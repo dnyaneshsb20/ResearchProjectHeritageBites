@@ -21,6 +21,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { Link } from "react-router-dom";
+import { FiLogIn } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 const AISuggestions = () => {
   const controls = useAnimation();
@@ -33,6 +35,8 @@ const AISuggestions = () => {
   const [showAttachMenu, setShowAttachMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [aiName] = useState("BiteBot");
+  const [isSignedIn, setIsSignedIn] = useState(false); // toggle later with real auth
+  const navigate = useNavigate();
 
   const [mode, setMode] = useState("idle"); // idle | list | detail
   const [lastRecipes, setLastRecipes] = useState([]); // store last recipe names
@@ -57,25 +61,12 @@ const AISuggestions = () => {
   const handleAskAI = async (e) => {
     e.preventDefault();
     const text = query.trim();
-    if (!text) return;
+        if (!text) return;
 
     // if (isChatEmpty) setWelcomeSentence("");
+    setMessages((prev) => [...prev, { role: "user", text }]);
     setQuery("");
     setIsLoading(true);
-
-    // controls.start({
-    //   x: [0, 40, -40, 0],
-    //   y: [0, -40, 40, 0],
-    //   rotate: [0, 15, 15, 0],
-    //   opacity: [1, 0, 0, 1],
-    //   transition: { duration: 0.8, ease: "easeInOut" },
-    // });
-    controls.start({
-      y: [0, -4, 0],
-      transition: { duration: 0.3, ease: "easeOut" },
-    });
-
-    setMessages((prev) => [...prev, { role: "user", text }]);
 
     const greetings = ["hi", "hello", "hey", "hii"];
     if (greetings.includes(text.toLowerCase())) {
@@ -91,6 +82,20 @@ Tell me what ingredients you have, and I'll suggest some dishes.`,
       return;
     }
 
+
+
+    // controls.start({
+    //   x: [0, 40, -40, 0],
+    //   y: [0, -40, 40, 0],
+    //   rotate: [0, 15, 15, 0],
+    //   opacity: [1, 0, 0, 1],
+    //   transition: { duration: 0.8, ease: "easeInOut" },
+    // });
+    controls.start({
+      y: [0, -4, 0],
+      transition: { duration: 0.3, ease: "easeOut" },
+    });
+
     try {
       // === User selects a recipe number ===
       if (awaitingSelection && /^\d+$/.test(text)) {
@@ -105,7 +110,21 @@ Tell me what ingredients you have, and I'll suggest some dishes.`,
           ]);
         } else {
           const recipeName = lastRecipes[index];
-          const systemPrompt = `You are BiteBot, an Indian recipe assistant. Provide a detailed recipe in this EXACT structure:
+          const systemPrompt = `You are BiteBot, an Indian recipe assistant. You must ONLY respond to topics about:
+- Indian food, recipes, ingredients, cooking methods, meal planning,
+- regional dishes, indigenous foods, or nutrition in Indian cuisine,
+- heritage food knowledge or sustainable local produce.
+
+If a user asks about *anything else* (e.g., politics, entertainment, relationships, math, technology, etc.), reply briefly:
+"I'm here to help only with Indian recipes, ingredients, and culinary traditions."
+
+Rules:
+- Keep responses strictly related to Indian food or cooking.
+- Maintain a warm, knowledgeable tone.
+- Never accept or answer questions unrelated to food or heritage cuisine.
+- Never generate off-topic text, stories, or explanations.
+- Follow the response format as instructed below.
+Provide a detailed recipe in this EXACT structure:
 
 # Recipe Name
 
@@ -164,7 +183,20 @@ Use proper Markdown formatting with headers, bullet points, and numbered lists.`
 
       // === User provides ingredients (new request) ===
       else {
-        const systemPrompt = `You are BiteBot, a friendly Indian recipe assistant.
+        const systemPrompt = `You are BiteBot, a friendly Indian recipe assistant. You must ONLY respond to topics about:
+- Indian food, recipes, ingredients, cooking methods, meal planning,
+- regional dishes, indigenous foods, or nutrition in Indian cuisine,
+- heritage food knowledge or sustainable local produce.
+
+If a user asks about *anything else* (e.g., politics, entertainment, relationships, math, technology, etc.), reply briefly:
+"I'm here to help only with Indian recipes, ingredients, and culinary traditions."
+
+Rules:
+- Keep responses strictly related to Indian food or cooking.
+- Maintain a warm, knowledgeable tone.
+- Never accept or answer questions unrelated to food or heritage cuisine.
+- Never generate off-topic text, stories, or explanations.
+- Follow the response format as instructed below.
 IMPORTANT: When user provides ingredients, respond with ONLY this exact format:
 
 Here are some dishes you can make with your ingredients:
@@ -287,9 +319,10 @@ Rules:
       />
 
       <button
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="absolute left-3 top-4 w-8 h-8 flex flex-col items-center justify-center rounded-md bg-primary text-white shadow-md hover:bg-primary/90 transition-all z-50"
-      >
+  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+  className="absolute left-3 top-4 w-8 h-8 flex flex-col items-center justify-center rounded-md bg-primary text-white shadow-md hover:bg-primary/90 transition-all z-50"
+>
+
         <div className="space-y-[4px]">
           <span className="block w-4 h-[2px] bg-white"></span>
           <span className="block w-4 h-[2px] bg-white"></span>
@@ -298,9 +331,10 @@ Rules:
       </button>
 
       <aside
-        className={`mt-12 fixed top-0 left-0 h-full bg-popover/90 border-r border-none flex flex-col transform transition-transform duration-500 ease-in-out z-40
-        ${isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-full w-64"}`}
-      >
+  className={`fixed left-0 top-16 h-[calc(100%-4rem)] bg-popover/90 border-r border-none flex flex-col transform transition-transform duration-500 ease-in-out z-40
+  ${isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-full w-64"}`}
+>
+
         <div className="flex items-center gap-3 p-4 border-b border-none">
           <Link to="/" className="flex items-center justify-center w-11 h-11 bg-primary rounded-lg">
             <span className="text-white text-xl font-bold">HB</span>
@@ -332,16 +366,38 @@ Rules:
       </aside>
 
       <div className={`flex flex-col flex-1 z-10 ${isChatEmpty ? "justify-center items-center" : ""}`}>
-        <header className="absolute top-6 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center text-center">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 flex items-center justify-center bg-yellow-500 rounded-full">
-              <Icon name="Sparkles" size={22} className="text-white" />
-            </div>
-            <h1 className="text-2xl font-semibold text-white drop-shadow-lg">{aiName} Assistant</h1>
-          </div>
-        </header>
+<header className="fixed top-0 left-0 w-full flex items-center justify-between px-8 h-16 bg-black/40 backdrop-blur-md shadow-md z-50">
+  {/* Left side — Bot title */}
+  <div className="flex items-center gap-3">
+    <div className="w-10 h-10 flex items-center justify-center bg-yellow-500 rounded-full">
+      <Icon name="Sparkles" size={22} className="text-white" />
+    </div>
+    <h1 className="text-2xl font-semibold text-white drop-shadow-md">
+      {aiName} Assistant
+    </h1>
+  </div>
 
-
+  {/* Right side — Profile / Sign In */}
+  <div className="flex items-center gap-2 text-white">
+    {isSignedIn ? (
+      <button
+        onClick={() => navigate("/user-profile-health-goals")}
+        className="flex items-center gap-2 hover:opacity-80 transition"
+      >
+        <FiUser className="text-xl" />
+        <span className="hidden md:inline">My Profile</span>
+      </button>
+    ) : (
+      <button
+        onClick={() => navigate("/sign-in")}
+        className="flex items-center gap-2 hover:opacity-80 transition"
+      >
+        <FiLogIn className="text-xl" />
+        <span className="hidden md:inline">Sign In</span>
+      </button>
+    )}
+  </div>
+</header>
         {isChatEmpty && (
           <div className="flex flex-col justify-center items-center mt-10">
             <h1 className="text-3xl font-semibold text-white mb-4">
@@ -351,7 +407,7 @@ Rules:
         )}
 
         {!isChatEmpty && (
-          <main className="h-[900px] mt-20 overflow-y-auto px-4 py-6 relative z-10">
+          <main className="h-[900px] mt-24 overflow-y-auto px-4 py-6 relative z-10">
             <div className="max-w-4xl mx-auto space-y-4">
               {messages.map((m, i) => (
                 <div
