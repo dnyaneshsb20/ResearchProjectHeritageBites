@@ -14,14 +14,14 @@ const ReviewsSection = ({ reviews = [], recipeId, onSubmitReview }) => {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [sortBy, setSortBy] = useState('newest');
   const [isWritingReview, setIsWritingReview] = useState(false);
-  const { user, setShowAuthPopup } = useAuth();
+  const { userProfile, setShowAuthPopup } = useAuth();
 
   const handleRatingClick = (rating) => {
     setNewReview((prev) => ({ ...prev, rating }));
   };
 
   const handleWriteReview = () => {
-    if (!user) {
+    if (!userProfile) {
       // Trigger login popup from header if user not logged in
       const signInButton = document.getElementById("login-button");
       if (signInButton) signInButton.click();

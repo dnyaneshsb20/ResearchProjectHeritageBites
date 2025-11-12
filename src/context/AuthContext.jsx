@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [userProfile, setUserProfile] = useState(null); // ✅ NEW
   const [role, setRole] = useState("guest");
   const [loading, setLoading] = useState(true);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
@@ -70,7 +71,9 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         user,
         role,
+        userProfile, 
         setUser,
+        setUserProfile, 
         setRole,
         login,
         logout,
