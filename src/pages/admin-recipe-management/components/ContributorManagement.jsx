@@ -18,6 +18,21 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
   const [selectedContributorId, setSelectedContributorId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const sortOptions = [
+    { value: 'submissions', label: 'Most Submissions' },
+    { value: 'rating', label: 'Highest Rating' },
+    { value: 'recent', label: 'Most Recent' },
+    { value: 'name', label: 'Name A-Z' }
+  ];
+
+  const ratingOptions = [
+    { value: '', label: 'All Ratings' },
+    { value: '5', label: '5 Stars' },
+    { value: '4', label: '4+ Stars' },
+    { value: '3', label: '3+ Stars' },
+    { value: '2', label: '2+ Stars' }
+  ];
+
   useEffect(() => {
     fetchContributors();
   }, []);
@@ -25,7 +40,6 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
   const fetchContributors = async () => {
     setLoading(true);
 
-    // Fetch all contributions with user details
     const { data, error } = await supabase
       .from('rec_contributions')
       .select(`
@@ -46,7 +60,6 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
       return;
     }
 
-    // Aggregate contributions per contributor
     const contributorMap = data?.reduce((acc, contribution) => {
       const user = contribution.created_by;
       if (!user) return acc;
@@ -62,7 +75,7 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
           approvedSubmissions: 0,
           lastSubmission: null,
           specialties: [],
-          rating: Math.floor(Math.random() * 5) + 1, // Random rating placeholder (replace with real rating if available)
+          rating: Math.floor(Math.random() * 5) + 1,
           status: 'active',
           avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
         };
@@ -93,7 +106,7 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
     };
     const config = statusConfig?.[status] || statusConfig?.active;
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${config?.color}`}>
+      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${config?.color}`}>
         {config?.label}
       </span>
     );
@@ -106,11 +119,11 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
           <Icon
             key={star}
             name="Star"
-            size={16}
+            size={14}
             className={star <= rating ? "text-amber-500 fill-current" : "text-gray-300"}
           />
         ))}
-        <span className="text-sm font-medium text-gray-700 ml-2">{rating}.0</span>
+        <span className="text-sm font-medium text-gray-700 ml-1">{rating}.0</span>
       </div>
     );
   };
@@ -136,23 +149,11 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
       });
   }, [contributors, searchQuery, sortBy, filterRating]);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading contributors...</p>
-        </div>
-      </div>
-    );
-  }
-
   const handleViewContributor = (id) => {
     setSelectedContributorId(id);
     setIsModalOpen(true);
   };
 
-  // Helper functions for avatar initials & color
   const getInitials = (name) => {
     if (!name) return "U";
     const parts = name.trim().split(" ");
@@ -167,20 +168,18 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
       hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
     const hue = Math.abs(hash % 360);
-    return `hsl(${hue}, 70%, 60%)`; // pastel color tone
+    return `hsl(${hue}, 70%, 60%)`;
   };
 
   const handleExportContributorsData = () => {
-    const doc = new jsPDF({ orientation: "landscape" }); // better for wide tables
+    const doc = new jsPDF({ orientation: "landscape" });
 
-    // Header
     doc.setFontSize(18);
     doc.text("Heritage Bites — Contributors Report", 14, 15);
     doc.setFontSize(11);
     doc.setTextColor(100);
     doc.text(`Generated on: ${new Date().toLocaleString("en-IN")}`, 14, 22);
 
-    // Table headers
     const headers = [[
       "Sr. No",
       "Name of Contributor",
@@ -192,7 +191,6 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
       "Specialities"
     ]];
 
-    // Table data
     const data = contributors.map((c, index) => [
       index + 1,
       c.name,
@@ -206,7 +204,6 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
       c.specialties?.join(", ") || "—"
     ]);
 
-    // Table design
     autoTable(doc, {
       startY: 30,
       head: headers,
@@ -218,7 +215,7 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
         lineWidth: 0.2,
       },
       headStyles: {
-        fillColor: [45, 106, 79], // Heritage Bites green tone
+        fillColor: [45, 106, 79],
         textColor: [255, 255, 255],
         halign: "center",
       },
@@ -230,7 +227,6 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
       },
     });
 
-    // Footer
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
@@ -247,21 +243,31 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
     doc.save("HeritageBites_Contributors_Report.pdf");
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading contributors...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header & Controls */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900">Contributor Management</h2>
-          <p className="text-gray-600 mt-2">Manage and monitor recipe contributors</p>
+          <h2 className="text-2xl font-bold text-foreground">Contributor Management</h2>
+          <p className="text-muted-foreground">Manage and monitor recipe contributors</p>
         </div>
         <div className="flex items-center space-x-3">
-          <Button
-            variant="outline"
-            iconName="Download"
-            iconPosition="left"
+          <Button 
+            variant="outline" 
+            iconName="Download" 
+            iconPosition="left" 
             onClick={handleExportContributorsData}
-            className="hover:bg-[#22c55e] hover:text-white"
           >
             Export Data
           </Button>
@@ -269,168 +275,218 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-background rounded-xl border border-gray-200 p-6 text-center hover:shadow-md transition-shadow">
-          <div className="text-3xl font-bold text-blue-600 mb-2">{contributors.length}</div>
-          <div className="text-sm font-medium text-gray-700">Total Contributors</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-card rounded-lg border border-border p-4 text-center">
+          <p className="text-2xl font-bold text-primary">{contributors.length}</p>
+          <p className="text-sm text-muted-foreground">Total Contributors</p>
         </div>
-        <div className="bg-background rounded-xl border border-gray-200 p-6 text-center hover:shadow-md transition-shadow">
-          <div className="text-3xl font-bold text-emerald-600 mb-2">{contributors.filter(c => c.status === 'active').length}</div>
-          <div className="text-sm font-medium text-gray-700">Active</div>
+        <div className="bg-card rounded-lg border border-border p-4 text-center">
+          <p className="text-2xl font-bold text-green-600">{contributors.filter(c => c.status === 'active').length}</p>
+          <p className="text-sm text-muted-foreground">Active</p>
         </div>
-        <div className="bg-background rounded-xl border border-gray-200 p-6 text-center hover:shadow-md transition-shadow">
-          <div className="text-3xl font-bold text-amber-600 mb-2">{contributors.filter(c => c.status === 'verified').length}</div>
-          <div className="text-sm font-medium text-gray-700">Verified</div>
+        <div className="bg-card rounded-lg border border-border p-4 text-center">
+          <p className="text-2xl font-bold text-blue-600">{contributors.filter(c => c.status === 'verified').length}</p>
+          <p className="text-sm text-muted-foreground">Verified</p>
         </div>
-        <div className="bg-background rounded-xl border border-gray-200 p-6 text-center hover:shadow-md transition-shadow">
-          <div className="text-3xl font-bold text-purple-600 mb-2">
+        <div className="bg-card rounded-lg border border-border p-4 text-center">
+          <p className="text-2xl font-bold text-purple-600">
             {(contributors.reduce((sum, c) => sum + c.rating, 0) / contributors.length)?.toFixed(1)}
-          </div>
-          <div className="text-sm font-medium text-gray-700">Avg Rating</div>
+          </p>
+          <p className="text-sm text-muted-foreground">Avg Rating</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <div className="relative w-full">
-          <Input
-            type="search"
-            placeholder="Search contributors..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 border-gray-300 focus:border-blue-500 w-full"
-          />
-          <Icon
-            name="Search"
-            size={18}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-          />
+      <div className="bg-card rounded-lg border border-border p-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="relative">
+            <Input
+              type="search"
+              placeholder="Search contributors..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+            <Icon
+              name="Search"
+              size={16}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+            />
+          </div>
+
+          <Select options={sortOptions} value={sortBy} onChange={setSortBy} placeholder="Sort by" />
+          <Select options={ratingOptions} value={filterRating} onChange={setFilterRating} placeholder="Filter by rating" />
         </div>
       </div>
 
-      {/* Contributors Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filteredContributors.map((contributor) => (
-          <div
-            key={contributor.id}
-            className="bg-background rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 group flex flex-col"
-          >
-            {/* Header with Avatar and Status */}
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex items-center space-x-4">
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-lg font-bold shadow-md"
-                  style={{ backgroundColor: getColorFromName(contributor.name) }}
-                >
-                  {getInitials(contributor.name)}
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                    {contributor.name}
-                  </h3>
-                  <div className="flex items-center space-x-2 text-sm text-gray-500 mt-1">
-                    <Icon name="MapPin" size={14} className="text-gray-400" />
-                    <span>{contributor.location || "Location not set"}</span>
-                  </div>
-                </div>
-              </div>
-              {getStatusBadge(contributor.status)}
-            </div>
+      {/* Contributors Table */}
+      <div className="bg-card rounded-lg border border-border overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-muted/50 border-b border-border">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Contributor
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Submissions
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Approved
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Rating
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Last Activity
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Specialties
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {filteredContributors.map((contributor) => (
+                <tr key={contributor.id} className="hover:bg-muted/30 transition-colors">
+                  {/* Contributor Info */}
+                  <td className="px-4 py-4">
+                    <div className="flex items-center space-x-3">
+                      <div
+                        className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm"
+                        style={{ backgroundColor: getColorFromName(contributor.name) }}
+                      >
+                        {getInitials(contributor.name)}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">
+                          {contributor.name}
+                        </p>
+                        <p className="text-sm text-muted-foreground truncate">
+                          {contributor.email}
+                        </p>
+                        <div className="flex items-center space-x-1 text-xs text-muted-foreground mt-1">
+                          <Icon name="MapPin" size={12} />
+                          <span>{contributor.location || 'No location'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
 
-            {/* Main Card Content (flex-1 makes this area expand to push button down) */}
-            <div className="flex-1 flex flex-col">
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="text-center p-3 bg-blue-50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-700">
-                    {contributor.totalSubmissions}
-                  </div>
-                  <div className="text-xs text-blue-600 font-medium">Total</div>
-                </div>
-                <div className="text-center p-3 bg-emerald-50 rounded-lg">
-                  <div className="text-2xl font-bold text-emerald-700">
-                    {contributor.approvedSubmissions}
-                  </div>
-                  <div className="text-xs text-emerald-600 font-medium">Approved</div>
-                </div>
-              </div>
+                  {/* Status */}
+                  <td className="px-4 py-4">
+                    {getStatusBadge(contributor.status)}
+                  </td>
 
-              {/* Rating and Last Activity */}
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Quality Rating</span>
-                  {renderStars(contributor.rating)}
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Last Activity</span>
-                  <span className="text-gray-900 font-medium">
-                    {contributor.lastSubmission
-                      ? new Date(contributor.lastSubmission).toLocaleDateString("en-IN")
-                      : "Never"}
-                  </span>
-                </div>
-              </div>
+                  {/* Submissions */}
+                  <td className="px-4 py-4">
+                    <div className="text-center">
+                      <p className="text-lg font-semibold text-foreground">
+                        {contributor.totalSubmissions}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Total</p>
+                    </div>
+                  </td>
 
-              {/* Specialties */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium text-gray-700">Specialties</span>
-                  <span className="text-xs text-gray-500">
-                    {contributor.specialties.length} areas
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {contributor.specialties.slice(0, 3).map((specialty, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-gradient-to-r from-gray-100 to-gray-50 text-gray-700 text-xs font-medium rounded-full border border-gray-200"
+                  {/* Approved */}
+                  <td className="px-4 py-4">
+                    <div className="text-center">
+                      <p className="text-lg font-semibold text-green-600">
+                        {contributor.approvedSubmissions}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Approved</p>
+                    </div>
+                  </td>
+
+                  {/* Rating */}
+                  <td className="px-4 py-4">
+                    {renderStars(contributor.rating)}
+                  </td>
+
+                  {/* Last Activity */}
+                  <td className="px-4 py-4 text-sm text-muted-foreground">
+                    {contributor.lastSubmission ? (
+                      <div>
+                        <div className="font-medium text-foreground">
+                          {new Date(contributor.lastSubmission).toLocaleDateString('en-IN')}
+                        </div>
+                        <div className="text-xs">
+                          {new Date(contributor.lastSubmission).toLocaleTimeString('en-IN', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-muted-foreground">Never</span>
+                    )}
+                  </td>
+
+                  {/* Specialties */}
+                  <td className="px-4 py-4">
+                    <div className="flex flex-wrap gap-1 max-w-[200px]">
+                      {contributor.specialties.slice(0, 2).map((specialty, index) => (
+                        <span 
+                          key={index} 
+                          className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-md border border-border"
+                        >
+                          {specialty}
+                        </span>
+                      ))}
+                      {contributor.specialties.length > 2 && (
+                        <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-md border border-border">
+                          +{contributor.specialties.length - 2}
+                        </span>
+                      )}
+                      {contributor.specialties.length === 0 && (
+                        <span className="text-xs text-muted-foreground">None</span>
+                      )}
+                    </div>
+                  </td>
+
+                  {/* Actions */}
+                  <td className="px-4 py-4 text-right">
+                    <Button
+                      variant="ghost2"
+                      size="sm"
+                      onClick={() => handleViewContributor(contributor.id)}
+                      className="whitespace-nowrap"
                     >
-                      {specialty}
-                    </span>
-                  ))}
-                  {contributor.specialties.length > 3 && (
-                    <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
-                      +{contributor.specialties.length - 3} more
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
+                      <Icon name="Eye" size={14} />
+                      <span className="ml-1">View</span>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-            {/* Action Button — always stays at the bottom */}
-            <Button
-              variant="default"
-              onClick={() => handleViewContributor(contributor.id)}
-              className="w-full mt-auto"
-            >
-              <Icon name="Eye" size={16} />
-              <span className="ml-2">View Full Profile</span>
-            </Button>
+        {/* Empty State */}
+        {filteredContributors.length === 0 && (
+          <div className="text-center py-12">
+            <Icon name="Users" size={48} className="text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">No contributors found</h3>
+            <p className="text-muted-foreground">
+              {searchQuery || filterRating 
+                ? "Try adjusting your search or filter criteria."
+                : "There are no contributors in the system yet."
+              }
+            </p>
           </div>
-        ))}
-
-        <ContributorProfileModal
-          contributorId={selectedContributorId}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
+        )}
       </div>
 
-      {/* Empty State */}
-      {filteredContributors.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Icon name="Users" size={32} className="text-gray-400" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No contributors found</h3>
-          <p className="text-gray-600 max-w-md mx-auto">
-            {searchQuery || filterRating
-              ? "Try adjusting your search or filter criteria to find contributors."
-              : "There are no contributors in the system yet."
-            }
-          </p>
-        </div>
-      )}
+      <ContributorProfileModal
+        contributorId={selectedContributorId}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
