@@ -4,6 +4,7 @@ import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Image from '../../../components/AppImage';
 import { useAuth } from '../../../context/AuthContext';
+import { supabase } from "../../../supabaseClient";
 
 const ReviewsSection = ({ reviews = [], recipeId, onSubmitReview }) => {
   const [newReview, setNewReview] = useState({
@@ -20,18 +21,19 @@ const ReviewsSection = ({ reviews = [], recipeId, onSubmitReview }) => {
     setNewReview((prev) => ({ ...prev, rating }));
   };
 
-  const handleWriteReview = () => {
-    if (!userProfile) {
-      // Trigger login popup from header if user not logged in
-      const signInButton = document.getElementById("login-button");
-      if (signInButton) signInButton.click();
-      else setShowAuthPopup(true);
-      return;
-    }
+const handleWriteReview = async () => {
+  const { data: sessionData } = await supabase.auth.getSession();
+  const loggedIn = !!sessionData?.session?.user;
 
-    // Toggle writing mode
-    setIsWritingReview((prev) => !prev);
-  };
+  if (!loggedIn || !userProfile) {
+    setShowAuthPopup(true);
+    return;
+  }
+
+  setIsWritingReview(prev => !prev);
+};
+
+
 
   const handleSubmitReview = (e) => {
     e.preventDefault();

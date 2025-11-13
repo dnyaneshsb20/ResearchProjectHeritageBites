@@ -13,7 +13,18 @@ import { RiUserCommunityLine } from "react-icons/ri";
 
 const Header = ({ onIngredientClick }) => {
   const navigate = useNavigate();
-  const { user, logout, setUser, setRole, showAuthPopup, setShowAuthPopup } = useAuth();
+  const {
+    user,
+    setUser,
+    userProfile,
+    setUserProfile,
+    setRole,
+    logout,
+    showAuthPopup,
+    setShowAuthPopup
+  } = useAuth();
+
+
 
   const isAuthenticated = !!user;
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -37,7 +48,6 @@ const Header = ({ onIngredientClick }) => {
   const location = useLocation();
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
-  const [userProfile, setUserProfile] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const suggestionsRef = useRef(null);
@@ -184,6 +194,8 @@ const Header = ({ onIngredientClick }) => {
         });
       } else {
         setUserProfile(data);
+        setRole(data?.role || "user");
+
       }
     };
 
