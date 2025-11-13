@@ -150,21 +150,12 @@ const Header = ({ onIngredientClick }) => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-
-      if (!session) {
-        console.log("No Supabase session — defaulting to guest role");
-        setUser(null);
-        setRole("guest"); // fallback role
-        return;
+      if (!user) {
+      return; // Wait until AuthContext loads the session
       }
-      // Get the current auth user
-      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
-
-      if (authError || !authUser) {
-        console.error("Error getting auth user:", authError);
-        return;
-      }
+// Get the current auth user
+      const authUser = user; // user already exists from AuthContext
+      if (!authUser) return;
 
       console.log("Auth user id:", authUser.id, "email:", authUser.email);
 
@@ -201,7 +192,7 @@ const Header = ({ onIngredientClick }) => {
 
     fetchUserProfile();
     console.log("Current role:", setRole);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setSuggestions([]);
