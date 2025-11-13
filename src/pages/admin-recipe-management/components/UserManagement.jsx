@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../../supabaseClient";
-import { MapPin, User, Mail, Phone, Calendar, Activity, Users, Search, Filter } from "lucide-react";
+import { MapPin, User, Mail, Phone, Calendar, Activity, Users, Search, Filter, Eye } from "lucide-react";
 import Button from "../../../components/ui/Button";
 import UserProfileModal from "./UserProfileModal";
 
@@ -52,7 +52,7 @@ const UserManagement = () => {
             mobile_number
           )
         `)
-        .eq("role", "user") 
+        .eq("role", "user")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -140,171 +140,199 @@ const UserManagement = () => {
 
   return (
     <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header Section */}
-        <div className="mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground mb-2">User Management</h1>
-              <p className="text-muted-foreground">
-                Manage and view all platform users ({users.length} total)
-              </p>
-            </div>
-
-            {/* Search and Filter */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <input
-                  type="text"
-                  placeholder="Search users..."
-                  className="pl-10 pr-4 py-2 border border-border rounded-lg bg-background text-foreground focus:border-primary focus:ring-1 focus:ring-primary"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-            </div>
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">User Management</h1>
+            <p className="text-muted-foreground">
+              Manage and view all platform users ({users.length} total)
+            </p>
           </div>
 
-          {/* Stats Overview */}
-          <div className="flex gap-4 mb-6 w-full">
-            <div className="flex-1 bg-card border border-border rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Total Users</p>
-                  <p className="text-2xl font-bold text-foreground">{users.length}</p>
-                </div>
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <Users className="w-5 h-5 text-blue-600" />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex-1 bg-card border border-border rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Regular Users</p>
-                  <p className="text-2xl font-bold text-foreground">
-                    {users.filter(u => u.role === 'user').length}
-                  </p>
-                </div>
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <User className="w-5 h-5 text-green-600" />
-                </div>
-              </div>
+          {/* Search and Filter */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search users..."
+                className="pl-10 pr-4 py-2 border border-border rounded-lg bg-background text-foreground focus:border-primary focus:ring-1 focus:ring-primary w-full max-w-xs"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
           </div>
         </div>
 
-        {/* Users Grid */}
-        {filteredUsers.length === 0 ? (
-          <div className="text-center py-16 bg-card rounded-xl border border-border">
-            <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              {searchTerm || filterRole !== "all" ? "No users found" : "No users yet"}
-            </h3>
-            <p className="text-muted-foreground">
-              {searchTerm || filterRole !== "all"
-                ? "Try adjusting your search or filter criteria"
-                : "Users will appear here once they register on the platform"
-              }
-            </p>
+        {/* Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-card border border-border rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-primary mb-2">{users.length}</div>
+            <div className="text-sm font-medium text-muted-foreground">Total Users</div>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredUsers.map((user) => (
-              <div
-                key={user.id}
-                className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 group"
-              >
-                {/* Header with Avatar and Basic Info */}
-                <div className="p-6 border-b border-border bg-gradient-to-r from-card to-card/80">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-14 h-14 rounded-full flex items-center justify-center text-white text-lg font-semibold border-4 border-primary/20 group-hover:border-primary/40 transition-colors"
-                        style={{ backgroundColor: getColorFromName(user.name) }}
-                      >
-                        {getInitials(user.name)}
-                      </div>
-                      <div className="min-w-0">
-                        <h3 className="text-lg font-semibold text-foreground truncate group-hover:text-primary transition-colors">
-                          {user.name}
-                        </h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getRoleColor(user.role)}`}>
-                            {user.role}
-                          </span>
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <MapPin className="w-3 h-3" />
-                            <span className="truncate">{user.location}</span>
+          <div className="bg-card border border-border rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">
+              {users.filter(u => u.role === 'user').length}
+            </div>
+            <div className="text-sm font-medium text-muted-foreground">Regular Users</div>
+          </div>
+          <div className="bg-card border border-border rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {users.filter(u => u.role === 'admin').length}
+            </div>
+            <div className="text-sm font-medium text-muted-foreground">Admins</div>
+          </div>
+          <div className="bg-card border border-border rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-purple-600 mb-2">
+              {users.filter(u => u.role === 'farmer').length}
+            </div>
+            <div className="text-sm font-medium text-muted-foreground">Farmers</div>
+          </div>
+        </div>
+
+        {/* Users Table */}
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-muted/50 border-b border-border">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    User
+                  </th>
+                  {/* <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Role
+                  </th> */}
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Contact
+                  </th>
+                  {/* <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Location
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Activity Level
+                  </th> */}
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Joined Date
+                  </th>
+                  <th className="px-6 py-4 text-right text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filteredUsers.map((user) => (
+                  <tr key={user.id} className="hover:bg-muted/30 transition-colors duration-150">
+                    {/* User Info */}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center space-x-4">
+                        <div
+                          className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md"
+                          style={{ backgroundColor: getColorFromName(user.name) }}
+                        >
+                          {getInitials(user.name)}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-lg font-semibold text-foreground truncate">
+                            {user.name}
+                          </p>
+                          <p className="text-sm text-muted-foreground truncate mt-1">
+                            {user.email}
+                          </p>
+                          <div className="flex items-center space-x-2 text-sm text-muted-foreground mt-1">
+                            <User className="w-3 h-3" />
+                            <span>{user.gender}</span>
+                            <span>•</span>
+                            <span>{user.ageGroup}</span>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
+                    </td>
 
-                {/* User Details */}
-                <div className="p-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <Mail className="w-4 h-4 text-primary" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm text-muted-foreground">Email</p>
-                        <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
-                      </div>
-                    </div>
+                    {/* Role */}
+                    {/* <td className="px-6 py-4">
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getRoleColor(user.role)}`}>
+                        {user.role}
+                      </span>
+                    </td> */}
 
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <Phone className="w-4 h-4 text-primary" />
+                    {/* Contact */}
+                    {/* Contact */}
+                    <td className="px-6 py-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2 text-sm">
+                          <Mail className="w-4 h-4 text-muted-foreground" />
+                          {/* Removed truncate and max-width to show full email */}
+                          <span className="text-foreground">{user.email}</span>
+                        </div>
+                        <div className="flex items-center space-x-2 text-sm">
+                          <Phone className="w-4 h-4 text-muted-foreground" />
+                          {/* Mobile number already shown fully */}
+                          <span className="text-foreground">{user.mobile}</span>
+                        </div>
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm text-muted-foreground">Mobile</p>
-                        <p className="text-sm font-medium text-foreground">{user.mobile}</p>
-                      </div>
-                    </div>
+                    </td>
 
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <Activity className="w-4 h-4 text-primary" />
+                    {/* Location */}
+                    {/* <td className="px-6 py-4">
+                      <div className="flex items-center space-x-2 text-sm">
+                        <MapPin className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-foreground">{user.location}</span>
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm text-muted-foreground">Activity Level</p>
-                        <p className="text-sm font-medium text-foreground">{user.activityLevel}</p>
-                      </div>
-                    </div>
+                    </td> */}
 
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <Calendar className="w-4 h-4 text-primary" />
+                    {/* Activity Level */}
+                    {/* <td className="px-6 py-4">
+                      <div className="flex items-center space-x-2 text-sm">
+                        <Activity className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-foreground">{user.activityLevel}</span>
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm text-muted-foreground">Joined</p>
-                        <p className="text-sm font-medium text-foreground">{user.createdAt}</p>
-                      </div>
-                    </div>
-                  </div>
+                    </td> */}
 
-                  {/* Action Button */}
-                  <div className="mt-6 pt-4 border-t border-border">
-                    <Button
-                      variant="ghost2"
-                      className="w-full justify-centers"
-                      onClick={() => setSelectedUser(user)}
-                    >
-                      <User className="w-4 h-4 mr-2" />
-                      View Full Profile
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
+                    {/* Joined Date */}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center space-x-2 text-sm">
+                        <Calendar className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-foreground">{user.createdAt}</span>
+                      </div>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="px-6 py-4 text-right">
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => setSelectedUser(user)}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Profile
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        )}
+
+          {/* Empty State */}
+          {filteredUsers.length === 0 && (
+            <div className="text-center py-16">
+              <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                {searchTerm || filterRole !== "all" ? "No users found" : "No users yet"}
+              </h3>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                {searchTerm || filterRole !== "all"
+                  ? "Try adjusting your search or filter criteria"
+                  : "Users will appear here once they register on the platform"
+                }
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* User Profile Modal */}
