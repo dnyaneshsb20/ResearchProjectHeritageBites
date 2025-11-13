@@ -196,28 +196,28 @@ const AnalyticsDashboard = () => {
         <StatCard
           title="Total Submissions"
           value={analyticsData?.totalSubmissions}
-          change={12}
+          // change={12}
           icon="FileText"
           color="primary"
         />
         <StatCard
           title="Pending Reviews"
           value={analyticsData?.pendingReviews}
-          change={-8}
+          // change={-8}
           icon="Clock"
           color="destructive"
         />
         <StatCard
           title="Approved This Month"
           value={analyticsData?.approvedThisMonth}
-          change={25}
+          // change={25}
           icon="CheckCircle"
           color="success"
         />
         <StatCard
           title="Active Contributors"
           value={analyticsData?.activeContributors}
-          change={15}
+          // change={15}
           icon="Users"
           color="warning"
         />
