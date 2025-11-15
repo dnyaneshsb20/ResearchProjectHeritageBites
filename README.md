@@ -1,172 +1,100 @@
-# React
+# Heritage Bites
 
-A modern React-based project utilizing the latest frontend technologies and tools for building responsive web applications.
+**Type:** Web Application  
+**Language:** React, TypeScript, Tailwind CSS
+**Database:** Supabase
+**Tool:** Visual Studio Code
+**Hosting:** Vercel / Supabase / Render
+**Platform:** Web Application  
 
-## 🚀 Features
+---
 
-- **React 18** - React version with improved rendering and concurrent features
-- **Vite** - Lightning-fast build tool and development server
-- **Redux Toolkit** - State management with simplified Redux setup
-- **TailwindCSS** - Utility-first CSS framework with extensive customization
-- **React Router v6** - Declarative routing for React applications
-- **Data Visualization** - Integrated D3.js and Recharts for powerful data visualization
-- **Form Management** - React Hook Form for efficient form handling
-- **Animation** - Framer Motion for smooth UI animations
-- **Testing** - Jest and React Testing Library setup
+## About the Project
 
-## 📋 Prerequisites
+**Heritage Bites** is a **full-stack web application** built to preserve and promote traditional Indian recipes and support local farmers through an integrated **E-Market platform.**   
 
-- Node.js (v14.x or higher)
-- npm or yarn
+The platform allows users to explore regional recipes, view detailed cooking steps, share feedback, rate dishes, and learn the cultural significance behind traditional foods. Farmers can register, sell homemade or farm-grown products, manage their listings, and reach a wider audience.
 
-## 🛠️ Installation
+Previously, such recipe collections and local market sales happened offline—through word of mouth, handwritten notes, and local booths. It was difficult to organize, update, and maintain.
 
-1. Install dependencies:
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-   
-2. Start the development server:
-   ```bash
-   npm start
-   # or
-   yarn start
-   ```
+With this software:
+- Recipes are stored digitally
+- Farmers can list products online
+- Users can explore dishes with images, steps & ingredients
+- Reviews and ratings help improve recipe discovery
+- dmin can manage all data in a centralized dashboard
+- Overall, it saves time, increases accessibility, and supports local communities
+---
 
-## 📁 Project Structure
+## Key Features
+User Features
+- Browse traditional recipes
+- View ingredients, steps, and cultural background
+- Rate and review recipesBuy local products from farmers
+- Manage profile and orders
+- Contact admin for help or queries
 
-```
-react_app/
-<<<<<<< HEAD
-├── public/             # Static assets
-├── src/
-│   ├── components/     # Reusable UI components
-│   ├── pages/          # Page components
-│   ├── styles/         # Global styles and Tailwind configuration
-│   ├── App.jsx         # Main application component
-│   ├── Routes.jsx      # Application routes
-│   └── index.jsx       # Application entry point
-├── .env                # Environment variables
-├── index.html          # HTML template
-├── package.json        # Project dependencies and scripts
-├── tailwind.config.js  # Tailwind CSS configuration
-└── vite.config.js      # Vite configuration
-=======
-├── functions/
-│   ├── .env
-│   ├── db.js
-│   ├── package.json
-│   ├── resetPassword.js
-│   ├── sendOtp.js
-│   ├── verifyOtp.js
-├── public/             # Static assets
-│   ├── assets
-│   ├───── images
-│   ├── favicon.ico
-│   ├── manifest.json
-│   ├── robots.txt
-├── src/
-│   ├── assets/
-│   ├── components/     # Reusable UI components
-│   ├───── ui/
-│   ├──────── Button.jsx
-│   ├──────── card.tsx
-│   ├──────── Checkbox.jsx
-│   ├──────── Header.jsx
-│   ├──────── Input.jsx
-│   ├──────── Select.jsx
-│   ├───── AppIcon.jsx
-│   ├───── AppImage.jsx
-│   ├───── ErrorBoundary.jsx
-│   ├───── RequireAuth.jsx
-│   ├───── ScrollToTop.jsx
-│   ├── context/
-│   ├───── AuthContext.jsx
-│   ├── lib/
-│   ├───── utils.ts
-│   ├── pages/          # Page components
-│   ├───── admin-recipe-management/
-│   ├───── ai-suggestions #chatbot
-│   ├───── dashboard
-│   ├───── farmer-dasboard
-│   ├───── ingredient-marketplace
-│   ├───── recipe-detail-instructions
-│   ├───── resipe-discovery-dashboard
-│   ├───── recipe-submission-management
-│   ├───── sign-in
-│   ├───── user-profile-health-goals
-│   ├───── NotFound.jsx
-│   ├── styles/         # Global styles and Tailwind configuration
-│   ├── utils/
-│   ├── App.jsx         # Main application component
-│   ├── Routes.jsx      # Application routes
-│   └── index.jsx       # Application entry point
-│   ├── supabaseClient.js
-├── .env                # Environment variables
-├── .gitignore
-├── favicon.ico
-├── index.html          # HTML template
-├── jsconfig.json
-├── package.json        # Project dependencies and scripts
-├── postcss.config.js
-├── README.md
-├── tailwind.config.js  # Tailwind CSS configuration
-├── vercel.json
-├── vite.config.mjs      # Vite configuration
-└── vite-env.d.ts
->>>>>>> master
-```
+Farmer Features
+- Create & manage product listings
+- View customer orders
+- Track sales
+- Update product details anytime
 
-## 🧩 Adding Routes
+Admin Features
+- Full access to manage users, farmers, recipes, and products
+- Approve or remove listings
+- View feedback and reports
+- Single admin with complete control
 
-To add new routes to the application, update the `Routes.jsx` file:
+General Highlights
+- Modern, clean UI
+- Secure authentication
+- Real-time database with Supabase
+- Fast & scalable backend with FastAPI
+- Integrated ML API for sentiment analysis
 
-```jsx
-import { useRoutes } from "react-router-dom";
-import HomePage from "pages/HomePage";
-import AboutPage from "pages/AboutPage";
+---
 
-const ProjectRoutes = () => {
-  let element = useRoutes([
-    { path: "/", element: <HomePage /> },
-    { path: "/about", element: <AboutPage /> },
-    // Add more routes as needed
-  ]);
+## Technology Used
+- **Frontend:** React, TypeScript, Tailwind CSS
+- **Backend:** FastAPI (Python)
+- **Database:** Supabase
+- **Authentication:** Supabase Auth
+- **Hosting:** Vercel (Frontend), Supabase (DB), Render (ML API)
+- **ML Integration:** Sentiment analysis model (Python + scikit-learn)  
 
-  return element;
-};
-```
+---
 
-## 🎨 Styling
+## Output Screens
 
-This project uses Tailwind CSS for styling. The configuration includes:
+| Home Page | Recipe Listing |
+| --- | --- |
+| ![Admin Login](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/home-page.png) | ![Home Page](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/recipe-details.png) |
 
-- Forms plugin for form styling
-- Typography plugin for text styling
-- Aspect ratio plugin for responsive elements
-- Container queries for component-specific responsive design
-- Fluid typography for responsive text
-- Animation utilities
+| Personalized Recommendations | Recipe Contributions |
+| --- | --- |
+| ![Manage Product](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/personalized-recomm.png) | ![Manage Category](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/rec-contri.png) |
 
-## 📱 Responsive Design
+| E-Market | Farmer Dashboard |
+| --- | --- |
+| ![Generate Bill](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/e-Market.png) | ![Invoice](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/farm-dash.png) |
 
-The app is built with responsive design using Tailwind CSS breakpoints.
+| SignUp Page | Profile Page |
+| --- | --- |
+| ![Bill](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/signup-page.png) | ![Reports](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/Profile.png) |
 
+| Feedback Analysis | Recipe Analysis |
+| --- | --- |
+| ![Change Username](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/feedbcak-analytics.png) | ![Change Password](https://github.com/dnyaneshsb20/ResearchProjectHeritageBites/blob/main/public/rec-analytics.png) |
 
-## 📦 Deployment
+---
 
-Build the application for production:
+## Hosted Webiste Link
+[Heritage Bites](https://heritage-bites.vercel.app)
 
-```bash
-npm run build
-```
+---
 
-## 🙏 Acknowledgments
+<div align="center">
+© 2025 Dnyanesh Badave | HeritageBites
+</div>
 
-- Built with [Rocket.new](https://rocket.new)
-- Powered by React and Vite
-- Styled with Tailwind CSS
-
-Built with ❤️ on Rocket.new
