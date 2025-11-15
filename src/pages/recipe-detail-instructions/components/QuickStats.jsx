@@ -61,7 +61,7 @@ const QuickStats = ({ recipe }) => {
         ))}
       </div>
       {/* Rating */}
-      <div className="flex items-center justify-center mt-4 pt-4 border-t border-border">
+      {/* <div className="flex items-center justify-center mt-4 pt-4 border-t border-border">
         <div className="flex items-center space-x-2">
           <div className="flex items-center space-x-1">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -83,7 +83,7 @@ const QuickStats = ({ recipe }) => {
             ({recipe?.reviewCount} reviews)
           </span>
         </div>
-      </div>
+      </div> */}
 
     </div>
   );
