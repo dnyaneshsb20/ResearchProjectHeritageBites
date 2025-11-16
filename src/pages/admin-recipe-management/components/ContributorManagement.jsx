@@ -358,11 +358,11 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
                   <td className="px-4 py-4">
                     <div className="flex items-center space-x-3">
                       <div
-                        className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm"
-                        style={{ backgroundColor: getColorFromName(contributor.name) }}
-                      >
-                        {getInitials(contributor.name)}
-                      </div>
+                          className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md"
+                          style={{ backgroundColor: getColorFromName(contributor.name) }}
+                        >
+                          {getInitials(contributor.name)}
+                        </div>
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-foreground truncate">
                           {contributor.name}
