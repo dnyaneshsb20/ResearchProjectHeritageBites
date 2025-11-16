@@ -8,6 +8,26 @@ import { supabase } from '../../../supabaseClient';
 import ContributorProfileModal from './ContributorProfileModal';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { Users, Search, Filter, Eye, Download, MapPin, Star, Calendar } from 'lucide-react';
+
+// Helper functions for initials and color (same as UserManagement)
+const getInitials = (name) => {
+  if (!name) return "U";
+  const names = name.split(" ");
+  return names.length > 1
+    ? `${names[0][0]}${names[1][0]}`
+    : `${names[0][0]}`;
+};
+
+const getColorFromName = (name) => {
+  if (!name) return "#6b7280";
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const color = `hsl(${hash % 360}, 70%, 50%)`;
+  return color;
+};
 
 const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
   const [contributors, setContributors] = useState([]);
@@ -106,7 +126,7 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
     };
     const config = statusConfig?.[status] || statusConfig?.active;
     return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${config?.color}`}>
+      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${config?.color}`}>
         {config?.label}
       </span>
     );
@@ -116,9 +136,8 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
     return (
       <div className="flex items-center space-x-1">
         {[1, 2, 3, 4, 5].map((star) => (
-          <Icon
+          <Star
             key={star}
-            name="Star"
             size={14}
             className={star <= rating ? "text-amber-500 fill-current" : "text-gray-300"}
           />
@@ -152,23 +171,6 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
   const handleViewContributor = (id) => {
     setSelectedContributorId(id);
     setIsModalOpen(true);
-  };
-
-  const getInitials = (name) => {
-    if (!name) return "U";
-    const parts = name.trim().split(" ");
-    if (parts.length === 1) return parts[0][0].toUpperCase();
-    return (parts[0][0] + parts[1][0]).toUpperCase();
-  };
-
-  const getColorFromName = (name) => {
-    if (!name) return "#999";
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const hue = Math.abs(hash % 360);
-    return `hsl(${hue}, 70%, 60%)`;
   };
 
   const handleExportContributorsData = () => {
@@ -245,243 +247,237 @@ const ContributorManagement = ({ onUpdateContributor, onViewContributor }) => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading contributors...</p>
+      <div className="min-h-screen bg-background p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+            <p className="text-muted-foreground">Loading contributors database...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header & Controls */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-        <div>
-          <h2 className="text-2xl font-bold text-foreground">Contributor Management</h2>
-          <p className="text-muted-foreground">Manage and monitor recipe contributors</p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <Button 
-            variant="outline" 
-            iconName="Download" 
-            iconPosition="left" 
-            onClick={handleExportContributorsData}
-          >
-            Export Data
-          </Button>
-        </div>
-      </div>
-
-      {/* Summary Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-card rounded-lg border border-border p-4 text-center">
-          <p className="text-2xl font-bold text-primary">{contributors.length}</p>
-          <p className="text-sm text-muted-foreground">Total Contributors</p>
-        </div>
-        <div className="bg-card rounded-lg border border-border p-4 text-center">
-          <p className="text-2xl font-bold text-green-600">{contributors.filter(c => c.status === 'active').length}</p>
-          <p className="text-sm text-muted-foreground">Active</p>
-        </div>
-        <div className="bg-card rounded-lg border border-border p-4 text-center">
-          <p className="text-2xl font-bold text-blue-600">{contributors.filter(c => c.status === 'verified').length}</p>
-          <p className="text-sm text-muted-foreground">Verified</p>
-        </div>
-        <div className="bg-card rounded-lg border border-border p-4 text-center">
-          <p className="text-2xl font-bold text-purple-600">
-            {(contributors.reduce((sum, c) => sum + c.rating, 0) / contributors.length)?.toFixed(1)}
-          </p>
-          <p className="text-sm text-muted-foreground">Avg Rating</p>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="bg-card rounded-lg border border-border p-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="relative">
-            <Input
-              type="search"
-              placeholder="Search contributors..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-            <Icon
-              name="Search"
-              size={16}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
-            />
+    <div className="min-h-screen bg-background p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header Section */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Contributor Management</h1>
+            <p className="text-muted-foreground">
+              Manage and monitor recipe contributors ({contributors.length} total)
+            </p>
           </div>
 
-          <Select options={sortOptions} value={sortBy} onChange={setSortBy} placeholder="Sort by" />
-          <Select options={ratingOptions} value={filterRating} onChange={setFilterRating} placeholder="Filter by rating" />
+          {/* Search and Filter */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search contributors..."
+                className="pl-10 pr-4 py-2 border border-border rounded-lg bg-background text-foreground focus:border-primary focus:ring-1 focus:ring-primary w-full max-w-xs"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <div className="flex gap-3">
+              <select
+                className="px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:border-primary focus:ring-1 focus:ring-primary"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                {sortOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="px-3 py-2 border border-border rounded-lg bg-background text-foreground focus:border-primary focus:ring-1 focus:ring-primary"
+                value={filterRating}
+                onChange={(e) => setFilterRating(e.target.value)}
+              >
+                {ratingOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <Button
+                variant="default"
+                onClick={handleExportContributorsData}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export Data
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Contributors Table */}
-      <div className="bg-card rounded-lg border border-border overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-muted/50 border-b border-border">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Contributor
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Submissions
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Approved
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Rating
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Last Activity
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Specialties
-                </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {filteredContributors.map((contributor) => (
-                <tr key={contributor.id} className="hover:bg-muted/30 transition-colors">
-                  {/* Contributor Info */}
-                  <td className="px-4 py-4">
-                    <div className="flex items-center space-x-3">
-                      <div
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md"
+        {/* Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-card border border-border rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-primary mb-2">{contributors.length}</div>
+            <div className="text-sm font-medium text-muted-foreground">Total Contributors</div>
+          </div>
+          <div className="bg-card border border-border rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">
+              {contributors.filter(c => c.status === 'active').length}
+            </div>
+            <div className="text-sm font-medium text-muted-foreground">Active</div>
+          </div>
+          <div className="bg-card border border-border rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {contributors.filter(c => c.status === 'verified').length}
+            </div>
+            <div className="text-sm font-medium text-muted-foreground">Verified</div>
+          </div>
+          <div className="bg-card border border-border rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-purple-600 mb-2">
+              {(contributors.reduce((sum, c) => sum + c.rating, 0) / contributors.length)?.toFixed(1)}
+            </div>
+            <div className="text-sm font-medium text-muted-foreground">Avg Rating</div>
+          </div>
+        </div>
+
+        {/* Contributors Table */}
+        <div className="bg-card rounded-lg border border-border overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-muted/50 border-b border-border">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Contributor
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Submissions
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Rating
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Last Activity
+                  </th>
+                  <th className="px-6 py-4 text-right text-sm font-semibold text-foreground uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filteredContributors.map((contributor) => (
+                  <tr key={contributor.id} className="hover:bg-muted/30 transition-colors duration-150">
+                    {/* Contributor Info */}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center space-x-4">
+                        <div
+                          className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md"
                           style={{ backgroundColor: getColorFromName(contributor.name) }}
                         >
                           {getInitials(contributor.name)}
                         </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-foreground truncate">
-                          {contributor.name}
-                        </p>
-                        <p className="text-sm text-muted-foreground truncate">
-                          {contributor.email}
-                        </p>
-                        <div className="flex items-center space-x-1 text-xs text-muted-foreground mt-1">
-                          <Icon name="MapPin" size={12} />
-                          <span>{contributor.location || 'No location'}</span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-lg font-semibold text-foreground truncate">
+                            {contributor.name}
+                          </p>
+                          <p className="text-sm text-muted-foreground truncate mt-1">
+                            {contributor.email}
+                          </p>
+                          <div className="flex items-center space-x-2 text-sm text-muted-foreground mt-1">
+                            <MapPin className="w-3 h-3" />
+                            <span>{contributor.location || 'No location'}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  {/* Status */}
-                  <td className="px-4 py-4">
-                    {getStatusBadge(contributor.status)}
-                  </td>
+                    {/* Status */}
+                    <td className="px-6 py-4">
+                      {getStatusBadge(contributor.status)}
+                    </td>
 
-                  {/* Submissions */}
-                  <td className="px-4 py-4">
-                    <div className="text-center">
-                      <p className="text-lg font-semibold text-foreground">
-                        {contributor.totalSubmissions}
-                      </p>
-                      <p className="text-xs text-muted-foreground">Total</p>
-                    </div>
-                  </td>
-
-                  {/* Approved */}
-                  <td className="px-4 py-4">
-                    <div className="text-center">
-                      <p className="text-lg font-semibold text-green-600">
-                        {contributor.approvedSubmissions}
-                      </p>
-                      <p className="text-xs text-muted-foreground">Approved</p>
-                    </div>
-                  </td>
-
-                  {/* Rating */}
-                  <td className="px-4 py-4">
-                    {renderStars(contributor.rating)}
-                  </td>
-
-                  {/* Last Activity */}
-                  <td className="px-4 py-4 text-sm text-muted-foreground">
-                    {contributor.lastSubmission ? (
-                      <div>
-                        <div className="font-medium text-foreground">
-                          {new Date(contributor.lastSubmission).toLocaleDateString('en-IN')}
-                        </div>
-                        <div className="text-xs">
-                          {new Date(contributor.lastSubmission).toLocaleTimeString('en-IN', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
+                    {/* Submissions */}
+                    <td className="px-6 py-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-4 text-sm">
+                          <div className="text-center">
+                            <p className="text-lg font-semibold text-foreground">
+                              {contributor.totalSubmissions}
+                            </p>
+                            <p className="text-xs text-muted-foreground">Total</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-lg font-semibold text-green-600">
+                              {contributor.approvedSubmissions}
+                            </p>
+                            <p className="text-xs text-muted-foreground">Approved</p>
+                          </div>
                         </div>
                       </div>
-                    ) : (
-                      <span className="text-muted-foreground">Never</span>
-                    )}
-                  </td>
+                    </td>
 
-                  {/* Specialties */}
-                  <td className="px-4 py-4">
-                    <div className="flex flex-wrap gap-1 max-w-[200px]">
-                      {contributor.specialties.slice(0, 2).map((specialty, index) => (
-                        <span 
-                          key={index} 
-                          className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-md border border-border"
-                        >
-                          {specialty}
+                    {/* Rating */}
+                    <td className="px-6 py-4">
+                      {renderStars(contributor.rating)}
+                    </td>
+
+                    {/* Last Activity */}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center space-x-2 text-sm">
+                        <Calendar className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-foreground">
+                          {contributor.lastSubmission 
+                            ? new Date(contributor.lastSubmission).toLocaleDateString('en-IN')
+                            : 'Never'
+                          }
                         </span>
-                      ))}
-                      {contributor.specialties.length > 2 && (
-                        <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-md border border-border">
-                          +{contributor.specialties.length - 2}
-                        </span>
-                      )}
-                      {contributor.specialties.length === 0 && (
-                        <span className="text-xs text-muted-foreground">None</span>
-                      )}
-                    </div>
-                  </td>
+                      </div>
+                    </td>
 
-                  {/* Actions */}
-                  <td className="px-4 py-4 text-right">
-                    <Button
-                      variant="ghost2"
-                      size="sm"
-                      onClick={() => handleViewContributor(contributor.id)}
-                      className="whitespace-nowrap"
-                    >
-                      <Icon name="Eye" size={14} />
-                      <span className="ml-1">View</span>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Empty State */}
-        {filteredContributors.length === 0 && (
-          <div className="text-center py-12">
-            <Icon name="Users" size={48} className="text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-foreground mb-2">No contributors found</h3>
-            <p className="text-muted-foreground">
-              {searchQuery || filterRating 
-                ? "Try adjusting your search or filter criteria."
-                : "There are no contributors in the system yet."
-              }
-            </p>
+                    {/* Actions */}
+                    <td className="px-6 py-4 text-right">
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => handleViewContributor(contributor.id)}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Profile
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        )}
+
+          {/* Empty State */}
+          {filteredContributors.length === 0 && (
+            <div className="text-center py-16">
+              <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                {searchQuery || filterRating ? "No contributors found" : "No contributors yet"}
+              </h3>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                {searchQuery || filterRating
+                  ? "Try adjusting your search or filter criteria"
+                  : "Contributors will appear here once they submit recipes on the platform"
+                }
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
+      {/* Contributor Profile Modal */}
       <ContributorProfileModal
         contributorId={selectedContributorId}
         isOpen={isModalOpen}
