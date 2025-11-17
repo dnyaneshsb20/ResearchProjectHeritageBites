@@ -61,7 +61,7 @@ const AISuggestions = () => {
   const handleAskAI = async (e) => {
     e.preventDefault();
     const text = query.trim();
-        if (!text) return;
+    if (!text) return;
 
     // if (isChatEmpty) setWelcomeSentence("");
     setMessages((prev) => [...prev, { role: "user", text }]);
@@ -319,9 +319,9 @@ Rules:
       />
 
       <button
-  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-  className="absolute left-3 top-4 w-8 h-8 flex flex-col items-center justify-center rounded-md bg-primary text-white shadow-md hover:bg-primary/90 transition-all z-50"
->
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="absolute left-3 top-4 w-8 h-8 flex flex-col items-center justify-center rounded-md bg-yellow-500 text-white shadow-md hover:bg-primary/90 transition-all z-50"
+      >
 
         <div className="space-y-[4px]">
           <span className="block w-4 h-[2px] bg-white"></span>
@@ -331,12 +331,12 @@ Rules:
       </button>
 
       <aside
-  className={`fixed left-0 top-16 h-[calc(100%-4rem)] bg-popover/90 border-r border-none flex flex-col transform transition-transform duration-500 ease-in-out z-40
+        className={`fixed left-0 top-16 h-[calc(100%-4rem)] bg-popover/90 border-r border-none flex flex-col transform transition-transform duration-500 ease-in-out z-40
   ${isSidebarOpen ? "translate-x-0 w-64" : "-translate-x-full w-64"}`}
->
+      >
 
         <div className="flex items-center gap-3 p-4 border-b border-none">
-          <Link to="/" className="flex items-center justify-center w-11 h-11 bg-primary rounded-lg">
+          <Link to="/" className="flex items-center justify-center w-11 h-11 bg-yellow-500 rounded-lg">
             <span className="text-white text-xl font-bold">HB</span>
           </Link>
           <div className="flex flex-col">
@@ -352,52 +352,53 @@ Rules:
               setAwaitingSelection(false);
               setLastRecipes([]);
             }}
-            className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-primary transition"
+            className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-yellow-500 transition"
           >
             <FiMessageSquare /> Start New Chat
           </button>
-          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-primary transition">
+          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-yellow-500 transition">
             <FiBook /> My Saved Recipes
           </button>
-          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-primary transition">
+          <button className="flex items-center gap-3 w-full text-left px-3 py-2 rounded-xl hover:bg-yellow-500 transition">
             <FiSettings /> Settings
           </button>
         </div>
       </aside>
 
       <div className={`flex flex-col flex-1 z-10 ${isChatEmpty ? "justify-center items-center" : ""}`}>
-<header className="fixed top-0 left-0 w-full flex items-center justify-between px-8 h-16 bg-black/40 backdrop-blur-md shadow-md z-50">
-  {/* Left side — Bot title */}
-  <div className="flex items-center gap-3">
-    <div className="w-10 h-10 flex items-center justify-center bg-yellow-500 rounded-full">
-      <Icon name="Sparkles" size={22} className="text-white" />
-    </div>
-    <h1 className="text-2xl font-semibold text-white drop-shadow-md">
-      {aiName} Assistant
-    </h1>
-  </div>
+        <header className="fixed top-0 left-0 w-full flex items-center justify-between px-8 h-16 z-50">
+          {/* Left side — Bot title */}
+          <div className="flex items-center gap-3 mx-auto">
+            <div className="w-10 h-10 flex items-center justify-center bg-yellow-500 rounded-full">
+              <Icon name="Sparkles" size={22} className="text-white" />
+            </div>
+            <h1 className="text-2xl font-semibold text-white drop-shadow-md">
+              {aiName} Assistant
+            </h1>
+          </div>
 
-  {/* Right side — Profile / Sign In */}
-  <div className="flex items-center gap-2 text-white">
-    {isSignedIn ? (
-      <button
-        onClick={() => navigate("/user-profile-health-goals")}
-        className="flex items-center gap-2 hover:opacity-80 transition"
-      >
-        <FiUser className="text-xl" />
-        <span className="hidden md:inline">My Profile</span>
-      </button>
-    ) : (
-      <button
-        onClick={() => navigate("/sign-in")}
-        className="flex items-center gap-2 hover:opacity-80 transition"
-      >
-        <FiLogIn className="text-xl" />
-        <span className="hidden md:inline">Sign In</span>
-      </button>
-    )}
-  </div>
-</header>
+
+          {/* Right side — Profile / Sign In */}
+          <div className="flex items-center gap-2 text-white">
+            {isSignedIn ? (
+              <button
+                onClick={() => navigate("/user-profile-health-goals")}
+                className="flex items-center gap-2 hover:opacity-80 transition"
+              >
+                <FiUser className="text-xl" />
+                <span className="hidden md:inline">My Profile</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/sign-in")}
+                className="flex items-center gap-2 hover:opacity-80 transition"
+              >
+                <FiLogIn className="text-xl" />
+                <span className="hidden md:inline">Sign In</span>
+              </button>
+            )}
+          </div>
+        </header>
         {isChatEmpty && (
           <div className="flex flex-col justify-center items-center mt-10">
             <h1 className="text-3xl font-semibold text-white mb-4">
